@@ -1,0 +1,5 @@
+php_flag session.use_cookies on
+php_flag session.use_only_cookies on
+php_value session.cookie_path /admin/
+
+Deny from None

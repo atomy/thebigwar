@@ -1,0 +1,64 @@
+#!/usr/bin/php
+<?php
+	$USE_OB = false;
+	require('../engine/include.php');
+
+	if(!isset($_SERVER['argv'][1]))
+	{
+		echo "Usage: ".$_SERVER['argv'][0]." <Database ID>\n";
+		exit(1);
+	}
+	else
+	{
+		$databases = get_databases();
+		if(!isset($databases[$_SERVER['argv'][1]]))
+		{
+			echo "Unknown database.\n";
+			exit(1);
+		}
+		else
+			define_globals($_SERVER['argv'][1], true);
+	}
+
+
+
+	$highscores_obj = Classes::Highscores();
+	 $highscores_obj->destroy();
+	$dh = opendir(global_setting("DB_PLAYERS"));
+	while(($fname = readdir($dh)) !== false)
+	{
+		if(!is_file(global_setting("DB_PLAYERS").'/'.$fname) || !is_readable(global_setting("DB_PLAYERS").'/'.$fname))
+			continue;
+
+		# Not using instances for memory reasons
+		$this_user = new User(urldecode($fname));
+		if(!$this_user->getStatus()) continue;
+
+		$highscores_obj->updateUser($this_user->getName(), $this_user->allianceTag(), $this_user->getScores());
+
+		unset($this_user);
+	}
+	closedir($dh);
+
+	$dh = opendir(global_setting("DB_ALLIANCES"));
+	while(($fname = readdir($dh)) !== false)
+	{
+		if(!is_file(global_setting("DB_ALLIANCES").'/'.$fname) || !is_readable(global_setting("DB_ALLIANCES").'/'.$fname))
+			continue;
+
+		$this_alliance = new Alliance(urldecode($fname));
+		if(!$this_alliance->getStatus())
+			continue;
+
+		$overall = $this_alliance->getTotalScores();
+		$members = $this_alliance->getMembersCount();
+		$average = floor($overall/$members);
+
+		$highscores_obj->updateAlliance($this_alliance->getName(), $average, $overall, $members);
+
+		unset($this_alliance);
+	}
+	closedir($dh);
+
+	exit(0);
+?>

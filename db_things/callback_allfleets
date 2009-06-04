@@ -1,0 +1,50 @@
+#!/usr/bin/php
+<?php
+	$USE_OB = false;
+	require('../engine/include.php');
+
+	if(!isset($_SERVER['argv'][1]))
+	{
+		fputs(STDERR, "Usage: ".$_SERVER['argv'][0]." <Database ID>\n");
+		exit(1);
+	}
+	else
+	{
+		$databases = get_databases();
+		if(!define_globals($_SERVER['argv'][1]))
+		{
+			fputs(STDERR, "Unknown database.\n");
+			exit(1);
+		}
+	}
+
+	$dh = opendir(global_setting("DB_FLEETS"));
+	while(($fname = readdir($dh)) !== false)
+	{
+		$path = global_setting("DB_FLEETS")."/".$fname;
+		if(!is_file($path)) continue;
+
+		$fleet = Classes::Fleet(urldecode($fname));
+		if($fleet->getStatus() != 1)
+			fputs(STDERR, "Error: Could not not process fleet ".$fleet->getName().".\n");
+		$callback = false;
+		foreach($fleet->getTargetsInformation() as $i)
+		{
+			if($i[0] == true && !$i[1])
+			{
+				$callback = true;
+				break;
+			}
+		}
+
+		if($callback)
+		{
+			foreach($fleet->getUsersList() as $user)
+			{
+				if(!$fleet->callBack($user, true))
+					fputs(STDERR, "Error: Could not call back user ".$user." in fleet ".$fleet->getName().".\n");
+			}
+		}
+	}
+	closedir($dh);
+?>

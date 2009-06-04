@@ -1,0 +1,24 @@
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+							Admininterface Skin Sytle
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+html { font-size:0.8em; color:#fff; font-style:small; font-family: arial; }
+
+body { background-color:#124; margin:1em; }
+
+.autocomplete { margin:0 -1px; padding:0; overflow:auto; border:1px solid #000; background-color:Window; color:WindowText; list-style-type:none; z-index:100000; max-height:12em; }
+.autocomplete li { cursor:pointer; padding:0 2px; }
+.autocomplete li.selected { background-color:Highlight; color:HighlightText; }
+* html form { position:relative; }
+
+select,input,textarea,button { border:.1em solid #679; background-color:#568; color:#fff; font-weight:bold; padding:0 .2em; }
+
+select:hover,select:focus,select:active,input:hover,input:focus,input:active,textarea:hover,textarea:focus,textarea:active,button:hover,button:focus,button:active { background-color:#679; }
+
+a:visited { color:#fff; }
+
+a:hover,a:link { color:#679; }
+
+hr,table,tfoot,thead,tbody,tr,td,th { border:.1em solid #679;  vertical-align:middle; }
+
+fieldset { padding:.5em; margin:.5em; border:.2em solid #679; }
+legend { font-weight:bold; }

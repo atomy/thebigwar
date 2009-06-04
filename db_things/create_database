@@ -1,0 +1,66 @@
+if [ $# -lt 1 ]
+then
+	echo "Usage: $0 [filename]"
+	exit 1
+fi
+
+mkdir $1
+RETURN_MKDIR=$?
+false
+FALSE=$?
+
+
+if [ $RETURN_MKDIR -eq $FALSE ]
+then
+	exit 1
+fi
+
+CWD=`pwd`
+cd $1
+DBDIR_ABS=`pwd`
+cd $CWD
+
+echo '4' > $1/.version
+touch $1/locked
+echo 'Order Deny,Allow' > $1/.htaccess
+echo 'Deny from All' >> $1/.htaccess
+echo 'Allow from None' >> $1/.htaccess
+mkdir $1/alliances
+echo 10 > $1/handelskurs
+echo 5 > $1/handelskurs
+echo 3.75 > $1/handelskurs
+echo 2.5 > $1/handelskurs
+echo 1 > $1/handelskurs
+mkdir $1/fleets
+mkdir $1/items
+ln -s $CWD/gebaeude $1/items/gebaeude
+ln -s $CWD/forschung $1/items/forschung
+ln -s $CWD/roboter $1/items/roboter
+ln -s $CWD/schiffe $1/items/schiffe
+ln -s $CWD/verteidigung $1/items/verteidigung
+mkdir $1/messages
+mkdir $1/messages_public
+mkdir $1/players
+mkdir $1/truemmerfelder
+mkdir $1/universe
+ln -s $CWD/create_galaxy $1/universe/create_galaxy
+touch $1/admins
+read -p "Enter Admin user name: " ADMIN_USERNAME
+read -s -p "Enter Admin password: " ADMIN_PASSWD
+echo
+
+echo -n "$ADMIN_USERNAME" > $1/admins
+echo -ne "\t" >> $1/admins
+echo -n "$ADMIN_PASSWD" | md5sum | awk '{ ORS=""; print $1; }' >> $1/admins
+echo -ne "\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1" >> $1/admins
+
+unset ADMIN_PASSWD
+
+OLD_PWD=`pwd`
+cd $1/universe
+php ./create_galaxy
+cd $OLD_PWD
+
+chmod -R a+rw $1
+
+exit 0;

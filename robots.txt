@@ -1,0 +1,11 @@
+#
+# robots.txt 
+#
+
+User-agent: *
+Disallow: /database.global/
+Disallow: /database2/
+Disallow: /db_things/
+Disallow: /downloads/
+Disallow: /images/
+Disallow: /admin/

@@ -1,0 +1,90 @@
+#!/usr/bin/php
+<?php
+	function add_nulls($count, $len)
+	{
+		while(strlen($count) < $len)
+			$count = '0'.$count;
+
+		if(strlen($count) > $len)
+			echo "Warning, too big byte.\n";
+
+		return $count;
+	}
+
+	function bin2string($bin)
+	{
+		$return = '';
+
+		$len = strlen($bin);
+		for($i=0; $i < $len; $i+=8)
+		{
+			$substr = substr($bin, $i, 8);
+			$return .= chr(bindec($substr));
+		}
+
+		return $return;
+	}
+
+	if(!is_file('count') || !is_readable('count'))
+		$galaxy = 1;
+	else
+		$galaxy = file_get_contents('count')+1;
+
+	if(file_exists($galaxy))
+		die('Galaxy '.$galaxy.' already exists. Please edit file `count\'.');
+
+	$fh = fopen('count', 'w');
+	if(!$fh)
+		echo "Warning: File `count' couldn't be updated.\n";
+	else
+	{
+		fwrite($fh, $galaxy);
+		fclose($fh);
+	}
+	chmod('count', 0666);
+
+	$fh = fopen($galaxy, 'wb');
+	flock($fh, LOCK_EX);
+
+	for($system = 1; $system <= 999; $system++)
+	{
+		$this_bin = '';
+
+		$planet_count = rand(10, 30); # Planetenanzahl
+		$this_bin .= add_nulls(decbin($planet_count-10), 5);
+
+		for($planet = 1; $planet <= $planet_count; $planet++)
+		{
+			$size = rand(100, 500); # Planetengroesse
+
+			$this_bin .= add_nulls(decbin($size-100), 9);
+		}
+		
+		if($planet_count < 30)
+			$this_bin .= str_repeat('000000000', (30-$planet_count));
+		$this_bin .= '00000';
+		
+		fwrite($fh, bin2string($this_bin));
+
+		fwrite($fh, str_repeat(' ', 24*$planet_count));
+		if($planet_count < 30)
+			fwrite($fh, str_repeat("\0", (30-$planet_count)*24)); # Null-Bytes fuer Spieler auf nicht existierenden Planeten
+
+		fwrite($fh, str_repeat(' ', 24*$planet_count)); # Planetennamen, werden spaeter eingefuegt
+		if($planet_count < 30)
+			fwrite($fh, str_repeat("\0", (30-$planet_count)*24)); # Null-Bytes fuer Planetennamen nicht existierender Planeten
+		
+		fwrite($fh, str_repeat(' ', 6*$planet_count)); # Allianztags, werden spaeter eingefuegt
+		if($planet_count < 30)
+			fwrite($fh, str_repeat("\0", (30-$planet_count)*6)); # Null-Bytes fuer Allianztags nicht existierender Planeten
+	}
+
+	flock($fh, LOCK_UN);
+	fclose($fh);
+
+	chmod($galaxy, 0666);
+
+	echo 'Galaxy '.$galaxy." successfully created.\n";
+
+	exit(0);
+?>

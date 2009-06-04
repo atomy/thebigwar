@@ -1,0 +1,93 @@
+#
+#         This java file is a part of the
+#
+#          -  Plouf's Java IRC Client  -
+#
+#      Copyright (C) 2004 Philippe Detournay
+#
+#   This file is licensed under the GPL license
+#
+#        All contacts : theplouf@yahoo.com
+#
+#
+#  Syntax :
+#    Comments begin with the # character. This character must be the first character of the line.
+#    A data line has three parts : the data id, the data id description, the data string.
+#      - Data id : An hexadecimal figure identifying the string.
+#      - Data description : Begins by [ and ends by ]. The description is not parsed and
+#                           can be any string.
+#      - Data string : The string itself. Parameters are specified using the %i syntax.
+#
+#  Trailing spaces can be added using the \s escape character.
+
+0001 [INTERPRETOR_NOT_ON_CHANNEL] Nicht im Kanal.
+0002 [INTERPRETOR_UNKNOWN_DCC] %1 : Unbekannter DCC-Befehl
+0003 [INTERPRETOR_INSUFFICIENT_PARAMETERS] %1 : Nicht genügend Parameter
+0004 [INTERPRETOR_BAD_CONTEXT] %1 : In diesem Zustand nicht ausführbar
+0005 [INTERPRETOR_CANNOT_CTCP_IN_DCCCHAT] CTCP-Codes können nicht über einen DCC-Chat versandt werden
+0006 [INTERPRETOR_UNKNOWN_CONFIG] %1 : Unbekannter Konfigurationsbefehl
+0007 [INTERPRETOR_TIMESTAMP_ON] Zeitstempel sind aktiviert
+0008 [INTERPRETOR_TIMESTAMP_OFF] Zeitstempel sind deaktiviert
+0009 [INTERPRETOR_SMILEYS_ON] Grafische Smileys sind aktiviert
+000a [INTERPRETOR_SMILEYS_OFF] Grafische Smileys sind deaktiviert
+000b [INTERPRETOR_IGNORE_ON] %1 wird ab jetzt ignoriert
+000c [INTERPRETOR_IGNORE_OFF] %1 wird ab jetzt nicht mehr ignoriert
+000d [INTERPRETOR_MULTISERVER_DISABLED] Unterstützung für mehrere Server ist deaktiviert
+  
+0101 [DCC_WAITING_INCOMING] Auf eingehende Verbindung warten...
+0102 [DCC_UNABLE_TO_OPEN_CONNECTION] Verbindung nicht möglich: %1
+0103 [DCC_CONNECTION_ESTABLISHED] DCC-Verbindung hergestellt
+0104 [DCC_CONNECTION_CLOSED] Verbindung abgebrochen
+0105 [DCC_ERROR] Fehler: %1
+0106 [DCC_UNABLE_TO_SEND_TO] %1: Senden an %2 nicht möglich
+0107 [DCC_BAD_CONTEXT] In diesem Zustand kann der Befehl nicht ausgeführt werden
+0108 [DCC_NOT_CONNECTED] Nicht verbunden
+0109 [DCC_UNABLE_PASSIVE_MODE] Passiver Modus konnte nicht hergestellt werden
+010a [CTCP_PING_REPLY] [%1 PING-Antwort]: %2 Sekunden
+010b [DCC_STREAM_CLOSED] Datenverbindung abgebrochen
+      
+0201 [IDENT_FAILED_LAUNCH] Failed to launch Ident server : %1
+0202 [IDENT_REQUEST] Ident request from %1
+0203 [IDENT_ERROR] Error occurred
+0204 [IDENT_REPLIED] Replied %1
+0205 [IDENT_DEFAULT_USER] default user
+0206 [IDENT_NO_USER] No user for request
+0207 [IDENT_RUNNING_ON_PORT] Ident server running on port %1
+0208 [IDENT_LEAVING] Ident server leaving : %1
+0209 [IDENT_NONE] none
+020a [IDENT_UNKNOWN] unknown
+020b [IDENT_UNDEFINED] Undefined result
+      
+0301 [FILE_SAVEAS] Save file as
+      
+0401 [ABOUT_ABOUT] Über...
+0402 [ABOUT_PROGRAMMING] Programmierung
+0403 [ABOUT_DESIGN] Design
+0404 [ABOUT_THANKS] Dank an
+0405 [ABOUT_SUPPORT] für Unterstützung, Ideen und Tests
+0406 [ABOUT_GPL] Dieses Programm steht unter der GPL-Lizenz
+      
+0501 [SERVER_UNABLE_TO_CONNECT] Verbindung nicht möglich: %1
+0502 [SERVER_UNABLE_TO_CONNECT_STILL] Verbindung zu %1 nicht möglich: Es wird gerade zu %2 verbunden
+0503 [SERVER_DISCONNECTING] Verbindung zu %1 wird abgebrochen
+0504 [SERVER_CONNECTING] Verbindung wird hergestellt...
+0505 [SERVER_NOT_CONNECTED] Nicht verbunden
+0506 [SERVER_LOGIN] Anmeldung läuft...
+0507 [SERVER_DISCONNECTED] Verbindung zu %1 abgebrochen
+0508 [SERVER_ERROR] Fehler: %1
+0509 [SERVER_AUTOREJOIN_ATTEMPT] Versuche, den Kanal %1 erneut zu betreten...
+050a [SERVER_AUTOREJOIN_FAILED] Der Kanal %1 konnte nicht betreten werden
+      
+071a [GUI_CHANGE_NICK] Spitznamen ändern: 
+071b [GUI_COPY_WINDOW] Text kopieren
+071c [GUI_DCC_CHAT_WARNING_TITLE] Achtung
+071d [GUI_DCC_CHAT_WARNING_TEXT] Wollen Sie die DCC-Chat-Anfrage von %1 annehmen?
+
+0801 [ASL_MALE] Männlich, %1 Jahre alt, %2
+0802 [ASL_FEMALE] Weiblich, %1 Jahre alt, %2
+0803 [ASL_UNKNOWN] %1 Jahre alt, aus %2
+
+0901 [REPLY_IDLE] %1 ist still seit %2
+0902 [REPLY_SIGNON] %1 hat die Verbindung zu %2 hergestellt
+
+ffff [ERROR_NOT_DEFINED] Unbekannter Fehler

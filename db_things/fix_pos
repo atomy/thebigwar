@@ -1,0 +1,63 @@
+#!/usr/bin/php
+<?php
+        $USE_OB = false;
+        require('../engine/include.php');
+
+        if(!isset($_SERVER['argv'][1]))
+        {
+                echo "Usage: ".$_SERVER['argv'][0]." <Database ID>\n";
+                exit(1);
+        }
+        else
+        {
+                $databases = get_databases();
+                if(!define_globals($_SERVER['argv'][1]))
+                {
+                        echo "Unknown database.\n";
+                        exit(1);
+                }
+        }
+
+        function check_number($no)
+        {
+                return preg_match("/^[1-9]([0-9]*)$/", $no);
+        }
+
+        $d = global_setting("DB_PLAYERS")."/";
+        $dh = opendir($d);
+        while(($fname = readdir($dh)) !== false)
+        {
+                $player = urldecode($fname);
+                $fname = $d.$fname;
+                if(!is_file($fname) || !is_readable($fname)) continue;
+
+                $arr = unserialize(bzdecompress(file_get_contents($fname)));
+                foreach(array_keys($arr['planets']) as $p)
+                {
+                        $pos = explode(":", $arr['planets'][$p]['pos']);
+                        $correct = 1;
+                        if(count($pos) != 3) $correct = 0;
+                        elseif(!check_number($pos[0]) || !check_number($pos[1]) || !check_number($pos[2]))
+                        {
+                                $correct = 0;
+                                $pos[0] = preg_replace("/^0+/", "", trim($pos[0]));
+                                $pos[1] = preg_replace("/^0+/", "", trim($pos[1]));
+                                $pos[2] = preg_replace("/^0+/", "", trim($pos[2]));
+                                if(check_number($pos[0]) && check_number($pos[1]) && check_number($pos[2]))
+                                        $correct = 2;
+                        }
+
+                        if($correct != 1)
+                                echo "Invalid coordinates ".$arr['planets'][$p]['pos']." (player ".$player.", planet ".$p.")\n";
+                        if($correct == 2)
+                        {
+                                $arr['planets'][$p]['pos'] = implode(":", $pos);
+                                if(file_put_contents($fname, bzcompress(serialize($arr))))
+                                        echo "Corrected to: ".$arr['planets'][$p]['pos']."\n";
+                                else
+                                        echo "Could not fix: writing failed.\n";
+                        }
+                }
+        }
+        closedir($dh);
+?>

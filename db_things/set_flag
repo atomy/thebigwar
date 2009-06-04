@@ -1,0 +1,38 @@
+#!/usr/bin/php
+<?php
+	$USE_OB = false;
+	require('../engine/include.php');
+	
+	if(!isset($_SERVER['argv'][1]))
+	{
+		echo "Usage: ".$_SERVER['argv'][0]." <Database ID>\n";
+		exit(1);
+	}
+	else
+	{
+		$databases = get_databases();
+		if(!isset($databases[$_SERVER['argv'][1]]))
+		{
+			echo "Unknown database.\n";
+			exit(1);
+		}
+		else
+			define_globals($_SERVER['argv'][1], true);
+	}
+		#Username eintragen
+		$user_obj = new User('battel');
+		if(!$user_obj->getStatus())
+		{
+			unset($user_obj);
+			continue;
+		}
+		#Betroffenen Planeten aktiv setzen
+		$user_obj->setActivePlanet(13);
+		#Galaxie eintragen
+		$galaxy_obj = Classes::Galaxy(2);
+		#System, Planetenposition, Flag eintragen - die 3 Argumente muessen vorhanden sein
+		$galaxy_obj->setPlanetOwnerFlag('283', '8', '');
+	
+		unset($user_obj);
+	exit(0);
+?>

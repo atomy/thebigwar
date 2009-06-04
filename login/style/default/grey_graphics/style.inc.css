@@ -1,0 +1,82 @@
+body {  background-position:left bottom; background-repeat:no-repeat; background-attachment:fixed; }
+
+#planets { padding:0 0 250px 0 !important; }
+* html #planets { padding:0 !important; }
+
+#planets li { background-repeat:no-repeat; background-position:right center; min-height:50px; padding:.2em 1ex; }
+* html #planets li { height:50px; }
+#planets .planet-1 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet01.png); }
+#planets .planet-2 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet02.png); }
+#planets .planet-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet03.png); }
+#planets .planet-4 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet04.png); }
+#planets .planet-5 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet05.png); }
+#planets .planet-6 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet06.png); }
+#planets .planet-7 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet07.png); }
+#planets .planet-8 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet08.png); }
+#planets .planet-9 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet09.png); }
+#planets .planet-10 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet10.png); }
+#planets .planet-11 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet11.png); }
+#planets .planet-12 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet12.png); }
+#planets .planet-13 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet13.png); }
+#planets .planet-14 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet14.png); }
+#planets .planet-15 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet15.png); }
+#planets .planet-16 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet16.png); }
+#planets .planet-17 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet17.png); }
+#planets .planet-18 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet18.png); }
+#planets .planet-19 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet19.png); }
+#planets .planet-20 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet20.png); }
+
+#planets .active,#spionage-planet dl { background-repeat:no-repeat; background-position:center top; padding:250px 0 0 0 !important; }
+.planet-1 #planets .active,#spionage-planet dl.planet_1 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet01.png); }
+.planet-2 #planets .active,#spionage-planet dl.planet_2 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet02.png); }
+.planet-3 #planets .active,#spionage-planet dl.planet_3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet03.png); }
+.planet-4 #planets .active,#spionage-planet dl.planet_4 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet04.png); }
+.planet-5 #planets .active,#spionage-planet dl.planet_5 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet05.png); }
+.planet-6 #planets .active,#spionage-planet dl.planet_6 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet06.png); }
+.planet-7 #planets .active,#spionage-planet dl.planet_7 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet07.png); }
+.planet-8 #planets .active,#spionage-planet dl.planet_8 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet08.png); }
+.planet-9 #planets .active,#spionage-planet dl.planet_9 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet09.png); }
+.planet-10 #planets .active,#spionage-planet dl.planet_10 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet10.png); }
+.planet-11 #planets .active,#spionage-planet dl.planet_11 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet11.png); }
+.planet-12 #planets .active,#spionage-planet dl.planet_12 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet12.png); }
+.planet-13 #planets .active,#spionage-planet dl.planet_13 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet13.png); }
+.planet-14 #planets .active,#spionage-planet dl.planet_14 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet14.png); }
+.planet-15 #planets .active,#spionage-planet dl.planet_15 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet15.png); }
+.planet-16 #planets .active,#spionage-planet dl.planet_16 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet16.png); }
+.planet-17 #planets .active,#spionage-planet dl.planet_17 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet17.png); }
+.planet-18 #planets .active,#spionage-planet dl.planet_18 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet18.png); }
+.planet-19 #planets .active,#spionage-planet dl.planet_19 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet19.png); }
+.planet-20 #planets .active,#spionage-planet dl.planet_20 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets%2fplanet20.png); }
+
+#ress dt { padding-left:21px !important; background-repeat:no-repeat; background-position:2px 50%; }
+#ress dt.ress-carbon { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fresources%2fcarbon.png); }
+#ress dt.ress-aluminium { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fresources%2faluminium.png); }
+#ress dt.ress-wolfram { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fresources%2fwolfram.png); }
+#ress dt.ress-radium { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fresources%2fradium.png); }
+#ress dt.ress-tritium { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fresources%2ftritium.png); }
+#ress dt.ress-energie { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fresources%2fenergie.png); }
+
+* html .unbeschaeftigte-planeten .c-voriger a,* html .unbeschaeftigte-planeten .c-naechster a { width:45px; padding:0 0 0 45px; margin:0 .5ex; overflow:hidden; background-image:url(image.php?default%2fgrey_graphics%2fimages%2ffastbuild.gif); background-repeat:no-repeat; background-position:left center; }
+
+#css-3 { position:fixed; top:.7em; right:.7em; height:50px; width:50px; z-index:30000; border:.1em solid #aaa; padding:.5em; background-position:center center; background-repeat:no-repeat; background-color:#222; display:block; }
+* html #css-3 { position:absolute; margin-right:17px; }
+.planet-1 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet01.png); }
+.planet-2 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet02.png); }
+.planet-3 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet03.png); }
+.planet-4 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet04.png); }
+.planet-5 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet05.png); }
+.planet-6 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet06.png); }
+.planet-7 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet07.png); }
+.planet-8 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet08.png); }
+.planet-9 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet09.png); }
+.planet-10 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet10.png); }
+.planet-11 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet11.png); }
+.planet-12 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet12.png); }
+.planet-13 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet13.png); }
+.planet-14 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet14.png); }
+.planet-15 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet15.png); }
+.planet-16 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet16.png); }
+.planet-17 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet17.png); }
+.planet-18 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet18.png); }
+.planet-19 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet19.png); }
+.planet-20 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet20.png); }

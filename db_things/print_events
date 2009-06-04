@@ -1,0 +1,12 @@
+#!/usr/bin/php
+<?php
+	if(!isset($_SERVER['argv'][1]))
+	{
+		echo "Usage: ".$_SERVER['argv'][0]." [Events file]\n";
+		exit(1);
+	}
+
+	$conn = sqlite_popen($_SERVER['argv'][1]);
+	var_dump(sqlite_array_query($conn, "SELECT * FROM events", SQLITE_ASSOC));
+	sqlite_close($conn);
+?>

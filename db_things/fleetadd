@@ -1,0 +1,58 @@
+#!/usr/bin/php
+
+<?php
+	$USE_OB = false;
+	require('../engine/include.php');
+
+        if(!isset($_SERVER['argv'][1]))
+        {
+                fputs(STDERR, "Usage: ".$_SERVER['argv'][0]." <Database ID>\n");
+                exit(1);
+        }
+        else
+        {
+                $databases = get_databases();
+                if(!define_globals($_SERVER['argv'][1]))
+                {
+                        fputs(STDERR, "Unknown database.\n");
+                        exit(1);
+                }
+        }
+
+        $dh = opendir(global_setting("DB_PLAYERS"));
+ 
+
+	$user = new User('wootan');
+
+	$user->setActivePlanet(0);
+
+
+    $user->changeItemLevel('S0', '0', 'schiffe');
+	$user->changeItemLevel('S1', '0', 'schiffe');
+	$user->changeItemLevel('S2', '0', 'schiffe');
+	$user->changeItemLevel('S3', '0', 'schiffe');
+	$user->changeItemLevel('S4', '0', 'schiffe');
+	$user->changeItemLevel('S5', '0', 'schiffe');
+	$user->changeItemLevel('S6', '0', 'schiffe');
+	$user->changeItemLevel('S7', '0', 'schiffe');
+	$user->changeItemLevel('S8', '0', 'schiffe');
+	$user->changeItemLevel('S9', '0', 'schiffe');
+    $user->changeItemLevel('S10', '0', 'schiffe');
+	$user->changeItemLevel('S11', '0', 'schiffe');
+    $user->changeItemLevel('S12', '0', 'schiffe');
+    $user->changeItemLevel('S13', '0', 'schiffe');
+	$user->changeItemLevel('S14', '22500', 'schiffe');
+	$user->changeItemLevel('S15', '12500', 'schiffe');
+    $user->changeItemLevel('S16', '', 'schiffe');
+    
+	$user->changeItemLevel('V0', '0', 'verteidigung');
+	$user->changeItemLevel('V1', '0', 'verteidigung');
+	$user->changeItemLevel('V2', '0', 'verteidigung');
+	$user->changeItemLevel('V3', '0', 'verteidigung');
+	$user->changeItemLevel('V4', '0', 'verteidigung');
+	$user->changeItemLevel('V5', '0', 'verteidigung');
+	$user->changeItemLevel('V6', '0', 'verteidigung');
+
+
+
+?>

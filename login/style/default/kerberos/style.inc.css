@@ -1,0 +1,1292 @@
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+HTML
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+html
+{
+font-size:1em;
+color:#fff;
+font-style:normal;
+font-family: arial;
+}
+
+*,#planets .active dt
+{
+font-size:inherit;
+color:inherit;
+font-weight:inherit;
+font-style:inherit;
+font-variant:normal;
+text-decoration:inherit;
+font-family:inherit;
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Body
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+body { background-color:#222; margin:1em; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Überschriften (H1,H2,H3,H4)
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+* html h1,* html h2,* html h3,* html h4
+{
+font-size:100.01%;
+}
+
+* html *,* html #planets .active dt
+{
+font-size:11px;
+font-family:sans-serif;
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Uhrzeit
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#time
+{
+bottom:0;
+text-align:right;
+display:block;
+margin:0;
+border-top:.2em solid #aaa;
+padding:.2em;
+background-color:#222;
+word-spacing:-1.1em;
+line-height:2em;
+height:2em;
+white-space:nowrap;
+z-index:20000;
+}
+
+* html #time
+{
+word-spacing:0;
+}
+
+#time dt
+{
+margin:0 0 0 .25em;
+padding:.2em 0 .2em .3em;
+display:inline;
+background-color:#777;
+color:#fff;
+font-weight:bold;
+border-width:.1em;
+border-color:#aaa;
+border-style:solid none solid solid;
+font-family:monospace;
+}
+
+* html #time dt
+{
+padding-right:.5em;
+}
+
+#time dt:after
+{
+content:":\a0";
+}
+
+#time dd
+{
+margin:0 .25em 0 0;
+padding:.2em .3em .2em 0;
+display:inline;
+background-color:#777;
+color:#fff;
+font-weight:bold;
+border-width:.1em;
+border-color:#aaa;
+border-style:solid solid solid none;
+font-family:monospace;
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Ressourcen
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#ress { left:0; right:0; top:0; display:block; margin:0; border-bottom:.2em solid #aaa; padding:.2em;
+background-color:#002F64; word-spacing:-1.1em; line-height:2em; height:2em; white-space:nowrap; z-index:25000; }
+* html #ress { border-right:.2em solid #aaa; word-spacing:0; }
+#ress dt { margin:0 0 0 .25em; padding:.2em 0 .2em .3em; display:inline; background-color:#777; color:#fff; font-weight:bold; border-width:.1em; border-color:#002F64; border-style:solid none solid solid; white-space:nowrap; }
+#ress dt:after { content:":\a0"; }
+#ress dd { margin:0 .25em 0 0; padding:.2em .3em .2em 0; display:inline; background-color:#777; color:#fff; font-weight:bold; border-width:.1em; border-color:#002F64; border-style:solid solid solid none; white-space:nowrap; }
+.ress dd { word-spacing:0; }
+#ress .negativ { color:#f00; }
+
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Gebäude
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#item-B0 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/buildings/carbon.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-B1 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/buildings/aluminium.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-B2 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/buildings/wolfram.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-B3 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/buildings/radium.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-B4 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/buildings/tritium.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-B5 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/buildings/solar.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-B6 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/buildings/sonnenwind.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-B7 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/buildings/waerme.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-B8 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/buildings/forschung.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-B9 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/buildings/roboter.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-B10 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/buildings/werft.jpg); background-position:right center; background-repeat:no-repeat; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Forschungen
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#item-F0 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/tech/kontroll.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-F1 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/tech/spionage.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-F2 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/tech/roboter.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-F3 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/tech/energie.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-F4 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/tech/waffen.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-F5 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/tech/verteidigung.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-F6 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/tech/rueckstoss.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-F7 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/tech/ion.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-F8 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/tech/kern.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-F9 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/tech/ing.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-F10 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/tech/schild.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-F11 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/tech/laderaum.jpg); background-position:right center; background-repeat:no-repeat; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Roboter
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#item-R01 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/rob/bau.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-R02 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/rob/carbon.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-R03 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/rob/aluminium.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-R04 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/rob/wolfram.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-R05 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/rob/radium.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-R06 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/rob/tritium.jpg); background-position:right center; background-repeat:no-repeat; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Verteidigung
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#item-V0 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/def/laser1.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-V1 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/def/gatlin.jpg); background-position:right center;background-repeat:no-repeat; }
+#item-V2 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/def/mrakete.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-V3 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/def/emp.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-V4 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/def/ion.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-V5 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/def/radon.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-V6 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/def/laser2.jpg); background-position:right center; background-repeat:no-repeat; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Schiffe
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#item-S0 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/hopper.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S1 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/castor.jpg); background-position:right center;background-repeat:no-repeat; }
+#item-S3 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/sammler.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S2 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/arche.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S5 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/spio.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S6 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/bschiff.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S7 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/buster.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S8 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/octupus.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S9 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/phyton.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S10 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/jotka.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S11 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/kleib.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S12 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/amann.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S13 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/sheliak.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S15 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/nem.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S14 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/vega.jpg); background-position:right center; background-repeat:no-repeat; }
+#item-S16 { height:107px; background-image:url(login/style/default/grey_graphics/images/design/fleet/torval.jpg); background-position:right center; background-repeat:no-repeat; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Form
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+form { text-align:left; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Navigation
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#navigation { border:.1em solid #888; background-color:#777; color:#fff; font-weight:bold; z-index:10000; }
+#navigation ul { list-style-type:none; margin:0; padding:0; }
+#navigation li { display:block; text-align:center; margin:0 0 -.1em 0; padding:0; border-bottom:.1em solid #888; border-top:.1em solid #888; position:relative; z-index:25000; }
+#navigation li.active,#navigation li:hover { border-color:#999; z-index:30000; }
+#navigation a { display:block; margin:0; padding:0; line-height:1.25em; position:relative; }
+* html #navigation a { width:100%; position:relative; }
+#navigation .active a, #navigation a:hover,#navigation a:focus { background-color:#888; }
+#navigation #navigation-karte,#navigation #navigation-board { border-top:1em solid #888; }
+#navigation button { width:100%; padding:0; margin:0 -.1em; }
+
+* html #navigation { position:absolute; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+CSS3
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#css-3 { display:none; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Werbung
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#werbung { z-index:10000; }
+* html #werbung { position:absolute; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Planet wechseln
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#change-planet { margin:-.1em 0; padding:0; }
+#change-planet fieldset { margin:0; padding:0; border-style:none; }
+#change-planet legend { display:none; }
+#change-planet select { width:100%; background-color:#888; border-color:#999; border-style:solid none; text-align:center; }
+#change-planet option { text-align:left; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Content
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#content-12 { margin:0 auto; width:80%; max-width:800px; }
+* html #content-12 { width:80%; }
+#content-13 { border:.2em solid #aaa; background-color:#777; z-index:5000; text-align:center; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Formular
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+select { background-color:#777; border:.1em solid #aaa; }
+option { background-color:#777; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+KBD
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+kbd { font:inherit; text-decoration:underline; }
+
+#content-12 h1 { margin:0; padding:.2em; border-bottom:.2em solid #aaa; text-align:center; background-color:#888; font-weight:bold; position:relative; }
+#content-11 h2 { margin:0; padding:.1em; border-bottom:.1em solid #aaa; text-align:center; background-color:#888; font-weight:bold; position:relative; }
+#content-13 h3,
+#content-12 #content-13 .desc-prod h3,
+#content-12 #content-13 .desc-values h3,
+#content-12 .nachricht-informationen.type-1 h3,
+#content-12 .nachricht-informationen.type-1 h4 { border-bottom:.1em solid #aaa; background-color:#888; margin:0; padding:.1em; text-align:center; font-weight:bold; }
+#content-13 * h3 { border-bottom-style:none; background-color:transparent; padding:0; text-align:left; }
+* html h3 { position:relative; }
+
+* html a { color:#fff; text-decoration:none; } /* IE sucks! */
+a:hover,a:focus { color:#ccc; }
+#navigation a:hover,#navigation a:focus { color:#fff; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Formular
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+select,input,textarea,button { border:.1em solid #999; background-color:#888; color:#fff; font-weight:bold; padding:0 .2em; }
+button { text-align:center; }
+input[type=submit],input[type=reset],input[type=button] { text-align:center; }
+select:hover,select:focus,select:active,input:hover,input:focus,input:active,textarea:hover,textarea:focus,textarea:active,button:hover,button:focus,button:active { background-color:#999; }
+select[readonly],input[readonly],textarea[readonly],button[readonly] { color:#ccc; }
+form div { text-align:center; padding:.5em; }
+form * div { text-align:inherit; padding:0; } /* IE Wuergaround */
+form div button { width:75%; text-align:center; margin:0 auto; }
+form div input[type=submit],form div input[type=reset],form div input[type=button] { text-align:center; margin:0 auto; }
+textarea { max-width:100%; }
+abbr,acronym { border-style:none; text-decoration:none; font-style:normal; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Nachrichten
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.error { color:#f00; font-weight:bold; text-align:center; font-size:1.2em; }
+.successful,.flotte-versandt p { color:#0f0; font-weight:bold; text-align:center; font-size:1.2em; }
+.nothingtodo { color:#8bf; font-weight:bold; text-align:center; font-size:1.2em; }
+.ads { text-align:center; font-weight:bold; color:#f00; font-size:1.0em; }
+.noads { text-align:center; font-weight:bold; color:#0f0; font-size:1.0em; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Form
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+form { margin:0; padding:0; }
+form ul { list-style-type:none; margin:0; padding:0; }
+form dt { float:left; width:30%; }
+form dt:after { content:":\a0"; }
+fieldset { padding:.5em; margin:.5em; border:.1em solid #aaa; }
+legend { font-weight:bold; }
+
+
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Items
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.item { border-color:#aaa; border-style:none; border-width:.1em; padding:.5em; text-align:left; clear:right; position:relative; }
+* html .item { height:1%; }
+.item + .item { border-top-style:solid; }
+* html .item { border-top-style:solid; }
+.item h3 { font-weight:bold; margin:0 0 .5em 0; padding:0; line-height:2em; }
+.item h3 .stufe { font-weight:normal; }
+.item dl,.item dt,.item dd,.item-info,.item-info dt,.item-info dd { margin:0; padding:0; width:auto; float:none; }
+* html .item dl,* html .item dt,* html .item dd { position:relative; }
+.item .ress dt,.item .ress dd,.item-info .ress dt,.item-info .ress dd { display:inline; }
+.item .ress dt:after,.item-info .ress dt:after { content:":\a0"; word-spacing:-1.1em; }
+.item .ress dd,.item-info .ress dd { font-weight:bold; white-space:nowrap; }
+.item .ress dd:after,.item-info .ress dd:after { content:",\a0"; font-weight:normal; }
+.item .ress dd.ress-radium:after,.item-info .ress dd.ress-radium:after { content:""; }
+.item dt.item-kosten,.item dt.item-bauzeit { float:left; }
+.item dt.item-kosten:after,.item dt.item-bauzeit:after,.item-info dt.item-kosten:after,.item-info dt.item-bauzeit:after,.item-info dt.item-bauzeit-lokal:after,.item-info dt.item-bauzeit-global:after { content:":\a0"; }
+.item dd.item-bauzeit,.item-info dd.item-bauzeit,.item-info dd.item-bauzeit-lokal,.item-info dd.item-bauzeit-global { font-weight:bold; }
+.item-info dt.item-bauzeit,.item-info dt.item-kosten,.item-info dt.item-bauzeit-lokal,.item-info dt.item-bauzeit-global { display:inline; font-weight:bold; }
+.item-info dd.item-bauzeit-lokal:after { content:"\0a"; white-space:pre; }
+.item-info dd,.item-info dl { display:inline; }
+.item-info .ress dd.ress-radium:after { content:"\0a"; white-space:pre; }
+
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Unbeschäftigte Planeten
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.unbeschaeftigte-planeten,.ungelesene-nachrichten { list-style-type:none; margin:0; padding:0; font-weight:bold; }
+.unbeschaeftigte-planeten .c-voriger,.ungelesene-nachrichten .c-vorige { position:absolute; top:0; left:0; }
+.unbeschaeftigte-planeten .c-voriger a:after,.ungelesene-nachrichten .c-vorige a:after { vertical-align:middle; font-size:.8em; }
+.ungelesene-nachrichten .c-vorige a:after { content:"\a0 Fastread"; }
+.unbeschaeftigte-planeten .c-naechster,.ungelesene-nachrichten .c-naechste { position:absolute; top:0; right:0; }
+.unbeschaeftigte-planeten .c-naechster a:before,.ungelesene-nachrichten .c-naechste a:before { vertical-align:middle; font-size:.8em; }
+
+.ungelesene-nachrichten .c-naechste a:before { content:"Fastread\a0"; }
+
+.unbeschaeftigte-planeten .c-voriger a:after { content:"\a0 Vorheriger Planet"; }
+.unbeschaeftigte-planeten .c-naechster a:before { content:"\a0 Naechster Planet"; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Highscores
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.highscores-seiten { list-style-type:none; margin:0; padding:0; font-weight:bold; }
+.highscores-seiten li.c-naechste { position:absolute; top:0; right:0; vertical-align:middle; font-size:.8em; }
+.highscores-seiten li.c-vorige { position:absolute; top:0; left:0; vertical-align:middle; font-size:.8em; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Deps
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.deps.deps-gebaeude { margin:0; }
+.deps { width:100%; padding:0; margin:-.1em 0 0 0; border-spacing:0; border-collapse:collapse; font-weight:bold; text-align:left; }
+.deps thead { background-color:#888; text-align:center; }
+.deps .c-item { border-right:.1em solid #aaa; }
+.deps th,.deps td { padding:.2em .3em; width:50%; vertical-align:top; }
+.deps td { border-bottom:.1em solid #aaa; }
+.deps tbody td { text-align:left; }
+.deps ul { margin:0; padding:0; list-style-type:none; }
+.deps .deps-ja,.deps .deps-ja a { color:#0f0; }
+.deps .deps-nein,.deps .deps-nein a { color:#f00; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Desc
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.desc { text-align:left; }
+.desc p { padding-left:.5em; padding-right:.5em; }
+
+.desc-prod,.desc-values { text-align:center; }
+.desc-prod table,.desc-values table { margin:.5em auto; padding:0; border-spacing:0; border-collapse:collapse; border:.1em solid #aaa; }
+.desc-prod h3,.desc-values h3 { margin:0; padding:.1em; border-bottom:.1em solid #aaa; text-align:center; background-color:#888; font-weight:bold; }
+.desc-prod th,.desc-values th { font-weight:bold; }
+.desc-prod td,.desc-prod th,.desc-values td,.desc-values th { border-bottom:.1em solid #aaa; padding:.3em; text-align:center; border-left:.1em solid #aaa; }
+.desc-prod .c-stufe,.desc-values .c-stufe { border-left-style:none; }
+.desc-prod tr:hover td,.desc-prod tr:hover th,.desc-prod tr.active td,.desc-prod tr.active th,.desc-values tr:hover td,.desc-values tr:hover th,.imperium-tabelle tr.active td,.imperium-tabelle tr.active th,.imperium-tabelle tr:hover th,.imperium-tabelle tr:hover td,.imperium-tabelle td.active,.imperium-tabelle th.active { background-color:#888; }
+.desc-values ul { text-align:left; margin-top:0; padding-top:0; margin-bottom:0; padding-bottom:0; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Ressourcen-Produktion
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.ress-prod { width:98%; border:.1em solid #aaa; border-spacing:0; border-collapse:collapse; margin:.5em; padding:0; background-color:#777; }
+.ress-prod thead { font-weight:bold; text-align:center; }
+.ress-prod th,.ress-prod td { border-bottom:.1em solid #aaa; padding:.1em .2em; border-right:.1em solid #aaa; }
+.ress-prod th.c-produktion,.ress-prod td.c-produktion { border-right-style:none; }
+.ress-prod td { text-align:right; font-weight:bold; }
+.ress-prod td.c-gebaeude { text-align:left; }
+.ress-prod td.c-gebaeude .stufe { font-weight:normal; }
+.ress-prod td.positiv { color:#0f0; }
+.ress-prod td.negativ { color:#f00; }
+.ress-prod tfoot th { text-align:left; font-weight:bold; }
+.ress-prod tfoot .c-stunde th,.ress-prod tfoot .c-stunde td { border-top:.4em double #aaa; }
+.ress-prod td.c-carbon,.ress-prod td.c-aluminium,.ress-prod td.c-wolfram,.ress-prod td.c-radium,.ress-prod td.c-tritium,.ress-prod td.c-energie { white-space:nowrap; }
+.prod-show-days { width:3ex; height:1.2em; }
+.ress-prod button { width:100%; }
+
+
+.punkte,
+.daten,
+.buendnis-informationen,
+.playerinfo-planeten,
+.allianceinfo,
+.imperium-roboter-auswirkungsgrade,
+.imperium-rohstoffe-auswirkungsgrade,
+.imperium-schiffe-auswirkungsgrade,
+.handel-ress
+{ width:70%; margin:.5em 15%; padding:0; border:.1em solid #aaa; white-space:nowrap; text-align:left; }
+
+
+* html .punkte,
+* html .daten,
+* html .allianceinfo,
+* html .imperium-roboter-auswirkungsgrade,
+* html .imperium-rohstoffe-auswirkungsgrade,
+* html .imperium-schiffe-auswirkungsgrade,
+* html .handel-ress
+{ width:100%; }
+
+.punkte dt,
+.daten dt,
+.allianceinfo dt,
+.imperium-roboter-auswirkungsgrade dt,
+.imperium-rohstoffe-auswirkungsgrade dt,
+.imperium-schiffe-auswirkungsgrade dt,
+.handel-ress dt
+{ float:left; width:35%; padding:.2em; border-bottom:.1em solid #aaa; border-right:.1em solid #aaa; margin-right:.2em; font-weight:bold; }
+
+.punkte dd,
+.daten dd,
+.allianceinfo dd,
+.imperium-roboter-auswirkungsgrade dd,
+.imperium-rohstoffe-auswirkungsgrade dd,
+.imperium-schiffe-auswirkungsgrade dd,
+.handel-ress dd
+ { margin:0 0 0 35%; padding:.2em; border-bottom:.1em solid #aaa; font-weight:bold; }
+
+.punkte dt.c-gesamt,
+.punkte dd.c-gesamt,
+.punkte dt.c-registrierung,
+.punkte dd.c-registrierung,
+.allianceinfo dt.c-punktzahl,
+.allianceinfo dd.c-punktzahl,
+.imperium-roboter-auswirkungsgrade dt.c-minenroboter,
+.imperium-roboter-auswirkungsgrade dd.c-minenroboter,
+.imperium-rohstoffe-auswirkungsgrade .c-energieproduktion,
+.imperium-schiffe-auswirkungsgrade .c-laderaumvergroesserung,
+.handel-ress
+{ border-bottom-style:none; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Bündnisinformation
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.buendnis-informationen,.playerinfo-planeten { text-align:center; font-weight:bold; list-style-type:none; border-bottom-style:none; }
+.buendnis-informationen li,.playerinfo-planeten li { border-bottom:.1em solid #aaa; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Benutzerbeschreibung
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.benutzerbeschreibung,.allianz-internes,.allianz-externes { text-align:left; padding:.5em; }
+.benutzerbeschreibung table,.allianz-internes table,.allianz-externes table,.type-6 .c-nachricht table { width:100%; border-spacing:0; border-collapse:collapse; border:.2em solid #aaa; }
+.benutzerbeschreibung td,.benutzerbeschreibung th,.allianz-internes td,.allianz-internes th,.allianz-externes td,.allianz-externes th,.type-6 .c-nachricht td,.type-6 .c-nachricht th { border:.1em solid #aaa; padding:.1em .3em; vertical-align:top; }
+.benutzerbeschreibung th,.allianz-internes th,.allianz-externes th,.type-6 .c-nachricht th { font-weight:bold; text-align:center; }
+.benutzerbeschreibung thead,.allianz-internes thead,.allianz-externes thead,.type-6 .c-nachricht thead { border-bottom:.2em solid #aaa; }
+.benutzerbeschreibung tfoot,.allianz-internes tfoot,.allianz-externes tfoot,.type-6 .c-nachricht tfoot { border-top:.2em solid #aaa; }
+.benutzerbeschreibung dl,.allianz-internes dl.allianz-externes dl,.type-6 .c-nachricht dl { width:100%; margin:0; padding:0; }
+.benutzerbeschreibung dt,.allianz-internes dt,.allianz-externes dt,.type-6 .c-nachricht dt { width:30%; float:left; margin:0; padding:0; text-align:right; font-weight:bold; }
+.benutzerbeschreibung dt:after,.allianz-internes dt:after,.allianz-externes dt:after,.type-6 .c-nachricht dt:after { content:":\a0"; }
+.benutzerbeschreibung dd,.allianz-internes dd,.allianz-externes dd,.type-6 .c-nachricht dd { margin:0 0 0 30%; padding:0; text-align:left; }
+.benutzerbeschreibung hr,.allianz-internes hr,.allianz-externes hr,.type-6 .c-nachricht hr { height:0; padding:0; border-style:solid none none none; border-width:.2em; border-color:#aaa; }
+.benutzerbeschreibung strong,.allianz-internes strong,.allianz-externes strong,.type-6 .c-nachricht strong { font-weight:bold; font-style:normal; text-decoration:none; }
+.benutzerbeschreibung em,.allianz-internes em,.allianz-externes em,.type-6 .c-nachricht em { font-weight:normal; font-style:normal; text-decoration:underline; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Nachricht
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.playerinfo-nachricht dt { position:relative; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Fertig
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.fertig { color:#0f0; font-weight:bold; }
+.fertig:hover,.fertig:focus { color:#0c0; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Queue
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.queue { width:50ex; max-width:100%; margin:.5em auto; border-width:.1em; border-color:#aaa; border-style:solid solid none solid; padding:.2em 0; text-align:center; list-style-position:inside; }
+.queue li { border-bottom:.1em solid #aaa; font-size:.8em; }
+.queue .active { font-size:1em; }
+.queue .active,.queue .last { font-weight:bold; }
+.queue .restbauzeit { border-left:.1em solid #aaa; padding-left:1ex; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Karte
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.karte-system { width:75%; border-spacing:0; border-collapse:collapse; text-align:center; margin:.5em auto; }
+.karte-system th,.karte-system td { border:.1em solid #aaa; padding:.2em; font-weight:bold; }
+.karte-system th.c-planet { width:1px; }
+.karte-system th.c-aktionen { width:10ex; }
+.karte-system td.c-aktionen ul { margin:0; padding:0; list-style-type:none; }
+.karte-system td.c-aktionen li { width:1.5ex; overflow:hidden; float:left; display:block; margin-right:.5ex; white-space:nowrap; line-height:1em; height:1em; }
+.karte-system td.c-aktionen li:first-letter,.karte-system td.c-aktionen a:first-letter { color:#fff !important; }
+.karte-system td.c-aktionen a { color:#777; }
+
+.karte-system .eigen .playername a,.highscores .eigen .playername { color:#8f8; }
+.karte-system .verbuendet .playername a,.highscores .verbuendet .playername { color:#8bf; }
+
+.karte-wahl { width:26.7em; margin:0 auto; padding:0; font-weight:bold; }
+.karte-galaxiewahl { float:left; width:13em; padding:0; margin:0 .1em 0 0; text-align:center; }
+.karte-systemwahl { width:13em; padding:0; margin:0 0 0 auto; text-align:center; float:none; }
+* html .karte-systemwahl { margin:0 0 0 13.3em; }
+.karte-wahl input { width:5ex; text-align:center; }
+.karte-wahl ul { margin:0; padding:0; list-style-type:none; }
+.karte-wahl li { display:inline; }
+.karte-wahl legend { margin:0 auto; text-align:center; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Nachrichten-Kategorien
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.nachrichten-kategorien { display:block; padding:0; margin:0; font-weight:bold; }
+.nachrichten-kategorien dt { float:left; margin:0; padding:.2em .3em; display:block; position:relative; }
+.nachrichten-kategorien dd { margin:0; padding:.2em .3em; text-align:right; display:block; border-top:.1em solid #aaa; vertical-align:middle; }
+.nachrichten-kategorien dd.c-postausgang { border-width:.3em; border-style:double none none none; }
+.nachrichten-kategorien dt.c-gesamt { margin-top:.3em; }
+.nachrichten-kategorien dd.c-gesamt { border-top:.3em double #aaa; }
+.nachrichten-kategorien .alt a,.nachrichten-kategorien dt.c-gesamt.alt { color:#bbb; }
+.nachrichten-kategorien .alt a:hover,.nachrichten-kategorien .alt a:focus { color:#888; }
+.nachrichten-kategorien .leer { display:none; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Neue Nachrichten
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.nachrichten-neu-link { font-weight:bold; list-style-type:none; text-align:center; margin:.5em 0; padding:0; font-size:1.2em; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Liste der Nachrichten
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.nachrichten-liste table { width:80%; border-spacing:0; border-collapse:collapse; margin:.5em auto; }
+.nachrichten-liste th,.nachrichten-liste td { border:.1em solid #aaa; padding:.2em; }
+.nachrichten-liste th { font-weight:bold; }
+#content-11 .nachrichten-liste td { text-align:left; }
+.nachrichten-liste td.c-betreff { font-weight:bold; }
+.nachrichten-liste .c-auswaehlen { width:1px; text-align:center; }
+.nachrichten-liste .c-absender,.nachrichten-liste .c-datum { width:25%; white-space:nowrap; }
+.nachrichten-liste .auswahl-button { width:3ex; text-align:center; padding:0; }
+.nachrichten-liste .alt a,.nachrichten-liste .archiviert a { color:#bbb; }
+.nachrichten-liste .alt a:hover,.nachrichten-liste .alt a:focus,.nachrichten-liste .archiviert a:hover,.nachrichten-liste .archiviert a:focus { color:#888; }
+.nachrichten-liste .archiviert a { font-style:italic; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Nachrichten informationen
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.nachricht-informationen { margin:0; padding:0; text-align:left; font-weight:bold; }
+.nachricht-informationen dt { margin:0; padding:.2em .5em; width:10em; float:left; border-bottom:.1em solid #aaa; clear:left; position:relative; }
+.nachricht-informationen dt:after { content:":"; }
+.nachricht-informationen dd { margin:0 0 0 11em; padding:.2em .5em; border-left:.1em solid #aaa; border-bottom:.1em solid #aaa; }
+.nachricht-informationen .c-nachricht { border-bottom-style:none; }
+.nachricht-informationen dd.c-nachricht { text-align:left; border:.1em solid transparent; border-left-color:#aaa; } /* Workaround */
+
+.nachricht-informationen.type-2.html dd.c-nachricht { padding:0; }
+.nachricht-informationen.type-2.html dd.c-nachricht dt,.nachricht-informationen.type-2.html dd.c-nachricht dd { border-style:none; }
+#content-11 .nachricht-informationen.type-2.html dd.c-nachricht h3,.nachricht-informationen.type-2.html dd.c-nachricht h4 { border-bottom:.1em solid #aaa; background-color:#888; margin:0; padding:.1em; text-align:center; font-weight:bold; }
+.nachricht-informationen.type-2.html dd.c-nachricht ul { list-style-type:disc; list-style-position:inside; margin:0; padding:0 .5em; }
+.nachricht-informationen.type-2.html dd.c-nachricht li { display:block; float:left; width:50%; padding:.2em 0; margin:0; }
+.nachricht-informationen.type-2.html h4 { clear:left; }
+.nachricht-loeschen-formular { clear:left; }
+.nachricht-informationen.type-2.html + .nachricht-loeschen-formular { display:block; text-align:center; padding:.5em 0; }
+.nachricht-informationen.type-2.html .besiedeln { text-align:center; }
+.type-2 div ul li { position:relative; }
+
+.nachricht-informationen.type-1 dd.c-nachricht { padding:0; }
+.nachricht-informationen.type-1 p { padding:0 .5em; }
+.nachricht-informationen.type-1 table { width:100%; border-spacing:0; border-collapse:collapse; margin:.5em; }
+.nachricht-informationen.type-1 th,.nachricht-informationen.type-1 td { text-align:center; border:.1em solid #aaa; padding:.1em .3em; }
+.nachricht-informationen.type-1 td.c-schiffstyp { text-align:left; }
+.nachricht-informationen.type-1 p.keine { margin:.5em; padding:.1em .3em; text-align:center; border:.1em solid #aaa; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Weitergeleitete Nachricht
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.weitergeleitete-nachricht { text-align:center; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Neue Nachrichten
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+p.neue-nachrichten { font-weight:bold; margin:0; padding:.5em; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Nachricht antworten
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.nachricht-antworten-formular,.nachricht-loeschen-formular { display:inline; margin:0; padding:0; }
+.nachricht-antworten-formular div,.nachricht-loeschen-formular div { display:inline; }
+.nachricht-antworten-formular button,#content-1 .nachricht-loeschen-formular input { width:10em; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Nachricht veröffentlichen
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#nachricht-veroeffentlichen { font-weight:bold; text-align:center; list-style-type:none; margin:0; padding:.5em; }
+.nachrichten-verbuendeten-links { margin:0; padding:0; text-align:center; font-weight:bold; }
+.nachrichten-verbuendeten-links li { display:inline; padding:.2em .3em; }
+.nachrichten-verbuendeten-links li.c-verbuendete { border-right:.1em solid #aaa; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Flotten
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.flotte-anzahl { font-weight:bold; margin:.5em; padding:.5em; border:.1em solid #aaa; height:75px; background-image: url(login/style/default/grey_graphics/addon/flotten_bg.jpg); background-repeat: no-repeat; text-align: right;}
+.flotte-anzahl.voll { color:#f00; }
+.flotte-versenden,.flotte-versenden dl { margin:0; padding:0; }
+.flotte-versenden fieldset { margin:.5em; padding:0; }
+.flotte-versenden dt a { font-weight:bold; }
+.flotte-versenden .flotte-schiffe { border-bottom-style:none; }
+.flotte-versenden .flotte-schiffe dt { float:left; margin:0; padding:.2em .5em; clear:left; width:auto; }
+.flotte-versenden .flotte-schiffe dd { margin:0; padding:.2em .5em; border-bottom:.1em solid #aaa; text-align:right; }
+.flotte-versenden .flotte-schiffe input { width:5ex; text-align:right; }
+.flotte-versenden .flotte-koords { text-align:center; font-weight:bold; }
+.flotte-versenden .flotte-koords dl { width:100%; max-width:40ex; margin:.5em auto; text-align:left; padding:0; }
+* html .flotte-versenden .flotte-koords dl { width:40ex; }
+.flotte-versenden .flotte-koords dt { width:10ex; padding:.3em 1ex; }
+.flotte-versenden .flotte-koords dd { margin:0 0 0 12ex; padding:.3em 1ex; }
+.flotte-versenden .flotte-koords .c-ziel input { width:5ex; text-align:center; padding:.2em; }
+
+.flotte-versenden-2 { font-weight:bold; text-align:center; }
+.flotte-versenden-2 dl { width:100%; max-width:65ex; margin:.5em auto; text-align:left; padding:0; border:.1em solid #aaa; }
+* html .flotte-versenden-2 dl { width:65ex; }
+.flotte-versenden-2 dd.c-tritiumverbrauch.ja { color:#0f0; }
+.flotte-versenden-2 dd.c-tritiumverbrauch.nein { color:#f00; }
+.flotte-versenden-2 dt { width:25ex; border-bottom:.1em solid #aaa; border-right:.1em solid #aaa; padding:.3em 1ex; }
+.flotte-versenden-2 dd { margin:0 0 0 27ex; border-bottom:.1em solid #aaa; padding:.3em 1ex; }
+.flotte-versenden-2 dd.c-transport { padding:0; border-style:none; }
+.flotte-versenden-2 .c-transport input { width:12ex; text-align:right; }
+.flotte-versenden-2 .c-transport dl { margin:0; padding:.5em; width:auto; border-style:none none none solid; }
+.flotte-versenden-2 .c-transport dt { float:left; padding:0; margin:0; width:20ex; border-style:none; }
+.flotte-versenden-2 .c-transport dd { padding:0; margin:0; width:auto; border-style:none; }
+
+.flotte-versandt dl { width:100%; max-width:65ex; margin:.5em auto; text-align:left; padding:0; border:.1em solid #aaa; font-weight:bold; }
+* html .flotte-versandt dl { width:65ex; }
+.flotte-versandt dt { width:25ex; border-bottom:.1em solid #aaa; border-right:.1em solid #aaa; padding:.3em 1ex; float:left; }
+.flotte-versandt dt:after { content:":\a0"; }
+.flotte-versandt dd { margin:0 0 0 27ex; border-bottom:.1em solid #aaa; padding:.3em 1ex; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Planeten
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#planets { list-style-type:none; padding:0; margin:0; position:relative; min-height:10em; text-align:left; }
+* html #planets { height:10em; width:100%; text-align:center; }
+#planets .c-felder { display:none; }
+#planets dt { margin:0; padding:0; width:1.5ex; overflow:hidden; display:block; float:left; color:#777; line-height:1.2em; height:1.2em; }
+#planets dt:first-letter { color:#fff; }
+#planets dd { margin:0; padding:0; display:block; line-height:1.2em; }
+#planets dd:before { content:":\a0"; color:#fff; }
+#planets dl { margin:0; padding:0; }
+#planets li { float:right; clear:right; width:40ex; padding:.5em 1ex; font-weight:bold; border-color:#aaa; border-width:.4ex; border-style:none none none solid; display:block; }
+* html #planets li { width:48.2ex; text-align:left; float:none; clear:none; border-width:.1em .4ex; border-style:solid; padding:.2em .5em; }
+#planets li .koords,#planets li dl { font-weight:normal; }
+#planets li.active { position:absolute; width:auto; top:0; left:0; right:42ex; border-right:.4ex solid #aaa; text-align:center; border-left-style:none; min-height:10em; }
+* html #planets li.active { position:static !important; border-right-style:none; border-top:.1em solid #aaa; border-bottom:.1em solid #aaa; padding:.5em; }
+#planets li.active > * { font-size:1.2em; }
+#planets li.active dl { margin:0; width:auto; }
+* html #planets li.active dl { width:1px; }
+#planets .active dt { display:inline; width:auto; float:none; clear:none; color:#fff; }
+#planets .active dt:after { content:":\a0"; }
+* html #planets .active dt { display:block; float:left; width:50%; text-align:right; margin:0; padding:0; clear:left; }
+#planets .active dd { display:inline; }
+#planets .active dd:before { content:""; }
+#planets .active dd:after { content:"\0a"; white-space:pre; }
+* html #planets .active dd { display:block; margin:0 0 0 50%; text-align:left; padding:0; }
+h2#punkte { clear:right; }
+#planets li + .active + li { border-top-style:solid; border-top-width:.1em; }
+* html #planets li.active .planet-info { width:100%; }
+#planets .gelangweilt { font-weight:bold; color:#8bf; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Flotten
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#flotten { margin:-.1em 0 0 0; padding:0; }
+#flotten dt { margin:0; float:left; width:78%; border-top:.1em solid #aaa; padding:.5em 1%; text-align:left; font-weight:bold; position:relative; }
+#flotten dd { margin:0; float:left; width:18%; border-top:.1em solid #aaa; padding:.5em 1%; position:relative; }
+#planeten { clear:left; }
+#flotten dt.hinflug.eigen { color:#0f0; }
+#flotten dt.rueckflug.eigen { color:#0b0; }
+#flotten dt.fremd.type-4 { color:#0cf; }
+#flotten dt.fremd.type-3,#flotten dt.fremd.type-5 { color:#f00; }
+#flotten .beschreibung,#flotten .handel a { color:#fff; }
+#flotten .beschreibung { cursor:help; }
+#flotten .rueckflug .beschreibung { color:#bbb; }
+#flotten .beschreibung:hover,#flotten .handel a:hover,#flotten .handel a:focus { color:#ccc; }
+#flotten .rueckflug .beschreibung:hover { color:#888; }
+#flotten .beschreibung[class],#flotten .beschreibung[class]:hover,#flotten .rueckflug .beschreibung[class]:hover { color:inherit; cursor:inherit; }
+#flotten .beschreibung[title],#flotten .beschreibung[titleAttribute] { color:#fff; cursor:help; }
+#flotten .rueckflug .beschreibung[title],#flotten .rueckflug .beschreibung[titleAttribute] { color:#bbb; }
+#flotten .beschreibung[title]:hover,#flotten .beschreibung[titleAttribute]:hover { color:#ccc; }
+#flotten .rueckflug .beschreibung[title]:hover,#flotten .rueckflug .beschreibung[titleAttribute]:hover { color:#888; }
+#flotten .handel { text-align:center; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Highscores
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.highscores { width:50%; margin:.5em auto; border-spacing:0; border-collapse:collapse; font-weight:bold; }
+.highscores td,.highscores th { border:.1em solid #aaa; padding:.1em .3em; }
+.highscores tbody td { text-align:left; }
+.highscores tbody td.c-punktzahl,.highscores tbody td.c-punkteschnitt,.highscores tbody td.c-gesamtpunkte { text-align:right; }
+.highscores a.nachricht-schreiben { font-weight:normal; }
+.highscores th { text-align:center; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Bündnisse
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.buendnisse-liste,.allianz-laufende-bewerbungen { margin:.5em; padding:0; }
+.buendnisse-liste dt,.allianz-laufende-bewerbungen dt { width:50%; margin:0; padding:.1em 0; border-style:none; float:left; text-align:right; display:block; font-weight:bold; }
+.buendnisse-liste dd,.allianz-laufende-bewerbungen dd { width:50%; margin:0 0 0 50%; padding:.1em 0; border-style:none; text-align:left; display:block; }
+.buendnisse-liste ul,.allianz-laufende-bewerbungen ul { margin:0; padding:0; display:inline; list-style-type:none; }
+.buendnisse-liste ul li,.allianz-laufende-bewerbungen ul li { display:inline; border-left:.1em solid #aaa; margin:0 0 0 .5ex; padding:0 0 0 .5ex; font-size:.9em; }
+.buendnisse-liste .nachricht-schreiben,.allianz-laufende-bewerbungen .allianz-rundschreiben-form { font-weight:normal; }
+.buendnisse-eingehen,.allianz-laufende-bewerbungen { margin:.5em; }
+.buendnisse,.allianz-laufende-bewerbungen { border:.1em solid #aaa; }
+.buendnisse-rundschreiben div { text-align:center; }
+* html .buendnisse-liste { height:1%; }
+.buendnisse-eingehen dt { position:relative; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Titel
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#js-title { position:absolute; z-index:50000; border:1px solid #000; padding:.5em; font-weight:normal; background-color:#FFFFE1; margin:0 10px 10px 0; color: black; font-size: 9pt; background-image: url(login/style/default/grey_graphics/addon/information.jpg); background-repeat: no-repeat; padding-top: 20px;}
+#js-title.hidden { display:none; }
+#js-title.show { display:block; }
+.popup { z-index:60000; border:.2em solid #aaa; padding:.5em; font-weight:bold; background-color:#FFFFFF; margin:-.2em -.7em -.12em -.7em; }
+#loading { z-index:40000; border:2px solid #FFA72A; padding:5px; font-weight:bold; background-color:#FFFFFF; position:fixed; top:45%; left:50%; color:#000000; background-image: url(login/style/default/grey_graphics/addon/loading.gif); background-repeat: no-repeat; padding-left: 30px;}
+* html #loading { position:absolute; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Handelsrechner
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.handelsrechner-handelskurs { text-align:center; }
+.handelsrechner-handelskurs dl dt { display:inline; font-size:.9em; font-weight:bold; float:none; margin:0; padding:0 0 0 .5ex; width:auto; border-left:.1em solid #aaa; }
+.handelsrechner-handelskurs dl dt.c-carbon { padding-left:0; border-left-style:none; }
+.handelsrechner-handelskurs dl dd { display:inline; float:none; margin:0; padding:0; width:auto; }
+.handelsrechner-handelskurs input { width:6ex; text-align:center; }
+.handelsrechner-handelskurs button { width:20ex; margin:0 auto; }
+.handelsrechner-angebot { width:45%; margin:0 .5em; float:left; position:relative; }
+.handelsrechner-erhalten { width:45%; margin:0 .5em; }
+* html .handelsrechner-erhalten { width:100%; }
+.handelsrechner input { padding:0 .2em; }
+.handelsrechner { font-weight:bold; }
+.handelsrechner fieldset div { text-align:right; font-weight:normal; }
+.handelsrechner fieldset div input { float:right; }
+.handelsrechner-angebot dl input,.handelsrechner-erhalten dl input { width:8em; }
+.handelsrechner-angebot input.handelsrechner-anteil,.handelsrechner-erhalten input.handelsrechner-anteil { width:5ex; }
+.handelsrechner noscript,.handelsrechner div { text-align:center; }
+.handelsrechner noscript button,.handelsrechner div button { margin:.5em auto; width:95%; }
+.handelsrechner-fortgeschrittener-modus { text-align:right; font-weight:normal; }
+.handelsrechner-fortgeschrittener-modus label { font-weight:bold; }
+br.clear { clear:both; }
+.handelsrechner #hilfe-schliessen-klein { list-style-type:none; margin:0; padding:0; position:absolute; top:.5em; right:.5em; }
+.handelsrechner-hilfe { position:relative; }
+#content-11 .handelsrechner-hilfe h3,#content-11 .handelsrechner-hilfe h4 { text-align:center; }
+.handelsrechner-hilfe p { text-align:justify; font-weight:normal; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Urlaubsmodus
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.urlaubsmodus div { text-align:center; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Nachrichtentypen
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.nachrichtentypen-empfangen table { width:50%; border:.1em solid #aaa; text-align:center; border-spacing:0; border-collapse:collapse; }
+.nachrichtentypen-empfangen thead th { font-weight:bold; padding:.2em .3em; }
+.nachrichtentypen-empfangen th.c-ankunft,.nachrichtentypen-empfangen th.c-rueckkehr { border-left:.1em solid #aaa; }
+.nachrichtentypen-empfangen tbody th,.nachrichtentypen-empfangen tbody td { border-top:.1em solid #aaa; padding:.1em .3em }
+.nachrichtentypen-empfangen tbody td { border-left:.1em solid #aaa; }
+.nachrichtentypen-empfangen tbody th { font-weight:bold; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Einstellungen speichern
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.einstellungen-speichern-1 { display:none; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Gegenstände
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.bauende-gegenstaende table { border-spacing:0; border-collapse:collapse; text-align:center; }
+.bauende-gegenstaende td,.bauende-gegenstaende th { border:.1em solid #aaa; padding:.2em .3em; }
+.bauende-gegenstaende th { font-weight:bold; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Gesperrt
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#gesperrt-hinweis { font-size:1.2em; font-weight:bold; color:#f00; margin:0; padding:.5em; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Changelog
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.changelog { text-align:left; margin:.5em; padding:0; border-top:.1em solid #aaa; border-right:.1em solid #aaa; border-left:.1em solid #aaa; list-style-type:none; }
+.changelog li { border-bottom:.1em solid #aaa; padding:.2em .5em; }
+.changelog li:hover { background-color:#888; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Planeten-Reihenfolge
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.planeten-reihenfolge { padding:0; border-bottom-style:none; }
+.planeten-reihenfolge ol { list-style-type:none; margin:0; padding:0; font-weight:bold; text-align:left; }
+.planeten-reihenfolge li { position:relative; padding:.2em .5em; border-bottom:.1em solid #aaa; }
+.planeten-reihenfolge .pos { font-weight:normal; }
+.planeten-reihenfolge .aktionen { position:absolute; top:0; right:0; color:#777; word-spacing:-.5ex; padding:.2em .5em; }
+.planeten-reihenfolge .aktionen a { color:#fff; }
+.planeten-reihenfolge .aktionen a:hover,.planeten-reihenfolge .aktionen a:focus { color:#ccc; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Shortcuts
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.shortcuts-verwalten { list-style-type:none; margin:0; padding:0; font-weight:bold; text-align:left; }
+.shortcuts-verwalten li { position:relative; padding:.2em .5em; border-bottom:.1em solid #aaa; text-align:left; }
+.shortcuts-verwalten .aktionen { position:absolute; top:0; right:0; color:#777; word-spacing:-.5ex; padding:.2em .5em; }
+.shortcuts-verwalten .aktionen a { color:#fff; }
+.shortcuts-verwalten .aktionen a:hover,.planeten-reihenfolge .aktionen a:focus { color:#ccc; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Allianzen
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.allianz-moeglichkeiten { text-align:center; font-weight:bold; border-top:.1em solid #aaa; border-bottom:.1em solid #aaa; margin:.5em 0; }
+.allianz-moeglichkeiten ul { margin:0; padding:0; list-style-type:none; }
+.allianz-moeglichkeiten li { margin:.5em; }
+
+.allianz-bewerben { border-top:.1em solid #aaa; font-weight:bold; margin:0; padding:0; list-style-type:none; padding:.5em; }
+
+.allianz-aktionen { font-weight:bold; margin:.5em 0; list-style-type:none; padding:.5em; border-top:.1em solid #aaa; border-bottom:.1em solid #aaa; }
+
+.allianz-rechte-form table,.allianz-liste { border-spacing:0; border-collapse:collapse; margin:.5em auto; width:95%; }
+.allianz-rechte-form table thead,.allianz-liste thead { text-align:center; font-weight:bold; }
+.allianz-rechte-form table tbody th,.allianz-liste tbody th { text-align:left; font-weight:bold; }
+.allianz-rechte-form table tbody td,.allianz-liste tbody td { text-align:center; }
+.allianz-rechte-form th,.allianz-rechte-form td,.allianz-liste th,.allianz-liste td { padding:.1em .3em; border:.1em solid #aaa; }
+
+.allianz-suchergebnisse { margin:.5em; padding:.5em; border:.1em solid #aaa; font-weight:bold; list-style-type:none; }
+
+.allianz-laufende-bewerbung { font-weight:bold; }
+.allianz-laufende-bewerbung-aktionen { margin:0; padding:.5em; list-style-type:none; font-weight:bold; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Imperium
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.imperium-tabelle { border-spacing:0; border-collapse:collapse; background-color:#777; margin:.5em; }
+.imperium-tabelle th,.imperium-tabelle td { border:.1em solid #aaa; padding:.1em .2em; }
+.imperium-tabelle td { text-align:right; }
+.imperium-tabelle th { font-weight:bold; text-align:center; }
+.imperium-tabelle th.c-planet,.imperium-tabelle th.c-einheit { border-right-style:double; border-right-width:.3em; }
+.imperium-tabelle thead th,.imperium-tabelle thead td { border-bottom-style:double; border-bottom-width:.3em; }
+.imperium-tabelle tfoot th,.imperium-tabelle tfoot td { border-top-style:double; border-top-width:.3em; }
+.imperium-tabelle .c-gesamt { border-left-style:double; border-left-width:.3em; }
+.imperium-rohstoffproduktion .c-gesamt { border-right:double; border-right-width:.3em; }
+.imperium-rohstoffproduktion .positiv { color:#0f0; }
+.imperium-rohstoffproduktion .negativ { color:#f00; }
+.imperium-tabelle .maximal { font-size:.8em; }
+
+.imperium-modi,.highscores-modi { list-style-type:none; padding:0; height:1.5em; margin:.5em; font-weight:bold; text-align:center; }
+.imperium-modi li,.highscores-modi li { float:left; border:.1em solid #aaa; margin-right:-.1em; line-height:1.5em; }
+.imperium-modi li { width:33%; }
+.highscores-modi li { width:49.5%; }
+.imperium-modi a,.highscores-modi a { display:block; }
+.imperium-modi a:hover,.imperium-modi a:focus,.highscores-modi a:hover,.highscores-modi a:focus { background-color:#888; }
+.imperium-modi .active a,.highscores-modi .active a { background-color:#999; }
+
+.allianz-bewerben-form dt,.allianz-gruenden-form dt,.allianz-intern-form dt,.allianz-extern-form dt { position:relative; }
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Alle Abbrechen
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.alle-abbrechen { padding:.5em; border:.1em solid #aaa; font-size:.8em; width:50%; margin:.5em .5em .5em auto; }
+.alle-abbrechen p { margin:0; padding:0; }
+* html .alle-abbrechen { margin-left:50%; }
+.alle-abbrechen strong { font-weight:bold; text-decoration:underline; }
+
+* html .c-werbung-ausblenden { display:none; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Autocomplete
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.autocomplete { margin:0 -1px; padding:0; overflow:auto; border:1px solid #000; background-color:Window; color:WindowText; list-style-type:none; z-index:100000; max-height:12em; }
+.autocomplete li { cursor:pointer; padding:0 2px; }
+.autocomplete li.selected { background-color:Highlight; color:HighlightText; }
+* html form { position:relative; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Body-root
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#body-root { background-position:left top; background-repeat:no-repeat; background-image:url(login/style/default/grey_graphics/images/design/bodybg1.jpg); }
+
+
+body { padding:3.5em 1em 11em 12em; }
+
+body.mit-werbung #content-9,* html body #content-9 { margin-right:1em; }
+body.mit-werbung #content-13,* html body #content-13 { top:7.5em; }
+body.mit-werbung #content-10,* html body  #content-10 { margin-right:120px; }
+
+#time { position:fixed; right:0; border-left:.2em solid #aaa; }
+#ress { position:fixed; }
+
+#navigation { position:fixed; top:3.5em; left:1em; width:10em; }
+
+#werbung { position:absolute; margin-left:auto; margin-right:auto; left:14.5em; right:14.5em; top:3.5em; width:728px; height:90px; }
+#werbung-skyscraper { position:absolute; top:12.0em; right:2.5em; width:120px; height:600px; }
+
+#content-13 { position:relative; }
+
+/* MSIE workaround */
+
+* html,* html body { padding:0; margin:0; overflow-y:hidden; }
+
+* html #time { position:absolute; left:0; right:auto; border-left-style:none; border-right:.2em solid #aaa; }
+* html #ress { position:absolute; right:auto; }
+
+* html #navigation { position:absolute; top:3.5em; left:1em; width:10em;  }
+
+* html #werbung { position:absolute; top:0; left:12.5em; bottom:0; right:0; height:100%; width:100%; padding-top:6.5em; }
+* html #werbung-skyscraper { position:absolute; top:18em; right:3.5em; width:120px; height:600px; }
+
+* html #content-10 { position:absolute; top:0; left:0; bottom:0; right:0; overflow:auto; height:100%; width:100%; padding-top:3.6em; padding-left:12em; padding-right:10px; text-align:center; }
+* html #content-11 { margin:2.6em 0 0 0; padding:1.1em 0 3.6em 0; width:100%; }
+* html #content-12 { text-align:left; position:relative; margin:75 0; }
+
+* html #version { right:20px; z-index:40000; }
+
+body {  background-position:left bottom; background-repeat:no-repeat; background-attachment:fixed; }
+
+#planets { padding:0 0 250px 0 !important; }
+* html #planets { padding:0 !important; }
+
+#planets li { background-repeat:no-repeat; background-position:right center; min-height:50px; padding:.2em 1ex; }
+* html #planets li { height:50px; }
+#planets .planet-1 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet01.png); }
+#planets .planet-2 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet02.png); }
+#planets .planet-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet03.png); }
+#planets .planet-4 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet04.png); }
+#planets .planet-5 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet05.png); }
+#planets .planet-6 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet06.png); }
+#planets .planet-7 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet07.png); }
+#planets .planet-8 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet08.png); }
+#planets .planet-9 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet09.png); }
+#planets .planet-10 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet10.png); }
+#planets .planet-11 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet11.png); }
+#planets .planet-12 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet12.png); }
+#planets .planet-13 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet13.png); }
+#planets .planet-14 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet14.png); }
+#planets .planet-15 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet15.png); }
+#planets .planet-16 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet16.png); }
+#planets .planet-17 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet17.png); }
+#planets .planet-18 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet18.png); }
+#planets .planet-19 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet19.png); }
+#planets .planet-20 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet20.png); }
+
+#planets .active,#spionage-planet dl { background-repeat:no-repeat; background-position:center top; padding:250px 0 0 0 !important; }
+.planet-1 #planets .active,#spionage-planet dl.planet_1 { background-image:url(login/style/default/grey_graphics/images/planets/planet01.png); }
+.planet-2 #planets .active,#spionage-planet dl.planet_2 { background-image:url(login/style/default/grey_graphics/images/planets/planet02.png); }
+.planet-3 #planets .active,#spionage-planet dl.planet_3 { background-image:url(login/style/default/grey_graphics/images/planets/planet03.png); }
+.planet-4 #planets .active,#spionage-planet dl.planet_4 { background-image:url(login/style/default/grey_graphics/images/planets/planet04.png); }
+.planet-5 #planets .active,#spionage-planet dl.planet_5 { background-image:url(login/style/default/grey_graphics/images/planets/planet05.png); }
+.planet-6 #planets .active,#spionage-planet dl.planet_6 { background-image:url(login/style/default/grey_graphics/images/planets/planet06.png); }
+.planet-7 #planets .active,#spionage-planet dl.planet_7 { background-image:url(login/style/default/grey_graphics/images/planets/planet07.png); }
+.planet-8 #planets .active,#spionage-planet dl.planet_8 { background-image:url(login/style/default/grey_graphics/images/planets/planet08.png); }
+.planet-9 #planets .active,#spionage-planet dl.planet_9 { background-image:url(login/style/default/grey_graphics/images/planets/planet09.png); }
+.planet-10 #planets .active,#spionage-planet dl.planet_10 { background-image:url(login/style/default/grey_graphics/images/planets/planet10.png); }
+.planet-11 #planets .active,#spionage-planet dl.planet_11 { background-image:url(login/style/default/grey_graphics/images/planets/planet11.png); }
+.planet-12 #planets .active,#spionage-planet dl.planet_12 { background-image:url(login/style/default/grey_graphics/images/planets/planet12.png); }
+.planet-13 #planets .active,#spionage-planet dl.planet_13 { background-image:url(login/style/default/grey_graphics/images/planets/planet13.png); }
+.planet-14 #planets .active,#spionage-planet dl.planet_14 { background-image:url(login/style/default/grey_graphics/images/planets/planet14.png); }
+.planet-15 #planets .active,#spionage-planet dl.planet_15 { background-image:url(login/style/default/grey_graphics/images/planets/planet15.png); }
+.planet-16 #planets .active,#spionage-planet dl.planet_16 { background-image:url(login/style/default/grey_graphics/images/planets/planet16.png); }
+.planet-17 #planets .active,#spionage-planet dl.planet_17 { background-image:url(login/style/default/grey_graphics/images/planets/planet17.png); }
+.planet-18 #planets .active,#spionage-planet dl.planet_18 { background-image:url(login/style/default/grey_graphics/images/planets/planet18.png); }
+.planet-19 #planets .active,#spionage-planet dl.planet_19 { background-image:url(login/style/default/grey_graphics/images/planets/planet19.png); }
+.planet-20 #planets .active,#spionage-planet dl.planet_20 { background-image:url(login/style/default/grey_graphics/images/planets/planet20.png); }
+
+
+
+.c-planet { background-repeat:no-repeat; background-position:left center; text-align:right; padding-left:.3em; padding-right:.3em; }
+.planet_1 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet01.png); }
+* html .planet_1 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet01.png); }
+.planet_2 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet02.png); }
+* html .planet_2 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet02.png); }
+.planet_3 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet03.png); }
+* html .planet_3 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet03.png); }
+.planet_4 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet04.png); }
+* html .planet_4 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet04.png); }
+.planet_5 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet05.png); }
+* html .planet_5 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet05.png); }
+.planet_6 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet06.png); }
+* html .planet_6 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet06.png); }
+.planet_7 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet07.png); }
+* html .planet_7 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet07.png); }
+.planet_8 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet08.png); }
+* html .planet_8 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet08.png); }
+.planet_9 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet09.png); }
+* html .planet_9 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet09.png); }
+.planet_10 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet10.png); }
+* html .planet_10 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet10.png); }
+.planet_11 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet11.png); }
+* html .planet_11 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet11.png); }
+.planet_12 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet12.png); }
+* html .planet_12 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet12.png); }
+.planet_13 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet13.png); }
+* html .planet_13 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet13.png); }
+.planet_14 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet14.png); }
+* html .planet_14 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet14.png); }
+.planet_15 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet15.png); }
+* html .planet_15 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet15.png); }
+.planet_16 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet16.png); }
+* html .planet_16 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet16.png); }
+.planet_17 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet17.png); }
+* html .planet_17 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet17.png); }
+.planet_18 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet18.png); }
+* html .planet_18 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet18.png); }
+.planet_19 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet19.png); }
+* html .planet_19 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet19.png); }
+ .planet_20 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet20.png); }
+* html .planet_20 .c-planet { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_extra_small%2fplanet20.png); }
+
+#ress dt { padding-left:21px !important; background-repeat:no-repeat; background-position:2px 50%; }
+#ress dt.ress-carbon { background-image:url(login/style/default/grey_graphics/images/resources/carbon.png); }
+#ress dt.ress-aluminium { background-image:url(login/style/default/grey_graphics/images/resources/aluminium.png); }
+#ress dt.ress-wolfram { background-image:url(login/style/default/grey_graphics/images/resources/wolfram.png); }
+#ress dt.ress-radium { background-image:url(login/style/default/grey_graphics/images/resources/radium.png); }
+#ress dt.ress-tritium { background-image:url(login/style/default/grey_graphics/images/resources/tritium.png); }
+#ress dt.ress-energie { background-image:url(login/style/default/grey_graphics/images/resources/energie.png); }
+
+* html .unbeschaeftigte-planeten .c-voriger a,* html .unbeschaeftigte-planeten .c-naechster a { width:45px; padding:0 0 0 45px; margin:0 .5ex; overflow:hidden; background-image:url(image.php?default%2fgrey_graphics%2fimages%2ffastbuild.gif); background-repeat:no-repeat; background-position:left center; }
+
+#css-3 { position:fixed; top:.7em; right:.7em; height:50px; width:50px; z-index:30000; border:.1em solid #aaa; padding:.5em; background-position:center center; background-repeat:no-repeat; background-color:#222; display:block; }
+* html #css-3 { position:absolute; margin-right:17px; }
+.planet-1 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet01.png); }
+.planet-2 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet02.png); }
+.planet-3 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet03.png); }
+.planet-4 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet04.png); }
+.planet-5 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet05.png); }
+.planet-6 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet06.png); }
+.planet-7 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet07.png); }
+.planet-8 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet08.png); }
+.planet-9 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet09.png); }
+.planet-10 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet10.png); }
+.planet-11 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet11.png); }
+.planet-12 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet12.png); }
+.planet-13 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet13.png); }
+.planet-14 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet14.png); }
+.planet-15 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet15.png); }
+.planet-16 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet16.png); }
+.planet-17 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet17.png); }
+.planet-18 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet18.png); }
+.planet-19 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet19.png); }
+.planet-20 #css-3 { background-image:url(login/style/default/grey_graphics/images/planets_small/planet20.png); }
+
+
+
+/* default/simple_blue/style.inc.css */
+
+#time,#ress,body,#css-3 { background-color:#124; }
+#time dt,#time dd,#ress dt,#ress dd,#navigation,#content-13,.ress-prod,.ress-prod th,.ress-prod td,.ress-prod tfoot .c-stunde th,.ress-prod tfoot .c-stunde td,.imperium-tabelle { background-color:#457; }
+.karte-system td.c-aktionen a,#planets dt,.planeten-reihenfolge .aktionen { color:#457; }
+.deps thead,#content-12 h1,#content-11 h2,#content-13 h3,#content-13 .desc-values h3,#content-12 #content-13 .desc-prod h3,#content-12 #content-13 .desc-values h3,.desc-prod tr:hover td,.desc-prod tr:hover th,.desc-prod tr.active td,.desc-prod tr.active th,.desc-values tr:hover td,.desc-values tr:hover th,.imperium-tabelle tr.active,#content-11 .nachricht-informationen.type-2.html dd.c-nachricht h3,.nachricht-informationen.type-2.html dd.c-nachricht h4,#content-12 #content-13 .desc-prod h3,#content-12 .nachricht-informationen.type-1 h3,#content-12 .nachricht-informationen.type-1 h4,.changelog li:hover,.imperium-modi a:hover,.imperium-modi a:focus,.highscores-modi a:hover,.highscores-modi a:focus,.imperium-tabelle td.active,.imperium-tabelle th.active,.imperium-tabelle tr.active td,.imperium-tabelle tr.active th,.imperium-tabelle tr:hover th,.imperium-tabelle tr:hover td { background-color:#568; }
+#time,#time dt,#time dd,#ress,#ress dt,#ress dd,#content-13,#content-12 h1,#content-11 h2,#content-13 h3,#content-12 #content-13 .desc-values h3,fieldset,.item,.ress-prod,.ress-prod th,.ress-prod td,.ress-prod tfoot .c-stunde th,.ress-prod tfoot .c-stunde td,.deps .c-item,.deps td,.desc-prod table,.desc-values table,#content-12 #content-13 .desc-prod h3,#content-12 #content-13 .desc-values h3,.desc-prod td,.desc-prod th,.desc-values td,.desc-values th,.punkte,.daten,.allianceinfo,.punkte dt,.daten dt,.allianceinfo dt,.punkte dd,.daten dd,.allianceinfo dd,.queue,.queue li,.queue .restbauzeit,.karte-system th,.karte-system td,.nachrichten-kategorien dd,.nachricht-informationen dd.c-nachricht,.nachrichten-kategorien dd,.nachrichten-kategorien dd.c-verbuendete,.nachrichten-kategorien dd.c-gesamt,.nachrichten-liste th,.nachrichten-liste td,.nachricht-informationen dt,.nachricht-informationen dd,.flotte-versenden .flotte-schiffe dd,.flotte-versenden-2 dl,.flotte-versenden-2 dt,.flotte-versenden-2 dd
+,#planets li,#planets li.active,#flotten dt,#flotten dd,#content-11 .nachricht-informationen.type-2.html dd.c-nachricht h3,.nachricht-informationen.type-2.html dd.c-nachricht h4,.highscores td,.highscores th,.buendnisse-liste ul li,.buendnisse,.handelsrechner-handelskurs dl dt,#content-12 #content-13 .desc-prod h3,.flotte-anzahl,.buendnis-informationen li,.buendnis-informationen,.playerinfo-planeten,.playerinfo-planeten li,.flotte-versandt dl,.flotte-versandt dt,.flotte-versandt dd,.nachrichtentypen-empfangen table,.nachrichtentypen-empfangen th.c-ankunft,.nachrichtentypen-empfangen th.c-rueckkehr,.nachrichtentypen-empfangen tbody th,.nachrichtentypen-empfangen tbody td,#content-12 .nachricht-informationen.type-1 h3,.nachricht-informationen.type-1 th,.nachricht-informationen.type-1 td,#content-12 .nachricht-informationen.type-1 h4,.nachricht-informationen.type-1 p.keine,.changelog,.changelog li,.planeten-reihenfolge li,.benutzerbeschreibung td,.benutzerbeschreibung th,.benutzerbeschreibung thead
+,.benutzerbeschreibung tfoot,.benutzerbeschreibung table,.allianz-moeglichkeiten,.allianz-bewerben,.allianz-aktionen,.allianz-rechte-form th,.allianz-rechte-form td,.allianz-liste th,.allianz-liste td,.allianz-suchergebnisse,.allianz-laufende-bewerbungen,.allianz-laufende-bewerbungen ul li,* html #planets li.active,.benutzerbeschreibung hr,.allianz-internes hr,.allianz-externes hr,.type-6 .c-nachricht hr,.imperium-tabelle th,.imperium-tabelle td,.imperium-rohstoffproduktion .c-gesamt,.imperium-modi li,.highscores-modi li,.punkte,.daten,.buendnis-informationen,.playerinfo-planeten,.allianceinfo,.imperium-roboter-auswirkungsgrade,.imperium-roboter-auswirkungsgrade dt,.imperium-roboter-auswirkungsgrade dd,.imperium-rohstoffe-auswirkungsgrade,.imperium-rohstoffe-auswirkungsgrade dt,.imperium-rohstoffe-auswirkungsgrade dd,.imperium-schiffe-auswirkungsgrade,.imperium-schiffe-auswirkungsgrade dt,.imperium-schiffe-auswirkungsgrade dd,.allianz-internes table,.allianz-externes table,.type-6 .c-nachricht table
+,.allianz-internes td,.allianz-internes th,.allianz-externes td,.type-6 .c-nachricht th,.type-6 .c-nachricht td,.allianz-externes th,.allianz-internes thead,.allianz-externes thead,.type-6 .c-nachricht thead,.allianz-internes tfoot,.allianz-externes tfoot,.type-6 .c-nachricht tfoot,.handel-ress,.handel-ress dt,.handel-ress dd,#css-3,.nachrichten-verbuendeten-links li.c-verbuendete,.alle-abbrechen,.bauende-gegenstaende td,.bauende-gegenstaende th,.benachrichtigung-fertigstellung td,.benachrichtigung-fertigstellung th { border-color:#679; }
+
+#navigation { border-color:#568; }
+#navigation li { border-color:#568; }
+#navigation li.active,#navigation li:hover { border-color:#678; }
+#navigation .active a, #navigation a:hover,#navigation a:focus { background-color:#568; }
+#navigation #navigation-karte,#navigation #navigation-board { border-color:#568; }
+#change-planet select { background-color:#568; border-color:#678; }
+
+select,option,textarea,input,button,.popup { background-color:#568; border-color:#679; }
+select:hover,select:focus,select:active,input:hover,input:focus,input:active,textarea:hover,textarea:focus,textarea:active,button:hover,button:focus,button:active,.highscores-modi .active a,.imperium-modi .active a { background-color:#679; }
+
+#content-13 * h3 { background-color:transparent; }
+.nachricht-informationen dd.c-nachricht { border-top-color:transparent; border-right-color:transparent; border-bottom-color:transparent; }
+
+a:hover,a:focus,#flotten .beschreibung:hover,#flotten .handel a:hover,#flotten .handel a:focus,.planeten-reihenfolge .aktionen a:hover,.planeten-reihenfolge .aktionen a:focus { color:#bbd; }
+#flotten .rueckflug .beschreibung:hover,.nachrichten-kategorien .alt a:hover,.nachrichten-kategorien .alt a:focus,.nachrichten-liste .alt a:hover,.nachrichten-liste .alt a:focus,.nachrichten-liste .archiviert a:hover,.nachrichten-liste .archiviert a:focus { color:#779; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+KERBEROS SKIN 1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+h3
+{
+color: #AEC2EA;
+font-size: 11pt;
+padding: 0px;
+margin: 0px;
+text-transform:uppercase;
+}
+
+.item-bauzeit
+{
+color: #CCC0CC;
+}
+
+.stufe
+{
+font-size: 9pt;
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Ausbauen / Rückbauen / Forschen
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+.item ul { padding:0px; margin:0px; list-style-type:none; list-style:none; width:150px;}
+.item .item-ausbau a,.item .item-rueckbau a { color:#0f0; font-weight:bold; }
+.item .item-ausbau a:hover,.item .item-ausbau a:focus,.item .item-rueckbau a:hover,.item .item-rueckbau a:focus { color:#0c0; }
+.item .item-ausbau.no-ress,.item .item-rueckbau.no-ress { color:gray; font-weight:bold; }
+.item .item-ausbau.forschung-global { margin-top:.5em; }
+.item .item-bau { text-align:right; }
+.item .item-bau input { text-align:right; width: 136px;}
+
+.item .item-rueckbau { font-size:.85em;}
+
+.item li { list-style-type:none; list-style:none; padding: 3px;}
+.item ul { background-color: #33334C;
+border-width: 1px;
+border-style: solid;
+border-color: #333333;
+position:absolute;
+top: 75px;
+left: 405px;}
+
+.item .restbauzeit {
+background-color: #33334C;
+border-width: 1px;
+border-style: solid;
+border-color: #333333;
+position:absolute;
+top: 60px;
+right: 150px;
+width: 100px;
+padding: 5px;
+text-align: center;
+}
+
+body
+{
+margin-bottom: 100px;
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Spielinformationen
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#gameinfo { position:fixed; bottom:0.8em; left:.3em; margin:0; padding:0; list-style-type:none; }
+
+
+
+{
+background-color: orange;
+}
+
+h1
+{
+font-size: 14pt;
+color: #FFF8DC;
+background-image:url(login/style/default/grey_graphics/addon/h1_bg.jpg);
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Planeten umbenennen
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+#planeten-umbenennen { list-style-type:none; margin:0; padding:3px; position:absolute; top:0; right:0; }
+#planeten-umbenennen a:before { content:url(login/style/default/grey_graphics/addon/edit.gif);}
+#ress{background-image:url(login/style/default/grey_graphics/addon/ress_bg.jpg);}
+#ress dd, #ress dt{border-color: #546786; background-color: #001C47;}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Abbrechen
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.abbrechen { color:#f00; font-weight:bold; background-image: url(login/style/default/grey_graphics/addon/abbrechen_bg.jpg); background-repeat: no-repeat; padding: 1px; padding-left: 20px; padding-right: 3px; white-space:nowrap;}
+.abbrechen:before { content:"\0a"; white-space:nowrap; }
+.abbrechen:hover,.abbrechen:focus { color:#c00; }
+* html .abbrechen { display:block; }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Fieldsets
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+fieldset{background-image:url(login/style/default/grey_graphics/addon/fieldset_bg.jpg); margin: 10px;}
+legend{background-color: #667799; padding: 2px; margin-left: 10px; padding-left: 10px; padding-right: 10px;}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Fieldsets
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.c-gebaeudebau,.c-forschung,.c-roboter,.c-schiffe,.c-verteidigung
+{
+width: 230px;
+}
+
+th.c-carbon:before
+ {content:url(login/style/default/grey_graphics/images/resources/carbon.png);
+}
+
+th.c-aluminium:before
+ {content:url(login/style/default/grey_graphics/images/resources/aluminium.png);
+}
+
+ th.c-wolfram:before
+ {content:url(login/style/default/grey_graphics/images/resources/wolfram.png);
+}
+
+ th.c-radium:before
+ {content:url(login/style/default/grey_graphics/images/resources/radium.png);
+}
+
+ th.c-tritium:before
+ {content:url(login/style/default/grey_graphics/images/resources/tritium.png);
+}
+
+th.c-energie:before
+ {content:url(login/style/default/grey_graphics/images/resources/energie.png);
+}
+
+ th.c-carbon:before, th.c-aluminium:before,  th.c-wolfram:before, th.c-radium:before, th.c-tritium:before, th.c-energie:before
+ {
+ padding: 2px;
+}
+
+ th.c-carbon, th.c-aluminium,  th.c-wolfram, th.c-radium, th.c-tritium, th.c-energie
+
+ {
+ /*background-color: #64738F;*/
+ background-color: #A1B0CE;
+ color: black;
+ width: 75px;
+ font-weight: normal;
+ padding: 1px;
+ font-size: 8pt;
+}
+
+th.c-gebaeude
+{
+width: 200px;
+}
+
+th.c-gesamt, th.c-stufe
+ {
+ background-color: #A1B0CE;
+ color: black;
+}
+
+.stufe, .anzahl{color: orange;}
+
+.hoch:before
+ {content:url(login/style/default/grey_graphics/addon/up.gif);}
+
+ .runter:before
+ {content:url(login/style/default/grey_graphics/addon/down.gif);}
+
+button ,.loeschen-button,
+.als-gelesen-markieren-button,
+.archivieren-button,
+input[name=archive],
+input[name=delete]
+{ border:.1em solid #999; background-color:#FFF; color:#000; font-weight:bold; padding:0 .2em;
+background-image: url(login/style/default/grey_graphics/addon/button_bg1.jpg); background-repeat: repeat-x;}
+
+button:hover,
+.loeschen-button:hover,
+.als-gelesen-markieren-button:hover,
+.archivieren-button:hover,
+input[name=archive]:hover,
+input[name=delete]:hover
+{background-image: url(login/style/default/grey_graphics/addon/button_bg2.jpg); background-repeat: repeat-x;}
+
+input[type=text],input[type=password]{background-image: url(login/style/default/grey_graphics/addon/input_bg.jpg); background-repeat: repeat-x; color: black;}
+
+input[name=umode]
+{
+background-image: url(login/style/default/grey_graphics/addon/umode.jpg); background-repeat: repeat-x; color: black;
+ padding-left: 20px; background-color: white;
+ padding-top: 0px; height: 18px;
+}
+
+.besiedeln
+{
+width: 100%;
+height: 40px;
+background-image: url(login/style/default/grey_graphics/addon/besiedeln.jpg);
+background-repeat: no-repeat;
+background-position:50% 50%;
+padding-top: 15px;
+font-size: 14pt;
+}
+
+#content-13 {margin-top: 30px;}
+
+textarea
+{
+background-image: url(login/style/default/grey_graphics/addon/textarea_bg.jpg);
+background-repeat: repeat-x;
+color: black;
+}
+
+#mitteilung-textarea
+{
+width: 350px;
+height: 250px;
+}

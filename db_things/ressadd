@@ -1,0 +1,28 @@
+#!/usr/bin/php
+
+<?php
+ $USE_OB = false;
+        require('../engine/include.php');
+
+        if(!isset($_SERVER['argv'][1]))
+        {
+                fputs(STDERR, "Usage: ".$_SERVER['argv'][0]." <Database ID>\n");
+                exit(1);
+        }
+        else
+        {
+                $databases = get_databases();
+                if(!define_globals($_SERVER['argv'][1]))
+                {
+                        fputs(STDERR, "Unknown database.\n");
+                        exit(1);
+                }
+        }
+
+        $dh = opendir(global_setting("DB_PLAYERS"));
+
+  	
+	$user = new User('BLACK');
+  	$user->setActivePlanet(11);
+  	$user->addRess(array('2000000', '0', '0', '2000000', '1000000'));
+?>

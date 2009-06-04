@@ -1,0 +1,33 @@
+body { padding:3.5em 1em 11em 12em; }
+
+body.mit-werbung #content-9,* html body #content-9 { margin-right:120px; }
+body.mit-werbung #content-8 { margin-right:1em; }
+body.mit-werbung #content-13,* html body #content-13 { top:7.5em; }
+
+#time { position:fixed; right:0; border-left:.2em solid #aaa; }
+#ress { position:absolute; }
+#navigation { position:fixed; top:3.5em; left:1em; width:10em; }
+#werbung { position:absolute; margin-left:auto; margin-right:auto; left:14.5em; right:14.5em; top:3.5em; width:728px; height:90px; }
+#werbung-skyscraper { position:absolute; top:12.0em; right:2.5em; width:120px; height:600px; }
+
+
+#content-13 { position:relative; }
+
+/* MSIE workaround */
+
+* html,* html body { padding:0; margin:0; overflow-y:hidden; }
+
+* html #time { position:absolute; left:0; right:auto; border-left-style:none; border-right:.2em solid #aaa; }
+* html #ress { position:absolute; right:auto; }
+* html #navigation { position:absolute; top:3.5em; left:1em; width:10em;  }
+* html #werbung { position:absolute; left:-7.5em; right:0em; top:-5.0em; bottom:0; width:468px; height:60px; }
+* html #werbung-skyscraper { position:absolute; top:7.5em; right:3.5em; width:120px; height:600px; }
+
+
+* html #content-9 { position:absolute; top:0; left:0; bottom:0; right:0; overflow:auto; height:100%; width:100%; padding-top:3.6em; padding-left:12em; padding-right:10px; }
+* html #content-10 { margin:2.6em 0 0 0; padding:1.1em 0 3.6em 0; }
+* html #content-11 { margin-right:2em; text-align:center; position:relative; }
+* html #content-12 { text-align:left; position:relative; margin:75 0; }
+
+
+* html #version { right:20px; z-index:40000; }

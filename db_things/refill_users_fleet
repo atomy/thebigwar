@@ -1,0 +1,41 @@
+#!/usr/bin/php
+<?php
+	$USE_OB = false;
+	require('../engine/include.php');
+
+	if(!isset($_SERVER['argv'][1]))
+	{
+		echo "Usage: ".$_SERVER['argv'][0]." <Database ID>\n";
+		exit(1);
+	}
+	else
+	{
+		$databases = get_databases();
+		if(!isset($databases[$_SERVER['argv'][1]]))
+		{
+			echo "Unknown database.\n";
+			exit(1);
+		}
+		else
+			define_globals($_SERVER['argv'][1], true);
+	}
+
+	$eventfile = Classes::EventFile();
+	#Betroffenen User eintragen
+	$user_obj = new User('arie777');
+	#Flotten	holen
+	$flotten = $user_obj->getFleetsList();
+	foreach($flotten as $flotte)
+	{
+		$fl = Classes::Fleet($flotte);
+		$time = $fl->getArrivalTime();
+		if($time < time())
+		{
+			echo $flotte;
+			$fleet = new Fleet($flotte);
+			$eventfile->removeFleet($flotte);
+			$eventfile->addNewFleet($fleet->getNextArrival(), $flotte);
+			unset($fleet);
+		}
+	}
+?>

@@ -1,0 +1,17 @@
+Standard-Skins
+new_grey_graphics_fixed	New Grey/Brown Graphics (fixed ress)	new_grey_graphics/style.inc.css simple_grey/fixed.css grey_graphics/style.inc.css
+new_grey_graphics_iframe	New Grey/Brown Graphics (non-fixed ress)	new_grey_graphics/style.inc.css simple_grey/iframe.css grey_graphics/style.inc.css
+new_blue_graphics_fixed	New Blue Graphics (fixed ress)	new_blue_graphics/style.inc.css simple_grey/fixed.css grey_graphics/style.inc.css simple_blue/style.inc.css
+new_blue_graphics_iframe	New Blue Graphics (non-fixed ress)	new_blue_graphics/style.inc.css simple_grey/iframe.css grey_graphics/style.inc.css simple_blue/style.inc.css
+blue_graphics_fixed	Blue Graphics (fixed ress)	simple_grey/style.inc.css simple_grey/fixed.css grey_graphics/style.inc.css simple_blue/style.inc.css
+blue_graphics_iframe	Blue Graphics (non-fixed ress)	simple_grey/style.inc.css simple_grey/iframe.css grey_graphics/style.inc.css simple_blue/style.inc.css
+simple_blue_fixed	Simple Blue (fixed ress)	simple_grey/style.inc.css simple_grey/fixed.css simple_blue/style.inc.css
+simple_blue_iframe	Simple Blue (non-fixed ress)	simple_grey/style.inc.css simple_grey/iframe.css simple_blue/style.inc.css
+grey_graphics_fixed	Grey Graphics (fixed ress)	simple_grey/style.inc.css simple_grey/fixed.css grey_graphics/style.inc.css
+grey_graphics_iframe	Grey Graphics (non-fixed ress)	simple_grey/style.inc.css simple_grey/iframe.css grey_graphics/style.inc.css
+simple_grey_fixed	Simple Grey (fixed ress)	simple_grey/style.inc.css simple_grey/fixed.css
+simple_grey_iframe	Simple Grey (non-fixed ress)	simple_grey/style.inc.css simple_grey/iframe.css
+kerberos-userskin	Userskin Kerberos (Version 1.b)	kerberos/style.inc.css
+internetex-only	Internet Explorer (Workaround)	internetex-only/style.inc.css simple_grey/fixed.css grey_graphics/style.inc.css simple_blue/style.inc.css
+
+

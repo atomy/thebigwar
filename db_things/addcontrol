@@ -1,0 +1,44 @@
+#!/usr/bin/php
+
+<?php
+        $USE_OB = false;
+        require('../engine/include.php');
+
+        if(!isset($_SERVER['argv'][1]))
+        {
+                fputs(STDERR, "Usage: ".$_SERVER['argv'][0]." <Database ID>\n");
+                exit(1);
+        }
+        else
+        {
+                $databases = get_databases();
+                if(!define_globals($_SERVER['argv'][1]))
+                {
+                        fputs(STDERR, "Unknown database.\n");
+                        exit(1);
+                }
+        }
+
+                        $dh = opendir(global_setting("DB_PLAYERS"));
+                        $i = 0;
+                        while(($player = readdir($dh)) !== false)
+
+                        {
+                                if($player == '.' || $player == '..') continue;
+                                $this_user = Classes::User(urldecode($player));
+                                $set = $this_user->checkSetting('noads');
+
+                                if($set == 1)
+                                {
+                                $i += count($player);
+                                echo $player,"\n";
+                                }
+
+
+                        }
+                        echo "\n";
+                        echo "$i Spieler haben einen Werbefreien Account!" ;
+                        echo "\n";
+                        closedir($dh);
+?>
+
