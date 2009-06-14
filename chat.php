@@ -15,7 +15,7 @@
 ?>
 <h2><abbr title="The Big War" xml:lang="en">T-B-W</abbr> &ndash; <span xml:lang="en">Chat</span></h2>
                 <style type="text/css">
-                        html,body,#chat-applet { width:100%; height:100%; margin:0; padding:0; border-style:none; }
+                        html,body { width:100%; height:100%; margin:0; padding:0; border-style:none; }
                 </style>
 
 <?php
@@ -109,7 +109,7 @@ open('<?=global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/cha
 <?php
 		}
 ?>
-<applet code="IRCApplet.class" archive="irc.jar,pixx.jar" id="chat-applet">
+<applet code="IRCApplet.class" codebase="chat/" archive="irc.jar,pixx.jar" id="chat-applet" width=640 height=600>
 	<param name="CABINETS" value="irc.cab,securedirc.cab,pixx.cab" />
 	<param name="nick" value="<?=$_REQUEST['nickname']?>" />
 	<param name="fullname" value="T-B-W Java User" />

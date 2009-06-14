@@ -4,7 +4,15 @@
 	$databases = get_databases();
 
 	gui::html_head();
+
 ?>
+
+<style type="text/css">
+        dd {
+          width: 50%;
+        }
+</style>
+
 <h2><abbr title="The Big War" xml:lang="en">T-B-W</abbr> &ndash; Registrieren</h2>
 <?php
 	if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password2']) &&	isset($_POST['email']) && isset($_POST['database']) && isset($databases[$_POST['database']]))
@@ -197,9 +205,6 @@
 			<li><button type="submit">Registrieren</button></li>
 		</ul>
 		<i>* Erlaubte Zeichen: A-Z, a-z, 0-9 und Leerzeichen.</i></br></br>
-		
-		<b>Dieses Spiel ist für den Firefox-Browser optimiert!</br></br>
-		Downloadlink --></b><a href="http://www.firefox-browser.de/" target"_blank">http://www.firefox-browser.de/</a>
 		
 		</fieldset>
 		

@@ -16,55 +16,56 @@
 	gui::html_head();
 ?>
 
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
 
 
-<h2><abbr title="The Big War" xml:lang="en">T-B-W</abbr> &ndash; News</h2>
+<div class="news"  style="width:400px; position:absolute; top:200px; left:200px;">
+<h2>T-B-W &ndash; News</h2>
 <?php
-	$news_array = array();
-	if(is_file(global_setting("DB_NEWS")) && filesize(global_setting("DB_NEWS")) > 0 && is_readable(global_setting("DB_NEWS")))
-		$news_array = array_reverse(unserialize(gzuncompress(file_get_contents(global_setting("DB_NEWS")))));
+        $news_array = array();
+        if(is_file(global_setting("DB_NEWS")) && filesize(global_setting("DB_NEWS")) > 0 && is_readable(global_setting("DB_NEWS")))
+                $news_array = array_reverse(unserialize(gzuncompress(file_get_contents(global_setting("DB_NEWS")))));
 ?>
-<ul class="newsbox">
+<br/>
+<ul>
 <?php
-	foreach($news_array as $news)
-	{
-		if(!is_array($news) || !isset($news['text_parsed']))
-			continue;
+        foreach($news_array as $news)
+        {
+                echo '<li class="entry">';
 
-		$title = 'Kein Titel';
-		if(isset($news['title']) && trim($news['title']) != '')
-			$title = trim($news['title']);
+                if(!is_array($news) || !isset($news['text_parsed']))
+                        continue;
 
-		$author = '';
-		if(isset($news['author']) && trim($news['author']) != '')
-			$author = trim($news['author']);
-?>
-			<?
-#			=utf8_htmlentities($title)
-			?>
-			<?
-#			=($author != '') ? ' <span class="author">('.utf8_htmlentities($author).')</span>' : ''
-			?>
-<?php
-#		if(isset($news['time']))
-#		{
-?>
-		<?
-#		=date('Y-m-d, H:i:s', $news['time'])
-		?>
-    		<li>
-	        	<?php echo utf8_htmlentities($title)?><br>
-		</li>
+                $title = 'Kein Titel';
+                if(isset($news['title']) && trim($news['title']) != '')
+                        $title = trim($news['title']);
 
-<?php
-#		}
+                $author = '';
+                if(isset($news['author']) && trim($news['author']) != '')
+                        $author = trim($news['author']);
 
-#	print("\t".str_replace("\n", "\n\t", $news['text_parsed']));
-?>
-<?php
-	}
+                print '<div class="topic">'.utf8_htmlentities($title).'</div>';
+
+                if ( $author != '' )
+                                print '<div class="author"> von '.utf8_htmlentities($author).'</div>';
+                if(isset($news['time']))
+                {
+                        print '<div class="time">'.date('d.m.Y - H:i:s', $news['time']).'</div>';
+                }
+
+                print('<div class="content">'.str_replace("\n", "\n\t", $news['text_parsed']).'</div>');
+
+                echo "</li>";
+        }
 ?>
 </ul>
-<?php
-	gui::html_foot();
-?>
+</div>
+
+
+</body>
+</html>
