@@ -5,11 +5,10 @@
 ?>
 <h2><abbr title="The Big War" xml:lang="en">T-B-W</abbr> &ndash; <abbr title="Frequently Asked Questions" xml:lang="en"><span xml:lang="de">FAQ</span></abbr></h2>
 <fieldset><legend>FAQ</legend>
-<p>Hier eine Liste häufig gestellter Fragen. Sollte die Frage, die Sie suchen, nicht dabei sein, schreiben Sie die Frage einfach ins <a href="http://www.yourhost.com/tbwforum/" xml:lang="en">Board</a>.</p>
+<p>Hier eine Liste häufig gestellter Fragen. Sollte die Frage, die Sie suchen, nicht dabei sein, schreiben Sie die Frage einfach ins <a href="http://www.stephanlinden.net/forum/" xml:lang="en">Board</a>.</p>
 <ol id="question-list">
 	<li><a href="#requirements">Was brauche ich, um <abbr title="The Big War" xml:lang="en">T-B-W</abbr> zu spielen?</a></li>
 	<li><a href="#register">Wie kann ich mich anmelden?</a></li>
-	<li><a href="#certification">Warum bekomme ich immer eine Meldung &bdquo;Ungültiges Zertifikat&ldquo;?</a></li>
 	<li><a href="#scores">Wie bekomme ich Punkte?</a></li>
 	<li><a href="#noobs">Gibt es einen Anfängerschutz?</a></li>
 	<li><a href="#planets">Kann man mehrere Planeten haben?</a></li>
@@ -27,7 +26,6 @@
 	<li><a href="#universe">Wie viele Universen gibt es?</a></li>
 	<li><a href="#expand">Bei einem Gebäude/Forschung fehlt der Ausbauknopf oder bei meinen Robotern/Schiffen/Verteidigungsanlagen fehlt das Ausbaufeld.</a></li>
 	<li><a href="#distance">Wie berechnet sich die Entfernung zwischen zwei Planeten?</a></li>
-	<li><a href="#aks">Wie funktioniert das AKS (Bündnisflug, Halten, Saveflug)?</a></li>
 </ol>
 
 <div class="faq" id="requirements">
@@ -48,16 +46,6 @@
 	<h3>Wie kann ich mich anmelden?</h3>
 	<p>Bereits registrierte Benutzer müssen das Formular, das auf der rechten Seite zu sehen ist, einfach nur ausfüllen (mit Benutzernamen und Passwort) und auf &bdquo;Anmelden&ldquo; klicken.</p>
 	<p>Noch nicht registrierte Benutzer wählen bitte in der Hauptnavigation &bdquo;<a href="register.php">Registrieren</a>&ldquo; aus, füllen das dortige Formular aus und klicken auf &bdquo;registrieren&ldquo;. Danach können Sie sich, wie oben beschrieben, anmelden.</p>
-</div>
-
-<div class="faq" id="certification">
-	<h3>Warum bekomme ich immer eine Meldung &bdquo;Ungültiges Zertifikat&ldquo;?</h3>
-	<p>Diese Meldung ist nichts Schlimmes, Sie erhalten sie, weil das Zertifikat der sicheren <abbr title="Hypertext Tranfer Protocol" xml:lang="en"><span xml:lang="de">HTTP</span></abbr>-Verbindung nicht für teures Geld bei irgendeinem Anbieter signiert wurde, sondern nur von der <a href="http://cacert.org/"><span xml:lang="en">CAcert</span>-Organisation</a> unterzeichnet ist, welche in vielen <span xml:lang="en">Browser</span>n nicht in der Liste der vertrauenswürdigen Firmen aufgeführt ist. Sie können die Warnung jedenfalls getrost ignorieren.</p>
-	<p>Falls Sie sich von der Meldung gestört fühlen, haben Sie folgende Möglichkeiten, sie zu vermeiden.</p>
-	<ul>
-		<li>Sie verzichten auf eine verschlüsselte Verbindung, indem Sie rechts auf der Seite <abbr title="Secure Sockets Layer" xml:lang="en"><span xml:lang="de">SSL</span></abbr> abschalten. Dies ist aber weniger sicher und ist deshalb nicht empfohlen.</li>
-		<li>Sie laden sich das Zertifikat herunter und installieren es bei sich. Keine Sorge, das Zertifikat ist nur eine kleine Textdatei, die auf Ihrem <span xml:lang="en">Computer</span> unter den etlichen anderen Zertifikaten, die schon auf Ihrem Betriebssystem vorinstalliert sind, gespeichert wird. Es kann keinerlei Schaden anrichten. Um die Installation zu starten, <a href="http://www.yourhost.com/yourhost-CA.crt">öffnen Sie das Zertifikat</a> und folgen den Anweisungen. (In manchen <span xml:lang="en">Browser</span>n müssen Sie zusätzlich noch auf &bdquo;Öffnen&ldquo; klicken.)</li>
-	</ul>
 </div>
 
 <div class="faq" id="scores">
@@ -156,8 +144,8 @@
 
 <div class="faq" id="administrators">
 	<h3>Wie kann ich die Administratoren erreichen?</h3>
-	<p>Ab und zu treiben sich unsere Administratoren und Entwickler im <a href="irc://irc.eu.gamesurge.net/#tbw-dev"><em xml:lang="en">#tbw-dev</em>-<span xml:lang="en">Channel</span> auf <em>irc.eu.gamesurge.net</em></a> herum. Jener Kanal wird hauptsächlich für Entwicklergespräche zwischen den <abbr title="The Big War" xml:lang="en">T-B-W</abbr>-Entwicklern verwendet.</p>
-	<p>Beachten Sie: Der <span xml:lang="en">Developer</span>-<span xml:lang="en">Channel</span> sollte nicht zum Klatsch und Tratsch verwendet werden, dazu ist der <a href="chat.php">allgemeine <span xml:lang="en">Chat</span></a> da. Sollten sich zu viele Leute nicht an diese Regel halten, kann es vorkommen, dass der Entwickler-<span xml:lang="en">Channel</span> auf &bdquo;<span xml:lang="en">moderated</span>&ldquo; geschaltet wird, das heißt, dass ein Administrator Ihnen zuerst manuell erlauben muss, etwas zu schreiben, nachdem Sie den Kanal betreten haben.</p>
+	<p>Ab und zu treiben sich unsere Administratoren und Entwickler im <a href="irc://irc.eu.gamesurge.net/#tbw"><em xml:lang="en">#tbw</em>-<span xml:lang="en">Channel</span> auf <em>irc.eu.gamesurge.net</em></a> herum.
+	<br/><a href="chat.php">Hier klicken um direkt in den Chat zu gelangen.</a></p>
 </div>
 
 <div class="faq" id="name">
@@ -189,13 +177,6 @@
 	<p>Planeten innerhalb des Sonnensystems sind in einer Reihe angeordnet. Die Distanz zum nächsten Planeten beträgt hierbei 100&thinsp;<abbr title="Orbits">Or</abbr>, die zum übernächsten 200&thinsp;<abbr title="Orbits">Or</abbr>, und so weiter.</p>
 	<p>Die Entfernung zu einem Planeten in derselben Galaxie, aber in einem anderen Sonnensystem gestaltet sich etwas schwieriger. Sie müssen sich eine Galaxie in <abbr title="The Big War" xml:lang="en">T-B-W</abbr> als riesigen Quader vorstellen, der eine Seitenlänge von 9&thinsp;000&thinsp;<abbr title="Orbits">Or</abbr> hat. Stellen Sie sich ein dreidimensionales Koordinatensystem vor, in welchem die Längeneinheiten der x-, der y- und der z-Achse jeweils 1&thinsp;000&thinsp;<abbr title="Orbits">Or</abbr> sind. Die Koordinaten eines Sonnensystems sind nun einfach herausfinden, das Sonnensystem 123 hat zum Beispiel die Koordinaten (1|2|3), also (1&thinsp;000&thinsp;<abbr title="Orbits">Or</abbr>|2&thinsp;000&thinsp;<abbr title="Orbits">Or</abbr>|3&thinsp;000&thinsp;<abbr title="Orbits">Or</abbr>). Sollten Sie sich gut in der Mathematik und der Geometrie auskennen, werden Sie nun wissen, wie sich der Abstand zwischen zwei Sonnensystemen berechnet.</p>
 	<p>Wenn Sie mit einem Raumschiff in eine andere Galaxie fliegen wollen, müssen Sie größere Distanzen zurücklegen. Stellen Sie sich einen riesigen Kreis vor, auf dem die Galaxien gleichmäßig verteilt sind. Das Raumschiff nimmt in diesem Kreis den kürzesten Weg (&bdquo;Luftlinie&ldquo;) zur Zielgalaxie. Für die Mathematiker unter uns: Die Größe des Kreises wird so ausgelegt, dass der Abstand von einer Galaxie zur nächsten <strong>auf der Kreislinie entlang</strong> genau 30&thinsp;000&thinsp;<abbr title="Orbits">Or</abbr> entspricht.</p>
-	<br />
-</div>
-
-
-<div class="faq" id="aks">
-	<h3>Wie funktioniert das AKS (Bündnisflug, Halten, Saveflug)?</h3>
-	<p>Im <a href="http://www.stephanlinden.net/forum/viewtopic.php?t=1755">TBW-Forum</a> ist ein Tutorial zum AKS (Bündnisflug, Halten, Saveflug) vorhanden.</p>
 	<br />
 </div>
 </fieldset>
