@@ -1,5 +1,6 @@
 <?php
 	require('include.php');
+	include_once('include/php2egg.php');
 
 	$databases = get_databases();
 
@@ -145,6 +146,8 @@
 					if(trim($_POST['hauptplanet']) == '')
 						$user_obj->planetName('Hauptplanet');
 					else $user_obj->planetName($_POST['hauptplanet']);
+
+					phpbb2egg("\00304Ein neuer Spieler ist dem Universum beigetreten: ".$_POST['username'], "tbw" );
 ?>
 <p class="successful">
 	Die Registrierung war erfolgreich. Sie können sich nun anmelden. Die Koordinaten Ihres Hauptplaneten lauten <?=htmlentities($koords)?>.
