@@ -603,9 +603,8 @@
 ?>
 
 <ul class="nachrichten-neu-link">
-	<li><a href="nachrichten.php?to=Donner&<?=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="n" tabindex="1.2">Nachricht an <kbd>G</kbd>O (Donner)</a></li>
 	<li><a href="nachrichten.php?to=Stoffel&<?=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="n" tabindex="1.3">Nachricht an <kbd>G</kbd>O (Stoffel)</a></li>
-	<li><a href="nachrichten.php?to=atomy&<?=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="n" tabindex="1.4">Nachricht an S<kbd>G</kbd>O (atomy)</a></li>
+	<li><a href="nachrichten.php?to=atomy&<?=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="n" tabindex="1.4">Nachricht an <kbd>G</kbd>O (atomy)</a></li>
 </ul>
 
 <dl class="nachrichten-kategorien">
