@@ -66,6 +66,22 @@
 </ul>
 </div>
 
+<div class="donate" style="position:absolute; top:450px; left:5px;">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+<input type="hidden" name="cmd" value="_donations">
+<input type="hidden" name="business" value="spenden@thebigwar.org">
+<input type="hidden" name="lc" value="DE">
+<input type="hidden" name="item_name" value="thebigwar.org">
+<input type="hidden" name="currency_code" value="EUR">
+<input type="hidden" name="bn" value="PP-DonationsBF:btn_donate_LG.gif:NonHostedGuest">
+<input type="image" src="https://www.paypal.com/de_DE/DE/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal.">
+<img alt="" border="0" src="https://www.paypal.com/de_DE/i/scr/pixel.gif" width="1" height="1">
+</form>
+</div>
+
+<div class="gdynamite"  style="position:absolute; top:490px; left:10px;">
+<a href="http://bgs.gdynamite.de/charts_vote_1066.html" target="_blank"><img src="http://voting.gdynamite.de/images/gd_animbutton.gif" border="0"></a>
+</div>
 
 </body>
 </html>

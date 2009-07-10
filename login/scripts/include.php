@@ -397,6 +397,23 @@
 <?php
 			}
 ?>
+<div class="donate" style="position:absolute; top:428px; left:8px;">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+<input type="hidden" name="cmd" value="_donations">
+<input type="hidden" name="business" value="spenden@thebigwar.org">
+<input type="hidden" name="lc" value="DE">
+<input type="hidden" name="item_name" value="thebigwar.org">
+<input type="hidden" name="currency_code" value="EUR">
+<input type="hidden" name="bn" value="PP-DonationsBF:btn_donate_LG.gif:NonHostedGuest">
+<input type="image" src="https://www.paypal.com/de_DE/DE/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen ¿ mit PayPal.">
+<img alt="" border="0" src="https://www.paypal.com/de_DE/i/scr/pixel.gif" width="1" height="1">
+</form>
+</div>
+
+<div class="gdynamite"  style="position:absolute; top:459px; left:15px;">
+<a href="http://bgs.gdynamite.de/charts_vote_1066.html" target="_blank"><img src="http://voting.gdynamite.de/images/gd_animbutton.gif" border="0"></a>
+</div>
+
 		</div>
 		<ul id="gameinfo">
 			<li class="username"><?=utf8_htmlentities($_SESSION['username'])?></li>
@@ -582,100 +599,6 @@
 			global $me;
 ?>
 			</div></div>
-
-<!-- Werbecode Start -->
-
-<?php
-			global $me;
-			global $DISABLE_ADS;
-			$aus = $me->checkSetting('noads');
-			if($aus == 1)
-
-			{
-?>
-
-<?php
-			}
-
-			else
-
-			{
-?>
-
-                        <div id="werbung">
-<?php
-                        global $DISABLE_ADS;
-                        if($me->checkSetting('performance') != 0 && (!isset($DISABLE_ADS) || !$DISABLE_ADS) && global_setting("PROTOCOL") == 'http')
-                        {
-?>
-
-
-
-                           <script type="text/javascript"><!--
-                           google_ad_client = "pub-1723997077347194";
-                           google_ad_width = 728;
-                           google_ad_height = 90;
-                           google_ad_format = "728x90_as";
-                           google_ad_type = "text";
-                           //2007-03-30: /login/scripts/include.php
-                           google_ad_channel = "8919446779";
-                           google_color_border = "CCCCCC";
-                           google_color_bg = "FFFFFF";
-                           google_color_link = "0000FF";
-                           google_color_text = "000000";
-                           google_color_url = "008000";
-                           //-->
-                           </script>
-                           <!-- <script type="text/javascript"                             src="http://pagead2.googlesyndication.com/pagead/show_ads.js">                          </script> -->
-
-<?php
-                        }
-?>
-                        </div>
-
-                        <div id="werbung-skyscraper">
-<?php
-                        global $DISABLE_ADS;
-						$imperium = false;
-						global $imperium;
-
-                        if($me->checkSetting('performance') != 0 && (!isset($DISABLE_ADS) || !$DISABLE_ADS) && $imperium == false && global_setting("PROTOCOL") == 'http')
-                        {
-?>
-
-
-
-                      <!-- eBay RelevanceAd -->
-<script language='JavaScript' type='text/javascript'>
-//<-- DO NOT CHANGE -->
-// <!--<[CDATA[
-    era_width = '120';
-    era_height = '600';
-    era_layout = 'img';
-    era_color_border = 'FF0000';
-    era_color_bg = 'FFFFFF';
-    era_color_text = '000000';
-    era_color_title = '000000';
-    era_itemtype = '0';
-    era_minprice = '1';
-    era_usepulse = '1';
-    era_publisher='385740';
-// ]]> -->
-</script>
-<!-- <script language='JavaScript' type='text/javascript' src='http://ebayrelevancead.webmasterplan.com/js/show_ads.js'></script> -->
-<!-- /eBay RelevanceAd -->
-
-
-
-
-<?php
-                        }
-?>
-                        </div>
-
-<?php
-			}
-?>
 
 		<div id="css-1"></div>
 		</div></div>

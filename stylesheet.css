@@ -8,7 +8,7 @@ html,body,p,ul,ol,table,div,h1,h2,h3,h4,h5,h6,pre,address,hr,blockquote,tr,th,td
 .navigation a:active { text-decoration:none; color:#CCCCCC; font-size:15px; font-family:Tahoma; text-align:left; }
 .navigation a:focus { text-decoration:none; color:#CCCCCC; font-size:15px; font-family:Tahoma; text-align:left; }
 .navigation a:visited { text-decoration:none; color:#CCCCCC; font-size:15px; font-family:Tahoma; text-align:left; }
-input { width:145px; color:#CCCCCC; background-color:#000000; border:solid; border-width:thin; border-color:#666666; }
+.login input { width:145px; color:#CCCCCC; background-color:#000000; border:solid; border-width:thin; border-color:#666666; }
 select { color:#CCCCCC; width:145px; background-color:#212025; border:solid; border-width:thin; border-color:#666666; }
 .login { color:#CCCCCC; vertical-align:top; }
 .login2 { color:#CCCCCC; vertical-align:top; }

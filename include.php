@@ -13,7 +13,7 @@
 <html>
 	<head>
 		<title>The Big War | T-B-W</title>
-		<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+		<link href="stylesheet.css" rel="stylesheet" type="text/css" /> 
 		<body>
 
 <?php
