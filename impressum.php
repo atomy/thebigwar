@@ -34,7 +34,7 @@
 <fieldset><legend>Credits</legend>
 <ul>
 		
-		<li>Das Spiel basier auf den Programmcode von TBW bzw. SUA</li>
+		<li>Das Spiel basiert auf den Programmcode von TBW bzw. SUA</li>
 </ul>
 </fieldset>
 
