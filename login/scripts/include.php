@@ -120,7 +120,7 @@
 <p class="error">Datenbankfehler.</p>
 <?php
 		login_gui::html_foot();
-		exit(1);
+		exit( "Datenbankfehler" );
 	}
 
 	if($_SESSION['ip'] != $_SERVER['REMOTE_ADDR'] && $me->checkSetting('ipcheck'))
