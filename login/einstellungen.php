@@ -2,6 +2,18 @@
 	require('scripts/include.php');
 	require('../include/config_inc.php');
 
+	$demo = false;
+
+	if ( $_POST && strtolower( $me->getName() ) == strtolower( "DEMO" ) )
+	{
+		$demo = true;
+?>      
+<p class="error">
+        Das Veraendern von Einstellungen ist im Demo-Account nicht moeglich.
+</p>    
+<?php  
+	}
+
 	$changed = false;
 
 	$receive_settings = $me->checkSetting('receive');
@@ -10,6 +22,9 @@
 	$messengers = get_messenger_info();
 	$messenger_settings = $me->getNotificationType();
 	$messenger_receive = $me->checkSetting('messenger_receive');
+
+        if ( !$demo )
+        {
 
 	if(isset($_POST['skin-choice']))
 	{
@@ -185,8 +200,8 @@
 				$imfile->addMessage($new_uin, $new_protocol, $me->getName(), "Sie erhalten diese Nachricht, weil jemand in The Big War diesen Account zur Benachrichtigung eingetragen hat. Ignorieren Sie die Nachricht, wenn Sie die Eintragung nicht vornehmen möchten. Um die Einstellung zu bestätigen, antworten Sie bitte auf diese Nachricht folgenden Code: ".$rand_id);
 			}
 		}
+	 }
 	}
-
 	login_gui::html_head();
 
 	$tabindex = 1;
@@ -203,44 +218,6 @@
 	}
 ?>
 <form action="<?=htmlentities(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/login/einstellungen.php?'.urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="einstellungen-formular">
-
-<!-- Werbecode ON/OFF Beginn -->
-
-<?php			
-			global $me;
-			global $DISABLE_ADS;
-			$aus = $me->checkSetting('noads');
-			if($aus == 1)
-			
-			{
-?>
-		<p>
-			<fieldset>
-				<legend>Account Status</legend>
-					<div class="noads">Dieser Account ist werbefrei!</div>
-			</fieldset>			
-		</p>
-<?php
-			}
-			else
-                     {
-?>
-
-<!-- 		<fieldset> -->
-<!--				<legend>Account Status</legend> -->
-<!--						<div class="ads">Dieser Account ist nicht werbefrei!</div> -->	
-<!--							<div class="ads" style="color:#ffffff"> -->
-<!--								<p><a href="<?GLOBAL_GAMEURL?>mediawiki/index.php/Werbung" target="_blank">[ Informationen zur Werbung / Wiki ]</a> -->
-<!--								&nbsp;&nbsp;&nbsp; -->
-<!--								<a href="<?GLOBAL_GAMEURL?>login/nachrichten.php?to=supergameoperator&subject=Werbefreiheit / Payment&<?=htmlentities(session_name().'='.urlencode(session_id()))?>">[ Werbefreiheit buchen / eMail ]</a></p> -->
-<!--							</div> -->
-<!--			</fieldset> -->			
-			
-<?php
-			}
-?>
-
-<!-- Werbecode ON/OFF Ende -->
 
 	<fieldset class="verschiedene-einstellungen">
 		<legend>Verschiedene Einstellungen<input type="hidden" name="change-checkboxes" value="1" /></legend>

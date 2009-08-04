@@ -23,35 +23,6 @@
     <body><div id="content-1"><div id="content-2"><div id="content-3"><div id="content-4"><div id="content-5"><div id="content-6"><div id="content-7"><div id="content-8"><div id="content-9"><div id="content-10"><div id="content-11"><div id="content-12"><div id="content-13">
     <h1 class="nachricht-informationen">Öffentliche Nachricht</h1>
 
-<!-- Werbecode Start --->
-
-<p>
-<div class="nachricht-informationen" style="text-align:center">
-<fieldset>
-		<legend>Anzeige</legend>
-
-                       <script type="text/javascript"><!--
-                       google_ad_client = "pub-1723997077347194";
-                       google_ad_width = 468;
-                       google_ad_height = 60;
-                       google_ad_format = "468x60_as";
-                       google_ad_type = "text";
-                       google_ad_channel = "";
-                       google_color_border = "000000";
-                       google_color_bg = "FFFFFF";
-                       google_color_link = "000000";
-                       google_color_text = "000000";
-                       google_color_url = "008000";
-                       //-->
-                       </script>
-                       <!-- <script type="text/javascript"                          src="http://pagead2.googlesyndication.com/pagead/show_ads.js">                        </script> -->
-	</fieldset>
-</div>
-</p>
-
-<!-- Werbecode Ende --->
-
-
 
 <?php
     $databases = get_databases();
@@ -96,39 +67,6 @@
 <?php
     }
 ?>
-       
-<!-- Werbecode Start --->
-
-<p>
-<div class="nachricht-informationen" style="text-align:center">
-<fieldset>
-		<legend>Anzeige</legend>
-
-                      <!-- eBay RelevanceAd -->
-<script language='JavaScript' type='text/javascript'>
-//<-- DO NOT CHANGE -->
-// <!--<[CDATA[
-    era_width = '468';
-    era_height = '60';
-    era_layout = 'img';
-    era_color_border = 'FF0000';
-    era_color_bg = 'FFFFFF';
-    era_color_text = '000000';
-    era_color_title = '000000';
-    era_itemtype = '0';
-    era_minprice = '1';
-    era_usepulse = '1';
-    era_publisher='385740';
-// ]]> -->
-</script>
-<!-- <script language='JavaScript' type='text/javascript' src='http://ebayrelevancead.webmasterplan.com/js/show_ads.js'></script> -->
-<!-- /eBay RelevanceAd -->
-	</fieldset>
-</div>
-</p>
-
-<!-- Werbecode Ende --->
-
 	   </div></div></div></div></div></div></div></div></div></div></div></div></div>
     </body>
 </html>

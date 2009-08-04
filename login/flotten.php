@@ -228,21 +228,24 @@
 					unset($types[2]); # Kein Truemmerfeld, Sammeln nicht moeglich
 
 				if($me->getPosString() == $_POST['galaxie'].':'.$_POST['system'].':'.$_POST['planet'] || $planet_owner_flag == 'U')
-				{ # Selber Planet / Urlaubsmodus, nur Sammeln
+				{ 
+					# Selber Planet / Urlaubsmodus, nur Sammeln
 					if($truemmerfeld && isset($types[2]))
 						$types = array(2 => 0);
 					else
 						$types = array();
 				}
 				elseif($planet_owner == $_SESSION['username'])
-				{ # Eigener Planet
+				{ 
+					# Eigener Planet
 					if(isset($types[3])) # Angriff nicht moeglich
 						unset($types[3]);
 					if(isset($types[5])) # Spionage nicht moeglich
 						unset($types[5]);
 				}
 				else
-				{ # Fremder Planet
+				{ 	
+					# Fremder Planet
 					if(isset($types[6])) # Stationieren noch nicht moeglich
 						unset($types[6]);
 					if($me->isVerbuendet($planet_owner) && isset($types[3])) # Verbuendet, Angriff nicht moeglich
@@ -250,12 +253,12 @@
 				}
 
 				if(fleets_locked()) # Flottensperre
-  		            {
-                          if($planet_owner && !$me->isVerbuendet($planet_owner) && isset($types[5])) # Feindliche Spionage nicht moeglich  
-  		                        unset($types[5]);
-  		                  if(isset($types[3])) # Angriff nicht erlaubt
-  		                        unset($types[3]);
-  		            }
+  		            	{
+                          		if($planet_owner && !$me->isVerbuendet($planet_owner) && isset($types[5])) # Feindliche Spionage nicht moeglich  
+  		                        	unset($types[5]);
+  		                  	if(isset($types[3])) # Angriff nicht erlaubt
+  		                        	unset($types[3]);
+  		            	}
 
 				if(count($types) <= 0)
 				{
@@ -265,9 +268,9 @@
 	Sie haben nicht die richtigen Schiffe ausgewählt, um diesen Planeten anzufliegen.
 </p>
 <?php
-                    }
-                    else
-                    {
+                    		}
+                    		else
+                    		{
 
 					$types = array_flip($types);
 
@@ -290,6 +293,18 @@
 					
 					if(isset($_POST['auftrag']) || isset($_POST['buendnisflug1']))
 					{
+						if ( $this->getName() == "DEMO" )
+						{
+							if( defined('ajax') ) 
+								return array('error', 'DEMO-Account');
+?>
+<p class="error">
+	Das Versenden von Flotten ist im Demo-Account nicht moeglich.
+</p>
+<?php
+
+						}
+
 						if(isset($_POST['buendnisflug1']))
 						{
 							$exp = explode("/", $_POST['buendnisflug1']);
@@ -323,12 +338,13 @@
 							if($buendnisflug) $_POST['auftrag'] = $buendnisflug_fleet->getCurrentType();
  	  	                                  else $auftrag = $_POST['auftrag'];
  	  	 
- 	  	                                  if(!$buendnisflug && !in_array($_POST['auftrag'], $types)) $show_form2 = true;
+ 	  	                                  	if(!$buendnisflug && !in_array($_POST['auftrag'], $types)) 
+								$show_form2 = true;
 							else
 							{
-							$that_user = Classes::User($planet_owner);
+								$that_user = Classes::User($planet_owner);
 
-							$noob = false;
+								$noob = false;
 							if($planet_owner && ($_POST['auftrag'] == '3' || $_POST['auftrag'] == '5') && !$that_user->userLocked() && !file_exists(global_setting("DB_NONOOBS")))
 							{
 								# Anfaengerschutz ueberpruefen
