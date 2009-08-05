@@ -76,7 +76,7 @@
 		
 								</select>&nbsp;<input type="submit" name="anmelden" style=" font-weight:bold; color:#FCFCCC; " value="Anmelden" /></div>
 								<div class="login4"><a href="http://<?=$_SERVER['HTTP_HOST'].h_root?>/passwd.php">Passwort vergessen?</a>
-								<div class="login5"><a href="http://<?=$_SERVER['HTTP_HOST'].h_root?>/login/index.php?username=demo&password=demo&database=<?=utf8_htmlentities($id)?>">Gast Zugang</a>
+								<div class="login5"><a href="http://<?=$_SERVER['HTTP_HOST'].h_root?>/login/guest.php?&database=<?=utf8_htmlentities($id)?>">Gast Zugang</a>
 							</div>
 						</form>
 					</div>
