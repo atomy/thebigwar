@@ -253,12 +253,12 @@
 				}
 
 				if(fleets_locked()) # Flottensperre
-  		            	{
-                          		if($planet_owner && !$me->isVerbuendet($planet_owner) && isset($types[5])) # Feindliche Spionage nicht moeglich  
-  		                        	unset($types[5]);
-  		                  	if(isset($types[3])) # Angriff nicht erlaubt
-  		                        	unset($types[3]);
-  		            	}
+  		            {
+                          if($planet_owner && !$me->isVerbuendet($planet_owner) && isset($types[5])) # Feindliche Spionage nicht moeglich  
+  		                        unset($types[5]);
+  		                  if(isset($types[3])) # Angriff nicht erlaubt
+  		                        unset($types[3]);
+  		            }
 
 				if(count($types) <= 0)
 				{
@@ -268,9 +268,9 @@
 	Sie haben nicht die richtigen Schiffe ausgewählt, um diesen Planeten anzufliegen.
 </p>
 <?php
-                    		}
-                    		else
-                    		{
+                    }
+                    else
+                    {
 
 					$types = array_flip($types);
 
@@ -293,15 +293,17 @@
 					
 					if(isset($_POST['auftrag']) || isset($_POST['buendnisflug1']))
 					{
-						if ( $this->getName() == "DEMO" )
+						$owner_obj = Classes::User($planet_owner);
+						if ( strtolower($owner_obj->getName()) == strtolower("DEMO") )
 						{
 							if( defined('ajax') ) 
 								return array('error', 'DEMO-Account');
 ?>
 <p class="error">
-	Das Versenden von Flotten ist im Demo-Account nicht moeglich.
+	Das Versenden von Flotten ist im Zusammenhang mit dem Demo-Account nicht moeglich.
 </p>
 <?php
+							return false;
 
 						}
 
@@ -342,9 +344,9 @@
 								$show_form2 = true;
 							else
 							{
-								$that_user = Classes::User($planet_owner);
+							$that_user = Classes::User($planet_owner);
 
-								$noob = false;
+							$noob = false;
 							if($planet_owner && ($_POST['auftrag'] == '3' || $_POST['auftrag'] == '5') && !$that_user->userLocked() && !file_exists(global_setting("DB_NONOOBS")))
 							{
 								# Anfaengerschutz ueberpruefen
