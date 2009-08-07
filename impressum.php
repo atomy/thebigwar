@@ -7,9 +7,9 @@
 
 <fieldset><legend>Spielbetreiber</legend>
 <ul>
-	<li>Projektleader</li><br><br>
-	<li>atomy</li>
-	<li>xsawa</li>
+	<li>Projektleader:</li><br><br>
+	<li>atomy@thebigwar.org</li><br>
+	<li>xsawa@thebigwar.org</li><br>
 </ul>
 <ul>
 <li><em xml:lang="en">The Big War</em> ist ein privates Projekt, das zur Zeit keinerlei kommerzielle Absichten verfolgt.</li>
@@ -21,12 +21,11 @@
 <fieldset><legend>Kontakt</legend>
 <p>Sollten Sie eine Frage oder Anmerkung bezüglich des Spiels haben, haben Sie folgende Möglichkeiten:</p>
 <ul>
-	<li>Setzen Sie sich per <a href="mailto:atomy@jackinpoint.net">eMail</a> mit dem Betreiber in Verbindung.</li>
+	<li>Setzen Sie sich per <a href="mailto:atomy@thebigwar.org">eMail</a> mit dem Betreiber in Verbindung.</li>
 	<li>Stellen Sie ihre Frage öffentlich im <a href="http://www.stephanlinden.net/forum/" xml:lang="en">Forum</a>.</li>
 	<li>Fragen Sie im Support-Kanal des <a href="http://<?=$_SERVER['HTTP_HOST'].h_root?>/chat.php">Chats</a> nach.</li>
 
 </ul>
-<p>Es besteht keine Garantie auf eine Antwort, normalerweise erfolgt eine solche aber innerhalb eines Tages.</p>
 </fieldset>
 
 <p></p>
