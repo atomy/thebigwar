@@ -23,6 +23,12 @@
 </tr>
 </table>
 
+<div class="TestuniIntro" style="margin-top:20px; margin-left:20px; margin-bottom:20px; margin-right:0px; width:500px; border:3pt solid #ff0000; padding:15px; font-size: 1.2em; line-height: 1.5;">
+Achtung! Dies ist das Testuni von TBW, d.h. hier werden Neuerungen getestet bevor sie den Weg ins richtige Universum finden.<br />
+Das erfordert, dass dieses Uni nicht zum ueblichen Spielen verwendet wird, sondern um die Neuerungen die in den unterstehenden News angekuendigt werden ausgiebig zu testen.<br/>
+Solltet ihr auf Fehler treffen bitten wir euch diese im <a href="https://jackinpoint.net/mantis/">Bugtracker</a> bzw. <a href="http://forum.thebigwar.org/">Forum</a> zu melden. <br />
+Mindestens genauso wichtig ist eure Meinung zu den Neuerungen, Feedback, Verbesserungsvorschlaege daher bitte ins Forum.<br />
+</div>
 
 <div class="news"  style="width:400px; position:absolute; top:200px; left:200px;">
 <h2>T-B-W &ndash; News</h2>
