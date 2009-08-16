@@ -81,6 +81,9 @@
 <div class="gdynamite"  style="position:absolute; top:490px; left:10px;">
 <a href="http://bgs.gdynamite.de/charts_vote_1066.html" target="_blank"><img src="http://voting.gdynamite.de/images/gd_animbutton.gif" border="0"></a>
 </div>
+<div class="gnews" style="position:absolute; top:530px; left:10px;">
+<a href=http://www.galaxy-news.de/charts/?op=vote&game_id=3353 target="_blank"><img src="images/vote.gif" style="border:0;" alt="Die besten Browsergames in den Galaxy-News MMOG-Charts!"></a>
+</div>
 <div class="spamtrap" style="position:absolute; left:100px; top:1980px; color:#000000">
 Spammers send mail to spbox2@eum-gilde.de - DO NOT SEND MAILS THERE
 </div>

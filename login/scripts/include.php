@@ -391,8 +391,6 @@
 <!--				<li id="navigation-wiki" xml:lang="en"><a href="/mediawiki/" target="_blank"><abbr title="TBW-Wiki">Wiki</abbr></a></li> -->
 				<li id="navigation-chat" xml:lang="en"><a href="http://<?=htmlentities(get_default_hostname().h_root)?>/chat.php" target="blank"><abbr title="Support / Chat (IRC)">Support / Chat</abbr></a></li>
 				<li id="navigation-bug" xml:lang="en"><a href="https://mantis.jackinpoint.net/main_page.php" target="blank"><abbr title="Fehler melden">Fehler melden</abbr></a></li>
-
-<!--				<li id="navigation-vote" xml:lang="en"><a href="http://bgs.gdynamite.de/charts_vote_1066.html" target="_blank"><img src="http://voting.gdynamite.de/images/gd_animbutton.gif" border="0"><br><abbr title="Please vote for TBW">Please vote for TBW</abbr></a></li> -->
 			</ul>
 <?php
 			}
@@ -412,6 +410,9 @@
 
 <div class="gdynamite"  style="position:absolute; top:459px; left:15px;">
 <a href="http://bgs.gdynamite.de/charts_vote_1066.html" target="_blank"><img src="http://voting.gdynamite.de/images/gd_animbutton.gif" border="0"></a>
+</div>
+<div class="gnews" style="position:absolute; top:492px; left:15px;">
+<a href=http://www.galaxy-news.de/charts/?op=vote&game_id=3353 target="_blank"><img src="../images/vote.gif" style="border:0;" alt="Die besten Browsergames in den Galaxy-News MMOG-Charts!"></a>
 </div>
 
 		</div>
@@ -452,49 +453,6 @@
        	         <dd class="ress-energie<?=($cur_ress[5]<0) ? " negativ" : ""?>" id="ress-energie"><?=ths($cur_ress[5])?></dd>
 	            </dl>
 		<div id="content-10"><div id="content-11"><div id="content-12"><div id="content-13">
-
-
-<!-- Werbecode Beginn -->
-<?php
-			global $me;
-			global $DISABLE_ADS;
-			$aus = $me->checkSetting('noads');
-			if($aus == 1)
-
-			{
-?>
-
-<?php
-			}
-			else
-            {
-?>
-<p>
-
-                       <script type="text/javascript"><!--
-                       google_ad_client = "pub-1723997077347194";
-                       google_ad_width = 468;
-                       google_ad_height = 60;
-                       google_ad_format = "468x60_as";
-                       google_ad_type = "text";
-                       google_ad_channel = "";
-                       google_color_border = "000000";
-                       google_color_bg = "FFFFFF";
-                       google_color_link = "000000";
-                       google_color_text = "000000";
-                       google_color_url = "008000";
-                       //-->
-                       </script>
-                       <!-- <script type="text/javascript"                      src="http://pagead2.googlesyndication.com/pagead/show_ads.js">                        </script> -->
-
-</P>
-
-<?php
-			}
-?>
-
-<!-- Werbecode Ende -->
-
 
 <?php
 			$locked_until = false;
