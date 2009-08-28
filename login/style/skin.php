@@ -1,5 +1,6 @@
 <?php
-	require('../../engine/include.php');
+	require_once( '../../include/config_inc.php' );
+	require( TBW_ROOT.'engine/include.php' );
 
 	header('Content-type: text/css; charset=ISO-8859-1');
 	header('Cache-control: max-age=152800');

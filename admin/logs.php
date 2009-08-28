@@ -1,5 +1,6 @@
 <?php
-	require('include.php');
+	require_once( '../include/config_inc.php' );
+	require( TBW_ROOT.'admin/include.php' );
 
 	if(!$admin_array['permissions'][10])
 		die('No access.');

@@ -6,7 +6,7 @@
 $RELPATH = substr( $_SERVER['PHP_SELF'], 0, strrpos( $_SERVER['PHP_SELF'], "/" ) + 1 );
 ini_set( "session.cookie_path", $RELPATH );
 
-require('../engine/include.php');
+require( TBW_ROOT.'engine/include.php' );
 
 	$actions = array(
 		"0" => "%s hat sich angemeldet.",
@@ -150,7 +150,7 @@ require('../engine/include.php');
 
 	class admin_gui
 	{
-		function html_head()
+		public static function html_head()
 		{
 ?>
 
@@ -174,7 +174,7 @@ require('../engine/include.php');
 <?php
 		}
 
-		function html_foot()
+		public static function html_foot()
 		{
 ?>
 	</body>

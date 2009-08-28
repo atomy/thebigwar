@@ -2,7 +2,9 @@
 	$LOGIN = true;
 	define('ignore_action', true);
 	define('ajax', true);
-	require_once('../../engine/include.php');
+	
+	require_once( '../../include/config_inc.php' );
+	require( TBW_ROOT.'engine/include.php' );
 
 	header('Content-type: text/xml;charset=UTF-8');
 	echo "<xmlresponse>\n";

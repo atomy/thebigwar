@@ -1,6 +1,8 @@
 <?php
 	$LOGIN = true;
-	require('../engine/include.php');
+	require_once( '../include/config_inc.php' );
+	require( TBW_ROOT.'engine/include.php' );
+
 	header('Content-type: text/javascript; charset=ISO-8859-1');
 	header('Cache-control: max-age=152800');
 	header('Expires: '.strftime('%a, %d %b %Y %T %Z', time()+152800));

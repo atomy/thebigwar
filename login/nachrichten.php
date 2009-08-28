@@ -1,5 +1,6 @@
 <?php
-	require('scripts/include.php');
+	require_once( '../include/config_inc.php' );
+	require( TBW_ROOT.'login/scripts/include.php' );
 
 	login_gui::html_head();
 
@@ -608,7 +609,7 @@
 
 <ul class="nachrichten-neu-link">
 	<li><a href="nachrichten.php?to=Stoffel&<?=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="n" tabindex="1.3">Nachricht an <kbd>G</kbd>O (Stoffel)</a></li>
-	<li><a href="nachrichten.php?to=Fzero&<?=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="n" tabindex="1.4">Nachricht an <kbd>G</kbd>O (Fzero)</a></li>
+	<li><a href="nachrichten.php?to=atomy&<?=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="n" tabindex="1.4">Nachricht an <kbd>G</kbd>O (atomy)</a></li>
 </ul>
 
 <dl class="nachrichten-kategorien">

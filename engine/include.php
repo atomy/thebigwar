@@ -1,4 +1,9 @@
 <?php
+	if ( !defined( TBW_ROOT ) )
+		define( "TBW_ROOT", "" );
+		
+	require_once( TBW_ROOT.'include/config_inc.php' );
+	
 	define('start_mtime', microtime(true));
 	ini_set( "session.gc_maxlifetime", 3600 );
 	error_reporting(2047);
@@ -37,19 +42,22 @@
 #		}
 	}
 
-	function global_setting($key, $value=null)
+	function global_setting( $key, $value=NULL )
 	{
 		static $settings;
 
-		if($value === null)
+		if( $value == NULL )
 		{
-			if(!isset($settings[$key])) return null;
-			else return $settings[$key];
+			if( !isset( $settings[ $key ] ) ) 
+				return null;
+			else 
+				return $settings[ $key ];
 		}
 		else
 		{
-			$settings[$key] = $value;
-			return true;
+			$settings[ $key ] = $value;
+			
+			return $settings[ $key ];
 		}
 	}
 
@@ -477,6 +485,7 @@
 					return true;
 
 				$url = global_setting("PROTOCOL").'://'.$real_hostname.$_SERVER['PHP_SELF'];
+			
 				if($_SERVER['QUERY_STRING'] != '')
 					$url .= '?'.$_SERVER['QUERY_STRING'];
 				header('Location: '.$url, true, 307);

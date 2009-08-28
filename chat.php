@@ -1,8 +1,8 @@
 <?php
-	require('include.php');
-	require_once('include/config_inc.php');
+	require_once( 'include/config_inc.php' );
+	require( TBW_ROOT.'include.php' );
 
-        $channels = array(
+    $channels = array(
             		    'tbw' => array('TBW Chat ', 'irc.eu.gamesurge.net', '#tbw')#,
 #			    'tbw-support' => array('Support Chat ', 'irc.eu.gamesurge.net', '#tbw-support')
             		 );

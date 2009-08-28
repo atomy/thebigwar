@@ -1,6 +1,7 @@
 <?php
-	require('scripts/include.php');
-	
+	require_once( '../include/config_inc.php' );
+	require( TBW_ROOT.'login/scripts/include.php' );
+
 	if(isset($_GET['cancel']))
 	{
 		# Flotte zurueckrufen
@@ -324,7 +325,7 @@
 			if($hold !== -1 && $fl->getCurrentType() == 4 && !$fl->isFlyingBack() && $me->isOwnPlanet($fl->getCurrentTarget()) && !$me->userLocked() && !$me->umode())
 			{
 ?>
-				<div class="handel"><a href="flotten_actions.php?action=handel&amp;id=<?=htmlspecialchars(urlencode($flotte))?>&amp;<?=htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Geben Sie dieser Flotte Ladung mit auf den Rückweg">Handel</a></div>
+				<div class="handel"><a href="flotten_actions.php?action=handel&amp;id=<?=htmlspecialchars(urlencode($flotte))?>&amp;<?=htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Geben Sie dieser Flotte Ladung mit auf den Rï¿½ckweg">Handel</a></div>
 <?php
  	  	       }
                      if($fl->getCurrentType() == 3 && !$fl->isFlyingBack() && array_search($me->getName(), $fl->getUsersList()) === 0)

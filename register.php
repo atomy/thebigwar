@@ -1,6 +1,7 @@
 <?php
-	require('include.php');
-	include_once('include/php2egg.php');
+	require_once( 'include/config_inc.php' );
+	require( TBW_ROOT.'include.php' );
+	include_once( TBW_ROOT.'include/php2egg.php' );
 
 	$databases = get_databases();
 
@@ -82,45 +83,14 @@
 			{
 				$user_obj = Classes::User($_POST['username']);
 				if(!$user_obj->create())
-					$error = 'Datenbankfehler beim Anlegen des Benutzeraccounts.';
-
-				# Koordinaten des Hauptplaneten bestimmen
+					$error = 'Datenbankfehler beim Anlegen des Benutzeraccounts.';		
 
 				__autoload('Galaxy');
-				$galaxies_count = getGalaxiesCount();
-				$galaxies = array();
-				for($i=1; $i<=$galaxies_count; $i++)
-					$galaxies[] = $i;
-				shuffle($galaxies);
-
-				$koords = false;
-				foreach($galaxies as $galaxy)
-				{
-					$galaxy_obj = Classes::Galaxy($galaxy);
-					if(!$galaxy_obj->getStatus()) continue;
-					$systems_count = $galaxy_obj->getSystemsCount();
-					$systems = array();
-					for($i=1; $i<=$systems_count; $i++)
-						$systems[] = $i;
-					shuffle($systems);
-
-					foreach($systems as $system)
-					{
-						$planets_count = $galaxy_obj->getPlanetsCount($system);
-						$empty_planets = array();
-						for($i=0; $i<$planets_count; $i++)
-						{
-							if($galaxy_obj->getPlanetOwner($system, $i) === '') $empty_planets[] = $i;
-						}
-						if(count($empty_planets) > 0)
-						{
-							$koords = $galaxy.':'.$system.':'.$empty_planets[array_rand($empty_planets)];
-							break 2;
-						}
-					}
-				}
-
-				if(!$koords)
+				
+				# Koordinaten des Hauptplaneten bestimmen
+				$koords = getFreeKoords();
+				
+				if( !$koords )
 				{
 					$error = 'Es gibt keine freien Planeten mehr.';
 					$user_obj->destroy();

@@ -1,5 +1,6 @@
 <?php
-	require('include.php');
+	require_once( '../../include/config_inc.php' );
+	require( TBW_ROOT.'engine/include.php' );
 
 	$planet_error = false;
 	if(isset($_POST['planet_name']))

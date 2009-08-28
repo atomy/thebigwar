@@ -1,5 +1,6 @@
 <?php
-    require('include.php');
+	require_once( 'include/config_inc.php' );
+	require( TBW_ROOT.'include.php' );
 ?>
 <?='<?xml version="1.0" encoding="UTF-8"?>'."\n"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

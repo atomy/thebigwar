@@ -1,5 +1,6 @@
 <?php
-	require('../../engine/include.php');
+	require_once( '../../include/config_inc.php' );
+	require( TBW_ROOT.'engine/include.php' );
 
 	session_start();
 

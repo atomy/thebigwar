@@ -1,5 +1,6 @@
 <?php
-	require('scripts/include.php');
+	require_once( '../include/config_inc.php' );
+	require( TBW_ROOT.'login/scripts/include.php' );
 
 	$laufende_forschungen = array();
 	$planets = $me->getPlanetsList();

@@ -1,8 +1,10 @@
 <?php
-	$__FILE__ = str_replace("\\", "/", __FILE__);
-	$include_filename = dirname($__FILE__).'/../../engine/include.php';
 	$LOGIN = true;
-	require_once($include_filename);
+	
+	if ( !defined( TBW_ROOT ) )
+		define( "TBW_ROOT", "" );
+	
+	require_once( TBW_ROOT.'engine/include.php' );
 
 	$resume = false;
 	$del_email_passwd = false;
@@ -95,7 +97,7 @@
 			if($last_click_diff < 0.4)
 			{
 				$_SESSION['last_click_sleep'] = 1.5;
-				die('Schnellklicksperre. Bitte warten Sie 1,5 Sekunden mit der nächsten Spielaktion, Sie geraten sonst erneut in die Schnellklicksperre. Bitte benutzen Sie den Back Button Ihres Browsers, um zum Spiel zurÃ¼ckzukehren.');				
+				die('Schnellklicksperre. Bitte warten Sie 1,5 Sekunden mit der nï¿½chsten Spielaktion, Sie geraten sonst erneut in die Schnellklicksperre. Bitte benutzen Sie den Back Button Ihres Browsers, um zum Spiel zurÃ¼ckzukehren.');				
 			}		
 	}
 	if(isset($_SESSION['last_click_ignore']))
@@ -403,7 +405,7 @@
 <input type="hidden" name="item_name" value="thebigwar.org">
 <input type="hidden" name="currency_code" value="EUR">
 <input type="hidden" name="bn" value="PP-DonationsBF:btn_donate_LG.gif:NonHostedGuest">
-<input type="image" src="https://www.paypal.com/de_DE/DE/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen ¿ mit PayPal.">
+<input type="image" src="https://www.paypal.com/de_DE/DE/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen ï¿½ mit PayPal.">
 <img alt="" border="0" src="https://www.paypal.com/de_DE/i/scr/pixel.gif" width="1" height="1">
 </form>
 </div>

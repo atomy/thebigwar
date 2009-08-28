@@ -1,5 +1,6 @@
 <?php
-	require('include.php');
+	require_once( 'include/config_inc.php' );
+	require( TBW_ROOT.'include.php' );
 
 	gui::html_head();
 ?>

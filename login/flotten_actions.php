@@ -1,5 +1,6 @@
 <?php
-	require('scripts/include.php');
+	require_once( '../include/config_inc.php' );
+	require( TBW_ROOT.'login/scripts/include.php' );
 
 	if(!isset($_GET['action']))
 		$_GET['action'] = false;
@@ -385,7 +386,7 @@
  	  	                         if(!$flotten_id)
  	  	                         {
  	  	 ?>
- 	  	 <p class="error">Ungültigen Angriff ausgewählt.</p>
+ 	  	 <p class="error">Ungï¿½ltigen Angriff ausgewï¿½hlt.</p>
  	  	 <?php
  	  	                                 login_gui::html_foot();
  	  	                                 exit();

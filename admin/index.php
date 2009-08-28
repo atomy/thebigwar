@@ -1,5 +1,8 @@
 <?php
-	require('include.php');
+	// XDEBUG_SESSION_START
+	// XDEBUG_SESSION_STOP
+	require_once( '../include/config_inc.php' );
+	require( TBW_ROOT.'admin/include.php' );
 
 	// load class user
 	__autoload('User');
@@ -79,8 +82,8 @@
 
 		$_POST['delete_username'] = trim($_POST['delete_username']);
 
-		$that_user = Classes::User($_POST['delete_username']);
-		$that_user->destroy() && protocol("4", $_POST['delete_username']);
+		# entferne user
+		user_control::removeUser( $_POST['delete_username'] ) && protocol( "4", $_POST['delete_username'] );
 	}
 		# Benutzer sperren / entsperren
 	if($admin_array['permissions'][6] && isset($_POST['lock_username']) && User::userExists(trim($_POST['lock_username'])))

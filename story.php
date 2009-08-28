@@ -1,5 +1,6 @@
 <?php
-	require('include.php');
+	require_once( 'include/config_inc.php' );
+	require( TBW_ROOT.'include.php' );
 	
 	$players = 0;
 	$alliances = 0;

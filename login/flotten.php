@@ -1,6 +1,9 @@
 <?php
 	if(isset($_GET['action'])) define('ignore_action', true);
-	require_once('scripts/include.php');
+
+	require_once( '../include/config_inc.php' );
+	require( TBW_ROOT.'login/scripts/include.php' );
+
 	if(!defined('ajax')) login_gui::html_head();
 
 	$show_versenden = true;

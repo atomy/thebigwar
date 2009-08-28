@@ -15,38 +15,50 @@
 
 		abstract function create();
 
-		function __construct($name=false, $write=true)
+		function __construct( $name=false, $write=true )
 		{
-			if($name === false)
+			if ( $name === false )
 			{
-				do $name = substr(md5(rand()), 0, 16); while(file_exists($this->save_dir.'/'.$name));
+				do 
+                    $name = substr( md5( rand() ), 0, 16 ); 
+                while( file_exists( $this->save_dir.'/'.$name ) );
 			}
 
 			$this->readonly = !$write;
 
-			if($this->save_dir === false)
+			if ( $this->save_dir === false )
+            {
 				$this->status = 0;
+            }
 			else
 			{
 				$this->name = $name;
-				$this->filename = $this->save_dir.'/'.strtolower(urlencode($this->name));
+				$this->filename = $this->save_dir.'/'.strtolower( urlencode( $this->name ) );
 				$this->location = $this->filename;
-				if(!is_file($this->filename) || !is_readable($this->filename))
+                
+				if ( !is_file( $this->filename ) || !is_readable( $this->filename ) )
+                {
 					$this->status = 0;
+                }
 				else
 				{
-					if(!$write || !is_writeable($this->filename))
+					if ( !$write || !is_writeable( $this->filename ) )
 					{
-						if($this->file_pointer = fopen($this->location, 'rb'))
+						if ( $this->file_pointer = fopen( $this->location, 'rb' ) )
 						{
 							$this->status = 2;
-							fancy_flock($this->file_pointer, LOCK_SH);
+							fancy_flock( $this->file_pointer, LOCK_SH );
 						}
 					}
-					elseif(($this->file_pointer = fopen($this->location, 'r+b')) && fancy_flock($this->file_pointer, LOCK_EX))
-						$this->status = 1;
-					if($this->status)
+					else if ( ( $this->file_pointer = fopen( $this->location, 'r+b' ) ) && fancy_flock( $this->file_pointer, LOCK_EX ) )
+					{
+                        $this->status = 1;
+                    }
+                    
+					if ( $this->status )
+                    {
 						$this->read();
+                    }
 				}
 			}
 		}
@@ -66,14 +78,18 @@
 
 		function read($force=false)
 		{
-			if(!$this->status) return false;
-			if($this->changed && !$force) $this->write();
+			if( !$this->status ) 
+                return false;
+			
+            if( $this->changed && !$force ) 
+                $this->write();
 
 			clearstatcache();
-			$filesize = filesize($this->filename);
-			fseek($this->file_pointer, 0, SEEK_SET);
-			$this->raw = unserialize(bzdecompress(fread($this->file_pointer, $filesize)));
+			$filesize = filesize( $this->filename );
+			fseek( $this->file_pointer, 0, SEEK_SET );
+            $this->raw = unserialize( bzdecompress( fread( $this->file_pointer, $filesize ) ) );
 			$this->getDataFromRaw();
+
 			return true;
 		}
 

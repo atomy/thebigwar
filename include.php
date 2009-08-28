@@ -1,12 +1,10 @@
 <?php
-	$__FILE__ = str_replace("\\", "/", __FILE__);
-	$include_filename = dirname($__FILE__).'/engine/include.php';
-	require_once($include_filename);
-	require_once('include/config_inc.php');
+	require_once( 'include/config_inc.php' );
+	require( TBW_ROOT.'engine/include.php' );
 
 	class gui
 	{ # Kuemmert sich ums HTML-Grundgeruest der Hauptseite
-		function html_head($base=false)
+		public static function html_head($base=false)
 		{
 			global $SHOW_META_DESCRIPTION; # Sollte nur auf der Startseite der Fall sein
 ?>
@@ -76,7 +74,7 @@
 		
 								</select>&nbsp;<input type="submit" name="anmelden" style=" font-weight:bold; color:#FCFCCC; " value="Anmelden" /></div>
 								<div class="login4"><a href="http://<?=$_SERVER['HTTP_HOST'].h_root?>/passwd.php">Passwort vergessen?</a>
-								<div class="login5"><a href="http://<?=$_SERVER['HTTP_HOST'].h_root?>/login/guest.php?&database=<?=utf8_htmlentities($id)?>">Gast Zugang</a>
+								<div class="login5"><a href="http://<?=$_SERVER['HTTP_HOST'].h_root?>/login/guest.php?database=<?=utf8_htmlentities($id)?>">Gast Zugang</a>
 							</div>
 						</form>
 					</div>
@@ -104,7 +102,7 @@
 <?php
 	}
 
-	function html_foot()
+	public static function html_foot()
 	{
 ?>
 				</td>

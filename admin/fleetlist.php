@@ -1,6 +1,6 @@
 <?php
-	require( 'include.php' );
-	#require( s_root.'/engine/classes/fleet.php' );
+	require_once( '../include/config_inc.php' );
+	require( TBW_ROOT.'admin/include.php' );
 	
 	// TODO, fleet list access
 	if(!$admin_array['permissions'][0])

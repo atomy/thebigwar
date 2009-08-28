@@ -1,5 +1,6 @@
 <?php
-	require('scripts/include.php');
+	require_once( '../include/config_inc.php' );
+	require( TBW_ROOT.'login/scripts/include.php' );
 
 	if(isset($_POST['prod']) && is_array($_POST['prod']) && count($_POST['prod']) > 0)
 	{

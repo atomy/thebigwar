@@ -37,9 +37,12 @@
 			return true;
 		}
 
-		function userExists($user)
+		public static function userExists( $user )
 		{
-			$filename = global_setting("DB_PLAYERS").'/'.strtolower(urlencode($user));
+			if ( !$user )
+				return false;
+				
+			$filename = global_setting( "DB_PLAYERS" ).'/'.strtolower(urlencode($user));
 			return (is_file($filename) && is_readable($filename));
 		}
 
@@ -49,6 +52,21 @@
 
 			return isset($this->raw['planets'][$planet]);
 		}
+		
+		function getStatus()
+		{
+			return $this->status;
+		}
+		
+		function getFilename()
+		{
+			return $this->filename;
+		}		
+		
+		function setStatus( $status )
+		{
+			$this->status = $status;
+		}		
 
 		function setActivePlanet($planet)
 		{
@@ -2822,68 +2840,6 @@
 			$this->changed = true;
 
 			return true;
-		}
-
-		function destroy()
-		{
-			if(!$this->status) return false;
-
-			# Planeten zuruecksetzen
-			$planets = $this->getPlanetsList();
-			foreach($planets as $planet)
-			{
-				$this->setActivePlanet($planet);
-				if(!$this->removePlanet()) return false;
-			}
-
-			# Buendnispartner entfernen
-			$verb_list = $this->getVerbuendetList();
-			foreach($verb_list as $verb)
-				$this->quitVerbuendet($verb);
-			$verb_list = $this->getVerbuendetApplicationList();
-			foreach($verb_list as $verb)
-				$this->cancelVerbuendetApplication($verb);
-			$verb_list = $this->getVerbuendetRequestList();
-			foreach($verb_list as $verb)
-				$this->rejectVerbuendetApplication($verb);
-
-			# Nachrichten entfernen
-			$categories = $this->getMessageCategoriesList();
-			foreach($categories as $category)
-			{
-				$messages = $this->getMessagesList($category);
-				foreach($messages as $message)
-					$this->removeMessage($message, $category);
-			}
-
-			# Aus der Allianz austreten
-			$this->allianceTag(false);
-
-                        # Aus den Highscores entfernen
-                        $highscores = Classes::Highscores();
-                        $highscores->removeEntry('users', $this->getName());
-
-			# Flotten zurueckrufen
-			$fleets = $this->getFleetsList();
-			foreach($fleets as $fleet)
-			{
-				$fleet_obj = Classes::Fleet($fleet);
-				foreach(array_reverse($fleet_obj->getUsersList()) as $username)
-					$fleet_obj->callBack($username);
-			}
-
-			# IM-Benachrichtigungen entfernen
-			$imfile = Classes::IMFile();
-			$imfile->removeMessages($this->getName());
-
-			$status = (unlink($this->filename));
-			if($status)
-			{
-				$this->status = 0;
-				$this->changed = false;
-				return true;
-			}
-			else return false;
 		}
 
 		function recalcHighscores($recalc_gebaeude=false, $recalc_forschung=false, $recalc_roboter=false, $recalc_schiffe=false, $recalc_verteidigung=false)

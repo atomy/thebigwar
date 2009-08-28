@@ -1,4 +1,7 @@
 <?php
+
+    require_once( 'dataset.php' );
+
 	class Alliance extends Dataset
 	{
 		protected $datatype = 'alliance';
@@ -57,7 +60,7 @@
                       if($message->create())
                       {
                           $message->subject("Allianz aufgel\xc3\xb6st");
-                          $message->text("Die Allianz ".$this->getName()." wurde aufgelöst. Ihre Bewerbung wurde deshalb zurückgewiesen.");
+                          $message->text("Die Allianz ".$this->getName()." wurde aufgelï¿½st. Ihre Bewerbung wurde deshalb zurï¿½ckgewiesen.");
                           foreach($applicants as $applicant)
                           $message->addUser($applicant, 7);
                       }
@@ -83,7 +86,7 @@
 			$highscores = Classes::Highscores();
 			$highscores->removeEntry('alliances', $this->getName());
 
-			$status = ( unlink($this->filename) );
+			$status = ( unlink( $this->filename ) );
 			if( $status )
 			{
 				$this->status = 0;

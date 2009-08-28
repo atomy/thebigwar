@@ -1,6 +1,6 @@
 <?php
-	require('scripts/include.php');
-	require('../include/config_inc.php');
+	require_once( '../include/config_inc.php' );
+	require( TBW_ROOT.'login/scripts/include.php' );
 
 	$demo = false;
 
@@ -165,7 +165,7 @@
 			if(!in_array($explode[$i],$keyarray)) $noblockpassword = false;
 		}
 		if($noblockpassword == false)
-			$error = 'Das Passswort enthält ungültige Zeichen.';
+			$error = 'Das Passswort enthï¿½lt ungï¿½ltige Zeichen.';
 
 	}
 	if(($noblockpassword == true) && isset($_POST['old-password']) && isset($_POST['new-password']) && isset($_POST['new-password2']) && ($_POST['old-password'] != $_POST['new-password'] || $_POST['new-password'] != $_POST['new-password2']))
@@ -174,7 +174,7 @@
 		if(!$me->checkPassword($_POST['old-password']))
 			$error = 'Das alte Passwort stimmt nicht.';
 		elseif($_POST['new-password'] != $_POST['new-password2'])
-			$error = 'Die beiden neuen Passwörter stimmen nicht überein.';
+			$error = 'Die beiden neuen Passwï¿½rter stimmen nicht ï¿½berein.';
 		else
 			$me->setPassword($_POST['new-password']);
 	}
