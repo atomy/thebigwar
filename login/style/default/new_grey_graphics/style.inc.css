@@ -626,6 +626,6 @@ br.clear { clear:both; }
 .autocomplete li.selected { background-color:Highlight; color:HighlightText; }
 * html form { position:relative; }
 
-
 #body-root { background-position:left top; background-repeat:no-repeat; background-image:url(default/grey_graphics/images.greygraphics/design/bodybg1.jpg); }
 
+.fleetoverview { color: #fee454; }

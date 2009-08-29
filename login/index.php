@@ -161,7 +161,7 @@
 					$from_array = explode(':', $from_pos);
 					$from_galaxy = Classes::Galaxy($from_array[0]);
 					$planet_name = $from_galaxy->getPlanetName($from_array[1], $from_array[2]);
-					$other_strings[] = 'mit einer <span class="beschreibung schiffe" title="'.makeFleetString($user, $fl->getFleetList($user)).'">Flotte</span> vom Planeten &bdquo;'.utf8_htmlentities($planet_name).'&ldquo; ('.$from_pos.', Eigentümer: '.utf8_htmlentities($userresolved).')';
+					$other_strings[] = 'mit einer <span class="beschreibung schiffe" title="'.makeFleetString($user, $fl->getFleetList($user)).'">Flotte</span> vom Planeten &bdquo; <span class="fleetoverview planetname">'.utf8_htmlentities($planet_name).'</span>&ldquo; <span class="fleetoverview planetpos">('.$from_pos.'</span>, Eigentümer: <span class="fleetoverview planetowner">'.utf8_htmlentities($userresolved).'</span>)';
 
 				}
 				if(count($other_strings) == 1)
@@ -180,7 +180,7 @@
 			{
 				$active_planet2 = $me->getActivePlanet();
 				$me->setActivePlanet($me->getPlanetByPos($from_pos));
-				$string .= 'von Ihrem Planeten &bdquo;'.utf8_htmlentities($me->planetName()).'&ldquo; ('.$from_pos.')';
+				$string .= 'von Ihrem Planeten &bdquo; <span class="fleetoverview planetname">'.utf8_htmlentities($me->planetName()).'</span>&ldquo; ('.$from_pos.')';
 				$me->setActivePlanet($active_planet2);
 			}
 			else
@@ -191,9 +191,9 @@
 				if($planet_owner)
 				{
 					$planet_name = $from_galaxy->getPlanetName($from_array[1], $from_array[2]);
-					$string .= 'vom Planeten &bdquo;'.utf8_htmlentities($planet_name).'&ldquo; ('.$from_pos.', Eigentümer: '.utf8_htmlentities($planet_owner).')';
+					$string .= 'vom Planeten &bdquo; <span class="fleetoverview planetname">'.utf8_htmlentities($planet_name).'</span> &ldquo; (<span class="fleetoverview planetpos">'.$from_pos.'</span>, Eigentümer: <span class="fleetoverview planetowner">'.utf8_htmlentities($planet_owner).'</span>)';
 				}
-				else $string .= 'vom Planeten '.$from_pos.' (unbesiedelt)';
+				else $string .= 'vom Planeten <span class="fleetoverview planetpos">'.$from_pos.'</span> (unbesiedelt)';
 			}
 
 			$string .= ' und erreicht ';
@@ -203,7 +203,7 @@
 			{
 				$active_planet2 = $me->getActivePlanet();
 				$me->setActivePlanet($me->getPlanetByPos($to_pos));
-				$string .= ' Ihren Planeten &bdquo;'.utf8_htmlentities($me->planetName()).'&ldquo; ('.$to_pos.').';
+				$string .= ' Ihren Planeten &bdquo; <span class="fleetoverview planetname">'.utf8_htmlentities($me->planetName()).'</span> &ldquo; (<span class="fleetoverview planetname">'.$to_pos.'</span>).';
 				$me->setActivePlanet($active_planet2);
 			}
 			else
@@ -214,9 +214,9 @@
 				if($planet_owner)
 				{
 					$planet_name = $to_galaxy->getPlanetName($to_array[1], $to_array[2]);
-					$string .= ' den Planeten &bdquo;'.utf8_htmlentities($planet_name).'&ldquo; ('.$to_pos.', Eigentümer: '.utf8_htmlentities($planet_owner).').';
+					$string .= ' den Planeten &bdquo; <span class="fleetoverview planetname">'.utf8_htmlentities($planet_name).'</span> &ldquo; (<span class="fleetoverview targetpos">'.$to_pos.'</span>, Eigentümer: <span class="fleetoverview planetowner">'.utf8_htmlentities($planet_owner).'</span>).';
 				}
-				else $string .= ' den Planeten '.$to_pos.' (unbesiedelt).';
+				else $string .= ' den Planeten <span class="fleetoverview planetpos">'.$to_pos.'</span> (unbesiedelt).';
 			}
 
 			if($fl->isFlyingBack() || $hold == -1)

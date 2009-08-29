@@ -629,3 +629,5 @@ br.clear { clear:both; }
 
 #body-root { background-position:left top; background-repeat:no-repeat; background-image:url(default/grey_graphics/images/design/bodybg1.jpg); }
 
+.fleetoverview { color: #fee454; }
+

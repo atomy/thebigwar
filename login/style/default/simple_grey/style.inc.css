@@ -526,5 +526,7 @@ br.clear { clear:both; }
 .autocomplete li.selected { background-color:Highlight; color:HighlightText; }
 * html form { position:relative; }
 
+.fleetoverview { color: #fee454; }
+
 
 

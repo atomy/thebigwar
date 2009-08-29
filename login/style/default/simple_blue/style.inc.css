@@ -22,3 +22,5 @@ select:hover,select:focus,select:active,input:hover,input:focus,input:active,tex
 
 a:hover,a:focus,#flotten .beschreibung:hover,#flotten .handel a:hover,#flotten .handel a:focus,.planeten-reihenfolge .aktionen a:hover,.planeten-reihenfolge .aktionen a:focus { color:#bbd; }
 #flotten .rueckflug .beschreibung:hover,.nachrichten-kategorien .alt a:hover,.nachrichten-kategorien .alt a:focus,.nachrichten-liste .alt a:hover,.nachrichten-liste .alt a:focus,.nachrichten-liste .archiviert a:hover,.nachrichten-liste .archiviert a:focus { color:#779; }
+
+.fleetoverview { color: #fee454; }

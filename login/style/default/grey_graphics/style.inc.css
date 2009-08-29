@@ -80,3 +80,5 @@ body {  background-position:left bottom; background-repeat:no-repeat; background
 .planet-18 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet18.png); }
 .planet-19 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet19.png); }
 .planet-20 #css-3 { background-image:url(image.php?default%2fgrey_graphics%2fimages%2fplanets_small%2fplanet20.png); }
+
+.fleetoverview { color: #fee454; }
