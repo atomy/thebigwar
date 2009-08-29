@@ -41,7 +41,7 @@
 		else
 			$loggedin = false;
 
-		if(!$loggedin)
+		if( !$loggedin )
 		{
 			# Auf die Startseite zurueckleiten
 			$url = explode('/', $_SERVER['PHP_SELF']);
@@ -138,18 +138,22 @@
 		unset($_SESSION['resume']);
 	}
 
+	# deaktiviert, da es ein aendern der spiel-url nicht verträgt
 	# Wiederherstellen
-	if($resume && $last_request = $me->lastRequest())
+	if( 0 && $resume && $last_request = $me->lastRequest() )
 	{
 
 		$_SESSION['act_planet'] = $last_request[1];
 		$url = 'http://'.$databases[$_SESSION['database']][2].$last_request[0];
 		$url = explode('?', $url, 2);
+		
 		if(isset($url[1]))
 			$url[1] = explode('&', $url[1]);
 		else
 			$url[1] = array();
+			
 		$one = false;
+		
 		foreach($url[1] as $key=>$val)
 		{
 			$val = explode("=", $val, 2);
@@ -159,10 +163,14 @@
 				$one = true;
 			}
 		}
+		
 		$url2 = $url[0];
+		
 		if(count($url[1]) > 0)
 			$url2 .= '?'.implode('&', $url[1]);
+			
 		$url = $url2;
+		
 		if(!$one)
 		{
 			if(strpos($url, '?') === false)
@@ -171,6 +179,7 @@
 				$url .= '&';
 			$url .= urlencode(session_name()).'='.urlencode(session_id());
 		}
+		
 		header('Location: '.$url, true, 303);
 		die('HTTP redirect: <a href="'.htmlentities($url).'">'.htmlentities($url).'</a>');
 	}

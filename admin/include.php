@@ -49,17 +49,23 @@ require( TBW_ROOT.'engine/include.php' );
 #		die('Please use SSL: <a href="'.htmlentities($url).'">'.htmlentities($url).'</a>');
 #	}
 
-        // check if session id is available via GET, if not, use cookies
-        if ( isset($_GET["PHPSESSID"] ) )
-                session_id( $_GET["PHPSESSID"] );
-        else if ( isset( $_COOKIE['PHPSESSID'] ) )
-                session_id( $_COOKIE['PHPSESSID'] );
+    // check if session id is available via GET, if not, use cookies
+    if ( isset($_GET["PHPSESSID"] ) )
+        session_id( $_GET["PHPSESSID"] );
+    else if ( isset( $_COOKIE['PHPSESSID'] ) )
+    	session_id( $_COOKIE['PHPSESSID'] );
+		
 	session_start();
 
-	if((isset($_SESSION['ip']) && $_SESSION['ip'] != $_SERVER['REMOTE_ADDR']) || (isset($_GET['logout']) && $_GET['logout']) || (isset($_SESSION['last_admin_access']) && time()-$_SESSION['last_admin_access'] > 900))
+	$ipcheck = isset( $_SESSION['ip'] ) && $_SESSION['ip'] != $_SERVER['REMOTE_ADDR'];
+	$logout = isset( $_GET['logout'] ) && $_GET['logout'];
+	$timeout = isset( $_SESSION['last_admin_access']) && time()-$_SESSION['last_admin_access'] > 900;
+
+	if( $ipcheck || $logout	|| $timeout	)
 	{
 		if(isset($_COOKIE[session_name()]))
 			setcookie(session_name(), '', 0, $RELPATH);
+			
 		unset($_SESSION);
 		$_SESSION = array();
 	}
@@ -93,7 +99,7 @@ require( TBW_ROOT.'engine/include.php' );
 				$_SESSION['debug'] = true;
 				$_SESSION['database'] = $_POST['database'];
 				$show_login = false;
-
+				
 				protocol("0", $_SESSION['database']);
 			}
 		}

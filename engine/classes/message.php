@@ -195,11 +195,15 @@
 				$user->removeMessage($this->name, $type, false);
 			}
 
+// this makes bunny cry, self execution however thats possible, 
+// deactivated since it prevents deleting accounts
+/*
 			if(count($this->raw['users']) == 0)
 			{
 				if(!unlink($this->filename)) return false;
 				else $this->status = false;
 			}
+*/
 
 			return true;
 		}

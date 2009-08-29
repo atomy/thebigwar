@@ -17,41 +17,44 @@
 		{
 			# Nachricht versenden, versuchen
 			if(!$me->userLocked())
-			$_POST['empfaenger'] = trim($_POST['empfaenger']);
-			else $_POST['empfaenger'] = "supergameoperator";
-			if(!User::userExists($_POST['empfaenger']))
+				$_POST['empfaenger'] = trim($_POST['empfaenger']);
+			else 
+				$_POST['empfaenger'] = GLOBAL_SGOACCNAME;
+			
+			if( !User::userExists( $_POST['empfaenger'] ) )
 				$error = 'Der Empfänger, den Sie eingegeben haben, existiert nicht.';
-                        elseif(strtolower(strtolower($me->getName()) == strtolower("DEMO")))
+           	else if( strtolower( strtolower( $me->getName() ) == GLOBAL_DEMOACCNAME ) )
 			        $error = 'Demo-Account kann keine Nachrichten verfassen.';
-			elseif(strtolower($_POST['empfaenger']) == strtolower("DEMO"))
+			else if( strtolower( $_POST['empfaenger'] ) == GLOBAL_DEMOACCNAME )
 				$error = 'Demo-Account kann keine Nachrichten empfangen.';
-			elseif(strtolower($_POST['empfaenger']) == strtolower($_SESSION['username']))
+			else if( strtolower( $_POST['empfaenger'] ) == strtolower($_SESSION['username']))
 				$error = 'Sie können sich nicht selbst eine Nachricht schicken.';
-			elseif(strlen($_POST['betreff']) > 30)
+			else if( strlen( $_POST['betreff'] ) > 30 )
 				$error = 'Der Betreff darf maximal 30 Bytes lang sein.';
-			elseif(strlen($_POST['inhalt']) <= 0)
+			else if( strlen( $_POST['inhalt'] ) <= 0 )
 				$error = 'Sie müssen eine Nachricht eingeben.';
 			else
 			{
 				# Nachricht versenden
 				$message = Classes::Message();
-				if(!$message->create())
+				
+				if( !$message->create() )
 					$error = 'Datenbankfehler.';
 				else
 				{
-					$message->text($_POST['inhalt']);
-					$message->subject($_POST['betreff']);
-					$message->from($_SESSION['username']);
-                                  $message->to($_POST['empfaenger']);
-                                  $message->addUser(User::resolveName($_POST['empfaenger']), 6);
-					$message->addUser($_SESSION['username'], 8);
+					$message->text( $_POST['inhalt'] );
+					$message->subject( $_POST['betreff'] );
+					$message->from( $_SESSION['username'] );
+                    $message->to($_POST['empfaenger'] );
+                    $message->addUser( User::resolveName( $_POST['empfaenger'] ), 6 );
+					$message->addUser( $_SESSION['username'], 8 );
 ?>
 <p class="successful">
 	Die Nachricht wurde erfolgreich versandt.
 </p>
 <?php
 					$show_form = false;
-					unset($message);
+					unset( $message );
 				}
 			}
 		}
@@ -76,6 +79,7 @@
 			<dt class="c-empfaenger"><label for="empfaenger-input">Empfänger</label></dt>
 <?php
 		$empfaenger = $_GET['to'];
+		
 		if(isset($_POST['empfaenger']))
 			$empfaenger = $_POST['empfaenger'];
 
