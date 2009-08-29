@@ -84,6 +84,12 @@
 <p class="error">Es gibt schon eine Allianz mit diesem <span xml:lang="en">Tag</span>.</p>
 <?php
 				}
+				else if ( strtolower( $me->getName() ) == GLOBAL_DEMOACCNAME )
+				{
+?>
+<p class="error">Im Zusammenhang mit dem Demo-Account sind Allianzen nicht verfuegbar.</p>
+<?php
+				}
 				else
 				{
 					$alliance_obj = Classes::Alliance($_POST['tag']);
@@ -123,7 +129,7 @@
 		<dd><input type="text" name="name" id="allianzname-input" value="<?=isset($_POST['name']) ? utf8_htmlentities($_POST['name']) : ''?>" tabindex="<?=$tabindex++?>" /></dd>
 	</dl>
 <?php
-		if(!$me->userLocked())
+		if( !$me->userLocked() && strtolower( $me->getName() ) != GLOBAL_DEMOACCNAME )
 		{
 ?>
 	<div><button type="submit" tabindex="<?=$tabindex++?>" accesskey="n">Allia<kbd>n</kbd>z gründen</button></div>
@@ -164,7 +170,7 @@
 		<dd><textarea name="text" id="bewerbungstext-textarea" cols="50" rows="17" accesskey="x" tabindex="<?=$tabindex++?>"></textarea></dd>
 	</dl>
 <?php
-		if(!$me->userLocked())
+		if( !$me->userLocked() && strtolower( $me->getName() ) != GLOBAL_DEMOACCNAME )
 		{
 ?>
 	<div><button type="submit" accesskey="n" tabindex="<?=$tabindex++?>">Bewerbu<kbd>n</kbd>g absenden</button></div>
@@ -421,7 +427,7 @@
 		<dd><textarea name="intern-text" id="allianz-intern-textarea" cols="50" rows="17" tabindex="<?=$tabindex++?>" accesskey="x"><?=preg_replace("/[\t\r\n]/e", "'&#'.ord('\$0').';'", utf8_htmlentities($alliance->getInternalDescription(false)))?></textarea></dd>
 	</dl>
 <?php
-	if(!$me->userLocked())
+	if( !$me->userLocked() && strtolower( $me->getName() ) != GLOBAL_DEMOACCNAME )
 		{
 ?>
 	<div><button type="submit" tabindex="<?=$tabindex++?>" accesskey="n">Speicher<kbd>n</kbd></button></div>
@@ -476,7 +482,7 @@
 		<dd class="c-text"><textarea name="extern-text" id="allianz-extern-textarea" cols="50" rows="17" tabindex="<?=$tabindex++?>" accesskey="x"><?=preg_replace("/[\t\r\n]/e", "'&#'.ord('\$0').';'", utf8_htmlentities($alliance->getExternalDescription(false)))?></textarea></dd>
 	</dl>
 <?php
-		if(!$me->userLocked())
+		if( !$me->userLocked() && strtolower( $me->getName() ) != GLOBAL_DEMOACCNAME )
 		{
 ?>
 	<div><button type="submit" accesskey="n" tabindex="<?=$tabindex++?>">Speicher<kbd>n</kbd></button></div>
@@ -544,7 +550,7 @@
 		</tbody>
 	</table>
 <?php
-		if(!$me->userLocked())
+		if( !$me->userLocked() && strtolower( $me->getName() ) != GLOBAL_DEMOACCNAME )
 		{
 ?>
 	<div><button type="submit">Speichern</button></div>
@@ -713,7 +719,7 @@
 		<dd class="c-text"><textarea name="rundschreiben-text" id="allianz-rundschreiben-text-textarea" cols="50" rows="17"></textarea></dd>
 	</dl>
 <?php
-		if(!$me->userLocked())
+		if( !$me->userLocked() && strtolower( $me->getName() ) != GLOBAL_DEMOACCNAME )
 		{
 ?>
 	<div><button type="submit">Allianzrundschreiben verschicken</button></div>

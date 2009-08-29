@@ -20,7 +20,8 @@
 		if( !$koords )
 		{
 			$error = 'Es gibt keine freien Planeten mehr.';
-			$user_obj->destroy();
+			$uName = $user_obj->getName();
+			user_control::removeUser( $uName );
 			echo $error;
 			die();
 		}
@@ -28,10 +29,11 @@
 		{
 			$index = $user_obj->registerPlanet( $koords );
 		
-			if( !$index )
+			if( $index === false )
 			{
 				$error = 'Der Hauptplanet konnte nicht besiedelt werden.';
-				$user_obj->destroy();
+				$uName = $user_obj->getName();
+				user_control::removeUser( $uName );
 				echo $error;
 				die();
 			}
@@ -42,24 +44,24 @@
 			$user_obj->planetName( 'Hauptplanet' );
 			
 			# give him a good start, some awesome buildings and research
-			for( $i=0; $i<=8; $i++ )
+			for( $i=0; $i<=6; $i++ )
 			{
-				$user->changeItemLevel('B'.$i, '20', 'gebaeude');
+				$user_obj->changeItemLevel( 'B'.$i, '20', 'gebaeude' );
 			}
 
 			for( $i=8; $i<=10; $i++ )
 			{
-				$user->changeItemLevel('B'.$i, '30', 'gebaeude');
+				$user_obj->changeItemLevel( 'B'.$i, '30', 'gebaeude' );
 			}	
 			
 			for( $i=0; $i<=7; $i++ )
 			{
-				$user->changeItemLevel('F'.$i, '5', 'forschung');
+				$user_obj->changeItemLevel( 'F'.$i, '20', 'forschung' );
 			}
 			
 			for( $i=8; $i<=11; $i++ )
 			{
-				$user->changeItemLevel('F'.$i, '2', 'forschung');
+				$user_obj->changeItemLevel( 'F'.$i, '2', 'forschung' );
 			}
 		}
 	}

@@ -98,6 +98,7 @@
 				else
 				{
 					$index = $user_obj->registerPlanet($koords);
+					
 					if($index === false)
 					{
 						$error = 'Der Hauptplanet konnte nicht besiedelt werden.';

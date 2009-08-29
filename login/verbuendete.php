@@ -19,10 +19,15 @@
 
 	if(isset($_POST['empfaenger']) && strlen(trim($_POST['empfaenger'])) > 0)
 	{
-		$_POST['empfaenger'] = User::resolveName($_POST['empfaenger']);
-		if(!User::userExists($_POST['empfaenger']))
+		$_POST['empfaenger'] = User::resolveName( $_POST['empfaenger'] );
+		
+		if( !User::userExists( $_POST['empfaenger'] ) )
 			$buendnis_error = 'Dieser Spieler existiert nicht.';
-		elseif($me->existsVerbuendet($_POST['empfaenger']))
+			
+		else if ( strtolower( $_POST['empfaenger'] ) == GLOBAL_DEMOACCNAME || strtolower( $me->getName() ) == GLOBAL_DEMOACCNAME )
+			$buendnis_error =  'Im Zusammenhang mit dem Demo-Account sind Buendnisse nicht verfuegbar.';
+			
+		else if( $me->existsVerbuendet( $_POST['empfaenger'] ) )
 			$buendnis_error = 'Mit diesem Spieler läuft bereits eine Bewerbung oder ein Bündnis.';
 		else
 		{
