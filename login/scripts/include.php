@@ -397,35 +397,45 @@
 ?>
 			<ul id="external-navigation">
 				<li id="navigation-board" xml:lang="en"><a href="http://www.stephanlinden.net/forum/" target="_blank"><abbr title="Board / Forum">Forum</abbr></a></li>
-<!--				<li id="navigation-rules" xml:lang="en"><a href="http://<?=htmlentities(get_default_hostname().h_root)?>/tbwforum/viewtopic.php?t=80" target="blank"><abbr title="Regeln">Regeln</abbr></a></li> -->
+				<li id="navigation-rules" xml:lang="en"><a href="http://wiki.thebigwar.org/index.php/Regelwerk" target="blank"><abbr title="Regeln">Regeln</abbr></a></li>
 				<li id="navigation-faq" xml:lang="en"><a href="http://<?=htmlentities(get_default_hostname().h_root)?>/faq.php" target="_blank"><abbr title="Frequently Asked Questions">FAQ</abbr></a></li>
-<!--				<li id="navigation-wiki" xml:lang="en"><a href="/mediawiki/" target="_blank"><abbr title="TBW-Wiki">Wiki</abbr></a></li> -->
+				<li id="navigation-wiki" xml:lang="en"><a href="http://wiki.thebigwar.org/" target="_blank"><abbr title="TBW-Wiki">Wiki</abbr></a></li>
 				<li id="navigation-chat" xml:lang="en"><a href="http://<?=htmlentities(get_default_hostname().h_root)?>/chat.php" target="blank"><abbr title="Support / Chat (IRC)">Support / Chat</abbr></a></li>
 				<li id="navigation-bug" xml:lang="en"><a href="https://mantis.jackinpoint.net/main_page.php" target="blank"><abbr title="Fehler melden">Fehler melden</abbr></a></li>
 			</ul>
+			
+			<ul id="ad-navigation">
+				<!-- donate button for paypal -->
+				<li id="navigation-donate" xml:lang="en" style="margin-top: 0.5em;">
+					<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="margin-left: 0.7em; border: none;">
+						<input type="hidden" name="cmd" value="_donations">
+						<input type="hidden" name="business" value="spenden@thebigwar.org">
+						<input type="hidden" name="lc" value="DE">
+						<input type="hidden" name="item_name" value="thebigwar.org">
+						<input type="hidden" name="currency_code" value="EUR">
+						<input type="hidden" name="bn" value="PP-DonationsBF:btn_donate_LG.gif:NonHostedGuest">
+						<input type="image" src="https://www.paypal.com/de_DE/DE/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen � mit PayPal.">
+						<img alt="" border="0" src="https://www.paypal.com/de_DE/i/scr/pixel.gif" width="1" height="1">
+					</form>
+				</li>				
+				
+				<!-- vote button for gamesdynamite -->
+				<li id="navigation-gdynamite" xml:lang="en">
+					<a href="http://bgs.gdynamite.de/charts_vote_1066.html" target="_blank">
+						<img src="http://voting.gdynamite.de/images/gd_animbutton.gif" border="0">
+					</a>
+				</li>
+				
+				<!-- vote button for gvote -->
+				<li id="navigation-gvote" xml:lang="en">
+					<a href=http://www.galaxy-news.de/charts/?op=vote&game_id=3353 target="_blank">
+						<img src="../images/vote.gif" style="border:0;" alt="Die besten Browsergames in den Galaxy-News MMOG-Charts!">
+					</a>
+				</li>
+			</ul>			
 <?php
 			}
 ?>
-<div class="donate" style="position:absolute; top:428px; left:8px;">
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-<input type="hidden" name="cmd" value="_donations">
-<input type="hidden" name="business" value="spenden@thebigwar.org">
-<input type="hidden" name="lc" value="DE">
-<input type="hidden" name="item_name" value="thebigwar.org">
-<input type="hidden" name="currency_code" value="EUR">
-<input type="hidden" name="bn" value="PP-DonationsBF:btn_donate_LG.gif:NonHostedGuest">
-<input type="image" src="https://www.paypal.com/de_DE/DE/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen � mit PayPal.">
-<img alt="" border="0" src="https://www.paypal.com/de_DE/i/scr/pixel.gif" width="1" height="1">
-</form>
-</div>
-
-<div class="gdynamite"  style="position:absolute; top:459px; left:15px;">
-<a href="http://bgs.gdynamite.de/charts_vote_1066.html" target="_blank"><img src="http://voting.gdynamite.de/images/gd_animbutton.gif" border="0"></a>
-</div>
-<div class="gnews" style="position:absolute; top:492px; left:15px;">
-<a href=http://www.galaxy-news.de/charts/?op=vote&game_id=3353 target="_blank"><img src="../images/vote.gif" style="border:0;" alt="Die besten Browsergames in den Galaxy-News MMOG-Charts!"></a>
-</div>
-
 		</div>
 		<ul id="gameinfo">
 			<li class="username"><?=utf8_htmlentities($_SESSION['username'])?></li>

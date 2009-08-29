@@ -64,6 +64,20 @@
 			login_gui::html_foot();
 			exit();
 		}
+		else if ( strtolower( $me->getName() ) == GLOBAL_DEMOACCNAME || strtolower( $planet_owner ) == GLOBAL_DEMOACCNAME )
+		{
+			if( defined('ajax') ) 
+				return array('error', 'DEMO-Account');
+?>
+
+<p class="error">
+	Das Versenden von Flotten ist im Zusammenhang mit dem Demo-Account nicht moeglich.
+</p>
+
+<?php
+			login_gui::html_foot();
+			exit();
+		}		
 		else
 		{
 			$_POST['galaxie'] = $_GET['action_galaxy'];
@@ -139,7 +153,8 @@
 		}
 	}
 	     $buendnisflug = (isset($_POST["buendnisflug"]) && $_POST["buendnisflug"]);	  	 
- 	  if($me->permissionToAct() && $my_flotten < $max_flotten && isset($_POST['flotte']) && is_array($_POST['flotte']) && ((!$buendnisflug && isset($_POST['galaxie']) && isset($_POST['system']) && isset($_POST['planet'])) || ($buendnisflug && isset($_POST["buendnis_benutzername"]) && isset($_POST["buendnis_flottenpasswort"]))))
+ 	
+	if($me->permissionToAct() && $my_flotten < $max_flotten && isset($_POST['flotte']) && is_array($_POST['flotte']) && ((!$buendnisflug && isset($_POST['galaxie']) && isset($_POST['system']) && isset($_POST['planet'])) || ($buendnisflug && isset($_POST["buendnis_benutzername"]) && isset($_POST["buendnis_flottenpasswort"]))))
 	{
 		$types = array();
 		foreach($_POST['flotte'] as $id=>$anzahl)
@@ -165,8 +180,9 @@
 				if(!in_array($type, $types)) $types[] = $type;
 			}
 		}
+		
 		if($buendnisflug)
-	  	                 {
+	  	{
  	  	                         $buendnisflug_user = Classes::User($_POST["buendnis_benutzername"]);
  	  	                         if(!$buendnisflug_user->getStatus())
  	  	                                 $show_versenden = true;
@@ -256,14 +272,25 @@
 				}
 
 				if(fleets_locked()) # Flottensperre
-  		            {
+  		        {
                           if($planet_owner && !$me->isVerbuendet($planet_owner) && isset($types[5])) # Feindliche Spionage nicht moeglich  
   		                        unset($types[5]);
   		                  if(isset($types[3])) # Angriff nicht erlaubt
   		                        unset($types[3]);
-  		            }
+  		        }
 
-				if(count($types) <= 0)
+				if ( strtolower( $me->getName() ) == GLOBAL_DEMOACCNAME || strtolower( $planet_owner ) == GLOBAL_DEMOACCNAME )
+				{
+					if( defined('ajax') ) 
+						return array('error', 'DEMO-Account');
+?>
+
+<p class="error">
+	Das Versenden von Flotten ist im Zusammenhang mit dem Demo-Account nicht moeglich.
+</p>
+<?php
+				}
+				else if( count( $types ) <= 0 )
 				{
 					if(defined('ajax')) return array('error', 'Diese Aktion ist auf diesen Planeten nicht möglich.');
 ?>
@@ -297,18 +324,6 @@
 					if(isset($_POST['auftrag']) || isset($_POST['buendnisflug1']))
 					{
 						$owner_obj = Classes::User($planet_owner);
-						if ( strtolower($owner_obj->getName()) == GLOBAL_DEMOACCNAME )
-						{
-							if( defined('ajax') ) 
-								return array('error', 'DEMO-Account');
-?>
-<p class="error">
-	Das Versenden von Flotten ist im Zusammenhang mit dem Demo-Account nicht moeglich.
-</p>
-<?php
-							return false;
-
-						}
 
 						if(isset($_POST['buendnisflug1']))
 						{
@@ -320,8 +335,8 @@
 							$buendnisflug = true;
 						}
 						
-					if($buendnisflug)
-	  	                 	{
+						if( $buendnisflug )
+	  	            	{
  	  	                         $buendnisflug_user = Classes::User($_POST["buendnis_benutzername"]);
  	  	                         if(!$buendnisflug_user->getStatus())
  	  	                                 $show_versenden = true;

@@ -4,7 +4,7 @@ body.mit-werbung #content-9,* html body #content-9 { margin-right:120px; }
 body.mit-werbung #content-8 { margin-right:1em; }
 body.mit-werbung #content-13,* html body #content-13 { top:7.5em; }
 
-#time { position:fixed; right:0; border-left:.2em solid #aaa; }
+#time { position:fixed; margin:0 1.4em 0 0; right:0; border-left:.2em solid #aaa; }
 #ress { position:absolute; }
 #navigation { position:fixed; top:3.5em; left:1em; width:10em; }
 #werbung { position:absolute; margin-left:auto; margin-right:auto; left:14.5em; right:14.5em; top:3.5em; width:728px; height:90px; }

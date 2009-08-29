@@ -26,7 +26,7 @@ Body
 body { background-color:#222; margin:1em; }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Überschriften (H1,H2,H3,H4)
+ï¿½berschriften (H1,H2,H3,H4)
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 * html h1,* html h2,* html h3,* html h4
 {
@@ -47,7 +47,7 @@ Uhrzeit
 bottom:0;
 text-align:right;
 display:block;
-margin:0;
+margin:0 1.4em 0 0;
 border-top:.2em solid #aaa;
 padding:.2em;
 background-color:#222;
@@ -115,7 +115,7 @@ background-color:#002F64; word-spacing:-1.1em; line-height:2em; height:2em; whit
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Gebäude
+Gebï¿½ude
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 #item-B0 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/buildings/carbon.jpg); background-position:right center; background-repeat:no-repeat; }
 #item-B1 { height:120px; background-image:url(login/style/default/grey_graphics/images/design/buildings/aluminium.jpg); background-position:right center; background-repeat:no-repeat; }
@@ -320,7 +320,7 @@ Items
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Unbeschäftigte Planeten
+Unbeschï¿½ftigte Planeten
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 .unbeschaeftigte-planeten,.ungelesene-nachrichten { list-style-type:none; margin:0; padding:0; font-weight:bold; }
 .unbeschaeftigte-planeten .c-voriger,.ungelesene-nachrichten .c-vorige { position:absolute; top:0; left:0; }
@@ -442,7 +442,7 @@ Ressourcen-Produktion
 { border-bottom-style:none; }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Bündnisinformation
+Bï¿½ndnisinformation
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 .buendnis-informationen,.playerinfo-planeten { text-align:center; font-weight:bold; list-style-type:none; border-bottom-style:none; }
 .buendnis-informationen li,.playerinfo-planeten li { border-bottom:.1em solid #aaa; }
@@ -587,7 +587,7 @@ Nachricht antworten
 .nachricht-antworten-formular button,#content-1 .nachricht-loeschen-formular input { width:10em; }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Nachricht veröffentlichen
+Nachricht verï¿½ffentlichen
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 #nachricht-veroeffentlichen { font-weight:bold; text-align:center; list-style-type:none; margin:0; padding:.5em; }
 .nachrichten-verbuendeten-links { margin:0; padding:0; text-align:center; font-weight:bold; }
@@ -697,7 +697,7 @@ Highscores
 .highscores th { text-align:center; }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Bündnisse
+Bï¿½ndnisse
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 .buendnisse-liste,.allianz-laufende-bewerbungen { margin:.5em; padding:0; }
 .buendnisse-liste dt,.allianz-laufende-bewerbungen dt { width:50%; margin:0; padding:.1em 0; border-style:none; float:left; text-align:right; display:block; font-weight:bold; }
@@ -770,7 +770,7 @@ Einstellungen speichern
 .einstellungen-speichern-1 { display:none; }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Gegenstände
+Gegenstï¿½nde
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 .bauende-gegenstaende table { border-spacing:0; border-collapse:collapse; text-align:center; }
 .bauende-gegenstaende td,.bauende-gegenstaende th { border:.1em solid #aaa; padding:.2em .3em; }
@@ -1092,7 +1092,7 @@ font-size: 9pt;
 }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Ausbauen / Rückbauen / Forschen
+Ausbauen / Rï¿½ckbauen / Forschen
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 .item ul { padding:0px; margin:0px; list-style-type:none; list-style:none; width:150px;}
@@ -1135,7 +1135,7 @@ margin-bottom: 100px;
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Spielinformationen
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-#gameinfo { position:fixed; bottom:0.8em; left:.3em; margin:0; padding:0; list-style-type:none; }
+#gameinfo { position:fixed; bottom:3em; right:.3em; margin:0; padding:0; list-style-type:none; }
 
 
 
