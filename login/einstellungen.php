@@ -4,7 +4,7 @@
 
 	$demo = false;
 
-	if ( $_POST && strtolower( $me->getName() ) == strtolower( "DEMO" ) )
+	if ( $_POST && strtolower( $me->getName() ) == GLOBAL_DEMOACCNAME )
 	{
 		$demo = true;
 ?>      

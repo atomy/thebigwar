@@ -297,7 +297,7 @@
 					if(isset($_POST['auftrag']) || isset($_POST['buendnisflug1']))
 					{
 						$owner_obj = Classes::User($planet_owner);
-						if ( strtolower($owner_obj->getName()) == strtolower("DEMO") )
+						if ( strtolower($owner_obj->getName()) == GLOBAL_DEMOACCNAME )
 						{
 							if( defined('ajax') ) 
 								return array('error', 'DEMO-Account');

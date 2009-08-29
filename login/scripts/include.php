@@ -125,7 +125,7 @@
 		exit( "Datenbankfehler" );
 	}
 
-	if($_SESSION['ip'] != $_SERVER['REMOTE_ADDR'] && $me->checkSetting('ipcheck') && strtolower($me->getName()) != "demo")
+	if($_SESSION['ip'] != $_SERVER['REMOTE_ADDR'] && $me->checkSetting('ipcheck') && strtolower($me->getName()) != GLOBAL_DEMOACCNAME )
 	{
 		if(isset($_COOKIE[session_name()]))
 			setcookie(session_name(), '');
