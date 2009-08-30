@@ -1093,7 +1093,7 @@
 							$info['prod'][3] *= pow($minen_rob, $rob);
 
 							$rob = $this->getItemLevel('R06', 'roboter', $run_eventhandler);
-							if($rob > $this->getItemLevel('B4', 'gebaeude', $run_eventhandler)*2) $rob = $this->getItemLevel('B4', 'gebaeude', $run_eventhandler)*2;
+							if($rob > $this->getItemLevel('B4', 'gebaeude', $run_eventhandler)) $rob = $this->getItemLevel('B4', 'gebaeude', $run_eventhandler);
 							if($use_max_limit && $rob > $max_rob_limit) $rob = $max_rob_limit;
 							$info['prod'][4] *= pow($minen_rob, $rob);
 						}
