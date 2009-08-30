@@ -67,6 +67,7 @@
 			<th class="c-spieler">Spieler</th>
 			<th class="c-allianz">Allianz</th>
 			<th class="c-punktzahl">Punktzahl</th>
+			<th class="c-lastactive">Letzte Aktivit&auml;t</th>
 		</tr>
 	</thead>
 <?php
@@ -121,6 +122,31 @@
 			}
 ?>
 			<td class="c-punktzahl"><?=ths($info['scores'])?></td>
+<?php
+
+			$strLastActive = '';
+			
+			if ( $class == 'fremd' )
+				$strLastActive = '?';
+			else if ( $class == 'verbuendet' || $class == 'eigen' )
+			{
+				if ( User::userExists( $info['username'] ) )
+				{
+					$user = Classes::User( $info['username'] );
+					$strLastActive = timeAgo( $user->getLastActivity() );
+				}
+				else
+				{
+					$strLastActive = 'N/A';
+				}
+			}
+				
+?>                  
+			<th class="c-lastactive"><?php print $strLastActive; ?></td>
+
+<?php
+
+?>				
 		</tr>
 <?php
 		}

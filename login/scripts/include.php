@@ -225,26 +225,7 @@
 		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 		<title xml:lang="en">T-B-W &ndash; The Big War</title>
 		
-		<!-------------------------------->
-		<!-- AdBlockPlus Blocken	-->
-		<!-------------------------------->
-		
-		<!-- 
-		<script>
-			if(document.all){ci= new Array(1,2);}
-			else{ci=Components.interfaces;}
-			if("nsIAdblockPlus" in ci){
-			document.write('ad block detected');
-			var bod = document.getElementsByTagName("html");
-			bod[0].innerHTML = '<p align="center"><font face="Century Gothic"><b>This page cannot be displayed because ad blocking software has been detected.</b></font></p>';
-			} 
-		</script>
-		// -->
-		
-			
-
-
-			<script type="text/javascript">
+		<script type="text/javascript">
 			var session_cookie = '<?=str_replace('\'', '\\\'', session_name())?>';
 			var session_id = '<?=str_replace('\'', '\\\'', session_id())?>';
 			var database_id = '<?=str_replace('\'', '\\\'', $_SESSION['database'])?>';
@@ -630,4 +611,44 @@
 		header('Location: '.$url, true, 303);
 		die('HTTP redirect: <a href="'.htmlentities($url).'">'.htmlentities($url).'</a>');
 	}
+	
+	function timeAgo( $timestamp, $granularity = 2 )
+	{
+
+        $difference = time() - $timestamp;
+       
+	    // if difference is lower than zero check server offset
+        if($difference <= 0) 
+			return 'vor 0s';
+			            
+        // if difference is over 30 days show normal time form
+        else if($difference < 2592000 )
+		{                                  
+       
+                $periods = array( 'd' => 86400,'h' => 3600,'m' => 60,'s' => 1 );
+                $output = '';
+                
+				foreach( $periods as $key => $value )
+				{
+                        if( $difference >= $value )
+						{
+                       
+                                $time = round($difference / $value);
+                                $difference %= $value;
+                               
+                                $output .= ($output ? ' ' : '').$time.' ';
+                                $output .= (($time > 1 && $key == 'd') ? $key.'s' : $key);
+                               
+                                $granularity--;
+                        }
+						
+                        if($granularity == 0) 
+							break;
+                }
+				
+                return ( $output ? $output : '' ).'vor 0s';
+		}
+        else 
+			return 'N/A';
+	}	
 ?>
