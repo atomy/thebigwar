@@ -646,7 +646,7 @@
 							break;
                 }
 				
-                return ( $output ? $output : '' ).'vor 0s';
+                return "vor ". $output;
 		}
         else 
 			return 'N/A';
