@@ -1,7 +1,7 @@
 <?php
 	$LOGIN = true;
 	
-	if ( !defined( TBW_ROOT ) )
+	if ( !defined( "TBW_ROOT" ) )
 		define( "TBW_ROOT", "" );
 	
 	require_once( TBW_ROOT.'engine/include.php' );
