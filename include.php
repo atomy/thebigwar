@@ -49,7 +49,7 @@
 				
 								<div class="login" style="width:400px; position:absolute; top:0px; left:286px; background-image:url('images/login.gif'); background-repeat:no-repeat;">
 				
-								<form method="post" action="<?GLOBAL_GAMEURL?>login/index.php" id="login-form">
+								<form method="post" action="<?echo GLOBAL_GAMEURL;?>login/index.php" id="login-form">
 									<table class="login" border="0">
 										<tbody>
 											<tr>

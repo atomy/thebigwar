@@ -2065,6 +2065,7 @@
 
 					while($action = array_shift($actions))
 					{
+							
 						$this->setActivePlanet($action[4]);
 
 						if($action[3])

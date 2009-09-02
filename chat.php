@@ -125,7 +125,7 @@ open('<?=global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/cha
 		}
 ?>
 	<param name="language" value="english" />
-	<param name="quitmessage" value="<?GLOBAL_GAMEURL?>" />
+	<param name="quitmessage" value="<?echo GLOBAL_GAMEURL;?>" />
 	<param name="pixx:color1" value="000000" />
 	<param name="pixx:color2" value="777777" />
 	<param name="pixx:color3" value="777777" />
