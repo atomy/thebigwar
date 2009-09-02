@@ -1,5 +1,5 @@
 <?php
-	if ( !defined( TBW_ROOT ) )
+	if ( !defined( "TBW_ROOT" ) )
 		define( "TBW_ROOT", "" );
 		
 	require_once( TBW_ROOT.'include/config_inc.php' );
@@ -500,7 +500,7 @@
 				}
 				else
 					echo 'HTTP redirect: <a href="'.htmlentities($url).'">'.htmlentities($url).'</a>';
-				die();
+				die( "redirect" );
 			}
 		}
 	}
