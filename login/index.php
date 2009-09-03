@@ -180,7 +180,7 @@
 			{
 				$active_planet2 = $me->getActivePlanet();
 				$me->setActivePlanet($me->getPlanetByPos($from_pos));
-				$string .= 'von Ihrem Planeten &bdquo; <span class="fleetoverview planetname">'.utf8_htmlentities($me->planetName()).'</span>&ldquo; ('.$from_pos.')';
+				$string .= 'von Ihrem Planeten &bdquo; <span class="fleetoverview planetname">'.utf8_htmlentities($me->planetName()).'</span>&ldquo; (<span class="fleetoverview planetpos">'.$from_pos.'</span>)';
 				$me->setActivePlanet($active_planet2);
 			}
 			else
