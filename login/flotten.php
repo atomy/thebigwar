@@ -29,7 +29,7 @@
 			$result = $me->addPosShortcut($_GET['action_galaxy'].':'.$_GET['action_system'].':'.$_GET['action_planet']);
 			if($result === 2) $return = array('nothingtodo', 'Dieser Planet ist schon in Ihren Lesezeichen.');
 			elseif($result) $return = array('successful', 'Der Planet wurde zu den Lesezeichen hinzugefügt.');
-			else $return = array('error', 'Datenbankfehler.');
+			else $return = array('error', 'Datenbankfehler &#40;1039&#41;');
 
 			if(defined('ajax')) return $return;
 			elseif($return[0] == 'error')

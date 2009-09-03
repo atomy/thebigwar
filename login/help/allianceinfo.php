@@ -19,7 +19,7 @@
 		if(!$alliance->getStatus())
 		{
 ?>
-<p class="error">Datenbankfehler.</p>
+<p class="error">Datenbankfehler &#40;1032&#41;</p>
 <?php
 		}
 		else

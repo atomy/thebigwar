@@ -96,7 +96,7 @@
 					if(!$alliance_obj->create())
 					{
 ?>
-<p class="error">Datenbankfehler.</p>
+<p class="error">Datenbankfehler &#40;1034&#41;</p>
 <?php
 					}
 					$alliance_obj->name($_POST['name']);
@@ -194,7 +194,7 @@
 					else
 					{
 ?>
-<p class="error">Datenbankfehler.</p>
+<p class="error">Datenbankfehler &#40;1035&#41;</p>
 <?php
 					}
 				}
@@ -393,7 +393,7 @@
 				else
 				{
 ?>
-<p class="error">Datenbankfehler.</p>
+<p class="error">Datenbankfehler &#40;1036&#41;</p>
 <?php
 				}
 			}
@@ -411,7 +411,7 @@
 				else
 				{
 ?>
-<p class="error">Datenbankfehler.</p>
+<p class="error">Datenbankfehler &#40;1037&#41;</p>
 <?php
 				}
 			}
@@ -705,7 +705,7 @@
 						else
 						{
 ?>
-<p class="error">Datenbankfehler.</p>
+<p class="error">Datenbankfehler &#40;1038&#41;</p>
 <?php
 						}
 					}

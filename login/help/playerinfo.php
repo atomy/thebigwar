@@ -18,7 +18,7 @@
 		if(!$user->getStatus())
 		{
 ?>
-<p class="error">Datenbankfehler.</p>
+<p class="error">Datenbankfehler &#40;1033&#41;</p>
 <?php
 		}
 		else

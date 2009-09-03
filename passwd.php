@@ -16,7 +16,7 @@
 		{
 			$that_user = Classes::User($_POST['benutzername']);
 			if(!$that_user->getStatus())
-				$error = 'Datenbankfehler.';
+				$error = 'Datenbankfehler &#40;1043&#41;';
 			elseif(!preg_match('/^[-._=a-z0-9]+@([-_=a-z0-9ßáàâäéèêíìîóòôöúùûü]+\.)*[-_=a-z0-9ßáàâäéèêíìîóòôöúùûü]+$/i', trim($that_user->checkSetting('email'))))
 				$error = 'In diesem Account wurde keine gültige E-Mail-Adresse gespeichert.';
 			elseif($_POST['email'] == trim($that_user->checkSetting('email')))
@@ -50,7 +50,7 @@
 			if(!$that_user->getStatus())
 			{
 ?>
-<p class="error">Datenbankfehler.</p>
+<p class="error">Datenbankfehler &#40;1044&#41;</p>
 <?php
 			}
 			elseif(!$that_user->checkPasswordSendID($_GET['id']))
@@ -75,7 +75,7 @@
 						if(!$that_user->setPassword($_POST['new_password']))
 						{
 ?>
-<p class="error">Datenbankfehler.</p>
+<p class="error">Datenbankfehler &#40;1045&#41;</p>
 <?php
 						}
 						else

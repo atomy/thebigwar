@@ -39,7 +39,7 @@
 				$message = Classes::Message();
 				
 				if( !$message->create() )
-					$error = 'Datenbankfehler.';
+					$error = 'Datenbankfehler &#40;1040&#41;';
 				else
 				{
 					$message->text( $_POST['inhalt'] );
@@ -145,7 +145,7 @@
 				{
 ?>
 <p class="error">
-	Datenbankfehler.
+	Datenbankfehler &#40;1041&#41;
 </p>
 <?php
 				}
@@ -320,7 +320,7 @@
 							if(!$weiterleitung_message->create())
 							{
 ?>
-<p class="error">Datenbankfehler.</p>
+<p class="error">Datenbankfehler &#40;1042&#41;</p>
 <?php
 							}
 							else

@@ -500,7 +500,7 @@
 				}
 				else
 					echo 'HTTP redirect: <a href="'.htmlentities($url).'">'.htmlentities($url).'</a>';
-				die( "redirect" );
+				die();
 			}
 		}
 	}

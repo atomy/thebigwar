@@ -1943,7 +1943,7 @@
 		function realEventhandler()
 		{
 			if(!$this->raw) return false;
-
+			
 			$actions = array();
 			/* Array
 			   (
@@ -1974,12 +1974,14 @@
 				{
 					$actions[] = array($building[1], $building[0], 1, true, $planet);
 				}
-				}
-				$building = $this->checkBuildingThing('roboter', false);
-				foreach($building as $j=>$items)
-				{
-					$info = $this->getItemInfo($items[0], 'roboter', false);
-					if(!$info || isset($this->raw['umode']) &&  $this->raw['umode'] == 1) continue;
+			
+			}
+			
+			$building = $this->checkBuildingThing('roboter', false);
+			foreach($building as $j=>$items)
+			{
+				$info = $this->getItemInfo($items[0], 'roboter', false);
+				if(!$info || isset($this->raw['umode']) &&  $this->raw['umode'] == 1) continue;
 
 					$time = $items[1];
 					for($i=0; $i<$items[2]; $i++)
