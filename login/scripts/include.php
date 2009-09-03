@@ -119,10 +119,10 @@
 	{
 		login_gui::html_head();
 ?>
-<p class="error">Datenbankfehler.</p>
+<p class="error">Datenbankfehler &#40;1102&#41;</p>
 <?php
 		login_gui::html_foot();
-		exit( "Datenbankfehler" );
+		exit( "Datenbankfehler &#40;1103&#41;" );
 	}
 
 	if($_SESSION['ip'] != $_SERVER['REMOTE_ADDR'] && $me->checkSetting('ipcheck') && strtolower($me->getName()) != GLOBAL_DEMOACCNAME )

@@ -59,7 +59,7 @@
 	{
 ?>
 <p class="error">
-	Datenbankfehler.
+	Datenbankfehler &#40;1110&#41;
 </p>
 <?php
 	}
