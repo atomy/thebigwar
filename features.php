@@ -21,7 +21,6 @@
 
 	gui::html_head();
 ?>
-
 <h2 xml:lang="en">T-B-W &ndash; Features</h2>
 <fieldset><legend>Features</legend>
 <ul>
