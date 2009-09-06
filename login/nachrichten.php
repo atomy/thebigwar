@@ -398,38 +398,6 @@
 	</fieldset>
 </form>
 
-<!-- Werbebanner Code Beginn --->
-<?php
-			global $me;
-			global $DISABLE_ADS;
-			$aus = $me->checkSetting('noads');
-			if($aus == 1)
-
-			{
-?>
-
-<?php
-			}
-			else
-                     {
-?>
-	<fieldset>
-		<legend>Anzeige</legend>
-        <!-- zanox AdServer code start-->
-        <script type="text/javascript" src="http://zbox.zanox.com/scripts/adbox_content.js">
-        </script>
-        <script type="text/javascript">
-        CallAdBoxTracking(130299, 876038573, 0, 468, 60, 'B0E0E6', 'FFFFFF', '000000', '336699', '333333', '0', '', true);
-        </script>
-        <!-- zanox AdServer code end -->
-	</fieldset>
-<?php
-			}
-?>
-<!-- Werbebanner Ende --->
-
-
-
 <?php
 					if($me->checkSetting('ajax'))
 					{
