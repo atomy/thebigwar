@@ -1,6 +1,6 @@
 <?php
 	require_once( '../../include/config_inc.php' );
-	require( TBW_ROOT.'engine/include.php' );
+	require( TBW_ROOT.'login/scripts/include.php' );
 
 	$planet_error = false;
 	if(isset($_POST['planet_name']))
@@ -63,7 +63,15 @@
 </p>
 <?php
 	}
-	elseif(isset($_POST['planet_name']) && strlen($_POST['planet_name']) > 17)
+	else if( $me->getName() == GLOBAL_DEMOACCNAME )
+	{
+?>
+<p class="error">
+	Nicht verf&uuml;gbar im Demo-Account.
+</p>
+<?php		
+	}
+	else if(isset($_POST['planet_name']) && strlen($_POST['planet_name']) > 17)
 	{
 ?>
 <p class="error">
@@ -71,7 +79,7 @@
 </p>
 <?php
 	}
-	elseif(isset($_POST['planet_name']) && $noblockplanet == false)
+	else if(isset($_POST['planet_name']) && $noblockplanet == false)
 	{
 ?>
 <p class="error">
