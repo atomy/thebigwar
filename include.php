@@ -88,12 +88,12 @@
 								<a href="http://<?=htmlentities($_SERVER['HTTP_HOST'].h_root)?>/index.php">&nbsp;&nbsp;&nbsp;News</a><br />
 								<a href="http://<?=htmlentities($_SERVER['HTTP_HOST'].h_root)?>/features.php">&nbsp;&nbsp;&nbsp;Features</a><br />
 								<a href="http://<?=htmlentities($_SERVER['HTTP_HOST'].h_root)?>/register.php">&nbsp;&nbsp;&nbsp;Registrieren</a><br />
-								<a href="http://<?=htmlentities($_SERVER['HTTP_HOST'].h_root)?>/faq.php">&nbsp;&nbsp;&nbsp;FAQ</a><br />
+								<a href="http://wiki.thebigwar.org/index.php/FAQ">&nbsp;&nbsp;&nbsp;FAQ</a><br />
 								<a href="http://<?=htmlentities($_SERVER['HTTP_HOST'].h_root)?>/chat.php">&nbsp;&nbsp;&nbsp;Chat</a><br />
 								<a href="http://www.stephanlinden.net/forum/" target="_blank">&nbsp;&nbsp;&nbsp;Forum</a><br />
 								<a href="http://<?=htmlentities($_SERVER['HTTP_HOST'].h_root)?>/impressum.php">&nbsp;&nbsp;&nbsp;Impressum</a><br />
 								<a href="http://<?=htmlentities($_SERVER['HTTP_HOST'].h_root)?>/story.php">&nbsp;&nbsp;&nbsp;TBW Story</a><br />
-								<a href="http://<?=htmlentities($_SERVER['HTTP_HOST'].h_root)?>/rules.php">&nbsp;&nbsp;&nbsp;AGB</a>
+								<a href="http://wiki.thebigwar.org/index.php/Regelwerk">&nbsp;&nbsp;&nbsp;Regeln</a>
 							</td>
 						</tr>
 					</table>
