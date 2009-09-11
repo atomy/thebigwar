@@ -379,7 +379,7 @@
 			<ul id="external-navigation">
 				<li id="navigation-board" xml:lang="en"><a href="http://www.stephanlinden.net/forum/" target="_blank"><abbr title="Board / Forum">Forum</abbr></a></li>
 				<li id="navigation-rules" xml:lang="en"><a href="http://wiki.thebigwar.org/index.php/Regelwerk" target="blank"><abbr title="Regeln">Regeln</abbr></a></li>
-				<li id="navigation-faq" xml:lang="en"><a href="http://<?=htmlentities(get_default_hostname().h_root)?>/faq.php" target="_blank"><abbr title="Frequently Asked Questions">FAQ</abbr></a></li>
+				<li id="navigation-faq" xml:lang="en"><a href="http://wiki.thebigwar.org/index.php/FAQ" target="_blank"><abbr title="Frequently Asked Questions">FAQ</abbr></a></li>
 				<li id="navigation-wiki" xml:lang="en"><a href="http://wiki.thebigwar.org/" target="_blank"><abbr title="TBW-Wiki">Wiki</abbr></a></li>
 				<li id="navigation-chat" xml:lang="en"><a href="http://<?=htmlentities(get_default_hostname().h_root)?>/chat.php" target="blank"><abbr title="Support / Chat (IRC)">Support / Chat</abbr></a></li>
 				<li id="navigation-bug" xml:lang="en"><a href="https://mantis.jackinpoint.net/main_page.php" target="blank"><abbr title="Fehler melden">Fehler melden</abbr></a></li>
