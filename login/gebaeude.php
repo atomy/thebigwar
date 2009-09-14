@@ -176,6 +176,36 @@
 </div>
 <?php
 	}
+	
+	if(($fastbuild_prev !== false || $fastbuild_next !== false) && $me->permissionToAct())
+	{
+?>
+
+<div class="item gebaeude"></div>
+<ul class="unbeschaeftigte-planeten2">
+<?php
+		$active_planet = $me->getActivePlanet();
+		if($fastbuild_prev !== false)
+		{
+			$me->setActivePlanet($fastbuild_prev);
+?>
+	<li class="c-voriger2"><a href="gebaeude.php?planet=<?=htmlentities(urlencode($fastbuild_prev))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Voriger unbeschäftigter Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>) [U]" rel="prev">&larr;</a></li>
+<?php
+		}
+		if($fastbuild_next !== false)
+		{
+			$me->setActivePlanet($fastbuild_next);
+?>
+	<li class="c-naechster2"><a href="gebaeude.php?planet=<?=htmlentities(urlencode($fastbuild_next))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Nächster unbeschäftigter Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>) [Q]" rel="next">&rarr;</a></li>
+<?php
+		}
+		$me->setActivePlanet($active_planet);
+?>
+</ul>
+
+
+<?php
+	}	
 ?>
 <?php
 	login_gui::html_foot();

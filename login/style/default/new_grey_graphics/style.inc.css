@@ -629,3 +629,11 @@ br.clear { clear:both; }
 #body-root { background-position:left top; background-repeat:no-repeat; background-image:url(default/grey_graphics/images.greygraphics/design/bodybg1.jpg); }
 
 .fleetoverview { color: #fee454; }
+
+.unbeschaeftigte-planeten2 { list-style-type:none; margin:0; padding:0; font-weight:bold; }
+.unbeschaeftigte-planeten2 .c-voriger2 { position:absolute; bottom:0; left:0; }
+.unbeschaeftigte-planeten2 .c-voriger2 a:after { vertical-align:middle; font-size:.8em; }
+.unbeschaeftigte-planeten2 .c-voriger2 a:after { content:"\a0 Fastbuild"; }
+.unbeschaeftigte-planeten2 .c-naechster2 { position:absolute; bottom:0; right:0; }
+.unbeschaeftigte-planeten2 .c-naechster2 a:before { vertical-align:middle; font-size:.8em; }
+.unbeschaeftigte-planeten2 .c-naechster2 a:before { content:"Fastbuild\a0"; }

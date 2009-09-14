@@ -243,6 +243,14 @@ legend { font-weight:bold; }
 .unbeschaeftigte-planeten .c-naechster a:before { content:"Fastbuild\a0"; }
 .ungelesene-nachrichten .c-naechste a:before { content:"Fastread\a0"; }
 
+.unbeschaeftigte-planeten2 { list-style-type:none; margin:0; padding:0; font-weight:bold; }
+.unbeschaeftigte-planeten2 .c-voriger2 { position:absolute; bottom:0; left:0; }
+.unbeschaeftigte-planeten2 .c-voriger2 a:after { vertical-align:middle; font-size:.8em; }
+.unbeschaeftigte-planeten2 .c-voriger2 a:after { content:"\a0 Fastbuild"; }
+.unbeschaeftigte-planeten2 .c-naechster2 { position:absolute; bottom:0; right:0; }
+.unbeschaeftigte-planeten2 .c-naechster2 a:before { vertical-align:middle; font-size:.8em; }
+.unbeschaeftigte-planeten2 .c-naechster2 a:before { content:"Fastbuild\a0"; }
+
 .highscores-seiten { list-style-type:none; margin:0; padding:0; font-weight:bold; }
 .highscores-seiten li.c-naechste { position:absolute; top:0; right:0; vertical-align:middle; font-size:.8em; }
 .highscores-seiten li.c-vorige { position:absolute; top:0; left:0; vertical-align:middle; font-size:.8em; }
