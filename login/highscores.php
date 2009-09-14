@@ -127,9 +127,7 @@
 			// show lastactive in highscores for friends and friendly ally members
 			$strLastActive = '';
 			
-			if ( $class == 'fremd' )
-				$strLastActive = '?';
-			else if ( $class == 'verbuendet' || $class == 'eigen' || $alliance_class == 'verbuendet' )
+			if ( $class == 'verbuendet' || $class == 'eigen' || $alliance_class == 'verbuendet' )
 			{								
 				if ( User::userExists( $info['username'] ) )
 				{
@@ -140,6 +138,10 @@
 				{
 					$strLastActive = 'N/A';
 				}
+			} 
+			else
+			{ 
+				$strLastActive = '?';
 			}
 				
 ?>                  
