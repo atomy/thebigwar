@@ -465,6 +465,7 @@ h2#punkte { clear:right; }
 #planets li + .active + li { border-top-style:solid; border-top-width:.1em; }
 * html #planets li.active .planet-info { width:100%; }
 #planets .gelangweilt { font-weight:bold; color:#8bf; }
+#planets .im-ausbau { font-weight:bold; color:#e6eb05; }
 
 #flotten { margin:-.1em 0 0 0; padding:0; }
 #flotten dt { margin:0; float:left; width:78%; border-top:.1em solid #aaa; padding:.5em 1%; text-align:left; font-weight:bold; position:relative; }

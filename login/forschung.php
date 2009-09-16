@@ -2,21 +2,87 @@
 	require_once( '../include/config_inc.php' );
 	require( TBW_ROOT.'login/scripts/include.php' );
 
+	// $me = the user itself
 	$laufende_forschungen = array();
 	$planets = $me->getPlanetsList();
 	$active_planet = $me->getActivePlanet();
-	foreach($planets as $planet)
+	$act = array_search($active_planet, $planets);
+	
+	# Naechsten nicht forschenden Planeten herausfinden
+	$i = $act+1;
+	$fastbuild_next = false;
+	
+	while( true )
 	{
-		$me->setActivePlanet($planet);
+		if( $i >= count($planets) )
+			$i = 0;
+			
+		if( $planets[$i] == $active_planet )
+			break;
+
+		/*
+		 * setting active planet and checking if there's stuff building right now 
+		 */
+		$me->setActivePlanet( $planets[$i] );
+			
+		$building = $me->checkBuildingThing( 'forschung' );
+		
+		// idle and we can research, lets take it as fastbuild
+		if( !$building && $me->getItemLevel( 'B8', 'gebaeude', false ) > 0 )
+		{
+			$fastbuild_next = $planets[$i];
+			break;
+		}
+
+		$i++;
+	}
+
+	# Vorigen herausfinden
+	$i = $act-1;
+	$fastbuild_prev = false;
+	
+	while( true )
+	{
+		if( $i < 0 )
+			$i = count( $planets ) - 1;
+			
+		if( $i == $act )
+			break;
+
+		/*
+		 * setting active planet and checking if there's stuff building right now 
+		 */
+		$me->setActivePlanet( $planets[$i] );
+			
+		$building = $me->checkBuildingThing( 'forschung' );
+		
+		// idle and we can research, lets take it as fastbuild
+		if( !$building && $me->getItemLevel( 'B8', 'gebaeude', false ) > 0 )
+		{
+			$fastbuild_prev = $planets[$i];
+			break;
+		}
+
+		$i--;
+	}
+	
+	foreach( $planets as $planet )
+	{
+		$me->setActivePlanet( $planet );
 		$building = $me->checkBuildingThing('forschung');
-		if($building)
+		
+		// if there's a research active save it
+		if( $building )
 			$laufende_forschungen[] = $building[0];
-		elseif($building = $me->checkBuildingThing('gebaeude') && $building[0] == 'B8')
+			
+		// check if research lab is currently being worked on (upgrade/downgrade)
+		else if( $building = $me->checkBuildingThing( 'gebaeude' ) && $building[0] == 'B8' )
 			$laufende_forschungen[] = false;
 	}
+	
 	$me->setActivePlanet($active_planet);
 
-	if(isset($_GET['lokal']))
+	if( isset($_GET['lokal'] ) )
 	{
 		$a_id = $_GET['lokal'];
 		$global = false;
@@ -28,7 +94,17 @@
 	}
 
 	if(isset($a_id) && $me->permissionToAct() && $me->buildForschung($a_id, $global))
+	{
+		if($me->checkSetting('fastbuild') && $fastbuild_next !== false)
+		{
+			# Fastbuild
+			$_SESSION['last_click_ignore'] = true;
+			$url = global_setting("PROTOCOL").'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?planet='.urlencode($fastbuild_next).'&'.session_name().'='.urlencode(session_id());
+			header('Location: '.$url, true, 303);
+			die('HTTP redirect: <a href="'.htmlentities($url).'">'.htmlentities($url).'</a>');
+		}	
 		delete_request();
+	}
 
 	if(isset($_GET['cancel']))
 	{
@@ -44,8 +120,34 @@
 ?>
 <h2>Forschung</h2>
 <?php
+	if(($fastbuild_prev !== false || $fastbuild_next !== false) && $me->permissionToAct())
+	{
+?>
+<ul class="unbeschaeftigte-planeten">
+<?php
+		$active_planet = $me->getActivePlanet();
+		if($fastbuild_prev !== false)
+		{
+			$me->setActivePlanet($fastbuild_prev);
+?>
+	<li class="c-voriger"><a href="forschung.php?planet=<?=htmlentities(urlencode($fastbuild_prev))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Voriger unbeschäftigter Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>) [U]" tabindex="1" accesskey="u" rel="prev">&larr;</a></li>
+<?php
+		}
+		if($fastbuild_next !== false)
+		{
+			$me->setActivePlanet($fastbuild_next);
+?>
+	<li class="c-naechster"><a href="forschung.php?planet=<?=htmlentities(urlencode($fastbuild_next))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Nächster unbeschäftigter Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>) [Q]" tabindex="2" accesskey="q" rel="next">&rarr;</a></li>
+<?php
+		}
+		$me->setActivePlanet($active_planet);
+?>
+</ul>
+<?php
+	}
+	
 	$tabindex = 1;
-	foreach($forschungen as $id)
+	foreach( $forschungen as $id )
 	{
 		$item_info = $me->getItemInfo($id, 'forschung');
 

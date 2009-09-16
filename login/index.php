@@ -415,7 +415,7 @@
 			else
 			{
 ?>
-			<dd class="c-gebaeudebau gelangweilt">Gelangweilt</dd>
+			<dd class="c-gebaeudebau gelangweilt"><a href="gebaeude.php?planet=<?=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilter Geb&auml;udebau auf Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
 <?php
 			}
 		}
@@ -427,7 +427,15 @@
 			<dt class="c-forschung">Forschung</dt>
 <?php
 			$building_forschung = $me->checkBuildingThing('forschung');
-			if($building_forschung && !$me->umode())
+			$buildingb = $me->checkBuildingThing( 'gebaeude' );
+			
+			if ( $buildingb[0] == 'B8' )
+			{
+				?>
+					<dd class="c-forschung im-ausbau">Im Ausbau</dd>
+				<?php
+			}
+			else if( $building_forschung && !$me->umode() )
 			{
 				$item_info = $me->getItemInfo($building_forschung[0], 'forschung');
 ?>
@@ -445,7 +453,7 @@
 			else
 			{
 ?>
-			<dd class="c-forschung gelangweilt">Gelangweilt</dd>
+			<dd class="c-forschung gelangweilt"><a href="forschung.php?planet=<?=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilte Forschung auf Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
 <?php
 			}
 		}
@@ -457,7 +465,15 @@
 			<dt class="c-roboter">Roboter</dt>
 <?php
 			$building = $me->checkBuildingThing('roboter');
-			if($building && !$me->umode())
+			$buildingb = $me->checkBuildingThing( 'gebaeude' );
+			
+			if ( $buildingb[0] == 'B9' )
+			{
+				?>
+					<dd class="c-roboter im-ausbau">Im Ausbau</dd>
+				<?php
+			}
+			else if( $building && !$me->umode() )
 			{
 				switch($show_building['roboter'])
 				{
@@ -499,7 +515,7 @@
 			else
 			{
 ?>
-			<dd class="c-roboter gelangweilt">Gelangweilt</dd>
+			<dd class="c-roboter gelangweilt"><a href="roboter.php?planet=<?=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilte Roboterfabrik auf Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
 <?php
 			}
 		}
@@ -511,7 +527,15 @@
 			<dt class="c-schiffe">Schiffe</dt>
 <?php
 			$building = $me->checkBuildingThing('schiffe');
-			if($building && !$me->umode())
+			$buildingb = $me->checkBuildingThing( 'gebaeude' );
+			
+			if ( $buildingb[0] == 'B10' )
+			{
+				?>
+					<dd class="c-schiffe im-ausbau">Im Ausbau</dd>
+				<?php
+			}
+			else if( $building && !$me->umode() )
 			{
 				switch($show_building['schiffe'])
 				{
@@ -554,19 +578,27 @@
 			else
 			{
 ?>
-			<dd class="c-schiffe gelangweilt">Gelangweilt</dd>
+			<dd class="c-schiffe gelangweilt"><a href="schiffswerft.php?planet=<?=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilte Schiffswerft auf Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
 <?php
 			}
 		}
 
-		if($show_building['verteidigung'] && $me->getItemLevel('B10', 'gebaeude') > 0)
+		if( $show_building['verteidigung'] && $me->getItemLevel('B10', 'gebaeude') > 0)
 		{
 ?>
 
 			<dt class="c-verteidigung">Verteidigung</dt>
 <?php
-			$building = $me->checkBuildingThing('verteidigung');
-			if($building && !$me->umode())
+			$building = $me->checkBuildingThing( 'verteidigung' );
+			$buildingb = $me->checkBuildingThing( 'gebaeude' );
+			
+			if ( $buildingb[0] == 'B10' )
+			{
+				?>
+					<dd class="c-verteidgung im-ausbau">Im Ausbau</dd>
+				<?php
+			}
+			else if( $building && !$me->umode() )
 			{
 				switch($show_building['verteidigung'])
 				{
@@ -597,7 +629,7 @@
 				}
 				$countdowns[] = array('ve-'.$planet, $finishing_time);
 			}
-			elseif($building && $me->umode())
+			else if( $building && $me->umode() )
 			{
 				$first_building = array_pop($building);
 				$item_info = $me->getItemInfo($first_building[0], 'verteidigung');
@@ -609,7 +641,7 @@
 			else
 			{
 ?>
-			<dd class="c-verteidigung gelangweilt">Gelangweilt</dd>
+			<dd class="c-verteidigung gelangweilt"><a href="verteidigung.php?planet=<?=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilte Verteidigung auf Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
 <?php
 			}
 		}

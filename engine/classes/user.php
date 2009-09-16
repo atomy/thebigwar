@@ -68,25 +68,37 @@
 			$this->status = $status;
 		}		
 
-		function setActivePlanet($planet)
+		function setActivePlanet( $planet )
 		{
-			if(!$this->status) return false;
-			if(!isset($this->raw['planets'][$planet]))
+			if( !$this->status ) 
+				return false;
+				
+			if( !isset($this->raw['planets'][$planet] ) )
 				return false;
 
-			if(isset($this->planet_info))
+			if( isset( $this->planet_info ) )
 			{
-				if(isset($this->items['gebaeude'])) $this->planet_info['gebaeude'] = $this->items['gebaeude'];
-				if(isset($this->items['roboter'])) $this->planet_info['roboter'] = $this->items['roboter'];
-				if(isset($this->items['schiffe'])) $this->planet_info['schiffe'] = $this->items['schiffe'];
-				if(isset($this->items['verteidigung'])) $this->planet_info['verteidigung'] = $this->items['verteidigung'];
-				if(isset($this->ress)) $this->planet_info['ress'] = $this->ress;
+				if( isset( $this->items['gebaeude'] ) )
+					$this->planet_info['gebaeude'] = $this->items['gebaeude'];
+					
+				if( isset( $this->items['roboter'] ) )
+					$this->planet_info['roboter'] = $this->items['roboter'];
+					
+				if( isset( $this->items['schiffe'] ) )
+					$this->planet_info['schiffe'] = $this->items['schiffe'];
+					
+				if( isset( $this->items['verteidigung'] ) ) 
+					$this->planet_info['verteidigung'] = $this->items['verteidigung'];
+					
+				if( isset( $this->ress ) ) 
+					$this->planet_info['ress'] = $this->ress;
 			}
 
 			$this->active_planet = $planet;
 			$this->planet_info = &$this->raw['planets'][$planet];
 
-			if(isset($this->cache['getPos'])) unset($this->cache['getPos']);
+			if( isset( $this->cache['getPos'] ) ) 
+				unset( $this->cache['getPos'] );
 
 			$this->items['gebaeude'] = $this->planet_info['gebaeude'];
 			$this->items['roboter'] = $this->planet_info['roboter'];
@@ -1845,14 +1857,22 @@
 				$this->planet_info['ress'] = $this->ress;
 			}
 		}
-
-		function checkBuildingThing($type, $run_eventhandler=true)
+	
+		/**
+		 * checks the active planet info for currently building stuff 
+		 * and returns the building elements if exists
+		 * @param object $type - type of item to check
+		 * @param object $run_eventhandler [optional] - run eventhandler before returning, default = yes
+		 * @return 
+		 */
+		function checkBuildingThing( $type, $run_eventhandler = true )
 		{
-			if(!$this->status || !isset($this->planet_info)) return false;
+			if( !$this->status || !isset( $this->planet_info ) ) 
+				return false;
 
-			if($run_eventhandler)
+			if( $run_eventhandler )
 			{
-				switch($type)
+				switch( $type )
 				{
 					case 'gebaeude': $this->eventhandler(false, 1, 0, 0, 0, 0); break;
 					case 'forschung': $this->eventhandler(false, 0, 1, 0, 0, 0); break;
@@ -1863,17 +1883,24 @@
 				}
 			}
 
-			switch($type)
+			switch( $type )
 			{
 				case 'gebaeude': case 'forschung':
-					if(!isset($this->planet_info['building']) || !isset($this->planet_info['building'][$type]) || !isset($this->planet_info['building'][$type][0]) || trim($this->planet_info['building'][$type][0]) == '')
+					
+					if( !isset($this->planet_info['building'] ) || !isset($this->planet_info['building'][$type]) || !isset($this->planet_info['building'][$type][0]) || trim($this->planet_info['building'][$type][0]) == '')
 						return false;
-					return $this->planet_info['building'][$type];
+					else
+						return $this->planet_info['building'][$type];
+						
 				case 'roboter': case 'schiffe': case 'verteidigung':
-					if(!isset($this->planet_info['building']) || !isset($this->planet_info['building'][$type]) || count($this->planet_info['building'][$type]) <= 0)
+					
+					if( !isset($this->planet_info['building']) || !isset($this->planet_info['building'][$type]) || count($this->planet_info['building'][$type]) <= 0)
 						return array();
-					return $this->planet_info['building'][$type];
-				default: return false;
+					else
+						return $this->planet_info['building'][$type];
+						
+				default: 
+					return false;
 			}
 		}
 

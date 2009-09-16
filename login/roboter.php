@@ -1,6 +1,71 @@
 <?php
 	require_once( '../include/config_inc.php' );
 	require( TBW_ROOT.'login/scripts/include.php' );
+	
+	// $me = the user itself
+	$planets = $me->getPlanetsList();
+	$active_planet = $me->getActivePlanet();
+	$act = array_search($active_planet, $planets);
+	
+	# Naechsten nicht roboter bauenden Planeten herausfinden
+	$i = $act+1;
+	$fastbuild_next = false;
+	
+	while( true )
+	{
+		if( $i >= count($planets) )
+			$i = 0;
+			
+		if( $planets[$i] == $active_planet )
+			break;
+
+		/*
+		 * setting active planet and checking if there's stuff building right now 
+		 */
+		$me->setActivePlanet( $planets[$i] );
+			
+		$building = $me->checkBuildingThing( 'roboter' );
+		
+		// idle and the we can build robots, lets take it as fastbuild
+		if( !$building && $me->getItemLevel( 'B9', 'gebaeude', false ) > 0 )
+		{
+			$fastbuild_next = $planets[$i];
+			break;
+		}
+
+		$i++;
+	}
+
+	# Vorigen herausfinden
+	$i = $act-1;
+	$fastbuild_prev = false;
+	
+	while( true )
+	{
+		if( $i < 0 )
+			$i = count( $planets ) - 1;
+			
+		if( $i == $act )
+			break;
+
+		/*
+		 * setting active planet and checking if there's stuff building right now 
+		 */
+		$me->setActivePlanet( $planets[$i] );
+			
+		$building = $me->checkBuildingThing( 'roboter' );
+		
+		// idle and the we can build robots, lets take it as fastbuild
+		if( !$building && $me->getItemLevel( 'B9', 'gebaeude', false ) > 0 )
+		{
+			$fastbuild_prev = $planets[$i];
+			break;
+		}
+
+		$i--;
+	}
+	
+	$me->setActivePlanet($active_planet);
 
 	if(isset($_POST['cancel-all-roboter']))
 	{
@@ -16,13 +81,50 @@
 		{
 			if($me->buildRoboter($id, $count)) $built++;
 		}
-		if($built > 0)
-			delete_request();
+		if( $built > 0 )
+		{
+			if( $me->checkSetting( 'fastbuild' ) && $fastbuild_next !== false )
+			{
+				# Fastbuild
+				$_SESSION['last_click_ignore'] = true;
+				$url = global_setting("PROTOCOL").'://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?planet='.urlencode($fastbuild_next).'&'.session_name().'='.urlencode(session_id());
+				header('Location: '.$url, true, 303);
+				die('HTTP redirect: <a href="'.htmlentities($url).'">'.htmlentities($url).'</a>');
+			}
+			delete_request();	
+		}	
 	}
 
 	login_gui::html_head();
 ?>
 <h2>Roboter</h2>
+<?php
+	if(($fastbuild_prev !== false || $fastbuild_next !== false) && $me->permissionToAct())
+	{
+?>
+<ul class="unbeschaeftigte-planeten">
+<?php
+		$active_planet = $me->getActivePlanet();
+		if($fastbuild_prev !== false)
+		{
+			$me->setActivePlanet($fastbuild_prev);
+?>
+	<li class="c-voriger"><a href="roboter.php?planet=<?=htmlentities(urlencode($fastbuild_prev))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Voriger unbeschäftigter Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>) [U]" tabindex="1" accesskey="u" rel="prev">&larr;</a></li>
+<?php
+		}
+		if($fastbuild_next !== false)
+		{
+			$me->setActivePlanet($fastbuild_next);
+?>
+	<li class="c-naechster"><a href="roboter.php?planet=<?=htmlentities(urlencode($fastbuild_next))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Nächster unbeschäftigter Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>) [Q]" tabindex="2" accesskey="q" rel="next">&rarr;</a></li>
+<?php
+		}
+		$me->setActivePlanet($active_planet);
+?>
+</ul>
+<?php
+	}
+?>
 <form action="roboter.php?<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post">
 <?php
 	$tabindex = 1;
