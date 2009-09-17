@@ -80,7 +80,24 @@
 		</tr>
 <?php
 			}
+			$schiffb = $me->getRessOnAllFleets();
+			$ges[0] += $schiffb[0];
+			$ges[1] += $schiffb[1];
+			$ges[2] += $schiffb[2];
+			$ges[3] += $schiffb[3];
+			$ges[4] += $schiffb[4];
+			$this_ges = $schiffb[0]+$schiffb[1]+$schiffb[2]+$schiffb[3]+$schiffb[4];
+			$ges[5] += $this_ges;						
 ?>
+		<tr>
+			<th class="c-planet">Schiffsbeladung</th>
+			<td class="c-carbon"><?=ths($schiffb[0])?></td>
+			<td class="c-aluminium"><?=ths($schiffb[1])?></td>
+			<td class="c-wolfram"><?=ths($schiffb[2])?></td>
+			<td class="c-radium"><?=ths($schiffb[3])?></td>
+			<td class="c-tritium"><?=ths($schiffb[4])?></td>
+			<td class="c-gesamt"><?=ths($this_ges)?></td>
+		</tr>
 	</tbody>
 	<tfoot>
 		<tr>

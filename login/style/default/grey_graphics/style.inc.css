@@ -90,3 +90,5 @@ body {  background-position:left bottom; background-repeat:no-repeat; background
 .unbeschaeftigte-planeten2 .c-naechster2 { position:absolute; bottom:0; right:0; }
 .unbeschaeftigte-planeten2 .c-naechster2 a:before { vertical-align:middle; font-size:.8em; }
 .unbeschaeftigte-planeten2 .c-naechster2 a:before { content:"Fastbuild\a0"; }
+
+#planets .im-ausbau { font-weight:bold; color:#e6eb05; }

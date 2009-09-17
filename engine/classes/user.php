@@ -505,6 +505,38 @@
 			return $this->planet_info['name'];
 		}
 
+		/**
+		 * summarize all res that are on flying ships
+		 * @return 
+		 */
+		function getRessOnAllFleets()
+		{
+			if( !$this->status ) 
+				return false;
+
+			$fleetres = array(0, 0, 0, 0, 0);
+			
+			/*
+			 * loop through all fleets, get their ress and summarize them
+			 */
+			foreach( $this->getFleetsList() as $flotte )
+			{				
+				$fl = Classes::Fleet( $flotte );
+				$flres = array(0, 0, 0, 0, 0);
+				
+				// get ress of fleet
+				$flres = $fl->getTransport( $this->getName() );
+				
+				$fleetres[0] += $flres[0][0];
+				$fleetres[1] += $flres[0][1];
+				$fleetres[2] += $flres[0][2];
+				$fleetres[3] += $flres[0][3];
+				$fleetres[4] += $flres[0][4];
+			}
+
+			return $fleetres;
+		}
+
 		function getRess($refresh=true)
 		{
 			if(!$this->status || !isset($this->planet_info)) return false;
