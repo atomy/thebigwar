@@ -1043,14 +1043,20 @@
 			return $items_instance->getItemsList($type);
 		}
 
-		function getItemInfo($id, $type=false, $run_eventhandler=true, $calc_scores=false)
+		function getItemInfo( $id, $type=false, $run_eventhandler=true, $calc_scores=false )
 		{
-			if(!$this->status) return false;
+			if( !$this->status ) 
+				return false;
 
 			$this_planet = $this->getActivePlanet();
-			if(!isset($this->cache['getItemInfo'])) $this->cache['getItemInfo'] = array();
-			if(!isset($this->cache['getItemInfo'][$this_planet])) $this->cache['getItemInfo'][$this_planet] = array();
-			if(!isset($this->cache['getItemInfo'][$this_planet][$id]) || ($calc_scores && !isset($this->cache['getItemInfo'][$this_planet][$id]['scores'])))
+			
+			if( !isset($this->cache['getItemInfo'])) 
+				$this->cache['getItemInfo'] = array();
+				
+			if( !isset($this->cache['getItemInfo'][$this_planet])) 
+				$this->cache['getItemInfo'][$this_planet] = array();
+				
+			if( !isset($this->cache['getItemInfo'][$this_planet][$id]) || ($calc_scores && !isset($this->cache['getItemInfo'][$this_planet][$id]['scores'])))
 			{
 				$item = Classes::Item($id);
 				if($type === false) $type = $item->getType();
@@ -1078,6 +1084,7 @@
 
 				if(isset($info['time']))
 					$info['time'] *= $global_factors['time'];
+					
 				if(isset($info['prod']))
 				{
 					$info['prod'][0] *= $global_factors['prod'];
@@ -1476,11 +1483,13 @@
 
 		function checkProductionFactor($gebaeude)
 		{
-			if(!$this->status || !isset($this->planet_info)) return false;
+			if( !$this->status || !isset($this->planet_info) ) 
+				return false;
 
 			if(isset($this->planet_info['prod'][$gebaeude]))
 				return $this->planet_info['prod'][$gebaeude];
-			else return 1;
+			else 
+				return 1;
 		}
 
 		function setProductionFactor($gebaeude, $factor)
@@ -1520,11 +1529,15 @@
 
 					$energie_prod = 0;
 					$energie_need = 0;
-					foreach($gebaeude as $id)
+					
+					foreach( $gebaeude as $id )
 					{
-						$item = $this->getItemInfo($id, 'gebaeude', false);
-						if($item['prod'][5] < 0) $energie_need -= $item['prod'][5];
-						elseif($item['prod'][5] > 0) $energie_prod += $item['prod'][5];
+						$item = $this->getItemInfo( $id, 'gebaeude', false );
+						
+						if( $item['prod'][5] < 0 ) 
+							$energie_need -= $item['prod'][5];
+						elseif( $item['prod'][5] > 0 ) 
+							$energie_prod += $item['prod'][5];
 
 						$prod[0] += $item['prod'][0];
 						$prod[1] += $item['prod'][1];

@@ -2,13 +2,14 @@
 	require_once( '../include/config_inc.php' );
 	require( TBW_ROOT.'login/scripts/include.php' );
 
-	if(isset($_POST['prod']) && is_array($_POST['prod']) && count($_POST['prod']) > 0)
+	if( isset($_POST['prod']) && is_array($_POST['prod']) && count($_POST['prod']) > 0)
 	{
 		$changed = false;
-		foreach($_POST['prod'] as $id=>$prod)
+		
+		foreach( $_POST['prod'] as $id=>$prod )
 			$me->setProductionFactor($id, $prod);
 
-		if(isset($_POST['show_days']))
+		if( isset($_POST['show_days'] ) )
 			$me->setSetting('prod_show_days', $_POST['show_days']);
 	}
 

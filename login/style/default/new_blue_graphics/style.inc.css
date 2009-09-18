@@ -613,7 +613,7 @@ br.clear { clear:both; }
 .imperium-rohstoffproduktion .negativ { color:#f00; }
 .imperium-tabelle .maximal { font-size:.8em; }
 
-.imperium-modi,.highscores-modi { list-style-type:none; padding:0; height:1.5em; margin:.5em; font-weight:bold; text-align:center; }
+.imperium-modi,.highscores-modi { list-style-type:none; padding:0; height:3em; margin:.5em; font-weight:bold; text-align:center; }
 .imperium-modi li,.highscores-modi li { float:left; border:.1em solid #aaa; margin-right:-.1em; line-height:1.5em; }
 .imperium-modi li { width:33%; }
 .highscores-modi li { width:49.5%; }

@@ -7,6 +7,7 @@
 	switch(isset($_GET['action']) ? $_GET['action'] : false)
 	{
 		case 'roboter':
+		case 'gebaeude':
 		case 'flotte':
 			$action = $_GET['action'];
 			break;
@@ -34,10 +35,143 @@
 	<li class="c-rohstoffe<?=($action == 'ress') ? ' active' : ''?>"><a href="imperium.php?<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?=($action == 'ress') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Rohstoffe</a></li>
 	<li class="c-roboter<?=($action == 'roboter') ? ' active' : ''?>"><a href="imperium.php?action=roboter&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?=($action == 'roboter') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Roboter</a></li>
 	<li class="c-flotte<?=($action == 'flotte') ? ' active' : ''?>"><a href="imperium.php?action=flotte&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?=($action == 'flotten') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Flotten</a></li>
+	<li class="c-gebaeude<?=($action == 'gebaeude') ? ' active' : ''?>"><a href="imperium.php?action=gebaeude&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?=($action == 'gebaeude') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Geb&auml;ude</a></li>
 </ul>
 <?php
-	switch($action)
+	switch( $action )
 	{
+		case 'gebaeude':
+
+		$imperium = true;
+?>
+
+<h3 id="stationierte-flotten">Geb&auml;ude&uuml;bersicht</h3>
+<table class="imperium-tabelle imperium-gebaeude-uebersicht">
+	<thead>
+		<tr>
+			<th class="c-gebaeude">Geb&auml;de</th>
+<?php
+			$planets = $me->getPlanetsList();
+			
+			foreach( $planets as $planet )
+			{
+				$me->setActivePlanet($planet);
+?>
+			<th<?=($planet==$active_planet) ? ' class="active"' : ''?> title="<?=utf8_htmlentities($me->planetName())?>"><a href="imperium.php?<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>&amp;planet=<?=htmlentities(urlencode($planet))?>&amp;action=gebaeude"><?=utf8_htmlentities($me->getPosString())?></a></th>
+<?php
+			}
+?>
+			<th class="c-gesamt">Gesamt</th>
+		</tr>
+	</thead>
+	<tbody>
+<?php
+			$ges_ges = 0;
+			$ges = array();
+			$gebaeude = $me->getItemsList('gebaeude');
+			
+			foreach( $gebaeude as $id )
+			{
+				$this_ges = 0;
+				$item_info = $me->getItemInfo( $id );
+?>
+		<tr>
+			<th class="c-gebaeude"><a href="help/description.php?id=<?=htmlentities(urlencode($id).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?=utf8_htmlentities($item_info['name'])?></a></th>
+<?php
+				foreach( $planets as $i=>$planet )
+				{
+					/*
+				 	* $status:
+				 	* 0 - unknown
+				 	* 1 - cant be build, not all deps fulfilled
+				 	* 2 - up/downgrading
+					 */
+					$status = 0;
+					$rueckbau = 0;					
+					
+					$me->setActivePlanet($planet);
+					$level = $me->getItemLevel($id);
+					$item_info = $me->getItemInfo( $id );
+					
+					$building = $me->checkBuildingThing('gebaeude');
+								
+        			if( !$item_info['deps-okay'] && $item_info['level'] <= 0 ) # Abhaengigkeiten nicht erfuellt
+						$status = 1;		
+					else if ( $building && $building[0] == $id )
+					{	
+						// $building = array( 0 = gebaeude-id, 1 = time, 2 = rueckbau (bool) )
+						$rueckbau = $building[2];
+						$status = 2;
+					}					
+					
+					if( !isset($ges[$i]) ) 
+						$ges[$i] = 0;
+						
+					$ges[$i] += $level;
+					$ges_ges += $level;
+					$this_ges += $level;
+					
+					switch( $status )
+					{
+						case 1:
+							$output = $level;
+							break;
+							
+						case 2:
+							if ( $rueckbau )
+								$output = $level." &rarr; ".($level - 1);
+							else
+								$output = $level." &rarr; ".($level + 1);
+							break;
+							
+						default:
+							$output = $level;
+							break;
+					}					
+
+					if ( $planet == $active_planet ) 
+						echo '<td class="active"';
+					else
+						echo '<td';
+						
+					if ( $status == 1 )
+						echo ' style="color:red;">';
+					else if ( $status == 2 && !$rueckbau )
+						echo ' style="color:#00d700;">';
+					else if ( $status == 2 && $rueckbau )
+						echo ' style="color:yellow;">';
+					else
+						echo '>';
+	
+					print $output;
+				?>
+			</td>
+<?php
+				}
+?>
+			<td class="c-gesamt"><?=utf8_htmlentities($this_ges)?></td>
+		</tr>
+<?php
+			}
+?>
+	</tbody>
+	<tfoot>
+		<tr>
+			<th class="c-einheit">Gesamt</th>
+<?php
+			foreach($planets as $i=>$planet)
+			{
+?>
+			<td<?=($planet==$active_planet) ? ' class="active"' : ''?>><?=ths($ges[$i])?></td>
+<?php
+			}
+?>
+			<td class="c-gesamt"><?=utf8_htmlentities($ges_ges)?></td>
+		</tr>
+	</tfoot>
+</table>
+<?php
+			break;
 		case 'ress':
 ?>
 <h3 id="rohstoffvorraete">Rohstoffvorräte</h3>
@@ -283,7 +417,7 @@
 	<dd class="c-energieproduktion"><?=str_replace('.', ',', round((pow(1.05, $me->getItemLevel('F3', 'forschung'))-1)*100, 3))?>&thinsp;<abbr title="Prozent">%</abbr></dd>
 </dl>
 <?php
-			break;
+			break;			
 		case 'roboter':
 ?>
 <h3 id="roboterzahlen">Roboterzahlen</h3>
