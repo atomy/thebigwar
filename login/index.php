@@ -11,8 +11,8 @@
 			delete_request();
 	}
 
-	#Hier die Haltezeit auf Null setzen, wenn Abweisung
-	if(isset($_GET['abweisen']))
+	# Hier die Haltezeit auf Null setzen, wenn Abweisung
+	if( isset( $_GET['abweisen'] ) )
 	{
 		
 		# Flotte zurueckrufen

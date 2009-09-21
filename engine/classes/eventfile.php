@@ -47,7 +47,7 @@
 
 			$time = round($time);
 
-                        fwrite($this->fo, time(). "EventFile::addNewFleet(): INSERT INTO events (time, fleet) VALUES (".$time.", ".$id.");\n" );
+                       #fwrite($this->fo, time(). "EventFile::addNewFleet(): INSERT INTO events (time, fleet) VALUES (".$time.", ".$id.");\n" );
 
 			return sqlite_query($this->connection, "INSERT INTO events (time, fleet) VALUES ('".sqlite_escape_string($time)."', '".sqlite_escape_string($id)."');");
 		}
@@ -56,7 +56,7 @@
 		{
 			if(!$this->status) return false;
 			
-                        fwrite($this->fo, time(). "EventFile::removeFleet(): DELETE FROM events WHERE fleet = ".$id."\n");
+                        #fwrite($this->fo, time(). "EventFile::removeFleet(): DELETE FROM events WHERE fleet = ".$id."\n");
 
 			# Aus DB loeschen
 			return sqlite_query($this->connection, "DELETE FROM events WHERE fleet = '".sqlite_escape_string($id)."';");
@@ -71,17 +71,17 @@
 			$field = sqlite_fetch_array($query, SQLITE_ASSOC);
 
 			//echo "removeNextFleet() ---- SELECT * FROM events WHERE time < ".time()." ORDER BY time ASC LIMIT 1;\n";
-			fwrite($this->fo, time(). "EventFile::removeNextFleet(): SELECT * FROM events WHERE time < ".time()." ORDER BY time ASC LIMIT 1;\n" );
+			#fwrite($this->fo, time(). "EventFile::removeNextFleet(): SELECT * FROM events WHERE time < ".time()." ORDER BY time ASC LIMIT 1;\n" );
 
 			if(!$field) return false;
 
-			fwrite($this->fo, time(). "EventFile::removeNextFleet(): DELETE FROM events WHERE time = ".$field['time']." AND fleet = ".sqlite_escape_string($field['fleet']).";\n" );
+			#fwrite($this->fo, time(). "EventFile::removeNextFleet(): DELETE FROM events WHERE time = ".$field['time']." AND fleet = ".sqlite_escape_string($field['fleet']).";\n" );
 
 			# Gefundenes Feld aus der Datenbank loeschen
 			if(!sqlite_query($this->connection, "DELETE FROM events WHERE time = '".$field['time']."' AND fleet = '".sqlite_escape_string($field['fleet'])."';", SQLITE_ASSOC))
 			{	
 				//echo "removeNextFleet() ---- DELETE FROM events WHERE time = '".$field['time']."' AND fleet = '".sqlite_escape_string($field['fleet'])."';\n";
-				fwrite( $this->fo, time(). "EventFile::removeNextFleet(): DELETE FROM events WHERE time... FAILED\n" );
+				#fwrite( $this->fo, time(). "EventFile::removeNextFleet(): DELETE FROM events WHERE time... FAILED\n" );
 				return false;
 			}
 			return $field;
@@ -91,7 +91,7 @@
 		{
 			if(!$this->status) return false;
 
-			fwrite($this->fo, time(). "EventFile::removeCanceledFleet(): DELETE FROM events WHERE fleet = ".$fleet."\n" );
+			#fwrite($this->fo, time(). "EventFile::removeCanceledFleet(): DELETE FROM events WHERE fleet = ".$fleet."\n" );
 
 			return sqlite_query($this->connection, "DELETE FROM events WHERE fleet = '".sqlite_escape_string($fleet)."';");
 		}
