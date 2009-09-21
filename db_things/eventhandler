@@ -301,25 +301,25 @@ EOF
 	{
 		function arrive($fleet_id)
 		{
-			$filename = s_root.'/logs/eventhandler.log';
-			$fo = fopen($filename, "a");
+			#$filename = s_root.'/logs/eventhandler.log';
+			#$fo = fopen($filename, "a");
 
-			fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. Fleet-ID:  ".$fleet_id."\n");
+			#fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. Fleet-ID:  ".$fleet_id."\n");
 
 			global $errlog;
 
 			if(function_exists('pcntl_fork'))
 			{
-				fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. function_exists('pcntl_fork') Pid wird zugewiesen. Fleet-ID: ".$fleet_id."\n");
+				#fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. function_exists('pcntl_fork') Pid wird zugewiesen. Fleet-ID: ".$fleet_id."\n");
 
 				Classes::resetInstances();
 				$pid = pcntl_fork();
-				fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. function_exists('pcntl_fork') Zugewiesene Pid: ".$pid." Fleet-ID: ".$fleet_id."\n");
+				#fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. function_exists('pcntl_fork') Zugewiesene Pid: ".$pid." Fleet-ID: ".$fleet_id."\n");
 
 			}
 			else
 			{
-				fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. Function_exists('pcntl_fork') nicht vorhanden. Pid wird auf PID = -1 gesetzt. Fleet-ID:  ".$fleet_id."\n");
+				#fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. Function_exists('pcntl_fork') nicht vorhanden. Pid wird auf PID = -1 gesetzt. Fleet-ID:  ".$fleet_id."\n");
 				$pid = -1;
 			}
 
@@ -327,7 +327,7 @@ EOF
 			{
 				if($pid != -1)
 				{
-					fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. PID != -1, Timelimit 30 Fleet-ID:  ".$fleet_id."\n");
+					#fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. PID != -1, Timelimit 30 Fleet-ID:  ".$fleet_id."\n");
 
 				 	set_time_limit(30);
 				}
@@ -336,8 +336,8 @@ EOF
 
 				if($fleet->getStatus() > 0 && ($fleet->getStatus() > 1 || $fleet->getArrivalTime() > time() || !$fleet->arriveAtNextTarget()))
 				{
-					fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. ##### F L O T T E N H � N G E R ##### Fleet-ID:  ".$fleet_id."\n");
-					fputs($fo, time_prefix()."Warning: Couldn't complete fleet ".$fleet_id.". Gonna process it later.\n");
+					fputs($errlog, time_prefix(). "Eventhandler Funktion Arrive. ##### F L O T T E N H � N G E R ##### Fleet-ID:  ".$fleet_id."\n");
+					fputs($errlog, time_prefix()."Warning: Couldn't complete fleet ".$fleet_id.". Gonna process it later.\n");
 					$eventfile = Classes::EventFile();
 					$eventfile->addNewFleet(time()+global_setting("EVENTHANDLER_INTERVAL"), $fleet_id);
 					unset($fleet);
@@ -349,13 +349,13 @@ EOF
 				Classes::resetInstances();
 				if($pid != -1)
 				{
-					fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. Exit Fleet-ID:  ".$fleet_id."\n\n\n");
+					fputs($errlog, time_prefix(). "Eventhandler Funktion Arrive. Exit Fleet-ID:  ".$fleet_id."\n\n\n");
 					exit(0);
 				}
 			}
 			else
 			{
-				fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. pcntl_wait: ".$pid."  Fleet-ID:  ".$fleet_id."\n");
+				fputs($errlog, time_prefix(). "Eventhandler Funktion Arrive. pcntl_wait: ".$pid."  Fleet-ID:  ".$fleet_id."\n");
 
 				pcntl_waitpid($pid, &$status);
 			}
@@ -695,8 +695,8 @@ EOF
 	#################
 
 	{
-		$filename = s_root.'/logs/eventhandler.log';
-		$fo = fopen($filename, "a");
+		#$filename = s_root.'/logs/eventhandler.log';
+		#$fo = fopen($filename, "a");
 
 		$fposition = 0;
 
@@ -719,7 +719,7 @@ EOF
 				$event_obj = Classes::EventFile();
 				while($process = $event_obj->removeNextFleet())
 				{
-					fwrite($fo, time_prefix()."Eventhandler Eventobjekt remove next Fleet\n");
+					fputs($errlog, time_prefix()."Eventhandler Eventobjekt remove next Fleet\n");
 
 					arrive($process['fleet']);
 					check_termination();
