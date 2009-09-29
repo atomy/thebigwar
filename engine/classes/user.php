@@ -1253,7 +1253,7 @@
 						$info['time'] *= pow(0.95, $this->getItemLevel('B10', 'gebaeude', $run_eventhandler));
 						$info['speed'] *= pow(1.025, $this->getItemLevel('F6', 'forschung', $run_eventhandler));
 						$info['speed'] *= pow(1.05, $this->getItemLevel('F7', 'forschung', $run_eventhandler));
-						$info['speed'] *= pow(1.25, $this->getItemLevel('F8', 'forschung', $run_eventhandler));
+						$info['speed'] *= pow(1.15, $this->getItemLevel('F8', 'forschung', $run_eventhandler));
 
 						if($calc_scores)
 						{
