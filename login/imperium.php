@@ -49,7 +49,7 @@
 <table class="imperium-tabelle imperium-gebaeude-uebersicht">
 	<thead>
 		<tr>
-			<th class="c-gebaeude">Geb&auml;de</th>
+			<th class="c-gebaeude">Geb&auml;ude</th>
 <?php
 			$planets = $me->getPlanetsList();
 			
