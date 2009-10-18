@@ -25,9 +25,10 @@
 		$me->setActivePlanet( $planets[$i] );
 			
 		$building = $me->checkBuildingThing( 'roboter' );
+		$buildingb = $me->checkBuildingThing( 'gebaeude' );
 		
 		// idle and the we can build robots, lets take it as fastbuild
-		if( !$building && $me->getItemLevel( 'B9', 'gebaeude', false ) > 0 )
+		if( !$building && $me->getItemLevel( 'B9', 'gebaeude', false ) > 0 && $buildingb[0] != 'B9' )
 		{
 			$fastbuild_next = $planets[$i];
 			break;
@@ -54,9 +55,10 @@
 		$me->setActivePlanet( $planets[$i] );
 			
 		$building = $me->checkBuildingThing( 'roboter' );
+		$buildingb = $me->checkBuildingThing( 'gebaeude' );
 		
 		// idle and the we can build robots, lets take it as fastbuild
-		if( !$building && $me->getItemLevel( 'B9', 'gebaeude', false ) > 0 )
+		if( !$building && $me->getItemLevel( 'B9', 'gebaeude', false ) > 0 && $buildingb[0] != 'B9' )
 		{
 			$fastbuild_prev = $planets[$i];
 			break;
