@@ -127,8 +127,8 @@
 			// show lastactive in highscores for friends and friendly ally members
 			$strLastActive = '';
 			
-			if ( $class == 'verbuendet' || $class == 'eigen' || $alliance_class == 'verbuendet' )
-			{								
+			if ( $class == 'verbuendet' || $class == 'eigen' || $alliance_class == 'verbuendet' || isset( $_SESSION['admin_username'] ) )
+			{
 				if ( User::userExists( $info['username'] ) )
 				{
 					$user = Classes::User( $info['username'] );

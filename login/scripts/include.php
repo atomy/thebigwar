@@ -615,40 +615,37 @@
 	function timeAgo( $timestamp, $granularity = 2 )
 	{
 
-        $difference = time() - $timestamp;
-       
-	    // if difference is lower than zero check server offset
-        if($difference <= 0) 
+	        $difference = time() - $timestamp;
+	       
+		// if difference is lower than zero check server offset
+	        if( $difference <= 0 )
 			return 'vor 0s';
-			            
-        // if difference is over 30 days show normal time form
-        else if($difference < 2592000 )
+				            
+	        // if difference is over 30 days show normal time form
+	        else 
 		{                                  
-       
-                $periods = array( 'd' => 86400,'h' => 3600,'m' => 60,'s' => 1 );
-                $output = '';
-                
-				foreach( $periods as $key => $value )
+	       
+	                $periods = array( 'd' => 86400,'h' => 3600,'m' => 60,'s' => 1 );
+        	        $output = '';
+	                
+			foreach( $periods as $key => $value )
+			{
+	                	if( $difference >= $value )
 				{
-                        if( $difference >= $value )
-						{
-                       
-                                $time = round($difference / $value);
-                                $difference %= $value;
-                               
-                                $output .= ($output ? ' ' : '').$time.' ';
-                                $output .= (($time > 1 && $key == 'd') ? $key.'s' : $key);
-                               
-                                $granularity--;
-                        }
-						
-                        if($granularity == 0) 
-							break;
-                }
-				
-                return "vor ". $output;
+	                                $time = round($difference / $value);
+	                                $difference %= $value;
+	                               
+	                                $output .= ($output ? ' ' : '').$time.' ';
+	                                $output .= (($time > 1 && $key == 'd') ? $key.'s' : $key);
+	                               
+	                                $granularity--;
+	                        }
+							
+	                        if( $granularity == 0 ) 
+					break;
+	               	}
+					
+	              	return "vor ". $output;
 		}
-        else 
-			return 'N/A';
 	}	
 ?>
