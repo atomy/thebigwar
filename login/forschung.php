@@ -26,9 +26,10 @@
 		$me->setActivePlanet( $planets[$i] );
 			
 		$building = $me->checkBuildingThing( 'forschung' );
-		
+		$buildingb = $me->checkBuildingThing( 'gebaeude' );
+	
 		// idle and we can research, lets take it as fastbuild
-		if( !$building && $me->getItemLevel( 'B8', 'gebaeude', false ) > 0 )
+		if( !$building && $me->getItemLevel( 'B8', 'gebaeude', false ) > 0 && $buildingb[0] != 'B8' )
 		{
 			$fastbuild_next = $planets[$i];
 			break;
@@ -55,9 +56,10 @@
 		$me->setActivePlanet( $planets[$i] );
 			
 		$building = $me->checkBuildingThing( 'forschung' );
-		
+		$buildingb = $me->checkBuildingThing( 'gebaeude' );
+	
 		// idle and we can research, lets take it as fastbuild
-		if( !$building && $me->getItemLevel( 'B8', 'gebaeude', false ) > 0 )
+		if( !$building && $me->getItemLevel( 'B8', 'gebaeude', false ) > 0 && $buildingb[0] != 'B8' )
 		{
 			$fastbuild_prev = $planets[$i];
 			break;
