@@ -1,53 +1,52 @@
 #!/usr/bin/php
-
 <?php
 	$USE_OB = false;
-	require('../engine/include.php');
 
-        if(!isset($_SERVER['argv'][1]))
+        require_once( '../include/config_inc.php' );
+        require( TBW_ROOT.'/engine/include.php' );
+
+        if( !isset( $_SERVER['argv'][1] ) )
         {
-                fputs(STDERR, "Usage: ".$_SERVER['argv'][0]." <Database ID>\n");
-                exit(1);
+                fputs( STDERR, "Usage: ".$_SERVER['argv'][0]." <Database ID>\n" );
+                exit( 1 );
         }
         else
         {
                 $databases = get_databases();
-                if(!define_globals($_SERVER['argv'][1]))
+
+                if( !define_globals( $_SERVER['argv'][1] ) )
                 {
-                        fputs(STDERR, "Unknown database.\n");
-                        exit(1);
+                        fputs( STDERR, "Unknown database.\n" );
+                        exit( 1 );
                 }
         }
 
-        $dh = opendir(global_setting("DB_PLAYERS"));
- 
-	
-	while(($filename = readdir($dh)) !== false)
+        $dh = opendir( global_setting( "DB_PLAYERS" ) );
+	$besiedelt = 0;
+	$activ = 0;
+
+	while( ( $filename = readdir( $dh ) ) !== false )
 	{
-                         	if(!is_file(global_setting("DB_PLAYERS").'/'.$filename))
-	               	        continue;
+		if( !is_file( global_setting( "DB_PLAYERS" ).'/'.$filename ) )
+	        	continue;
 
-                         	$user = Classes::User(urldecode($filename));
-				$planets = $user->getPlanetsList();
+                        $user = Classes::User( urldecode( $filename ) );
+			$planets = $user->getPlanetsList();
+			$besiedelt = 0;
                        
-			        foreach($planets as $planet)
-				{
-				$besiedelt += count($planet);
-				}
+		        foreach( $planets as $planet )
+			{
+				$besiedelt += count( $planet );
+			}
 				
-				$last_activity = $user->getLastActivity();
-				if($last_activity > (time()-259200)) $activ += 1;
-				
-	
+			$last_activity = $user->getLastActivity();
+		
+			if( $last_activity > ( time() - 259200) )
+				$activ += 1;
 	}
-	
-
-
-	
 	
 	echo "Besiedelte Planeten: ", $besiedelt, "\n\n";
 	echo "Aktive User innerhalb der letzten 3 Tage: ", $activ, "\n\n";
-
 
         $galaxy_n = 1;
         $system_n = 1;
@@ -58,14 +57,17 @@
         $galaxy = Classes::Galaxy($galaxy_n);
 	
 	$next_system = $system_n+1;
-        if($next_system > 999)
-        $next_system = 1;
 
-	for($c=1; $c <= 999; $c++)
+        if( $next_system > 999 )
+        	$next_system = 1;
+
+	$anzahl = 0;
+
+	for( $c=1; $c <= 999; $c++ )
 	{		
-		$planets_count = $galaxy->getPlanetsCount($c);
+		$planets_count = $galaxy->getPlanetsCount( $c );
         	{	 
-			for($i=1; $i <= $planets_count; $i++)
+			for( $i=1; $i <= $planets_count; $i++ )
 			{
 			}	
 			$anzahl += $planets_count;
@@ -87,8 +89,11 @@
         $galaxy1 = Classes::Galaxy($galaxy_n1);
 	
 	$next_system = $system_n+1;
-        if($next_system > 999)
-        $next_system = 1;
+
+        if( $next_system > 999 )
+        	$next_system = 1;
+
+	$anzahl1 = 0;
 
 	for($c=1; $c <= 999; $c++)
 	{		
