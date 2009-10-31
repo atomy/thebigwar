@@ -1,0 +1,13 @@
+[jabber]
+name = Jabber
+server = jabber.ccc.de
+username = thebigwar
+password = thebigwar 
+blocked = thebigwar
+
+[icq]
+name = ICQ
+server = icq.amessage.info 
+username = icqnr.
+password = icqpass
+blocked = icqnr.
