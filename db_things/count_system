@@ -108,7 +108,7 @@
 	}
 			$gesamtpp = $anzahl + $anzahl1;
                         echo "Es sind ", $anzahl1, " Planetenpositionen in Galaxie 2 verfuegbar\n\n";
-			echo "Es sind ", $gesamtpp, " Planetenpositionen gesamt verfügbar\n\n";
+			echo "Es sind ", $gesamtpp, " Planetenpositionen gesamt verfuegbar\n\n";
                         
                         $prozent = $besiedelt * 100 / ($gesamtpp);
                         
