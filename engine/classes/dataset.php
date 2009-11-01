@@ -28,6 +28,9 @@
 
 			if ( $this->save_dir === false )
             {
+				// debug
+				//echo $this->save_dir." save_dir is false\n";
+
 				$this->status = 0;
             }
 			else
@@ -38,6 +41,9 @@
                 
 				if ( !is_file( $this->filename ) || !is_readable( $this->filename ) )
                 {
+					// debug
+					//echo $this->filename." is no file or not readable\n";
+
 					$this->status = 0;
                 }
 				else
@@ -93,45 +99,55 @@
 			return true;
 		}
 
-		function write($force=false, $getraw=true)
+		function write( $force = false, $getraw = true )
 		{
-			if(!$this->status && (!$force || file_exists($this->filename)))
+			if ( !$this->status && ( !$force || file_exists( $this->filename ) ) )
 				return false;
-			if(!$this->changed && !$force) return 2;
 
-			if($getraw)
+			if ( !$this->changed && !$force ) 
+				return 2;
+
+			if ( $getraw )
 				$this->getRawFromData();
 
 			clearstatcache();
-			if($force && !file_exists($this->filename))
+
+			if ( $force && !file_exists( $this->filename ) )
 			{
-				if(!($this->file_pointer = fopen($this->location, 'a+')))
+				if ( !( $this->file_pointer = fopen( $this->location, 'a+' ) ) )
 					return false;
-				if(!fancy_flock($this->file_pointer, LOCK_EX))
+
+				if ( !fancy_flock( $this->file_pointer, LOCK_EX ) )
 					return false;
 			}
 
-			fseek($this->file_pointer, 0, SEEK_SET);
-			$new_data = bzcompress(serialize($this->raw));
+			fseek( $this->file_pointer, 0, SEEK_SET );
 
-			$act_filesize = filesize($this->filename);
-			$new_filesize = strlen($new_data);
+			$new_data = bzcompress( serialize( $this->raw ) );
 
-			if($new_filesize > $act_filesize)
+			$act_filesize = filesize( $this->filename );
+			$new_filesize = strlen( $new_data );
+
+			if ( $new_filesize > $act_filesize )
 			{
 				$diff = $new_filesize-$act_filesize;
 				$fname = $this->filename;
-				while(is_link($fname)) $fname = readlink($fname);
-				$df = disk_free_space(dirname($fname));
-				if($df < $diff)
+				
+				while ( is_link( $fname ) ) 
+					$fname = readlink( $fname );
+
+				$df = disk_free_space( dirname( $fname ) );
+
+				if ( $df < $diff )
 				{
 					echo "Error writing user array: No space left on disk.\n";
-					exit(1);
+					exit( 1 );
 				}
 			}
-			else ftruncate($this->file_pointer, $new_filesize);
+			else 
+				ftruncate( $this->file_pointer, $new_filesize );
 
-			fwrite($this->file_pointer, $new_data);
+			fwrite( $this->file_pointer, $new_data );
 
 			return true;
 		}
@@ -149,6 +165,9 @@
 			return $this->name;
 		}
 
-		function readonly() { return $this->readonly; }
+		function readonly() 
+		{ 
+			return $this->readonly; 
+		}
 	}
 ?>
