@@ -161,6 +161,9 @@
 			return $this->active_planet;
 		}
 
+		/*
+		 * @testing added - checking return value
+		 */
 		function getPlanetsList()
 		{
 			if( !$this->status ) 
@@ -258,6 +261,9 @@
 			return getPlanetClass( $pos[0], $pos[1], $pos[2] );
 		}
 
+		/*
+		 * @testing added
+		 */
 		function removePlanet()
 		{
 			if( !$this->status || !isset( $this->planet_info ) ) 

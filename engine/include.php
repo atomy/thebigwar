@@ -84,7 +84,7 @@
 	global_setting('PROTOCOL', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'http' : 'http');
 	global_setting('USE_PROTOCOL', (isset($_SESSION['use_protocol']) ? $_SESSION['use_protocol'] : (((!isset($_COOKIE['use_ssl']) || $_COOKIE['use_ssl'])) ? 'http' : 'http')));
 
-	function define_globals($DB)
+	function define_globals( $DB )
 	{
 		global $databases;
 		if(!isset($databases))
