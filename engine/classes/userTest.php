@@ -19,28 +19,44 @@ define( 'TEST_MAX_PLANETSINSYSTEM', 50 );
  */
 class userTest extends PHPUnit_Framework_TestCase
 {
-	private $testUname = 'helmut';
+	private $testUname1 = 'helmut';
+	private $testUname2 = 'bernd';
+	private $testUname3 = 'olaf';
 	private $testCreateUname = 'hans';
 	private $testNoUname = 'randomusernotcreatedbefore';
-	private $userObj = NULL;
 
 	// used during development, skip tests which are working
 	private $skipOldTests = true;
 
 	/*
 	 * keeps the random item levels which were set to make sure they were set
-	 * array( planet, array( itemID, itemLevel ) )
+	 * array( user, array ( planet, array( itemID, itemLevel ) ) )
 	 */
 	private $random_ItemLevels = array();
 
-	// this holds planets which we created, values = boolean
+	/*
+	 * this holds planets which we created, values = boolean
+	 * array( user, array( planetid, bWasCreated ) )
+	 */
 	private $test_PlanetCreated = array();
-	
-	// this holds the names of our planets, values = string
+
+	/*
+	 * this holds the names of our planets, values = string
+	 * array( user, array( planetid, name ) )	
+	 */
 	private $test_PlanetNames = array();
 
-	// this holds the koordinates of our planets, values = string
+	/*
+	 * this holds the koordinates of our planets, values = string
+	 * @array - user => ( planetid => coords )
+	 */
 	private $test_PlanetCoordinates = array();
+
+	/*
+	 * this holds all users used during testing
+	 * array( user, array( userobj, username, wascreated ) )
+	 */
+	private $test_Users = array();
 
     /**
      * Runs the test methods of this class.
@@ -66,41 +82,61 @@ class userTest extends PHPUnit_Framework_TestCase
     {
 		// define_globals( Uni ); to set globals like where db files are located etc
 		define_globals( 'TestUni1' );
+		
+		$nuser = new User( $this->testUname1 );
+		$nuser->create();
 
-		$this->userObj = new User( $this->testUname );
-		$this->userObj->create();
+		if ( !$nuser->getStatus() )
+			throw new Exception( 'setUp() failed, borken for status for $user obj returned' );
 
-		if ( !$this->userObj->getStatus() )
-			throw new Exception( 'setUp() failed, borken status returned' );
+		$this->test_Users[] = array( $nuser,  $this->testUname1, true );
 
-		$this->test_PlanetNames[0] = "MainPlanet";
-		$this->test_PlanetNames[1] = "TestPlanet1";
-		$this->test_PlanetCreated[0] = true;
-		$this->test_PlanetCreated[1] = true;
+        $nuser = new User( $this->testUname2 );
+        $nuser->create();
 
-		$this->setUp_NewPlanet( $this->test_PlanetNames[0] );
-		$this->setUp_NewPlanet( $this->test_PlanetNames[1] );
+        if ( !$nuser->getStatus() )
+            throw new Exception( 'setUp() failed, borken for status for $user obj returned' );
 
-		$this->setUp_RandomizePlanet( 0, true );
-		$this->setUp_RandomizePlanet( 1, false );
+		$this->test_Users[] = array( $nuser,  $this->testUname2, true );
+		
+		// $this->test_Users[UserID][UserObject]2
+		$this->setUp_NewPlanet( $this->test_Users[0][0], "MainPlanet" );
+		$this->setUp_NewPlanet( $this->test_Users[0][0], "TestPlanet1" );
+
+        $this->setUp_NewPlanet( $this->test_Users[1][0], "MainPlanet" );
+        $this->setUp_NewPlanet( $this->test_Users[1][0], "TestPlanet1" );
+
+		$this->setUp_RandomizePlanet( $this->test_Users[0][0], 0, true );
+		$this->setUp_RandomizePlanet( $this->test_Users[0][0], 1, false );
+
+        $this->setUp_RandomizePlanet( $this->test_Users[1][0], 0, true );
+		$this->setUp_RandomizePlanet( $this->test_Users[1][0], 1, false );
     }
+
+	protected function setUp_NewUser( $username )
+	{
+        $nuser = new User( $username );
+        $nuser->create();
+
+        array_push( $this->test_Users, array( $nuser, $username, true ) );
+	
+	}
 
 	/*
 	 * helper func for setting up a random planet,
 	 * sets and gets back random item levels for each class
 	 */
-	protected function setUp_RandomPlanet( $research = false )
+	protected function setUp_RandomPlanet( &$user, $research = false )
 	{
-		$user = &$this->userObj;
 		$random_ItemLevels = array();
 
-		$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( 'gebaeude' ) );
-		$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( 'roboter' ) );
-		$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( 'schiffe' ) );
-		$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( 'verteidigung' ) );
+		$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( $user, 'gebaeude' ) );
+		$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( $user, 'roboter' ) );
+		$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( $user, 'schiffe' ) );
+		$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( $user, 'verteidigung' ) );
 
 		if ( $research )
-			$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( 'forschung' ) );
+			$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( $user, 'forschung' ) );
 
 		return $random_ItemLevels;
 	}
@@ -110,9 +146,8 @@ class userTest extends PHPUnit_Framework_TestCase
 	 * @args $class - name the class for which all available items should be randomized
 	 * @return - returns a list of the random levels with the id as key
 	 */
-	protected function setUp_RandomItemClass( $class )
+	protected function setUp_RandomItemClass( $user, $class )
 	{
-		$user = &$this->userObj;
 		$minlvl = 0;
 		$maxlvl = 0;
 
@@ -159,6 +194,7 @@ class userTest extends PHPUnit_Framework_TestCase
 			$randomLevel = rand( $minlvl, $maxlvl );
 			$randomItemLevels[$item] = $randomLevel;
 			$user->changeItemLevel( $item, $randomLevel, $class );
+//			echo "added ".$randomLevel." items of ".$item."\n";
 		}
 
 		return $randomItemLevels;
@@ -168,11 +204,9 @@ class userTest extends PHPUnit_Framework_TestCase
 	 * sets up a new planet
 	 * @args $name - name of the new planet
 	 */
-	protected function setUp_NewPlanet( $name = false )
+	protected function setUp_NewPlanet( &$user, $name = false )
 	{
-		$user = &$this->userObj;
-
-		if ( !$this->setUp_addPlanet( $name ) )
+		if ( !$this->setUp_addPlanet( $user, $name ) )
 			throw new Exception( 'setUp_MainPlanet() failed, setUp_addPlanet() returned false' );
 	}
 
@@ -183,30 +217,31 @@ class userTest extends PHPUnit_Framework_TestCase
 	 * @args $planet - planet which will be the target
 	 * @return array() - array containing the random levels
 	 */	
-	protected function setUp_RandomizePlanet( $planet, $research = false )
+	protected function setUp_RandomizePlanet( &$user, $planet, $research = false )
 	{
-		$user = &$this->userObj;
-
 		if ( !$user->planetExists( $planet ) )
 		{
 			throw new Exception( 'setUp_RandomizePlanet() called with a non existant planet: '.$planet );
 		}
 
 		$user->setActivePlanet( $planet );
-		$this->random_ItemLevels[$planet] = $this->setUp_RandomPlanet( $research );
+//		$this->random_ItemLevels[$user->getName()] = array();
+		$this->random_ItemLevels[$user->getName()][$planet] = $this->setUp_RandomPlanet( $user, $research );
 	}
 
 	/* 
 	 * adds another planet to the user
 	 */
-	protected function setUp_addPlanet( $name = false )
+	protected function setUp_addPlanet( &$user, $name = false )
 	{
-        $user = &$this->userObj;
-
         $koords = getFreeKoords();
+
+		if( $user == false )
+			throw new Exception( 'setUp_MainPlanet() failed, $user is invalid' );
 
         if( $koords )
         {
+//			print "setUp_addPlanet() trying to register a planet for ".$user->getName()." at ".$koords."\n";
             $index = $user->registerPlanet( $koords );
 
             if ( $index === false )
@@ -216,10 +251,14 @@ class userTest extends PHPUnit_Framework_TestCase
                 $user->setActivePlanet( $index );
 
 				if ( $name )
+				{
 	                $user->planetName( $name );
+					$this->test_PlanetNames[$user->getName()][$index] = $name;
+				}
 
-				$this->test_PlanetCoordinates[$index] = $koords;
-
+				$this->test_PlanetCoordinates[$user->getName()][$index] = $koords;
+				$this->test_PlanetCreated[$user->getName()][$index] = true;
+		
 				return true;
             }
         }
@@ -235,27 +274,18 @@ class userTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-		$user = &$this->userObj;
-		$ufname = $user->getFileName();
-		$user->__destruct();
-		unset( $user );
-
-		// remove the testusers
-		user_control::removeUser( $this->testUname );
-		user_control::removeUser( $this->testCreateUname );
-
-		if ( User::userExists( $this->testUname ) )
+		foreach( $this->test_Users as $index => $uarray )
 		{
-			if ( is_file( $ufname ) )
-				unlink( $ufname );
-		}
+			$user = $uarray[0];
+	        $ufname = $user->getFileName();
+	        $user->__destruct();
+	        unset( $user );
 
-		if ( User::userExists( $this->testCreateUname ) )
-		{
-			$newuser = new User( $this->testCreateUname );
+			user_control::removeUser( $uarray[1] );
 
-			if ( is_file( $newuser->getFileName() ) )
-				unlink( $newuser->getFileName() );
+			if ( User::userExists( $uarray[1] ) )
+				if ( is_file( $ufname ) )
+					unlink( $ufname );
 		}
 	}
 
@@ -267,37 +297,41 @@ class userTest extends PHPUnit_Framework_TestCase
         if ( $this->skipOldTests )
 			$this->markTestSkipped();
 
-		$user = &$this->userObj;
-
-		$this->assertTrue( User::userExists( $this->testUname ) );
-	
-		for( $i = 0; $i <= $this->_testAndGetMaxPlanets(); $i++ )
+		foreach( $this->test_Users as $index => $usrarray )
 		{
-			if ( isset( $this->test_PlanetCreated[$i] ) && $this->test_PlanetCreated[$i] )
-			{
-				$this->assertTrue( $user->setActivePlanet( $i ) );
-				$this->assertTrue( $user->planetExists( $i ) );
-				$this->assertEquals( $this->test_PlanetNames[$i], $user->planetName() );
-				$this->_testPlanetItems( $i );
-			}
-			else
-			{
-				$this->assertFalse( $user->setActivePlanet( $i ) );
-				$this->assertFalse( $user->planetExists( $i ) );
-				//$this->assertFalse( $user->planetName() ); // doesnt work, cause we couldnt change to that planet with setActivePlanet()
-			}
+			$this->_testSetup( $usrarray[0] );
 		}
 	}
 
-	public function _testPlanetItems( $planet = false )
+	public function _testSetup( $user )
 	{
-		$user = &$this->userObj;
+        $this->assertTrue( User::userExists( $this->testUname1 ) );
 
+        for( $i = 0; $i <= $this->_testAndGetMaxPlanets(); $i++ )
+        {
+            if ( isset( $this->test_PlanetCreated[$user->getName()][$i] ) && $this->test_PlanetCreated[$user->getName()][$i] )
+            {
+                $this->assertTrue( $user->setActivePlanet( $i ) );
+                $this->assertTrue( $user->planetExists( $i ) );
+                $this->assertEquals( $this->test_PlanetNames[$user->getName()][$i], $user->planetName() );
+                $this->_testPlanetItems( $user, $i );
+            }
+            else
+            {
+                $this->assertFalse( $user->setActivePlanet( $i ) );
+                $this->assertFalse( $user->planetExists( $i ) );
+                //$this->assertFalse( $user->planetName() ); // doesnt work, cause we couldnt change to that planet with setActivePlanet()
+            }
+        }
+	}
+
+	public function _testPlanetItems( $user, $planet = false )
+	{
 		$this->assertGreaterThanOrEqual( 0, $planet );
 		
 		$user->setActivePlanet( $planet );
 	
-		foreach( $this->random_ItemLevels[$planet] as $key => $value )
+		foreach( $this->random_ItemLevels[$user->getName()][$planet] as $key => $value )
 		{
 			$lvl = $user->getItemLevel( $key, false, false );
 			$this->assertEquals( $value, $lvl, '_testPlanetItems() expected level didnt match for given item '.$key.' wanted: '.$value.' got: '.$lvl );
@@ -312,10 +346,16 @@ class userTest extends PHPUnit_Framework_TestCase
 		if ( $this->skipOldTests )
 			$this->markTestSkipped();
 
-		$newuser = new User( $this->testCreateUname );
-		$dupuser = new User( $this->testUname );
+		// new user
+		$newuser = new User( $this->testUname3 );
+
+		// already exists
+		$dupuser = new User( $this->testUname1 );
 
 		$this->assertTrue( $newuser->create(), "couldnt create user" );
+
+		$this->test_Users[] = array( $newuser,  $this->testUname3, true );
+
 		$this->assertFalse( $dupuser->create(), "could create user which already exist" );
 	}
 
@@ -324,7 +364,7 @@ class userTest extends PHPUnit_Framework_TestCase
 		if ( $this->skipOldTests )
 			$this->markTestSkipped();
 
-		$this->assertTrue( User::userExists( $this->testUname ), "user which was created doesnt exist" );
+		$this->assertTrue( User::userExists( $this->testUname1 ), "user which was created doesnt exist" );
 		$this->assertFalse( User::userExists( $this->testNoUname ), "user which wasnt created does exist" );
 		$this->assertFalse( User::userExists( NULL ), "func returned true but no name was given as parameter" );
 	}
@@ -334,13 +374,14 @@ class userTest extends PHPUnit_Framework_TestCase
 		if ( $this->skipOldTests )
 			$this->markTestSkipped();
 
-		$user = &$this->userObj;
+		// get our very fist user for testing
+		$user = $this->test_Users[0][0]; 
 
 		$this->assertTrue( $user->planetExists( 0 ), "planet setup but doesnt exist" );
 
 		for( $i = 0; $i <= $this->_testAndGetMaxPlanets(); $i++ )
 		{
-			if ( isset( $this->test_PlanetCreated[$i] ) && $this->test_PlanetCreated[$i] )
+			if ( isset( $this->test_PlanetCreated[$user->getName()][$i] ) && $this->test_PlanetCreated[$user->getName()][$i] )
 				$this->assertTrue( $user->planetExists( 0 ), "planet setup but doesnt exist" );
 			else
 				$this->assertFalse( $user->planetExists( $i ), "planet shouldnt exist" );
@@ -360,7 +401,9 @@ class userTest extends PHPUnit_Framework_TestCase
 		if ( $this->skipOldTests )
 			$this->markTestSkipped();
 
-		$user = &$this->userObj;
+        // get our very fist user for testing
+        $user = $this->test_Users[0][0];
+
 		$fuser = new User( "fakeuser1338" );
 
 		$this->assertTrue( $user->setActivePlanet( 0 ), "setting active planet to existing one should work" );
@@ -376,7 +419,9 @@ class userTest extends PHPUnit_Framework_TestCase
 		if ( $this->skipOldTests )
 			$this->markTestSkipped();
 
-		$user = &$this->userObj;
+        // get our very fist user for testing
+        $user = $this->test_Users[0][0];
+
 		$fuser = new User( "fakeuser1339" );
 
 		$this->assertFalse( $fuser->getPlanetByPos( false ) );
@@ -390,13 +435,13 @@ class userTest extends PHPUnit_Framework_TestCase
 					$pos = $i.":".$k.":".$m;
 					$bMyPlanet = false;
 
-					foreach( $this->test_PlanetCreated as $planet => $isCreated )
+					foreach( $this->test_PlanetCreated[$user->getName()] as $planet => $isCreated )
 					{
-						if ( $pos == $this->test_PlanetCoordinates[$planet] && $isCreated )
+						if ( $pos == $this->test_PlanetCoordinates[$user->getName()][$planet] && $isCreated )
 						{
 							$bMyPlanet = true;
 							$this->assertEquals( $planet, $user->getPlanetByPos( $pos ) );
-							echo "found mah planet @ ".$pos."\n"; 
+//							echo "found mah planet @ ".$pos."\n"; 
 						}
 					}
 
@@ -415,17 +460,19 @@ class userTest extends PHPUnit_Framework_TestCase
         if ( $this->skipOldTests )
 			$this->markTestSkipped();
 
-		$user = &$this->userObj;
+		// get our very fist user for testing
+        $user = $this->test_Users[0][0];		
+
 		$fuser = new User( "fakeuser1340" );
 
 		$this->assertFalse( $fuser->getPlanetsList() );
 
 		$planets = $user->getPlanetsList();
 	
-		for( $i = 0; isset( $planets[$i] ) || isset( $this->test_PlanetCreated[$i] ); $i++ )
+		for( $i = 0; isset( $planets[$i] ) || isset( $this->test_PlanetCreated[$user->getName()][$i] ); $i++ )
 		{
 			$this->assertTrue( isset( $planets[$i] ) );
-			$this->assertTrue( isset( $this->test_PlanetCreated[$i] ) );
+			$this->assertTrue( isset( $this->test_PlanetCreated[$user->getName()][$i] ) );
 		}
 	}
 
@@ -434,10 +481,88 @@ class userTest extends PHPUnit_Framework_TestCase
      */
     public function testRemovePlanet()
     {
-        if ( $this->skipOldTests && false )
+        if ( $this->skipOldTests && 0 )
             $this->markTestSkipped();
 
-		
+        // get our very fist user for the fleet start pos, using active planet
+        $user = &$this->test_Users[0][0];
+
+		$fuser = new User( "fakeuser1341" );
+
+		$this->assertFalse( $fuser->removePlanet() );
+
+		/*
+		 * fleet zurueckrufen welche zu plani unterwegs ist - testen
+		 */
+		$koords = $user->getPosString();
+		$i = 0;
+
+		while( $koords == $user->getPosString() && $i < 100 )
+		{
+			$i++;
+			$usr = array_rand( $this->test_PlanetCoordinates );
+			$planet = array_rand( $this->test_PlanetCoordinates[$usr] );
+			$koords = $this->test_PlanetCoordinates[$usr][$planet];
+
+			$this->assertLessThan( 100, $i );
+		}
+
+		$this->_testSendFleetTo( $user, $koords );
+	}
+
+	/*
+	 * send a fleet and test if it were created
+	 * the actual testing it derivated into a sub method
+	 */
+	public function _testSendFleetTo( &$user, $pos )
+	{
+		echo "flying from: ".$user->getPosString(). " to: ".$pos."\n";
+
+		$fleet = New Fleet();
+
+		/*
+		 * flotte als transport mit 10 kleinen transportern zum ziel $pos versenden
+		 */
+		$fleet->create(); // no return 
+		$this->assertTrue( $fleet->addTarget( $pos, 3 /* = Angriff */, false ) );
+		$this->assertEquals( $user->getName(), $fleet->addUser( $user->getName(), $user->getPosString(), 1 /* default */ ) );
+		$this->assertTrue( $fleet->addFleet( "S15", 510, $user->getName() ) );
+		$this->assertTrue( $fleet->addFleet( "S1", 100, $user->getName() ) );
+
+		$this->assertTrue( $fleet->addHoldTime( 0 ) );
+		$this->assertGreaterThan( 0, $fleet->calcNeededTritium( $user->getName() ) );
+		$this->assertTrue( $user->addFleet( $fleet->getName() ) );
+		$fleet->start(); // no return
+		$this->assertEquals( $pos, $fleet_obj->getCurrentTarget() );
+
+		$this->_testIsFleetExistingSpecific( $user, $pos, $user->getPosString(), array( "S1", 10 ), 4 );
+	}
+
+	/*
+	 * test if a given fleet is existant, it is expected to do, otherwise this test will fail
+	 */
+	public function _testIsFleetExistingSpecific( &$from_user, $to_pos, $from_pos, $ships, $type )
+	{
+		$fleets = $from_user->getFleetsList();
+
+		$this->assertGreaterThan( 0, count( $fleets ), "no fleets found" );
+
+		$fleet = false;
+
+		foreach( $fleets as $ffleet )
+		{
+		 	$fleet = $ffleet;
+		}
+	
+		if ( $fleet == false )
+			throw new Exception( "_testIsFleetExistingSpecific() failed, no fleet found" );
+
+		$that = new Fleet( $fleet );
+		$targets = $that->getTargetsList();
+print_r ($fleets);
+
+		$this->assertEquals( array( $to_pos, $type ), $targets[0] );
+		$this->assertEquals( array( "S1", 10 ), $fleet->getFleetList( $from_user ) );
 	}
 
 	public function _testAndGetMaxPlanets()

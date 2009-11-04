@@ -415,34 +415,45 @@
  	  	         
  	  	                                                #else
 									$fleet_obj->addUser($_SESSION['username'], $me->getPosString(), $_POST['speed']);
-									foreach($_POST['flotte'] as $id=>$anzahl)
-										$fleet_obj->addFleet($id, $anzahl, $_SESSION['username']);
-										if(!isset($_POST['haltezeit'])) $_POST['haltezeit'] = 0;
-										$fleet_obj->addHoldTime($_POST['haltezeit']);
-										if(isset($_POST['saveflug'])) $fleet_obj->addSaveFlight($_POST['saveflug']);
-										$ress = $me->getRess();
-									if(!isset($_POST['auftrag'])) $_POST['auftrag'] == true;
+
+									foreach( $_POST['flotte'] as $id => $anzahl )
+										$fleet_obj->addFleet( $id, $anzahl, $_SESSION['username'] );
+
+									if( !isset( $_POST['haltezeit'] ) ) 
+										$_POST['haltezeit'] = 0;
+										
+									$fleet_obj->addHoldTime( $_POST['haltezeit'] );
+
+									if( isset( $_POST['saveflug'] ) ) 
+										$fleet_obj->addSaveFlight( $_POST['saveflug'] );
+
+									$ress = $me->getRess();
+
+									if( !isset( $_POST['auftrag'] ) ) 
+										$_POST['auftrag'] == true;
 
 									#Transport
-									if(($_POST['auftrag'] == 4))
+									if( ( $_POST['auftrag'] == 4 ) )
 									{
-										$username1 = array();										
-										#Bei eigenen Angriffsflotten nicht halten
-										#Planetenbesitzer flotten holen
-										$owner_obj = Classes::User($planet_owner);
+										$username1 = array();		
+
+										# Bei eigenen Angriffsflotten nicht halten
+										# Planetenbesitzer flotten holen
+										$owner_obj = Classes::User( $planet_owner );
 										$fleets = $owner_obj->getFleetsList();
 										
 										
-										#Fremdflotten durch Userabgleich identifizieren
-										foreach($fleets as $fleet)
+										# Fremdflotten durch Userabgleich identifizieren
+										foreach( $fleets as $fleet )
 										{
-											$that = Classes::Fleet($fleet);
+											$that = Classes::Fleet( $fleet );
 											$target = $that->getTargetsList();
-											$target1 = array($_POST['galaxie'].':'.$_POST['system'].':'.$_POST['planet'], $_POST['auftrag']);
+											$target1 = array( $_POST['galaxie'].':'.$_POST['system'].':'.$_POST['planet'], $_POST['auftrag'] );
 											$username1 = $that->getUsersList();
 											$type = $that->getCurrentType();
 											$hold = $_POST['haltezeit'];
-											#Begrenzung der gehaltenen Flotten	
+
+											# Begrenzung der gehaltenen Flotten	
 											if(in_array($_SESSION['username'], $username1) && ($hold > 0) && ($target[0] == $target1[0]) && $type == 3)
 											{
 												if(defined('ajax')) return array('error', 'Kein Angriff auf eigene Halteflotten!!');
@@ -483,21 +494,21 @@
 										list($_POST['transport'], $_POST['rtransport']) = $fleet_obj->getTransport($_SESSION['username']);
 										
 									}
-
-									elseif($_POST['auftrag'] == 3)
+									else if( $_POST['auftrag'] == 3 )
 									{
 										
-										$username1 = array();										
-										#Bei eigenen Halteflotten Flotten nicht angreifen
-										#Fremdflotten holen
-										$owner_obj = Classes::User($planet_owner);
+										$username1 = array();		
+
+										# Bei eigenen Halteflotten Flotten nicht angreifen
+										# Fremdflotten holen
+										$owner_obj = Classes::User( $planet_owner );
 										$fleets = $owner_obj->getFleetsList();
-										$_POST['transport'] = array(0,0,0,0,0);
+										$_POST['transport'] = array( 0, 0, 0, 0, 0 );
 										$_POST['rtransport'] = array();
 
 										
-										#Fremdflotten durch Userabgleich identifizieren
-										foreach($fleets as $fleet)
+										# Fremdflotten durch Userabgleich identifizieren
+										foreach( $fleets as $fleet )
 										{
 											$that = Classes::Fleet($fleet);
 											$target = $that->getTargetsList();
@@ -554,12 +565,13 @@
 										$_POST['rtransport'] = array();
 									}
 
-									$tritium = $fleet_obj->calcNeededTritium($_SESSION['username']);
+									$tritium = $fleet_obj->calcNeededTritium( $_SESSION['username'] );
+
 									$filename = s_root.'/engine/classes/log.txt';
-									$fo = fopen($filename, "a");
-									fwrite($fo, date('Y-m-d, H:i:s')."  Flotten.php  User: ".$_SESSION['username']." Auftrag: ".$_POST['auftrag']."\n");
+									$fo = fopen( $filename, "a" );
+									fwrite( $fo, date('Y-m-d, H:i:s')."  Flotten.php  User: ".$_SESSION['username']." Auftrag: ".$_POST['auftrag']."\n" );
 								
-									$user_obj = Classes::User($_SESSION['username']);
+									$user_obj = Classes::User( $_SESSION['username'] );
 									$alliance_tag = $user_obj->getAllianceTag();
 									$tag_obj = Classes::Alliance($alliance_tag);
 									$alliance_array = $tag_obj->getUsersList();
@@ -606,7 +618,7 @@
 
 									else
 									{
-										if($buendnisflug)
+										if( $buendnisflug )
 										{
 											$user = $bndfleet_obj->addUser($_SESSION['username'], $me->getPosString(), $_POST['speed']);
 											foreach($_POST['flotte'] as $id=>$anzahl)											
@@ -614,43 +626,45 @@
 											$bndfleet_obj->addStartTime($user, time());
 											$me->addFleet($bndfleet_obj->getName());
 										}
-										else $me->addFleet($fleet_obj->getName());
-										if(!$buendnisflug && $_POST['auftrag'] != 1 && $_POST['auftrag'] != 2 && $planet_owner != $_SESSION['username'] && $planet_owner)
+										else 
+											$me->addFleet( $fleet_obj->getName() );
+
+										if( !$buendnisflug && $_POST['auftrag'] != 1 && $_POST['auftrag'] != 2 && $planet_owner != $_SESSION['username'] && $planet_owner )
 										{
 											# Beim Zielbenutzer die Flottenbewegung eintragen
-											$that_user->addFleet($fleet_obj->getName());
+											$that_user->addFleet( $fleet_obj->getName() );
 										}
 
-										$me->subtractRess(array(0, 0, 0, 0, $tritium));
+										$me->subtractRess( array( 0, 0, 0, 0, $tritium ) );
 
 										# Flotten abziehen
-										foreach($_POST['flotte'] as $id=>$anzahl)
-											$me->changeItemLevel($id, -$anzahl, 'schiffe');
+										foreach( $_POST['flotte'] as $id=>$anzahl )
+											$me->changeItemLevel( $id, -$anzahl, 'schiffe' );
 
 										# Rohstoffe abziehen
-										$me->subtractRess($_POST['transport'], false);
+										$me->subtractRess( $_POST['transport'], false );
 
 										# Roboter abziehen
-										if(isset($_POST['rtransport']))
+										if( isset( $_POST['rtransport'] ) )
 										{
-										foreach($_POST['rtransport'] as $id=>$anzahl)
-											$me->changeItemLevel($id, -$anzahl, 'roboter');
+											foreach( $_POST['rtransport'] as $id=>$anzahl )
+												$me->changeItemLevel( $id, -$anzahl, 'roboter' );
 										}
 										
-										
-											
-											if($buendnisflug) $fleet_obj->destroy();
-											else $fleet_obj->start();
+										if( $buendnisflug ) 
+											$fleet_obj->destroy();
+										else $fleet_obj->start();
 
-											if(defined('ajax')) return array('successful', 'Die Flotte wurde versandt.');
-											elseif($fast_action)
-											{
-												header($_SERVER['SERVER_PROTOCOL'].' 204 No Content');
-												ob_end_clean();
-												die();
-											}
-											else
-											{
+										if( defined('ajax') ) 
+											return array( 'successful', 'Die Flotte wurde versandt.' );
+										else if( $fast_action )
+										{
+											header( $_SERVER['SERVER_PROTOCOL'].' 204 No Content' );
+											ob_end_clean();
+											die();
+										}
+										else
+										{
 ?>
 <div class="flotte-versandt">
 	<p>

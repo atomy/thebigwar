@@ -13,15 +13,20 @@
 		{
 			if(file_exists($this->filename)) return false;
 			$this->raw = array(array(), array(), false, array());
-			$this->write(true);
+			$this->write( true );
 			$this->__construct($this->name);
+
 			return true;
 		}
 
-		function write($force=false)
+		function write( $force = false )
 		{
-			if($this->started() || $force) return Dataset::write($force);
-			else return $this->destroy();
+			if( $this->started() || $force ) 
+				return Dataset::write($force);
+			else 
+			{
+				return $this->destroy();
+			}
 		}
 
 		function destroy()
@@ -34,16 +39,18 @@
 				$user_obj->unsetFleet($this->getName());
 			}
 
-			$status = (unlink($this->filename));
-                        $filename = s_root.'/logs/fleet.log';
-                        $fo = fopen($filename, "a");
-                        fwrite($fo, "destroy() -- fleet ".$this->filename." deleted.");
-                        fclose($fo);
+			$status = ( unlink( $this->filename) );
 
-			if($status)
+            $filename = s_root.'/logs/fleet.log';
+            $fo = fopen($filename, "a");
+            fwrite($fo, "destroy() -- fleet ".$this->filename." deleted.\n");
+            fclose($fo);
+
+			if( $status )
 			{
 				$this->status = 0;
 				$this->changed = false;
+
 				return true;
 			}
 			else return false;
@@ -549,30 +556,39 @@
 			return $this->raw[1][$user][4];
 		}
 
-		function calcNeededTritium($user)
+		function calcNeededTritium( $user )
 		{
-			if(!$this->status || $this->started()) return false;
+			if( !$this->status || $this->started() ) 
+				return false;
 
-			$users = array_keys($this->raw[1]);
-			$user_key = array_search($user, $users);
+			$users = array_keys( $this->raw[1] );
+			$user_key = array_search( $user, $users );
 
-			if($user_key === false) return false;
+			if( $user_key === false ) 
+				return false;
 
-			if($user_key)
-               return $this->getTritium($user, $this->raw[1][$user][1], $this->getCurrentTarget())*2;
+			if( $user_key || 0 )
+			{
+            	return $this->getTritium( $user, $this->raw[1][$user][1], $this->getCurrentTarget() )*2;
+			}
 			else
 			{
 				$tritium = 0;
 				$old_target = $this->raw[1][$user][1];
-				foreach($this->raw[0] as $target=>$info)
+
+				foreach( $this->raw[0] as $target => $info )
 				{
-					if(substr($target, -1) == 'T') $target = substr($target, 0, -1);
-					$tritium += $this->getTritium($user, $old_target, $target);
+					if( substr( $target, -1 ) == 'T' ) 
+						$target = substr( $target, 0, -1 );
+
+					$tritium += $this->getTritium( $user, $old_target, $target );
 					$old_target = $target;
 				}
-				if($old_target != $this->raw[1][$user][1])
-					$tritium += $this->getTritium($user, $old_target, $this->raw[1][$user][1]);
-					return $tritium;
+
+				if( $old_target != $this->raw[1][$user][1] )
+					$tritium += $this->getTritium( $user, $old_target, $this->raw[1][$user][1] );
+
+				return $tritium;
 			}
 		}
 
@@ -630,7 +646,9 @@
             		foreach($this->raw[1][$user][0] as $id=>$count)
             		{
                 		$item_info = $user_obj->getItemInfo($id, 'schiffe');
+						print_r($item_info);
                 		$speeds[] = $item_info['speed'];
+//						print_r ($this->raw[1][$user][0]);
            
                 		# Geschwindigkeitsbegrenzung auf $speed_max
                  		if(min($speeds) > $speed_max && ($id == 'S7'))
@@ -920,12 +938,14 @@
 			#Zeitabgleich. Nicht mehr als 40% Unterschied.
 			$remtimebnd = $arrivalbnd - time();
 			$remtimeown = $arrival - time();
-			if($remtimeown > ($remtimebnd * 1.4))
+			
+			if( $remtimeown > ( $remtimebnd * 1.4 ) )
 			{
 				$this->destroy();
 				return false;
 			}
-			if($remtimeown > $remtimebnd)
+
+			if( $remtimeown > $remtimebnd )
 			{
 				
 				$newtime = $remtimeown + time();
@@ -989,7 +1009,9 @@
 
 		function started()
 		{
-			if(!$this->status) return false;
+			if( !$this->status )
+				return false;
+
 			return ($this->raw[2] !== false);
 		}
 
@@ -2621,19 +2643,17 @@ EOF
 				}
 
 
-				if(!$owner)
+				if( !$owner )
 				{
 					$this->destroy();
-					echo "DDDDDDDDDDDDDDDDDDDD";
+
 					return false;
 				}
 
-				$owner_obj = Classes::User($owner);
-				if(!$owner_obj->getStatus()) 
-				{
-					echo "EEEEEEEEEEEEEEEEEEEE";
+				$owner_obj = Classes::User( $owner );
+				
+				if( !$owner_obj->getStatus() ) 
 					return false;
-				}
 
 				$planet_index = $owner_obj->getPlanetByPos($next_target_nt);
 				if($planet_index === false)
@@ -2790,7 +2810,6 @@ EOF
 							$message_obj->addUser($username, $types_message_types[$this->raw[0][$next_target][0]]);
 					}
 				}
-
 				$this->destroy();
 			}
 			return true;

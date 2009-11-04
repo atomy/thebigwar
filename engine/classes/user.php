@@ -134,29 +134,40 @@
 			return true;
 		}
 
-		function getPlanetByPos($pos)
+		function getPlanetByPos( $pos )
 		{
-			if(!$this->status) return false;
+			if( !$this->status ) 
+				return false;
 
 			$return = false;
 			$planets = $this->getPlanetsList();
 			$active_planet = $this->getActivePlanet();
-			foreach($planets as $i=>$planet)
+
+			foreach( $planets as $i=>$planet )
 			{
-				$this->setActivePlanet($i);
-				if($this->getPosString() == $pos)
+				$this->setActivePlanet( $i );
+
+				if( $this->getPosString() == $pos )
 				{
+					echo "\n".$pos." matches: ".$i."\n";
+
 					$return = $i;
+
 					break;
 				}
+				else
+					echo $this->getPosString()." doesnt match ".$pos."\n";
 			}
-			$this->setActivePlanet($active_planet);
+
+			$this->setActivePlanet( $active_planet );
+
 			return $return;
 		}
 
 		function getActivePlanet()
 		{
-			if(!$this->status) return false;
+			if( !$this->status ) 
+				return false;
 
 			return $this->active_planet;
 		}
