@@ -29,6 +29,12 @@ class userTest extends PHPUnit_Framework_TestCase
 	private $skipOldTests = true;
 
 	/*
+	 * holds all fleets created
+	 * array( fleetname )
+	 */
+	private $test_Fleets = array();
+
+	/*
 	 * keeps the random item levels which were set to make sure they were set
 	 * array( user, array ( planet, array( itemID, itemLevel ) ) )
 	 */
@@ -268,18 +274,35 @@ class userTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+		Classes::resetInstances();
+
 		foreach( $this->test_Users as $index => $uarray )
 		{
 			$uname = $uarray[0];
-//			$user = Classes::User($uname);
-//	        $ufname = $user->getFileName();
-//	        unset( $user );
-
 			user_control::removeUser( $uname );
+		}
 
-//			if ( User::userExists( $uname ) )
-//				if ( is_file( $ufname ) )
-//					unlink( $ufname );
+		Classes::resetInstances();
+
+		$this->_tearDown_DeleteDir(global_setting("DB_PLAYERS"));
+		$this->_tearDown_DeleteDir(global_setting("DB_FLEETS"));
+
+	}
+
+	protected function _tearDown_DeleteDir( $dir )
+	{
+		
+		$exclude = array('.', '..');
+		$files = array_diff(scandir($dir), $exclude);
+		   
+		foreach($files as $value)
+		{
+			$fname = $dir."/".$value;
+
+			if(!is_dir($fname) && is_file($fname) && is_writable($fname) )
+			{
+				unlink( $fname );
+			}
 		}
 	}
 
@@ -521,7 +544,7 @@ class userTest extends PHPUnit_Framework_TestCase
 		$mypos =  $user->getPosString();
 		unset($user);
 
-		echo "\nflying from: ".$mypos. " to: ".$pos."\n";
+//		echo "\nflying from: ".$mypos. " to: ".$pos."\n";
 	
 		/*
 		 * flotte als transport mit 10 kleinen transportern zum ziel $pos versenden
@@ -529,6 +552,7 @@ class userTest extends PHPUnit_Framework_TestCase
 
 		$type = 6; // stationieren
 		$fleet->create(); // no return 
+		$this->test_Fleets[$uname][] = $fleet->getName();
 		$this->assertTrue( $fleet->addTarget( $pos, $type, false ) );
 		$this->assertEquals( $uname, $fleet->addUser( $uname, $mypos, 1 /* default */ ) );
 		$this->assertTrue( $fleet->addTransport( $uname, array( 0, 0, 0, 0, 0 ), array() ) );
@@ -544,6 +568,23 @@ class userTest extends PHPUnit_Framework_TestCase
 		unset($fleet);
 
 		$this->_testIsFleetExistingSpecific( $uname, $pos, $mypos, array( "S1", 10 ), $type );
+
+        // core func, remove the planet
+        $user = Classes::User( $uname );
+		$this->assertTrue($user->setActivePlanet(1));
+        $this->assertTrue($user->removePlanet());
+        unset($user);
+        
+		$fleet_obj = Classes::Fleet( $this->test_Fleets[$uname][0] );
+        // check if the fleet was sent back
+        $this->assertTrue( $fleet_obj->isFlyingBack() );
+		unset($fleet_obj);
+
+        // check if planet still exists
+        $galaxy = Classes::Galaxy(1);
+        $koords = explode( $mypos );
+        $this->assertFalse( $galaxy->getPlanetOwner( $koords[1], $koords[2] ) );
+
 	}
 
 	/*
@@ -576,6 +617,7 @@ class userTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals( array( $to_pos ), $targets );
 		$this->assertEquals( array( "S1" => 100 ), $fleet_obj->getFleetList( $from_user) );
+		$this->assertFalse( $fleet_obj->isFlyingBack() );
 	}
 
 	public function _testAndGetMaxPlanets()

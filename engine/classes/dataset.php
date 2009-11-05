@@ -90,6 +90,9 @@
             if( $this->changed && !$force ) 
                 $this->write();
 
+			if ( !file_exists($this->filename) )
+				return false;
+
 			clearstatcache();
 			$filesize = filesize( $this->filename );
 			fseek( $this->file_pointer, 0, SEEK_SET );

@@ -673,31 +673,43 @@ if( !$user_obj->getStatus() )
 
 		function callBack($user, $immediately=false)
 		{
-			if(!$this->status || !$this->started() || !isset($this->raw[1][$user]) || $this->isFlyingBack()) return false;
+			if(!$this->status || !$this->started() || !isset($this->raw[1][$user]) || $this->isFlyingBack()) 
+				return false;
 
 			$start = $this->raw[1][$user][1];
 			$keys = array_keys($this->raw[0]);
 			$to = $to_t = array_shift($keys);
-			if(substr($to, -1) == 'T') $to = substr($to, 0, -1);
+
+			if(substr($to, -1) == 'T') 
+				$to = substr($to, 0, -1);
+
 			if(count($this->raw[3]) > 0)
 			{
 				$keys = array_keys($this->raw[3]);
 				$from = $from_t = array_pop($keys);
 				if(substr($from, -1) == 'T') $from = substr($from, 0, -1);
 			}
-			else $from = $from_t = $start;
+			else 
+				$from = $from_t = $start;
 
-			if($to_t == $start) return false;
+			if($to_t == $start) 
+				return false;
 			
 			$exp = explode("/", $user);
 			$userres = $exp[0];
 
-			if($from_t == $start) $time1 = 0;
-			else $time1 = $this->calcTime($user, $from, $start);
+			if($from_t == $start) 
+				$time1 = 0;
+			else 
+				$time1 = $this->calcTime($user, $from, $start);
+
 			$time2 = $this->calcTime($user, $to, $start);
 			$time3 = $this->calcTime($user, $from, $to);
 			$holdtime = $this->getHoldTime();
-			if(isset($this->raw[1][$user]['startzeit'])) $timeex =(time()-$this->raw[1][$user]['startzeit']);
+
+			if(isset($this->raw[1][$user]['startzeit'])) 
+				$timeex =(time()-$this->raw[1][$user]['startzeit']);
+
 			$filename = s_root.'/logs/fleet.log';
 			$fo = fopen($filename, "a");
 			fwrite($fo, "\nCallback-User  ".$user."\nFrom  ".$from."\nTo  ".$to."\nRueckflugzeit  ".$time3."\nVerflogene Zeit  ".$timeex);
