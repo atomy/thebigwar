@@ -64,12 +64,17 @@
 
 		function getTargetsList()
 		{
-			if(!$this->status) return false;
+			if(!$this->status) 
+			{
+				return false;
+			}
 
 			$targets = array_keys($this->raw[0]);
+			
 			foreach($targets as $i=>$target)
 			{
-				if(substr($target, -1) == 'T') $targets[$i] = substr($target, 0, -1);
+				if(substr($target, -1) == 'T') 
+					$targets[$i] = substr($target, 0, -1);
 			}
 			return $targets;
 		}
@@ -233,7 +238,7 @@
  		 	if(isset($this->raw[7][0]) && $this->raw[7][0] > time() && $this->raw[6][0] !== -1) return $this->raw[7][0];
 			if(isset($this->raw[7][1]) && $this->raw[6][0] == -1 && $this->raw[7][1] > time()) return $this->raw[7][1];
 			#if(isset($this->raw[7][2]) && $this->raw[7][2] > time() && $this->isFlyingBack() == true) return $this->raw[7][2];
-			#Wird fï¿½r Callback gebraucht
+			#Wird für Callback gebraucht
 			else
 			{
 				$conn = sqlite_open(global_setting("EVENT_FILE"), 0666);
@@ -261,27 +266,19 @@
 
 		function addFleet($id, $count, $user)
 		{
-			if(!$this->status) 
-				return false;
+			if(!$this->status) return false;
 
 			$count = (int) $count;
-			
-			if($count < 0) 
-				return false;
+			if($count < 0) return false;
 
-			if(!isset($this->raw[1][$user])) 
-				return false;
+			if(!isset($this->raw[1][$user])) return false;
 
 			$keys = array_keys($this->raw[1]);
 			$first = !array_search($user, $keys);
-			
-			if(isset($this->raw[1][$user][0][$id])) 
-				$this->raw[1][$user][0][$id] += $count;
-			else 
-				$this->raw[1][$user][0][$id] = $count;
+			if(isset($this->raw[1][$user][0][$id])) $this->raw[1][$user][0][$id] += $count;
+			else $this->raw[1][$user][0][$id] = $count;
 
 			$this->changed = true;
-			
 			return true;
 		}
 
@@ -418,7 +415,7 @@
 				array(array(0, 0, 0, 0, 0), array(), 0), # Mitgenommene Rohstoffe
 				array(array(0, 0, 0, 0, 0), array()), # Handel
 				0, # Verbrauchtes Tritium
-				'startzeit'=>time() #Startzeit fï¿½r Verbandsflotte
+				'startzeit'=>time() #Startzeit für Verbandsflotte
 			);
 			#self::$database->setLog("read: $user", User);
 			$this->changed = true;
@@ -607,23 +604,19 @@
 
 			$mass = 0;
 			$user_obj = Classes::User($user);
-			
+if( !$user_obj->getStatus() )
+	echo "BLERK\n";
 			foreach($this->raw[1][$user][0] as $id=>$count)
 			{
 				$item_info = $user_obj->getItemInfo($id, 'schiffe');
-				$mass += $item_info['mass'] * $count;
+				$mass += $item_info['mass']*$count;
 			}
 
 			$global_factors = get_global_factors();
             $add_factor = 1;
-			
-            if($factor) 
-				$add_factor = $this->raw[1][$user][2];
+            if($factor) $add_factor = $this->raw[1][$user][2];
 
-			$distance = $this->getDistance($from, $to);
-			$tritium = $add_factor * $global_factors['cost'] * $distance * $mass;
-
-			return $tritium;
+			return $add_factor*$global_factors['cost']*$this->getDistance($from, $to)*$mass;
 		}
 
 		function getScores($user, $from, $to)
@@ -661,9 +654,7 @@
             		foreach($this->raw[1][$user][0] as $id=>$count)
             		{
                 		$item_info = $user_obj->getItemInfo($id, 'schiffe');
-						print_r($item_info);
                 		$speeds[] = $item_info['speed'];
-//						print_r ($this->raw[1][$user][0]);
            
                 		# Geschwindigkeitsbegrenzung auf $speed_max
                  		if(min($speeds) > $speed_max && ($id == 'S7'))
@@ -880,7 +871,8 @@
 
 		function getFleetList($user)
 		{
-			if(!$this->status || !isset($this->raw[1][$user])) return false;
+			if(!$this->status || !isset($this->raw[1][$user])) 
+				return false;
 
 			return $this->raw[1][$user][0];
 		}
@@ -983,30 +975,21 @@
 
 		function start()
 		{
-			if(!$this->status || $this->started()) 
-				return false;
-				
-			if(count($this->raw[1]) <= 0 || count($this->raw[0]) <= 0) 
-				return false;
-				
+			if(!$this->status || $this->started()) return false;
+			if(count($this->raw[1]) <= 0 || count($this->raw[0]) <= 0) return false;
 			$filename = s_root.'/logs/fleet.log';
 			$fo = fopen($filename, "a");
 
 			$keys = array_keys($this->raw[1]);
 			$user = array_shift($keys);
-			
-			if(array_sum($this->raw[1][$user][0]) <= 0) 
-				return false;
-				
+			if(array_sum($this->raw[1][$user][0]) <= 0) return false;
 			fwrite($fo, date('Y-m-d, H:i:s')." start() -- Fleet Start. User: ".$user."  Fleet-ID: ".$this->getName()."\n");
+
 
 			# Geschwindigkeitsfaktoren der anderen Teilnehmer abstimmen
 			$koords = array_keys($this->raw[0]);
 			$koords = $koords_t = array_shift($koords);
-			
-			if(substr($koords, -1) == 'T') 
-				$koords = substr($koords, 0, -1);
-				
+			if(substr($koords, -1) == 'T') $koords = substr($koords, 0, -1);
 			$time = $this->calcTime($user, $this->raw[1][$user][1], $koords);
 
 			if(count($keys) > 1)
@@ -1458,11 +1441,11 @@ EOF
 								$urverteidiger[$target_owner][$item] = $level;
 							}
 							fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Planetenbesitzer Verteidigung ermitteln-Ende. Flotten-ID:  ".$this->getName()."\n");
-							fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Funktion Battle ï¿½bergabe. Flotten-ID:  ".$this->getName()."\n");
+							fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Funktion Battle Übergabe. Flotten-ID:  ".$this->getName()."\n");
 
 							list($winner, $angreifer2, $verteidiger2, $nachrichten_text, $verteidiger_ress, $truemmerfeld) = battle($angreifer, $verteidiger);
 
-							fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Funktion Battle Rï¿½ckgabe. Flotten-ID:  ".$this->getName()."\n");
+							fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Funktion Battle Rückgabe. Flotten-ID:  ".$this->getName()."\n");
 							if(array_sum($truemmerfeld) > 0)
 							{
 								truemmerfeld::add($target[0], $target[1], $target[2], $truemmerfeld[0], $truemmerfeld[1], $truemmerfeld[2], $truemmerfeld[3]);
@@ -1491,7 +1474,7 @@ EOF
 								#Flottenverluste uebertragen
 								foreach($angreifer2 as $username2=>$ida2)
 								{
-									fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Flottenverluste ï¿½bertragen-Anfang. Flotten-ID:  ".$this->getName()."  User:  ".$username2."\n");
+									fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Flottenverluste übertragen-Anfang. Flotten-ID:  ".$this->getName()."  User:  ".$username2."\n");
 
 									$gesamt3 = 0;
 									foreach($ida2 as $id2=>$anzahl2)
@@ -1614,7 +1597,7 @@ EOF
 													{
 														$x = array_search ($userabzug, $usernamearray[$username2][$id3]);
 														unset($usernamearray[$username2][$id3][$x]);	
-														fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Angreifer Zufallsschleife. User aus Zufallsraw lï¿½schen User:  ".$userabzug."  ID:  ".$id3."\n");
+														fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Angreifer Zufallsschleife. User aus Zufallsraw löschen User:  ".$userabzug."  ID:  ".$id3."\n");
 													}
 
 												}
@@ -1622,7 +1605,7 @@ EOF
 												fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Angreifer Zufallsschleife Ende. User:  ".$username2."  ID:  ".$id3."  Flotten abgezogen:  ".$i."\n");
 											}	
 									}
-									#Angreifer 3 ohne gefï¿½llte Id-Raws lï¿½schen
+									#Angreifer 3 ohne gefüllte Id-Raws löschen
 									foreach($angreifer3 as $deleteusername=>$info)
 									{
 										$exp1 = explode("/", $deleteusername);
@@ -1634,7 +1617,7 @@ EOF
 										if($checkcount == 0)
 										{
 											unset($angreifer3[$deleteusername]);
-											fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Angreifer nicht mehr vorhanden , deshalb Lï¿½schung. User:  ".$deleteusername."\n");
+											fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Angreifer nicht mehr vorhanden , deshalb Löschung. User:  ".$deleteusername."\n");
 										}
 										#Falls der richtige Username nicht mehr in Angreifer 3, Userraw mit naechstem Imploded User fuellen
 										if(!isset($angreifer3[$exp1[0]]))
@@ -1645,7 +1628,7 @@ EOF
 
 									}
 
-								fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Flottenverluste ï¿½bertragen-Ende. Flotten-ID:  ".$this->getName()."\n");
+								fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Flottenverluste übertragen-Ende. Flotten-ID:  ".$this->getName()."\n");
 								}
 								$angreifer2 = $angreifer3;
 							}
@@ -1809,7 +1792,7 @@ EOF
 						
 							foreach($verteidiger_keys as $username)
 							{
-								fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Verteidiger Flotte Anzahl ï¿½bertragen in Urverteidiger-Anfang. Flotten-ID:  ".$this->getName()."\n");
+								fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Verteidiger Flotte Anzahl übertragen in Urverteidiger-Anfang. Flotten-ID:  ".$this->getName()."\n");
 
 								#Einheiten vor dem Kampf holen
 								#$count ist die Anzahl der zusammengefassen Usereinheiten vor dem Kampf
@@ -1845,7 +1828,7 @@ EOF
 										}
 										else
 										{
-											#Differenz berechnen (positiver Wert fuer Zï¿½hlschleife)
+											#Differenz berechnen (positiver Wert fuer Zählschleife)
 											$diff = ($count-$count2);
 								
 											#Array mit zum Usernamen gehoerenden Users fuellen
@@ -1938,7 +1921,7 @@ EOF
 
 									}	
 								}
-								fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Verteidiger Flotte Anzahl ï¿½bertragen in Urverteidiger-Ende. Flotten-ID:  ".$this->getName()."\n");
+								fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Verteidiger Flotte Anzahl übertragen in Urverteidiger-Ende. Flotten-ID:  ".$this->getName()."\n");
 
 							}
 							if($messagevertaufbau == true)
@@ -2323,8 +2306,8 @@ EOF
 													if($id =='S5') $id = 'Spionagesonde';
 													if($id =='S6') $id = 'Besiedlungsschiff';
 													if($id =='S7') $id = 'Kampfkapsel';
-													if($id =='S8') $id = 'Leichter Jï¿½ger';
-													if($id =='S9') $id = 'Schwerer Jï¿½ger';
+													if($id =='S8') $id = 'Leichter Jäger';
+													if($id =='S9') $id = 'Schwerer Jäger';
 													if($id =='S10') $id = 'Leichte Fregatte';
 													if($id =='S11') $id = 'Schwere Fregatte';
 													if($id =='S12') $id = 'Leichter Kreuzer';
@@ -2406,7 +2389,7 @@ EOF
 										unset($next);
 
 									case 2: # Gebaeude anzeigen
-									fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- CASE SPIONAGE. Gebï¿½ude.\n");
+									fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- CASE SPIONAGE. Gebäude.\n");
 
 										$next = &$message_text2[];
 										$next = "\n<div id=\"spionage-gebaeude\">";
@@ -2480,7 +2463,7 @@ EOF
 						$foreign_fleet = $owner_obj->getForeignFleetsArray();
 						$foreigncount = 0;
 						$usersonhold = array();
-						#Fremdflotten durch Zielabgleich aussortieren, nur Flotten am Ziel werden gezï¿½hlt
+						#Fremdflotten durch Zielabgleich aussortieren, nur Flotten am Ziel werden gezählt
 						foreach($foreign_fleet as $fleet1)
 						{
 							$that = Classes::Fleet($fleet1);
@@ -2619,7 +2602,7 @@ EOF
 				if(!$further)
 				{
 					$this->destroy();
-					fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Flotte Further = false. Destroy. Lï¿½sche Flotten-ID:  ".$this->getName()."\n");
+					fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Flotte Further = false. Destroy. Lösche Flotten-ID:  ".$this->getName()."\n");
 				}
 			}
 			else
@@ -2757,7 +2740,7 @@ EOF
 					$user_obj->addScores(5,$this->raw[1][$first_user][3][2]*-0.001);
 
 
-					#Behebung der bestehenden -1 Eintrï¿½ge vom Flugerfahrungsbug
+					#Behebung der bestehenden -1 Einträge vom Flugerfahrungsbug
 					if($user_obj->raw['punkte'][5] < 0) $user_obj->raw['punkte'][5] = ($user_obj->raw['punkte'][5] *-1);
 				}
 			
@@ -2951,7 +2934,7 @@ EOF
 				$this_ges_staerke += $staerke;
 				$this_ges_schild += $schild;
 
-				# KK ï¿½berprï¿½fung: Nur wenn KK und kein anderer Typ auï¿½er KK und Spios da sind ist es ein KK Kampf
+				# KK Überprüfung: Nur wenn KK und kein anderer Typ außer KK und Spios da sind ist es ein KK Kampf
                		 if($id != "S7" && $id != "S5" )
                    			$kk_kampf = 2;
                		 elseif($id == "S7" && $kk_kampf != 2)
@@ -3158,7 +3141,7 @@ EOF
 			$runde_anderer = 'verteidiger';
 		}
 
-		#Variablen zur Zwischenspeicherung des ï¿½berhangs bei den beschï¿½digten Schiffen
+		#Variablen zur Zwischenspeicherung des Überhangs bei den beschädigten Schiffen
 		$floordiffgerundet = array();
 		$floordiffungerundet = array();
 
@@ -3240,9 +3223,9 @@ EOF
 				$this_shield = $item_info['def']*$d[$att_user][$att_id];
 
 				$schild_f = pow(0.95, ${'users_'.$runde_anderer}[$att_user]->getItemLevel('F10', 'forschung'));
-				#echo("Angriffsstï¿½rke Angreifer vor Forschung Schildtechnik: ".$staerke."\n");
+				#echo("Angriffsstärke Angreifer vor Forschung Schildtechnik: ".$staerke."\n");
 				$aff_staerke = $staerke*$schild_f;
-				#echo("Angriffsstï¿½rke Angreifer nach Forschung Schildtechnik: ".$aff_staerke."\n");
+				#echo("Angriffsstärke Angreifer nach Forschung Schildtechnik: ".$aff_staerke."\n");
 		
 				if($this_shield > $aff_staerke) #
 				{

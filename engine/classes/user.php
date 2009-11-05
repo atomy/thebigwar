@@ -149,14 +149,14 @@
 
 				if( $this->getPosString() == $pos )
 				{
-					//echo "\n".$pos." matches: ".$i."\n";
+					echo "\n".$pos." matches: ".$i."\n";
 
 					$return = $i;
 
 					break;
 				}
-				//else
-					//echo $this->getPosString()." doesnt match ".$pos."\n";
+				else
+					echo $this->getPosString()." doesnt match ".$pos."\n";
 			}
 
 			$this->setActivePlanet( $active_planet );
@@ -277,6 +277,8 @@
 		 */
 		function removePlanet()
 		{
+			global $types_message_types;
+
 			if( !$this->status || !isset( $this->planet_info ) ) 
 				return false;
 
@@ -810,12 +812,14 @@
 
 		function getFleetsWithPlanet()
 		{
-			if(!$this->status || !isset($this->planet_info)) return false;
+			if(!$this->status || !isset($this->planet_info)) 
+				return false;
 
 			$fleets = array();
 			foreach($this->getFleetsList() as $flotte)
 			{
 				$fl = Classes::Fleet($flotte);
+
 				if(in_array($this->getName(), $fl->getUsersList()) && ($fl->from($this->getName()) == $this->getPosString() || $fl->isATarget($this->getPosString())))
 					$fleets[] = $flotte;
 			}
@@ -1152,7 +1156,9 @@
 		function getItemInfo( $id, $type=false, $run_eventhandler=true, $calc_scores=false )
 		{
 			if( !$this->status ) 
+			{
 				return false;
+			}
 
 			$this_planet = $this->getActivePlanet();
 			
@@ -1165,9 +1171,21 @@
 			if( !isset($this->cache['getItemInfo'][$this_planet][$id]) || ($calc_scores && !isset($this->cache['getItemInfo'][$this_planet][$id]['scores'])))
 			{
 				$item = Classes::Item($id);
-				if($type === false) $type = $item->getType();
+
+				if($type === false)
+				{
+				echo "FAAAAAAAAAAALSE\n";
+					$type = $item->getType();
+				}
+				
 				$info = $item->getInfo();
-				if(!$info) return false;
+
+				if(!$info) 
+				{
+				echo "FAAAAAAAAAAALSE\n";
+					return false;
+				}
+				
 				$info['type'] = $type;
 				$info['buildable'] = $info['deps-okay'] = $item->checkDependencies($this, $run_eventhandler);
 				$info['level'] = $this->getItemLevel($id, $type, $run_eventhandler);
