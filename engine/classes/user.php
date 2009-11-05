@@ -149,14 +149,14 @@
 
 				if( $this->getPosString() == $pos )
 				{
-					echo "\n".$pos." matches: ".$i."\n";
+					//echo "\n".$pos." matches: ".$i."\n";
 
 					$return = $i;
 
 					break;
 				}
-				else
-					echo $this->getPosString()." doesnt match ".$pos."\n";
+				//else
+					//echo $this->getPosString()." doesnt match ".$pos."\n";
 			}
 
 			$this->setActivePlanet( $active_planet );

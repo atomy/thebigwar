@@ -27,12 +27,17 @@
 		if($_GET['action'] == 'shortcut')
 		{
 			$result = $me->addPosShortcut($_GET['action_galaxy'].':'.$_GET['action_system'].':'.$_GET['action_planet']);
-			if($result === 2) $return = array('nothingtodo', 'Dieser Planet ist schon in Ihren Lesezeichen.');
-			elseif($result) $return = array('successful', 'Der Planet wurde zu den Lesezeichen hinzugefügt.');
-			else $return = array('error', 'Datenbankfehler &#40;1039&#41;');
+			
+			if($result === 2) 
+				$return = array('nothingtodo', 'Dieser Planet ist schon in Ihren Lesezeichen.');
+			else if($result) 
+				$return = array('successful', 'Der Planet wurde zu den Lesezeichen hinzugefügt.');				
+			else 
+				$return = array('error', 'Datenbankfehler &#40;1039&#41;');
 
-			if(defined('ajax')) return $return;
-			elseif($return[0] == 'error')
+			if(defined('ajax')) 
+				return $return;
+			else if($return[0] == 'error')
 			{
 ?>
 <p class="<?=htmlspecialchars($return[0])?>"><?=htmlspecialchars($return[1])?></p>
@@ -152,7 +157,8 @@
 			}
 		}
 	}
-	     $buendnisflug = (isset($_POST["buendnisflug"]) && $_POST["buendnisflug"]);	  	 
+	
+	$buendnisflug = (isset($_POST["buendnisflug"]) && $_POST["buendnisflug"]);	  	 
  	
 	if($me->permissionToAct() && $my_flotten < $max_flotten && isset($_POST['flotte']) && is_array($_POST['flotte']) && ((!$buendnisflug && isset($_POST['galaxie']) && isset($_POST['system']) && isset($_POST['planet'])) || ($buendnisflug && isset($_POST["buendnis_benutzername"]) && isset($_POST["buendnis_flottenpasswort"]))))
 	{
@@ -202,6 +208,8 @@
 
              elseif(!preg_match("/^[1-9]([0-9]*)$/", $_POST['galaxie']) || !preg_match("/^[1-9]([0-9]*)$/", $_POST['system']) || !preg_match("/^[1-9]([0-9]*)$/", $_POST['planet']))
 		$show_versenden = true;
+		
+		// flotte abschliessend versenden
 		if(!$show_versenden)
 		{
 
@@ -1125,8 +1133,9 @@
 
 	if($show_versenden)
 	{
-		if(defined('ajax')) return array('error', 'Ungültige Aktion.');
-		elseif($fast_action)
+		if(defined('ajax')) 
+			return array('error', 'Ungültige Aktion.');
+		else if($fast_action)
 		{
 			header($_SERVER['SERVER_PROTOCOL'].' 204 No Content');
 			ob_end_clean();
@@ -1140,9 +1149,15 @@
 </p>
 <?php
 		$this_pos = $me->getPos();
-		if(isset($_GET['action_galaxy'])) $this_pos[0] = $_GET['action_galaxy'];
-		if(isset($_GET['action_system'])) $this_pos[1] = $_GET['action_system'];
-		if(isset($_GET['action_planet'])) $this_pos[2] = $_GET['action_planet'];
+		
+		if(isset($_GET['action_galaxy'])) 
+			$this_pos[0] = $_GET['action_galaxy'];
+			
+		if(isset($_GET['action_system'])) 
+			$this_pos[1] = $_GET['action_system'];
+			
+		if(isset($_GET['action_planet'])) 
+			$this_pos[2] = $_GET['action_planet'];
 ?>
 <form action="flotten.php?<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="flotte-versenden">
 <?php
@@ -1162,6 +1177,7 @@
 					document.write('<option value="">Benutzerdefiniert</option>');
 <?php
 				$shortcuts = $me->getPosShortcutsList();
+				
 				if(count($shortcuts) > 0)
 				{
 ?>
@@ -1194,6 +1210,7 @@
 <?php
 				$planets = $me->getPlanetsList();
 				$active_planet = $me->getActivePlanet();
+				
 				foreach($planets as $planet)
 				{
 					$me->setActivePlanet($planet);
@@ -1282,7 +1299,9 @@
 		$i = 5;
 		foreach($me->getItemsList('schiffe') as $id)
 		{
-			if($me->getItemLevel($id, 'schiffe') < 1) continue;
+			if($me->getItemLevel($id, 'schiffe') < 1) 
+				continue;
+				
 			$item_info = $me->getItemInfo($id, 'schiffe');
 ?>
 			<dt><a href="help/description.php?id=<?=htmlentities(urlencode($id))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?=utf8_htmlentities($item_info['name'])?></a> <span class="vorhanden">(<?=ths($item_info['level'])?>&nbsp;vorhanden)</span></dt>
