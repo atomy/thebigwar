@@ -530,7 +530,21 @@ class userTest extends PHPUnit_Framework_TestCase
 
 		// set active planet to 0 and send fleet to planet 1
 		$user->setActivePlanet(0);
+		unset($user);
 		$this->_testSendFleetTo( $uname, $this->test_PlanetCoordinates[$uname][1] );
+
+        // core func, remove the planet
+		$user = Classes::User( $uname );
+        $this->assertTrue($user->setActivePlanet(1));
+        $this->assertTrue($user->removePlanet());
+
+        // check if the fleet was sent back
+        $this->assertTrue( $this->_testIsFleetFlyingBack($this->test_Fleets[$uname][0]) );
+
+        // check if planet still exists
+        $galaxy = Classes::Galaxy(1);
+        $koords = explode( $mypos );
+        $this->assertFalse( $galaxy->getPlanetOwner( $koords[1], $koords[2] ) );
 	}
 
 	/*
@@ -551,8 +565,14 @@ class userTest extends PHPUnit_Framework_TestCase
 		 */
 
 		$type = 6; // stationieren
-		$fleet->create(); // no return 
+		$fleet->create();
+		echo "created: ".$fleet."\n"; // no return
 		$this->test_Fleets[$uname][] = $fleet->getName();
+		echo "setting fleet: ".$fleet->getName()."\n";
+while(1)
+{
+}
+exit(1);
 		$this->assertTrue( $fleet->addTarget( $pos, $type, false ) );
 		$this->assertEquals( $uname, $fleet->addUser( $uname, $mypos, 1 /* default */ ) );
 		$this->assertTrue( $fleet->addTransport( $uname, array( 0, 0, 0, 0, 0 ), array() ) );
@@ -568,23 +588,24 @@ class userTest extends PHPUnit_Framework_TestCase
 		unset($fleet);
 
 		$this->_testIsFleetExistingSpecific( $uname, $pos, $mypos, array( "S1", 10 ), $type );
+	}
 
-        // core func, remove the planet
-        $user = Classes::User( $uname );
-		$this->assertTrue($user->setActivePlanet(1));
-        $this->assertTrue($user->removePlanet());
-        unset($user);
-        
-		$fleet_obj = Classes::Fleet( $this->test_Fleets[$uname][0] );
-        // check if the fleet was sent back
-        $this->assertTrue( $fleet_obj->isFlyingBack() );
-		unset($fleet_obj);
-
-        // check if planet still exists
-        $galaxy = Classes::Galaxy(1);
-        $koords = explode( $mypos );
-        $this->assertFalse( $galaxy->getPlanetOwner( $koords[1], $koords[2] ) );
-
+	protected function _testIsFleetFlyingBack( $fleet )
+	{
+		if(Fleet::fleetExists($fleet))
+		{
+			$fl = Classes::Fleet($fleet);
+if (!$fl->getStatus)
+	echo "FUUUUUUUUUUUCK\n";
+echo "LOOOL\n";
+			return $fl->isFlyingBack();
+		}
+		else
+		{
+			echo "OMG :".$fleet."\n";
+			exit(1);
+			return false;
+		}
 	}
 
 	/*
@@ -603,7 +624,7 @@ class userTest extends PHPUnit_Framework_TestCase
 		{
 		 	$fleet = $ffleet;
 		}
-	
+print_r($fleets);	
 		if ( $fleet == false )
 			throw new Exception( "_testIsFleetExistingSpecific() failed, no fleet found" );
 		
