@@ -6,12 +6,9 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 
 require_once 'PHPUnit/Framework.php';
 require_once '../../include/config_inc.php';
-require_once( TBW_ROOT.'engine/include.php' );
-require_once( TBW_ROOT.'engine/classes/galaxy.php' );
-
-define( 'TEST_MAX_GALAXIES', 2 );
-define( 'TEST_MAX_SYSTEMSINGALAXY', 999 );
-define( 'TEST_MAX_PLANETSINSYSTEM', 50 );
+require_once TBW_ROOT.'engine/include.php' ;
+require_once TBW_ROOT.'engine/classes/galaxy.php';
+require_once TBW_ROOT.'db_things/testConstants.php';
 
 /**
  * Test class for user.
@@ -19,51 +16,8 @@ define( 'TEST_MAX_PLANETSINSYSTEM', 50 );
  */
 class userTest extends PHPUnit_Framework_TestCase
 {
-	private $testUname1 = 'helmut';
-	private $testUname2 = 'bernd';
-	private $testUname3 = 'olaf';
-	private $testCreateUname = 'hans';
-	private $testNoUname = 'randomusernotcreatedbefore';
-
-	// used during development, skip tests which are working
-	private $skipOldTests = true;
-
-	/*
-	 * holds all fleets created
-	 * array( fleetname )
-	 */
-	private $test_Fleets = array();
-
-	/*
-	 * keeps the random item levels which were set to make sure they were set
-	 * array( user, array ( planet, array( itemID, itemLevel ) ) )
-	 */
-	private $random_ItemLevels = array();
-
-	/*
-	 * this holds planets which we created, values = boolean
-	 * array( user, array( planetid, bWasCreated ) )
-	 */
-	private $test_PlanetCreated = array();
-
-	/*
-	 * this holds the names of our planets, values = string
-	 * array( user, array( planetid, name ) )	
-	 */
-	private $test_PlanetNames = array();
-
-	/*
-	 * this holds the koordinates of our planets, values = string
-	 * @array - user => ( planetid => coords )
-	 */
-	private $test_PlanetCoordinates = array();
-
-	/*
-	 * this holds all users used during testing
-	 * array( user, array( username, wascreated ) )
-	 */
-	private $test_Users = array();
-
+	private $testData;
+	
     /**
      * Runs the test methods of this class.
      *
@@ -86,184 +40,7 @@ class userTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-		// define_globals( Uni ); to set globals like where db files are located etc
-		define_globals( 'TestUni1' );
-		
-		if ( !$this->setUp_NewUser( $this->testUname1 ) )
-			throw new Exception( 'setUp() failed, borken for status for $user obj returned' );
-
-        if ( !$this->setUp_NewUser( $this->testUname2 ) )
-            throw new Exception( 'setUp() failed, borken for status for $user obj returned' );
-
-		// $this->test_Users[UserID][UserName]
-		$this->setUp_NewPlanet( $this->test_Users[0][0], "MainPlanet" );
-		$this->setUp_NewPlanet( $this->test_Users[0][0], "TestPlanet1" );
-
-        $this->setUp_NewPlanet( $this->test_Users[1][0], "MainPlanet" );
-        $this->setUp_NewPlanet( $this->test_Users[1][0], "TestPlanet1" );
-
-		$this->setUp_RandomizePlanet( $this->test_Users[0][0], 0, true );
-		$this->setUp_RandomizePlanet( $this->test_Users[0][0], 1, false );
-
-        $this->setUp_RandomizePlanet( $this->test_Users[1][0], 0, true );
-		$this->setUp_RandomizePlanet( $this->test_Users[1][0], 1, false );
-    }
-
-	protected function setUp_NewUser( $username )
-	{
-        $nuser = Classes::User( $username );
-        $nuser->create();
-
-        array_push( $this->test_Users, array( $username, true ) );
-		$status = $nuser->getStatus();
-		unset( $nuser );
-
-		return $status;
-	}
-
-	/*
-	 * helper func for setting up a random planet,
-	 * sets and gets back random item levels for each class
-	 */
-	protected function setUp_RandomPlanet( $planet, $uname, $research = false )
-	{
-		$random_ItemLevels = array();
-
-		$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( $planet, $uname, 'gebaeude' ) );
-		$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( $planet, $uname, 'roboter' ) );
-		$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( $planet, $uname, 'schiffe' ) );
-		$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( $planet, $uname, 'verteidigung' ) );
-
-		if ( $research )
-			$random_ItemLevels = array_merge( $random_ItemLevels, $this->setUp_RandomItemClass( $planet, $uname, 'forschung' ) );
-
-		return $random_ItemLevels;
-	}
-
-	/*
-	 * setting up random items for a given class on the active planet
-	 * @args $class - name the class for which all available items should be randomized
-	 * @return - returns a list of the random levels with the id as key
-	 */
-	protected function setUp_RandomItemClass( $planet, $uname, $class )
-	{
-		$minlvl = 0;
-		$maxlvl = 0;
-
-		switch( $class )
-		{
-			case 'gebaeude' :
-				$minlvl = 0;
-				$maxlvl = 20;
-			break;
-
-			case 'roboter' :
-				$minlvl = 0;
-				$maxlvl = 200;
-			break;
-
-			case 'schiffe' :
-				$minlvl = 0;
-				$maxlvl = 9999;
-			break;
-
-			case 'verteidigung' :
-				$minlvl = 0;
-				$maxlvl = 9999;
-			break;
-
-			case 'forschung' :
-				$minlvl = 0;
-				$maxlvl = 20;
-			break;
-
-			default:
-				throw new Exception( 'setUp_RandomItemClass() called with unsupported class: '.$class );
-			break;
-		}
-
-        $randomItemLevels = array();
-		$user = Classes::User($uname);
-		$user->setActivePlanet($planet);
-
-		if (! $user->getStatus() )
-			throw new Exception( "OOOOOOOOOOOOOOOOOPS" );
-        $itemList = $user->getItemsList( $class );
-
-		if ( !$itemList )
-			throw new Exception( 'setUp_RandomItemClass() couldnt get ItemsList of class: '.$class.' from user '.$user->getName() );
-
-		foreach( $itemList as $item )
-		{
-			$randomLevel = rand( $minlvl, $maxlvl );
-			$randomItemLevels[$item] = $randomLevel;
-			$user->changeItemLevel( $item, $randomLevel, $class );
-//			echo "added ".$randomLevel." items of ".$item."\n";
-		}
-		unset( $user );
-
-		return $randomItemLevels;
-	}
-
-	/*
-	 * sets up a new planet
-	 * @args $name - name of the new planet
-	 */
-	protected function setUp_NewPlanet( $uname, $name = false )
-	{
-		if ( !$this->setUp_addPlanet( $uname, $name ) )
-			throw new Exception( 'setUp_MainPlanet() failed, setUp_addPlanet() returned false' );
-	}
-
-	/*
-	 * this func will randomize all levels for buildings, research, robots and ships on a given planet
-	 * and return its values for asserting
-	 *
-	 * @args $planet - planet which will be the target
-	 * @return array() - array containing the random levels
-	 */	
-	protected function setUp_RandomizePlanet( $uname, $planet, $research = false )
-	{
-		$this->random_ItemLevels[$uname][$planet] = $this->setUp_RandomPlanet( $planet, $uname, $research );
-	}
-
-	/* 
-	 * adds another planet to the user
-	 */
-	protected function setUp_addPlanet( $uname, $name = false )
-	{
-        $koords = getFreeKoords();
-
-		if( !User::userExists( $uname ) )
-			throw new Exception( 'setUp_MainPlanet() failed, $user is invalid' );
-
-        if( $koords )
-        {
-//			print "setUp_addPlanet() trying to register a planet for ".$user->getName()." at ".$koords."\n";
-			$user = Classes::User( $uname );
-            $index = $user->registerPlanet( $koords );
-
-            if ( $index === false )
-                throw new Exception( 'setUp_MainPlanet() failed, couldnt setup planet on given coordinates - '.$koords.' for '.$user->getName() );
-            else
-            {
-                $user->setActivePlanet( $index );
-
-				if ( $name )
-				{
-	                $user->planetName( $name );
-					$this->test_PlanetNames[$user->getName()][$index] = $name;
-				}
-
-				$this->test_PlanetCoordinates[$user->getName()][$index] = $koords;
-				$this->test_PlanetCreated[$user->getName()][$index] = true;
-		
-				return true;
-            }
-			unset($user);
-        }
-        else
-            throw new Exception( 'setUp_MainPlanet() failed, no free coordinates for setting up planet' );		
+    	$this->testData = new TestData();
 	}
 
     /**
@@ -530,21 +307,7 @@ class userTest extends PHPUnit_Framework_TestCase
 
 		// set active planet to 0 and send fleet to planet 1
 		$user->setActivePlanet(0);
-		unset($user);
 		$this->_testSendFleetTo( $uname, $this->test_PlanetCoordinates[$uname][1] );
-
-        // core func, remove the planet
-		$user = Classes::User( $uname );
-        $this->assertTrue($user->setActivePlanet(1));
-        $this->assertTrue($user->removePlanet());
-
-        // check if the fleet was sent back
-        $this->assertTrue( $this->_testIsFleetFlyingBack($this->test_Fleets[$uname][0]) );
-
-        // check if planet still exists
-        $galaxy = Classes::Galaxy(1);
-        $koords = explode( $mypos );
-        $this->assertFalse( $galaxy->getPlanetOwner( $koords[1], $koords[2] ) );
 	}
 
 	/*
@@ -565,14 +328,8 @@ class userTest extends PHPUnit_Framework_TestCase
 		 */
 
 		$type = 6; // stationieren
-		$fleet->create();
-		echo "created: ".$fleet."\n"; // no return
+		$fleet->create(); // no return 
 		$this->test_Fleets[$uname][] = $fleet->getName();
-		echo "setting fleet: ".$fleet->getName()."\n";
-while(1)
-{
-}
-exit(1);
 		$this->assertTrue( $fleet->addTarget( $pos, $type, false ) );
 		$this->assertEquals( $uname, $fleet->addUser( $uname, $mypos, 1 /* default */ ) );
 		$this->assertTrue( $fleet->addTransport( $uname, array( 0, 0, 0, 0, 0 ), array() ) );
@@ -588,24 +345,24 @@ exit(1);
 		unset($fleet);
 
 		$this->_testIsFleetExistingSpecific( $uname, $pos, $mypos, array( "S1", 10 ), $type );
-	}
+				
+        // core func, remove the planet
+        $user = Classes::User( $uname );
+		$this->assertTrue($user->setActivePlanet(1));
 
-	protected function _testIsFleetFlyingBack( $fleet )
-	{
-		if(Fleet::fleetExists($fleet))
-		{
-			$fl = Classes::Fleet($fleet);
-if (!$fl->getStatus)
-	echo "FUUUUUUUUUUUCK\n";
-echo "LOOOL\n";
-			return $fl->isFlyingBack();
-		}
-		else
-		{
-			echo "OMG :".$fleet."\n";
-			exit(1);
-			return false;
-		}
+        $this->assertTrue($user->removePlanet());
+        unset($user);
+        
+		$fleet_obj = Classes::Fleet( $this->test_Fleets[$uname][0] );
+        // check if the fleet was sent back
+        $this->assertTrue( $fleet_obj->isFlyingBack() );
+		//unset($fleet_obj);
+
+        // check if planet still exists
+        $galaxy = Classes::Galaxy(1);
+        $koords = explode( $mypos );
+        $this->assertFalse( $galaxy->getPlanetOwner( $koords[1], $koords[2] ) );
+
 	}
 
 	/*
@@ -624,7 +381,7 @@ echo "LOOOL\n";
 		{
 		 	$fleet = $ffleet;
 		}
-print_r($fleets);	
+	
 		if ( $fleet == false )
 			throw new Exception( "_testIsFleetExistingSpecific() failed, no fleet found" );
 		
