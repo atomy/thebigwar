@@ -1,7 +1,12 @@
 <?php
 
-require_once "testConstants.php";
+require_once "TestConstants.php";
+require_once "TestUser.php";
 	
+/**
+ * @author atomy
+ *
+ */
 class TestData
 {
 	/*
@@ -25,7 +30,7 @@ class TestData
 	 */
 	public function __construct()
 	{
-		$this->generateTestUsers();
+		$this->generateTestData();
 	}
 	
 	/**
@@ -34,6 +39,12 @@ class TestData
 	 */
 	public function generateTestData()
 	{
+		$this->generateTestUsers();
+		
+		foreach( $this->getTestUsers() as $user )
+		{
+			$user->generateTestPlanets();
+		}
 	}
 	
 	/**
@@ -42,9 +53,28 @@ class TestData
 	 */
 	private function generateTestUsers()
 	{
-		$this->users[] = new TestUser( "helmut" );
-		$this->users[] = new TestUser( "bernd" );
-		$this->users[] = new TestUser( "jenny" );				
+		// used for initially setting up a testing universe with users
+		$user = new TestUser( "helmut" );
+		$user->setShouldCreate(true);
+		$user->setShouldCreateOnSetup(true);
+		$this->users[] = $user;
+		
+		$user = new TestUser( "bernd" );
+		$user->setShouldCreate(true);
+		$user->setShouldCreateOnSetup(true);
+		$this->users[] = $user;
+		
+		// used for creating test users after setup within tests
+		$user = new TestUser( "herbert" );
+		$user->setShouldCreate(true);
+		$user->setShouldCreateOnSetup(false);
+		$this->users[] = $user;
+				
+		$user = new TestUser( "jenny" );
+		$user->setShouldCreate(true);
+		$user->setShouldCreateOnSetup(false);
+		$this->users[] = $user;
+						
 	}
 	
 	/**
@@ -56,6 +86,35 @@ class TestData
 	private function generateRandomUserNames( $count )
 	{
 		
+	}
+	
+	public function getUnusedUser()
+	{
+		foreach($this->users as $user)
+		{
+			if($user->isCreated())
+			{
+				continue;
+			}
+			
+			if(!$user->shouldCreate())
+			{
+				continue;
+			}
+			
+			return $user;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @return array() - containing all users for testing
+	 */
+	public function getTestUsers()
+	{
+		return $this->users;
 	}
 }
 ?>

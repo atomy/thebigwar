@@ -1,19 +1,26 @@
 <?php
 
+require_once 'TestItem.php';
+
 class TestPlanet
 {    
 	/*
 	 * the plantes galaxy
 	 */
-	private $galaxy;
+	//private $galaxy; //unused
 	
 	/*
 	 * the planets system
 	 */
-	private $system;
+	//private $system; //unused
 	
 	/*
-	 * the planets index
+	 * the planets index within the system
+	 */
+	//private $sysindex; //unused
+	
+	/*
+	 * the planets index within the user
 	 */
 	private $index;
 	
@@ -22,7 +29,15 @@ class TestPlanet
 	 */
 	private $name;
 	
+	/*
+	 * if it was created
+	 */
 	private $isCreated;
+	
+	/*
+	 * holds all items on the planet, building levels etc.
+	 */
+	private $items = array();
 	
 	/*
 	 * constructor
@@ -31,6 +46,7 @@ class TestPlanet
 	{
 		$galaxy = 0;
 		$system = 0;
+		$sysindex = 0;
 		$index = 0;
 		$name = false;
 	}
@@ -114,7 +130,7 @@ class TestPlanet
      *
      * @see testPlanet::$isCreated
      */
-    public function getIsCreated() 
+    public function isCreated() 
 	{
         return $this->isCreated;
     }
@@ -130,6 +146,30 @@ class TestPlanet
         $this->isCreated = $isCreated;
     }
     
+    public function setName($name)
+    {
+    	$this->name = $name;
+    }
+    
+    public function getName()
+    {
+    	return $this->name;
+    }
+    
+    public function addItemLevels($itemLevels)
+    {
+    	foreach($itemLevels as $id => $level)
+    	{
+    		$item = new TestItem($id);
+    		$item->setLevel($level);
+    		$this->items[] = $item;
+    	}
+    }
+    
+    public function getItems()
+    {
+    	return $this->items;
+    }
 }
 
 ?>

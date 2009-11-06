@@ -14,10 +14,10 @@ class TestItem
 	 */
 	private $id;
 	
-	public function __construct()
-	{
-		$level = 0;
-		$id = false;
+	public function __construct($id)
+	{		
+		$this->id = $id;
+		$this->level = 0;		
 	}
     
     /**
