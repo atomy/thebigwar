@@ -149,7 +149,7 @@
 
 				if( $this->getPosString() == $pos )
 				{
-					echo "\n".$pos." matches: ".$i."\n";
+					//echo "\n".$pos." matches: ".$i."\n";
 
 					$return = $i;
 
