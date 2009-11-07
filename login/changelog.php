@@ -10,7 +10,7 @@
 
 	$changelog = preg_split("/\r\n|\r|\n/", $changelog);
 ?>
-<h2 id="changelog" xml:lang="en">Changelog</h2>
+<h2 id="changelog">Changelog</h2>
 <ol class="changelog">
 <?php
 	foreach($changelog as $log)
@@ -29,6 +29,8 @@
 <?php
 		}
 	}
-
+?>
+</ol>
+<?php 
 	login_gui::html_foot();
 ?>

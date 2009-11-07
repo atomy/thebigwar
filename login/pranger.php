@@ -10,7 +10,7 @@
 
 	$pranger = preg_split("/\r\n|\r|\n/", $pranger);
 ?>
-<h2 id="changelog" xml:lang="en">Pranger - <?=utf8_htmlentities($databases[$_SESSION['database']][1])?></h2>
+<h2 id="changelog">Pranger - <?=utf8_htmlentities($databases[$_SESSION['database']][1])?></h2>
 <ol class="changelog">
 <?php
 	foreach($pranger as $log)
@@ -30,5 +30,8 @@
 		}
 	}
 
+?>
+</ol>
+<?php 
 	login_gui::html_foot();
 ?>

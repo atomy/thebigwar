@@ -51,10 +51,31 @@ class TestUser
     }
     
     public function generateTestPlanets()
-    {
-    	$planet = new TestPlanet();
-    	$planet->setName("TestPlanet".rand(0,100));
-    	$this->planets[] = $planet;
+    {   	
+    	$maxplanets = global_setting( "MAX_PLANETS" );
+    	
+    	if($maxplanets <= 0)
+    	{
+    		throw new Exception("generateTestPlanets() failed, maxplanet constant is 0 or below");
+    	}
+    	
+    	for( $i = 0; $i <= $maxplanets; $i++ )
+		{
+			$planet = new Testplanet();
+			$planet->setName("TestPlanet".$i);
+			$planet->setIndex($i);
+			
+			if($i <= 4)
+			{
+				$planet->setShouldCreate(true);
+			}
+			else
+			{
+				$planet->setShouldCreate(false);
+			}
+			
+			$this->planets[] = $planet;
+		}    	
     }
     
     public function getPlanets()
@@ -82,6 +103,18 @@ class TestUser
     	$this->bShouldCreate = $should;
     }
     
+    public function hasCreatedPlanetAtIndex($index)
+    {
+    	foreach($this->getPlanets() as $planet)
+    	{
+    		if($planet->getIndex() == $index && $planet->isCreated())
+    		{
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
 }
 
 ?>

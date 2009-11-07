@@ -338,7 +338,8 @@
 
         function resetPlanet($system, $planet)
         {
-            if(!$this->status) return false;
+            if(!$this->status) 
+            	return false;
 
             return ($this->setPlanetName($system, $planet, '') && $this->_setPlanetOwner($system, $planet, '')
             && $this->setPlanetOwnerAlliance($system, $planet, '') && $this->setPlanetSize($system, $planet, rand(100, 500)));
@@ -358,54 +359,54 @@
         return $i;
     }
 	
-	function getFreeKoords()
-	{
-		$galaxies_count = getGalaxiesCount();
-		$galaxies = array();
-		
-		for($i=1; $i<=$galaxies_count; $i++)
-			$galaxies[] = $i;
-			
-		shuffle($galaxies);
+    function getFreeKoords()
+    {
+        $galaxies_count = getGalaxiesCount();
+        $galaxies = array();
+        
+        for($i=1; $i<=$galaxies_count; $i++)
+            $galaxies[] = $i;
+            
+        shuffle($galaxies);
 
-		$koords = false;
-		
-		foreach($galaxies as $galaxy)
-		{
-			$galaxy_obj = Classes::Galaxy($galaxy);
-			
-			if( !$galaxy_obj->getStatus() )
-				continue;
-			
-			$systems_count = $galaxy_obj->getSystemsCount();
-			$systems = array();
-			
-			for( $i=1; $i<=$systems_count; $i++ )
-				$systems[] = $i;
-			
-			shuffle($systems);
+        $koords = false;
+        
+        foreach($galaxies as $galaxy)
+        {
+            $galaxy_obj = Classes::Galaxy($galaxy);
+            
+            if( !$galaxy_obj->getStatus() )
+                continue;
+            
+            $systems_count = $galaxy_obj->getSystemsCount();
+            $systems = array();
+            
+            for( $i=1; $i<=$systems_count; $i++ )
+                $systems[] = $i;
+            
+            shuffle($systems);
 
-			foreach( $systems as $system )
-			{
-				$planets_count = $galaxy_obj->getPlanetsCount( $system );
-				$empty_planets = array();
-				
-				for( $i=0; $i<$planets_count; $i++ )
-				{
-					if( $galaxy_obj->getPlanetOwner($system, $i) === '' ) 
-						$empty_planets[] = $i;
-						
-				}
-				
-				if( count( $empty_planets ) > 0 )
-				{
-					$koords = $galaxy.':'.$system.':'.$empty_planets[ array_rand( $empty_planets ) ];
-					break 2;
-				}
-			}
-		}
-		return $koords;
-	}	
+            foreach( $systems as $system )
+            {
+                $planets_count = $galaxy_obj->getPlanetsCount( $system );
+                $empty_planets = array();
+                
+                for( $i=0; $i<$planets_count; $i++ )
+                {
+                    if( $galaxy_obj->getPlanetOwner($system, $i) === '' ) 
+                        $empty_planets[] = $i;
+                        
+                }
+                
+                if( count( $empty_planets ) > 0 )
+                {
+                    $koords = $galaxy.':'.$system.':'.$empty_planets[ array_rand( $empty_planets ) ];
+                    break 2;
+                }
+            }
+        }
+        return $koords;
+    }
 
     function getPlanetClass($galaxy, $system, $planet)
     {

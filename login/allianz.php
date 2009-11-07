@@ -62,26 +62,26 @@
 				if($noblockname == false || $noblocktag == false)
 				{
 ?>
-<p class="error">Der Allianztag oder der Allianz<span xml:lang="en">name</span> enthalten ungültige <span xml:lang="en">Zeich</span>en.</p>
+<p class="error">Der Allianztag oder der Allianz<span>name</span> enthalten ungültige <span>Zeich</span>en.</p>
 <?php
 				}
 
 				elseif(strlen($_POST['tag']) < 2)
 				{
 ?>
-<p class="error">Das Allianz<span xml:lang="en">tag</span> muss mindestens zwei <span xml:lang="en">Bytes</span> lang sein.</p>
+<p class="error">Das Allianz<span>tag</span> muss mindestens zwei <span>Bytes</span> lang sein.</p>
 <?php
 				}
 				elseif(strlen($_POST['tag']) > 6)
 				{
 ?>
-<p class="error">Das Allianz<span xml:lang="en">tag</span> darf höchstens sechs <span xml:lang="en">Bytes</span> lang sein.</p>
+<p class="error">Das Allianz<span>tag</span> darf höchstens sechs <span>Bytes</span> lang sein.</p>
 <?php
 				}
 				elseif(Alliance::allianceExists($_POST['tag']))
 				{
 ?>
-<p class="error">Es gibt schon eine Allianz mit diesem <span xml:lang="en">Tag</span>.</p>
+<p class="error">Es gibt schon eine Allianz mit diesem <span>Tag</span>.</p>
 <?php
 				}
 				else if ( strtolower( $me->getName() ) == GLOBAL_DEMOACCNAME )
@@ -122,7 +122,7 @@
 ?>
 <form action="allianz.php?action=gruenden&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="allianz-gruenden-form">
 	<dl>
-		<dt><label for="allianztag-input">Allianz<span xml:lang="en">tag</span></label></dt>
+		<dt><label for="allianztag-input">Allianz<span>tag</span></label></dt>
 		<dd><input type="text" name="tag" id="allianztag-input" value="<?=isset($_POST['tag']) ? utf8_htmlentities($_POST['tag']) : ''?>" title="Das Allianztag wird in der Karte und in den Highscores vor dem Benutzernamen angezeigt." maxlength="6" tabindex="<?=$tabindex++?>" /></dd>
 
 		<dt><label for="allianzname-input">Allianzname</label></dt>
@@ -241,9 +241,6 @@
 </ul>
 <?php
 				}
-?>
-</ul>
-<?php
 			}
 		}
 	}
@@ -452,19 +449,19 @@
 					if(strlen($_POST['extern-tag']) < 2)
 					{
 ?>
-<p class="error">Das Allianz<span xml:lang="en">tag</span> muss mindestens zwei <span xml:lang="en">Bytes</span> lang sein.</p>
+<p class="error">Das Allianz<span>tag</span> muss mindestens zwei <span>Bytes</span> lang sein.</p>
 <?php
 					}
 					elseif(strlen($_POST['extern-tag']) > 6)
 					{
 ?>
-<p class="error">Das Allianz<span xml:lang="en">tag</span> darf höchstens sechs <span xml:lang="en">Bytes</span> lang sein.</p>
+<p class="error">Das Allianz<span>tag</span> darf höchstens sechs <span>Bytes</span> lang sein.</p>
 <?php
 					}
 					elseif(Alliance::allianceExists($_POST['extern-tag']))
 					{
 ?>
-<p class="error">Es gibt schon eine Allianz mit diesem <span xml:lang="en">Tag</span>.</p>
+<p class="error">Es gibt schon eine Allianz mit diesem <span>Tag</span>.</p>
 <?php
 					}
 					else $alliance->rename($_POST['extern-tag']);
@@ -507,7 +504,7 @@
 				<th title="Internen Bereich bearbeiten">Intern</th>
 				<th title="Externen Bereich bearbeiten">Extern</th>
 				<th title="Bewerbungen annehmen oder ablehnen">Bewerbungen</th>
-				<th title="Mitglieder aus der Allianz werfen"><span xml:lang="en">Kick</span></th>
+				<th title="Mitglieder aus der Allianz werfen"><span>Kick</span></th>
 				<th title="Ränge verteilen">Ränge</th>
 				<th title="Benutzerrechte verteilen">Rechte</th>
 				<th title="Bündnis auflösen">Auflösen</th>
@@ -599,7 +596,7 @@
 				$average = floor($overall/$alliance->getMembersCount());
 ?>
 <dl class="allianceinfo">
-	<dt class="c-allianztag">Allianz<span xml:lang="en">tag</span></dt>
+	<dt class="c-allianztag">Allianz<span>tag</span></dt>
 	<dd class="c-allianztag"><?=utf8_htmlentities($alliance->getName())?></dd>
 
 	<dt class="c-name">Name</dt>

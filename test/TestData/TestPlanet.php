@@ -7,17 +7,17 @@ class TestPlanet
 	/*
 	 * the plantes galaxy
 	 */
-	//private $galaxy; //unused
+	private $galaxy;
 	
 	/*
 	 * the planets system
 	 */
-	//private $system; //unused
+	private $system;
 	
 	/*
 	 * the planets index within the system
 	 */
-	//private $sysindex; //unused
+	private $sysindex;
 	
 	/*
 	 * the planets index within the user
@@ -39,18 +39,30 @@ class TestPlanet
 	 */
 	private $items = array();
 	
+	private $shouldCreate;
+	
 	/*
 	 * constructor
 	 */
 	public function __construct()
 	{
-		$galaxy = 0;
-		$system = 0;
-		$sysindex = 0;
-		$index = 0;
-		$name = false;
+		$this->galaxy = 0;
+		$this->system = 0;
+		$this->sysindex = 0;
+		$this->index = 0;
+		$this->name = false;
+		$this->shouldCreate = false;
 	}
 	
+	public function setShouldCreate($should)
+	{
+		$this->shouldCreate = $should;
+	}
+	
+	public function getShouldCreate()
+	{
+		return $this->shouldCreate;
+	}
     /**
      * Returns $galaxy.
      *
@@ -70,6 +82,16 @@ class TestPlanet
     public function setGalaxy($galaxy)
 	{
         $this->galaxy = $galaxy;
+    }
+    
+    public function getSysIndex()
+    {
+    	return $this->sysindex;
+    }
+    
+    public function setSysIndex($ind)
+    {
+    	$this->sysindex = $ind;
     }
     
     /**
@@ -120,11 +142,28 @@ class TestPlanet
 	 */
 	public function getPosString()
 	{
-		$pos = $this->getGalaxy().".".$this->getSystem().".".$this->getIndex();
+		$pos = $this->getGalaxy().":".$this->getSystem().":".$this->getSysIndex();
 		
 		return $pos;
 	}
     
+	public function setPosString($pos)
+	{
+		$apos = explode(":", $pos);
+		
+		if($apos[0] > 0 && $apos[1] > 0 && $apos[2] > 0)
+		{
+			$this->setGalaxy($apos[0]);
+			$this->setSystem($apos[1]);
+			$this->setSysIndex($apos[2]);
+		}
+		else
+		{
+			print_r($pos);
+			throw new Exception("setPosString() failed, couldnt split argument into seperate koords");
+		}
+	}
+	
     /**
      * Returns $isCreated.
      *

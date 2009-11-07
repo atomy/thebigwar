@@ -222,9 +222,9 @@
 	<fieldset class="verschiedene-einstellungen">
 		<legend>Verschiedene Einstellungen<input type="hidden" name="change-checkboxes" value="1" /></legend>
 		<dl>
-			<dt class="c-skin"><label for="skin-choice" xml:lang="en">Ski<kbd>n</kbd></label></dt>
+			<dt class="c-skin"><label for="skin-choice">Ski<kbd>n</kbd></label></dt>
 			<dd class="c-skin">
-				<select name="skin-choice" id="skin-choice" accesskey="n" tabindex="<?=$tabindex++?>" onchange="recalc_skin();" onkeyup="recalc_skin();">
+				<select name="skin-choice" id="skin-choice" tabindex="<?=$tabindex++?>" onchange="recalc_skin();" onkeyup="recalc_skin();">
 <?php
 	$my_skin = $me->checkSetting('skin');
 	foreach($skins as $skin=>$skin_info)
@@ -286,8 +286,8 @@
 			<dt class="c-nachrichteninformierung"><label for="notify">Nachrichteninformierung</label></dt>
 			<dd class="c-nachrichteninformierung"><input type="checkbox" name="notify" id="notify"<?=$me->checkSetting('notify') ? ' checked="checked"' : ''?> title="Wenn diese Option aktiviert ist, wird nicht nur in der Übersicht angezeigt, dass Sie eine neue Nachricht erhalten haben, sondern auf allen Seiten." tabindex="<?=$tabindex++?>" /></dd>
 
-			<dt class="c-ajax"><label for="ajax"><acronym title="Asynchronous JavaScript and XML" xml:lang="en">AJAX</acronym> aktivieren</label></dt>
-			<dd class="c-ajax" xml:lang="en"><input type="checkbox" name="ajax" id="ajax"<?=$me->checkSetting('ajax') ? ' checked="checked"' : ''?> title="Nützliche Eingabevereinfachungen, empfehlenswert in neuen Browsern mit schneller Internetverbindung." tabindex="<?=$tabindex++?>" /></dd>
+			<dt class="c-ajax"><label for="ajax"><acronym title="Asynchronous JavaScript and XML">AJAX</acronym> aktivieren</label></dt>
+			<dd class="c-ajax"><input type="checkbox" name="ajax" id="ajax"<?=$me->checkSetting('ajax') ? ' checked="checked"' : ''?> title="Nützliche Eingabevereinfachungen, empfehlenswert in neuen Browsern mit schneller Internetverbindung." tabindex="<?=$tabindex++?>" /></dd>
 		</dl>
 		<script type="text/javascript">
 			function recalc_skin()

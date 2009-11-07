@@ -2,7 +2,8 @@
 
 <?php
 	$USE_OB = false;
-	require('../engine/include.php');
+	require_once '../include/config_inc.php';
+	require TBW_ROOT.'/engine/include.php';
 
         if(!isset($_SERVER['argv'][1]))
         {
@@ -22,28 +23,41 @@
         $dh = opendir(global_setting("DB_PLAYERS"));
  
 
-	$user = new User('wootan');
+	$user = new User('atomy');
 
 	$user->setActivePlanet(0);
 
 
-    $user->changeItemLevel('S0', '0', 'schiffe');
-	$user->changeItemLevel('S1', '0', 'schiffe');
-	$user->changeItemLevel('S2', '0', 'schiffe');
-	$user->changeItemLevel('S3', '0', 'schiffe');
-	$user->changeItemLevel('S4', '0', 'schiffe');
-	$user->changeItemLevel('S5', '0', 'schiffe');
-	$user->changeItemLevel('S6', '0', 'schiffe');
-	$user->changeItemLevel('S7', '0', 'schiffe');
-	$user->changeItemLevel('S8', '0', 'schiffe');
-	$user->changeItemLevel('S9', '0', 'schiffe');
-    $user->changeItemLevel('S10', '0', 'schiffe');
-	$user->changeItemLevel('S11', '0', 'schiffe');
-    $user->changeItemLevel('S12', '0', 'schiffe');
-    $user->changeItemLevel('S13', '0', 'schiffe');
+    $user->changeItemLevel('S0', '10', 'schiffe');
+	$user->changeItemLevel('S1', '10', 'schiffe');
+	$user->changeItemLevel('S2', '10', 'schiffe');
+	$user->changeItemLevel('S3', '10', 'schiffe');
+	$user->changeItemLevel('S4', '10', 'schiffe');
+	$user->changeItemLevel('S5', '10', 'schiffe');
+	$user->changeItemLevel('S6', '10', 'schiffe');
+	$user->changeItemLevel('S7', '10', 'schiffe');
+	$user->changeItemLevel('S8', '10', 'schiffe');
+	$user->changeItemLevel('S9', '10', 'schiffe');
+    $user->changeItemLevel('S10', '10', 'schiffe');
+	$user->changeItemLevel('S11', '10', 'schiffe');
+    $user->changeItemLevel('S12', '10', 'schiffe');
+    $user->changeItemLevel('S13', '10', 'schiffe');
 	$user->changeItemLevel('S14', '22500', 'schiffe');
 	$user->changeItemLevel('S15', '12500', 'schiffe');
-    $user->changeItemLevel('S16', '', 'schiffe');
+    $user->changeItemLevel('S16', '10', 'schiffe');
+    
+    $user->changeItemLevel('F0', '10', 'forschung');    
+    $user->changeItemLevel('F1', '10', 'forschung'); 
+    $user->changeItemLevel('F2', '10', 'forschung'); 
+    $user->changeItemLevel('F3', '10', 'forschung'); 
+    $user->changeItemLevel('F4', '10', 'forschung'); 
+    $user->changeItemLevel('F5', '10', 'forschung'); 
+    $user->changeItemLevel('F6', '10', 'forschung'); 
+    $user->changeItemLevel('F7', '10', 'forschung'); 
+    $user->changeItemLevel('F8', '10', 'forschung'); 
+    $user->changeItemLevel('F9', '10', 'forschung');
+    $user->changeItemLevel('F10', '10', 'forschung'); 
+    $user->changeItemLevel('F11', '10', 'forschung');  
     
 	$user->changeItemLevel('V0', '0', 'verteidigung');
 	$user->changeItemLevel('V1', '0', 'verteidigung');

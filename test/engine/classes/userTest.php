@@ -194,32 +194,50 @@ class userTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse( $dupuser->create(), "could create user which already exist" );
 	}
 
-	public function testUserExists()
+	public function DDtestUserExists()
 	{
-		if ( $this->skipOldTests )
-			$this->markTestSkipped();
-
-		$this->assertTrue( User::userExists( $this->testUname1 ), "user which was created doesnt exist" );
-		$this->assertFalse( User::userExists( $this->testNoUname ), "user which wasnt created does exist" );
+		foreach($this->testData->getTestUsers() as $user)
+		{
+			if($user->isCreated())
+			{
+				$this->assertTrue( User::userExists( $user->getName() ), "user which was created doesnt exist" );
+			}
+			else if(!$user->isCreated())
+			{
+				$this->assertFalse( User::userExists( $user->getName() ), "user which wasnt created does exist" );
+			}				
+		}		
+		
 		$this->assertFalse( User::userExists( NULL ), "func returned true but no name was given as parameter" );
 	}
 
 	public function DDtestPlanetExists()
 	{
-		if ( $this->skipOldTests )
-			$this->markTestSkipped();
-
-		// get our very fist user for testing
-		$user = newUser($this->test_Users[0][0]);
-
-		$this->assertTrue( $user->planetExists( 0 ), "planet setup but doesnt exist" );
-
-		for( $i = 0; $i <= $this->_testAndGetMaxPlanets(); $i++ )
+		$users = $this->testData->getTestUsers();
+	
+		foreach($users as $user)
 		{
-			if ( isset( $this->test_PlanetCreated[$user->getName()][$i] ) && $this->test_PlanetCreated[$user->getName()][$i] )
-				$this->assertTrue( $user->planetExists( 0 ), "planet setup but doesnt exist" );
+			if(!$user->isCreated())
+			{
+				continue;
+			}
 			else
-				$this->assertFalse( $user->planetExists( $i ), "planet shouldnt exist" );
+			{
+				$userObj = Classes::User($user->getName());
+				$planets = $user->getPlanets();
+				
+				foreach($planets as $planet)
+				{
+					if($planet->isCreated())
+					{
+						$this->assertTrue( $userObj->planetExists( $planet->getIndex() ), "planet setup but doesnt exist" );
+					}
+					else
+					{
+						$this->assertFalse( $userObj->planetExists( $planet->getIndex() ), "planet shouldnt exist" );
+					}
+				}
+			}
 		}
 
 		// call it with an initialised user but which doesnt exists
@@ -232,30 +250,49 @@ class userTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function DDtestSetActivePlanet()
-	{
-		if ( $this->skipOldTests )
-			$this->markTestSkipped();
+	{	
+		$users = $this->testData->getTestUsers();
+	
+		foreach($users as $user)
+		{
+			if(!$user->isCreated())
+			{
+				continue;
+			}
+			else
+			{
+				$userObj = Classes::User($user->getName());
+				$planets = $user->getPlanets();
+				
+				foreach($planets as $planet)
+				{
+					if($planet->isCreated())
+					{
+						$this->assertTrue( $userObj->setActivePlanet( $planet->getIndex() ), "planet setup but doesnt exist" );
+					}
+					else
+					{
+						$this->assertFalse( $userObj->setActivePlanet( $planet->getIndex() ), "planet shouldnt exist" );
+					}
+				}
+			}
+		}
 
-        // get our very fist user for testing
-        $user = Classes::User($this->test_Users[0][0]);
-
-		$fuser = Classes::User( "fakeuser1338" );
-
-		$this->assertTrue( $user->setActivePlanet( 0 ), "setting active planet to existing one should work" );
+		// call it with an initialised user but which doesnt exists
+		$fuser = Classes::User( "fakeuser1337" );
 
 		for( $i = 0; $i <= $this->_testAndGetMaxPlanets(); $i++ )
 		{
-			$this->assertFalse( $fuser->setActivePlanet( $i ), "planet shouldnt be setable on non-existant user" );
+			$this->assertFalse( $fuser->setActivePlanet( $i ), "planet shouldnt exists on non-existing user" );
 		}
 	}
 
 	public function DDtestGetPlanetByPos()
 	{
-		if ( $this->skipOldTests )
-			$this->markTestSkipped();
-
+		$users = $this->testData->getTestUsers();
+		
         // get our very fist user for testing
-		$uname = $this->test_Users[0][0];
+		$uname = $users[0]->getName();
         $user = Classes::User($uname);
 
 		$fuser = Classes::User( "fakeuser1339" );
@@ -271,13 +308,13 @@ class userTest extends PHPUnit_Framework_TestCase
 					$pos = $i.":".$k.":".$m;
 					$bMyPlanet = false;
 
-					foreach( $this->test_PlanetCreated[$uname] as $planet => $isCreated )
+					foreach( $users[0]->getPlanets() as $planet )
 					{
-						if ( $pos == $this->test_PlanetCoordinates[$uname][$planet] && $isCreated )
+						if ( $planet->isCreated() && $pos == $planet->getPosString() )
 						{
 							$bMyPlanet = true;
-							$this->assertEquals( $planet, $user->getPlanetByPos( $pos ) );
-//							echo "found mah planet @ ".$pos."\n"; 
+							$this->assertEquals( $planet->getIndex(), $user->getPlanetByPos( $pos ) );
+							//echo "found mah planet @ ".$pos."\n"; 
 						}
 					}
 
@@ -293,11 +330,11 @@ class userTest extends PHPUnit_Framework_TestCase
 	 */
 	public function DDtestGetPlanetsList()
 	{
-        if ( $this->skipOldTests )
-			$this->markTestSkipped();
-
+		$testUsers = $this->testData->getTestUsers();
+		$testusr = $testUsers[0];
+		
 		// get our very fist user for testing
-        $user = Classes::User($this->test_Users[0][0]);		
+        $user = Classes::User($testusr->getName());		
 
 		$fuser = Classes::User( "fakeuser1340" );
 
@@ -305,20 +342,22 @@ class userTest extends PHPUnit_Framework_TestCase
 
 		$planets = $user->getPlanetsList();
 	
-		for( $i = 0; isset( $planets[$i] ) || isset( $this->test_PlanetCreated[$user->getName()][$i] ); $i++ )
+		for( $i = 0; isset( $planets[$i] ) || $testusr->hasCreatedPlanetAtIndex($i); $i++ )
 		{
 			$this->assertTrue( isset( $planets[$i] ) );
-			$this->assertTrue( isset( $this->test_PlanetCreated[$user->getName()][$i] ) );
+			$this->assertTrue( $testusr->hasCreatedPlanetAtIndex($i) );
 		}
 	}
 
     /*
      * checking if the returned planetlist is the same as our one of the created planets
      */
-    public function DISABLEDtestRemovePlanet()
+    public function testRemovePlanet()
     {
         // get our very fist user for the fleet start pos, using active planet
-		$uname = $this->test_Users[0][0];
+        $testusers = $this->testData->getTestUsers();
+		$testUser = $testusers[0];
+		$uname = $testUser->getName();
         $user = Classes::User( $uname );
 
 		$fuser = Classes::User( "fakeuser1341" );
@@ -345,7 +384,28 @@ class userTest extends PHPUnit_Framework_TestCase
 
 		// set active planet to 0 and send fleet to planet 1
 		$user->setActivePlanet(0);
-		$this->_testSendFleetTo( $uname, $this->test_PlanetCoordinates[$uname][1] );
+		$planets = $testUser->getPlanets();
+		$mypos =  $user->getPosString();
+		$pos = $planets[1]->getPosString();
+		$type = 6; // stationieren
+		
+		$this->_testSendFleetTo( $uname, $pos );
+		
+        // core func, remove the planet
+        $user = Classes::User( $uname );
+		$this->assertTrue($user->setActivePlanet(1));
+
+        $this->assertTrue($user->removePlanet());
+        unset($user);
+        
+		$fleet_obj = Classes::Fleet( $this->test_Fleets[$uname][0] );
+        // check if the fleet was sent back
+        $this->_testIsFleetExistingSpecific( $uname, $mypos, $pos, array( "S1", 10 ), $type, true );
+
+        // check if planet still exists
+        $galaxy = Classes::Galaxy(1);
+        $koords = explode( ":", $pos );
+        $this->assertEquals( "", $galaxy->getPlanetOwner( $koords[1], $koords[2] ) );		
 	}
 
 	/*
@@ -364,7 +424,6 @@ class userTest extends PHPUnit_Framework_TestCase
 		/*
 		 * flotte als transport mit 10 kleinen transportern zum ziel $pos versenden
 		 */
-
 		$type = 6; // stationieren
 		$fleet->create(); // no return 
 		$this->test_Fleets[$uname][] = $fleet->getName();
@@ -382,31 +441,13 @@ class userTest extends PHPUnit_Framework_TestCase
 		unset($user);
 		unset($fleet);
 
-		$this->_testIsFleetExistingSpecific( $uname, $pos, $mypos, array( "S1", 10 ), $type );
-				
-        // core func, remove the planet
-        $user = Classes::User( $uname );
-		$this->assertTrue($user->setActivePlanet(1));
-
-        $this->assertTrue($user->removePlanet());
-        unset($user);
-        
-		$fleet_obj = Classes::Fleet( $this->test_Fleets[$uname][0] );
-        // check if the fleet was sent back
-        $this->assertTrue( $fleet_obj->isFlyingBack() );
-		//unset($fleet_obj);
-
-        // check if planet still exists
-        $galaxy = Classes::Galaxy(1);
-        $koords = explode( $mypos );
-        $this->assertFalse( $galaxy->getPlanetOwner( $koords[1], $koords[2] ) );
-
+		$this->_testIsFleetExistingSpecific( $uname, $pos, $mypos, array( "S1", 10 ), $type, false );
 	}
 
 	/*
 	 * test if a given fleet is existant, it is expected to do, otherwise this test will fail
 	 */
-	public function _testIsFleetExistingSpecific( $from_user, $to_pos, $from_pos, $ships, $type )
+	public function _testIsFleetExistingSpecific( $from_user, $to_pos, $from_pos, $ships, $type, $flyingback )
 	{
 		$user = Classes::User($from_user);
 		$fleets = $user->getFleetsList();
@@ -433,7 +474,16 @@ class userTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals( array( $to_pos ), $targets );
 		$this->assertEquals( array( "S1" => 100 ), $fleet_obj->getFleetList( $from_user) );
-		$this->assertFalse( $fleet_obj->isFlyingBack() );
+		
+		if(!$flyingback)
+		{
+			$this->assertFalse( $fleet_obj->isFlyingBack() );
+		}
+		else
+		{
+			$this->assertTrue( $fleet_obj->isFlyingBack() );
+		}
+			
 	}
 
 	public function _testAndGetMaxPlanets()

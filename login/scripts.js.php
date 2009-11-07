@@ -120,7 +120,7 @@ function ths(old_count)
 		first_letters = 3;
 	new_count.push(count.substr(0, first_letters));
 	var max_i = (count.length-first_letters)/3;
-	for(var i=0; i<max_i; i++)
+	for(var i=0; i < max_i; i++)
 		new_count.push(count.substr(i*3+first_letters, 3));
 	new_count = new_count.join("<?=utf8_jsentities(global_setting("THS_UTF8"))?>");
 	if(minus)
@@ -144,10 +144,10 @@ function get_key_elements()
 {
 	var key_els;
 	var accesskey;
-	for(var i=0; i<check_key_elements.length; i++)
+	for(var i=0; i < check_key_elements.length; i++)
 	{
 		key_els = document.getElementsByTagName(check_key_elements[i]);
-		for(var j=0; j<key_els.length; j++)
+		for(var j=0; j < key_els.length; j++)
 		{
 			accesskey = key_els[j].getAttribute('accesskey');
 			if(accesskey)
@@ -613,7 +613,7 @@ function do_make_users_list(node)
 			if (xmlhttp.status == 200)
 			{
 				var results = xmlhttp.responseXML.getElementsByTagName('result');
-				for(var i=0; i<results.length; i++)
+				for(var i=0; i < results.length; i++)
 				{
 					v = results[i].firstChild.data;
 					var next_li = document.createElement('li');
@@ -795,7 +795,7 @@ function do_make_alliances_list(node)
 			if (xmlhttp.status == 200)
 			{
 				var results = xmlhttp.responseXML.getElementsByTagName('result');
-				for(var i=0; i<results.length; i++)
+				for(var i=0; i < results.length; i++)
 				{
 					v = results[i].firstChild.data;
 					var next_li = document.createElement('li');
@@ -841,7 +841,7 @@ function preload_systems(systems)
 
 	request_url = '<?=h_root?>/login/scripts/ajax.php?action=universe&'+encodeURIComponent(session_cookie)+'='+encodeURIComponent(session_id)+'&database='+encodeURIComponent(database_id);
 	var c = 0;
-	for(var i=0; i<systems.length; i++)
+	for(var i=0; i < systems.length; i++)
 	{
 		if(typeof preloaded_systems[systems[i]] != 'undefined' || preloading_systems[systems[i]]) continue;
 		request_url += '&system[]='+encodeURIComponent(systems[i]);
@@ -862,12 +862,12 @@ function preload_systems(systems)
 			if(xmlhttp.status == 200 && xmlhttp.responseXML)
 			{
 				system_results = xmlhttp.responseXML.getElementsByTagName('system');
-				for(i=0; i<system_results.length; i++)
+				for(i=0; i < system_results.length; i++)
 				{
 					system_number = system_results[i].getAttribute('number');
 					preloaded_systems[system_number] = new Array();
 					system_info = system_results[i].childNodes;
-					for(j=0; j<system_info.length; j++)
+					for(j=0; j < system_info.length; j++)
 					{
 						if(system_info[j].nodeType != 1) continue;
 						planet_number = system_info[j].getAttribute('number');
@@ -875,7 +875,7 @@ function preload_systems(systems)
 						preloading_systems[system_number] = false;
 						planet_infos = system_info[j].childNodes;
 						if(planet_infos.length <= 0) continue;
-						for(k=0; k<planet_infos.length; k++)
+						for(k=0; k < planet_infos.length; k++)
 						{
 							if(planet_infos[k].nodeType != 1) continue;
 							var this_info = '';

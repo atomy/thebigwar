@@ -27,14 +27,16 @@ class tester
     		
     		foreach( $user->getPlanets() as $planet )
     		{
-    			$index = $this->setUp_NewPlanet($user->getName(), $planet->getName());
+    			if(!$planet->getShouldCreate())
+    				continue;
+    			
+    			$index = $this->setUp_NewPlanet($user->getName(), $planet);
     			
     			if ($index === false)
     			{
     				throw new Exception('setUp() failed, setting up planet failed.');
     			}
 
-    			$planet->setIsCreated(true);
     			$planet->setIndex($index);
     				
     			$this->setUp_RandomizePlanet($planet, $user->getName(), $setupResearch);
@@ -144,9 +146,9 @@ class tester
      * sets up a new planet
      * @args $name - name of the new planet
      */
-    protected function setUp_NewPlanet( $uname, $name = false )
+    protected function setUp_NewPlanet( $uname, &$planet )
     {
-    	$index = $this->setUp_addPlanet( $uname, $name );
+    	$index = $this->setUp_addPlanet( $uname, $planet );
     	
         if ( $index === false )
         {
@@ -162,7 +164,7 @@ class tester
     /* 
      * adds another planet to the user
      */
-    protected function setUp_addPlanet( $uname, $name = false )
+    protected function setUp_addPlanet( $uname, &$planet )
     {
         $koords = getFreeKoords();
 
@@ -181,18 +183,16 @@ class tester
             {
                 $user->setActivePlanet( $index );
 
-                if ( $name )
+                if ( $planet->getName() )
                 {
-                    $user->planetName( $name );
-                    $this->test_PlanetNames[$user->getName()][$index] = $name;
+                    $user->planetName( $planet->getName() );
                 }
 
-                $this->test_PlanetCoordinates[$user->getName()][$index] = $koords;
-                $this->test_PlanetCreated[$user->getName()][$index] = true;
+                $planet->setPosString($koords);
+                $planet->setIsCreated(true);
         
                 return $index;
             }
-            unset($user);
         }
         else
             throw new Exception( 'setUp_MainPlanet() failed, no free coordinates for setting up planet' );        
