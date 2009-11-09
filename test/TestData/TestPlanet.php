@@ -79,9 +79,16 @@ class TestPlanet
      * @param object $galaxy
      * @see testPlanet::$galaxy
      */
-    public function setGalaxy($galaxy)
-	{
-        $this->galaxy = $galaxy;
+    public function setGalaxy($gala)
+    {
+    	if($gala > 0 && $gala <= 999)
+		{
+			$this->galaxy = $gala;
+		}
+		else
+		{
+			throw new Exception("setSystem() failed, impossible $galaxy submitted");
+		}
     }
     
     public function getSysIndex()
@@ -91,7 +98,14 @@ class TestPlanet
     
     public function setSysIndex($ind)
     {
-    	$this->sysindex = $ind;
+    	if($ind > 0 && $ind <= 999)
+		{
+			$this->sysindex = $ind;
+		}
+		else
+		{
+			throw new Exception("setSystem() failed, impossible $sysindex submitted");
+		}
     }
     
     /**
@@ -133,7 +147,14 @@ class TestPlanet
      */
     public function setSystem($system) 
 	{
-        $this->system = $system;
+		if($system > 0 && $system <= 999)
+		{
+			$this->system = $system;
+		}
+		else
+		{
+			throw new Exception("setSystem() failed, impossible $system submitted");
+		}
     }
 	
 	/**

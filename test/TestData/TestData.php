@@ -116,5 +116,16 @@ class TestData
 	{
 		return $this->users;
 	}
+	
+	public function getUserWithName($name)
+	{
+		foreach( $this->getTestUsers() as $user )
+		{
+			if($user->getName() == $name)
+			{
+				return $user;
+			}
+		}
+	}
 }
 ?>

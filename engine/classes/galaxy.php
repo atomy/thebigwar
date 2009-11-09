@@ -77,14 +77,21 @@
 
         function getPlanetsCount($system)
         {
-            if(!$this->status) return false;
+            if(!$this->status) 
+            {
+            	return false;
+            }
 
             $system = (int) $system;
 
             if(!isset($this->cache['getPlanetsCount'])) $this->cache['getPlanetsCount'] = array();
             if(!isset($this->cache['getPlanetsCount'][$system]))
             {
-                if(!$this->seekSystem($system)) return false;
+                if(!$this->seekSystem($system)) 
+                {
+                	return false;
+                }
+
                 $this->cache['getPlanetsCount'][$system] = (ord(fread($this->file_pointer, 1))>>3)+10;
             }
             return $this->cache['getPlanetsCount'][$system];
@@ -271,7 +278,10 @@
 
         function getPlanetSize($system, $planet)
         {
-            if(!$this->status) return false;
+            if(!$this->status)
+            {
+            	return false;
+            }
 
             $planet = (int) $planet;
             $system = (int) $system;
@@ -281,10 +291,21 @@
             if(!isset($this->cache['getPlanetSize'][$system][$planet]))
             {
                 $planets_count = $this->getPlanetsCount($system);
-                if(!$planets_count) return false;
-                if($planet > $planets_count || $planet < 1) return false;
+                
+                if(!$planets_count) 
+                {
+                	return false;
+                }
+                
+                if($planet > $planets_count || $planet < 1) 
+                {
+                	return false;
+                }
 
-                if(!$this->seekSystem($system)) return false;
+                if(!$this->seekSystem($system)) 
+                {
+                	return false;
+                }
 
                 $bit_position = 5+($planet-1)*9;
                 $byte_position = $bit_position%8;

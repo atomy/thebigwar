@@ -21,14 +21,24 @@
 
         function text($text=false)
         {
-            if(!$this->status) return false;
+            if(!$this->status) 
+            {
+            	return false;
+            }
 
             if($text === false)
             {
-                if(!isset($this->raw['text'])) return '';
+                if(!isset($this->raw['text'])) 
+                {
+                	return '';
+                }
                 else
                 {
-                    if(!isset($this->raw['parsed'])) $this->_createParsed();
+                    if(!isset($this->raw['parsed'])) 
+                    {
+                    	$this->_createParsed();
+                    }
+                    
                     return $this->raw['parsed'];
                 }
             }
@@ -42,7 +52,10 @@
 
         function _createParsed()
         {
-            if(!$this->status) return false;
+            if(!$this->status) 
+            {
+            	return false;
+            }
 
             if(!isset($this->raw['text']))
             {
@@ -67,15 +80,27 @@
 
         function rawText()
         {
-            if(!$this->status) return false;
+            if(!$this->status) 
+            {
+            	return false;
+            }
 
-            if(!isset($this->raw['text'])) return '';
-            else return $this->raw['text'];
+            if(!isset($this->raw['text'])) 
+            {
+            	return '';
+            }
+            else 
+            {
+            	return $this->raw['text'];
+            }
         }
 
         function from($from=false)
         {
-            if(!$this->status) return false;
+            if(!$this->status) 
+            {
+            	return false;
+            }
 
             if($from === false)
             {
@@ -88,18 +113,28 @@
             return true;
         }
 
-              function to($to=false)
+        function to($to=false)
         {
-            if(!$this->status) return false;
+            if(!$this->status) 
+            {
+            	return false;
+            }
 
             if($to === false)
             {
-                if(!isset($this->raw['to'])) return '';
-                else return $this->raw['to'];
+                if(!isset($this->raw['to'])) 
+                {
+                	return '';
+                }
+                else 
+                {
+                	return $this->raw['to'];
+                }
             }
 
             $this->raw['to'] = $to;
             $this->changed = true;
+            
             return true;
         }
 
@@ -126,22 +161,47 @@
 
         function subject($subject=false)
         {
-            if(!$this->status) return false;
+            if(!$this->status) 
+            {
+            	return false;
+            }
 
             if($subject === false)
             {
-                if(!isset($this->raw['subject']) || trim($this->raw['subject']) == '') return 'Kein Betreff';
-                else return $this->raw['subject'];
+                if(!isset($this->raw['subject']) || trim($this->raw['subject']) == '') 
+                {
+                	return 'Kein Betreff';
+                }
+                else 
+                {
+                	return $this->raw['subject'];
+                }
             }
 
             $this->raw['subject'] = $subject;
             $this->changed = true;
             return true;
         }
+        
+        function getSubject()
+        {
+        	if(!$this->status)
+        	{
+        		return false;
+        	} 
+
+        	if(!isset($this->raw['subject']))
+        	{
+        		return '';
+        	}
+        	
+        	return $this->raw['subject'];
+        }
 
         function html($html=-1)
         {
-            if(!$this->status) return false;
+            if(!$this->status) 
+            	return false;
 
             if($html === -1)
             {

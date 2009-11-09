@@ -239,6 +239,14 @@
 
 			return true;
 		}
+		
+		function getFields()
+		{
+			if ( !$this->status || !isset( $this->planet_info ) ) 
+				return false;
+
+			return $this->planet_info['size'][1];			
+		}
 
 		function getPos()
 		{
@@ -364,6 +372,11 @@
 			return true;
 		}
 
+		/**
+		 * @test - added for almost everything
+		 * @param $pos_string
+		 * @return unknown_type
+		 */
         function registerPlanet( $pos_string )
         {
             if( !$this->status ) 
@@ -449,6 +462,11 @@
             return $planet_index;
         }
 
+        /**
+         * @test in progress
+         * @param $planet
+         * @return unknown_type
+         */
         function movePlanetUp( $planet=false )
         {
             if( !$this->status ) 
@@ -902,7 +920,10 @@
 
         function checkMessageStatus($message_id, $type)
         {
-            if(!$this->status) return false;
+            if(!$this->status) 
+            {
+            	return false;
+            }
 
             if(isset($this->raw['messages']) && isset($this->raw['messages'][$type]) && isset($this->raw['messages'][$type][$message_id]))
                 return (int) $this->raw['messages'][$type][$message_id];
@@ -912,11 +933,17 @@
 
         function findMessageType($message_id)
         {
-            if(!$this->status) return false;
+            if(!$this->status) 
+            {
+            	return false;
+            }
 
             foreach($this->raw['messages'] as $type=>$messages)
             {
-                if(isset($messages[$message_id])) return $type;
+                if(isset($messages[$message_id])) 
+                {
+                	return $type;
+                }
             }
             return false;
         }
@@ -936,15 +963,36 @@
 
         function getMessagesList($type)
         {
-            if(!$this->status) return false;
+            if(!$this->status) 
+            {
+            	return false;
+            }
 
-            if(!isset($this->cache['getMessagesList'])) $this->cache['getMessagesList'] = array();
+            if(!isset($this->cache['getMessagesList'])) 
+            {
+            	$this->cache['getMessagesList'] = array();
+            }
+            
             if(!isset($this->cache['getMessagesList'][$type]))
             {
-                if(!isset($this->raw['messages']) || !isset($this->raw['messages'][$type])) $this->cache['getMessagesList'] = array();
-                else $this->cache['getMessagesList'][$type] = array_reverse(array_keys($this->raw['messages'][$type]));
+                if(!isset($this->raw['messages']) || !isset($this->raw['messages'][$type])) 
+                {
+                	$this->cache['getMessagesList'] = array();
+                }
+                else 
+                {
+                	$this->cache['getMessagesList'][$type] = array_reverse(array_keys($this->raw['messages'][$type]));
+                }
             }
-            return $this->cache['getMessagesList'][$type];
+            
+            if(isset($this->cache['getMessagesList'][$type]))
+            {
+            	return $this->cache['getMessagesList'][$type];
+            }
+            else
+            {
+            	return false;
+            }
         }
 
         function getMessageCategoriesList()
@@ -2738,8 +2786,10 @@
         {
             if(!$this->status) return false;
 
-            if(global_setting("MAX_PLANETS") > 0 && count($this->raw['planets']) < global_setting("MAX_PLANETS")) return true;
-            else return false;
+            if(global_setting("MAX_PLANETS") > 0 && count($this->raw['planets']) < global_setting("MAX_PLANETS")) 
+            	return true;
+            else 
+            	return false;
         }
 
         function buildGebaeude($id, $rueckbau=false)

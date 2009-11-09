@@ -12,6 +12,7 @@ class TestUser
 	private $bCreated;
 	private $bShouldCreate;
 	private $bCreateOnSetup;
+	private $messages = array();
 	
 	public function __construct( $name )
 	{
@@ -21,6 +22,16 @@ class TestUser
 		$this->bCreateOnSetup = false;
 	}
     
+	public function getMessages()
+	{
+		return $this->messages;
+	}
+	
+	public function addMessage($msgObj)
+	{
+		$this->messages[] = $msgObj;
+	}
+	
 	public function shouldCreateOnSetup()
 	{
 		return $this->bCreateOnSetup;
@@ -114,6 +125,39 @@ class TestUser
     	}
     	
     	return false;
+    }
+    
+    public function getPlanetCount()
+    {
+    	return count($this->planets);
+    }
+    
+    public function getCreatedPlanetCount()
+    {
+    	$count = 0;
+    	
+    	foreach($this->planets as $planet)
+    	{
+    		if($planet->isCreated())
+    		{
+    			$count++;
+    		}
+    	}
+    	
+    	return $count;
+    }    
+    
+    public function addNewPlanetCreated($index, $koordString)
+    {
+    	$koords = explode(":", $koordString);
+    	$testPlanet = new TestPlanet();
+    	$testPlanet->setIndex($index);
+    	$testPlanet->setGalaxy($koords[0]);
+    	$testPlanet->setSystem($koords[1]);
+    	$testPlanet->setSysIndex($koords[2]);
+    	$testPlanet->setIsCreated(true);
+    	
+    	$this->planets[] = $testPlanet; 
     }
 }
 
