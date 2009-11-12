@@ -317,6 +317,11 @@ class userTest extends PHPUnit_Framework_TestCase
 			{
 				for( $m = 0; $m <= TEST_MAX_PLANETSINSYSTEM; $m++ )
 				{
+					if ( rand(0, 10) != 5 )
+					{
+						continue;
+					}
+
 					$pos = $i.":".$k.":".$m;
 					$bMyPlanet = false;
 
