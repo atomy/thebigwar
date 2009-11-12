@@ -24,7 +24,7 @@
   </target>
 
   <target name="test">
-    <phpunit2 haltonfailure="true" printsummary="true">
+    <phpunit2 haltonerror="true" haltonfailure="true" printsummary="true">
       <batchtest>
         <fileset dir="test">
           <include name="**/*Test.php"/>
@@ -34,22 +34,25 @@
   </target>
 
   <target name="coverage-report" depends="prepare">
+    <exec command="mkdir coverage-report" dir="."/>
+
     <coverage-setup database="./coverage-report/database">
-      <fileset dir="test">
-        <include name="**/*Test.php"/>
+      <fileset dir=".">
+        <include name="engine/**/*.php"/>
+        <exclude name="**/*Test.php"/>
       </fileset>
     </coverage-setup>
 
-	<phpunit2 codecoverage="true">>
+	<phpunit2 codecoverage="true" printsummary="true">
 	  <batchtest>
 	    <fileset dir="test">
-	      <include name="**/*Test.php/"/>
+	      <include name="**/*Test.php"/>
 	    </fileset>
 	  </batchtest>
 	</phpunit2>
 
     <coverage-report outfile="coverage-report/coverage.xml">
-      <report styledir="/usr/share/php5/data/phing/etc/coverage-frames.xsl"
+      <report styledir="/usr/share/php5/data/phing/etc/"
               todir="coverage-report"/>
     </coverage-report>
 

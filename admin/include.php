@@ -6,7 +6,7 @@
 $RELPATH = substr( $_SERVER['PHP_SELF'], 0, strrpos( $_SERVER['PHP_SELF'], "/" ) + 1 );
 ini_set( "session.cookie_path", $RELPATH );
 
-require( TBW_ROOT.'engine/include.php' );
+require_once( TBW_ROOT.'engine/include.php' );
 
 	$actions = array(
 		"0" => "%s hat sich angemeldet.",
