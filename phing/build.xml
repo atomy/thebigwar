@@ -55,7 +55,7 @@
   </target>
 
   <!-- Unit Tests & coverage analysis -->
-  <target name="phpunit" depends="prepare">
+  <target name="phpunit">
     <echo msg="PHP Unit..." />
 	<exec command="mkdir phpunit" dir="./tools" />
 	<exec command="mkdir coverage" dir="./tools/phpunit" />
@@ -89,7 +89,7 @@
     <echo msg="PHP Documentator" />
     <exec command="mkdir docs" dir="./tools" />
 	<phpdoc title="API Documentation"
-	        destdir="${project.builddir}/tools/docs"
+	        destdir="${project.basedir}/tools/docs"
 			sourcecode="yes"
 			defaultpackagename="TBW"
 			output="HTML:Smarty:PHP">
@@ -99,7 +99,7 @@
 	</phpdoc>
   </target>
 
-  <target name="coverage-report" depends="prepare">
+  <target name="coverage-report">
     <exec command="mkdir coverage-report" dir="."/>
 
     <coverage-setup database="./coverage-report/database">
