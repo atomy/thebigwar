@@ -1,6 +1,12 @@
 if [ $# -lt 1 ]
 then
-	echo "Usage: $0 [filename]"
+	echo "Usage: $0 <filename> [adminlogin] [adminpass]"
+	exit 1
+fi
+
+if [ $# -eq 2 ]
+then
+	echo "Usage: $0 <filename> [adminlogin] [adminpass]"
 	exit 1
 fi
 
@@ -45,8 +51,16 @@ mkdir $1/truemmerfelder
 mkdir $1/universe
 ln -s $CWD/create_galaxy $1/universe/create_galaxy
 touch $1/admins
-read -p "Enter Admin user name: " ADMIN_USERNAME
-read -s -p "Enter Admin password: " ADMIN_PASSWD
+
+if [ $# -eq 3 ]
+then
+  ADMIN_USERNAME=$2
+  ADMIN_PASSWD=$3
+else
+  read -p "Enter Admin user name: " ADMIN_USERNAME
+  read -s -p "Enter Admin password: " ADMIN_PASSWD
+fi
+
 echo
 
 echo -n "$ADMIN_USERNAME" > $1/admins
