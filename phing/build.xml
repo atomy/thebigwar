@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<project name="thebigwar" basedir=".." default="test">
+  <target name="test">
+    <phpunit2 haltonfailure="true" printsummary="true">
+	  <batchtest>
+	    <fileset file="./test/AllTest.php"/>
+	  </batchtest>
+	</phpunit2>
+  </target>
+</project>
