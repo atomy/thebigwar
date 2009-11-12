@@ -72,7 +72,11 @@ class tester
         $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'verteidigung' ) );
 
         if ( $research )
-            $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'forschung' ) );
+        {
+        	$rData = $this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'forschung' );
+        	$planetData->addItemLevels($rData);      	
+        }
+            
     }
 
     /*
@@ -134,6 +138,8 @@ class tester
         {
             $randomLevel = rand( $minlvl, $maxlvl );
             $randomItemLevels[$item] = $randomLevel;
+            //if($class == 'forschung')
+            	//echo "changing lvl of ".$item." from ".$user->getItemLevel($item, 'forschung')." to ".$randomLevel."\n";
             $user->changeItemLevel( $item, $randomLevel, $class );
 //            echo "added ".$randomLevel." items of ".$item."\n";
         }

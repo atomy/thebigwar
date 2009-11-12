@@ -78,9 +78,9 @@ class userTest extends PHPUnit_Framework_TestCase
 	
 	protected function cleanUp()
 	{
-		/*
+
 		Classes::resetInstances();
-		
+		/*
 		foreach( $this->testData->getTestUsers() as $user )
 		{
 			user_control::removeUser( $user->getName() );
@@ -88,6 +88,7 @@ class userTest extends PHPUnit_Framework_TestCase
 
 		Classes::resetInstances();
 */
+		
 		$this->_tearDown_DeleteDir(global_setting("DB_PLAYERS"));
 		$this->_tearDown_DeleteDir(global_setting("DB_FLEETS"));
 		$this->_tearDown_DeleteDir(global_setting("DB_MESSAGES"));
@@ -183,7 +184,7 @@ class userTest extends PHPUnit_Framework_TestCase
 	/**
 	 * check new user creation
 	 */
-	public function	DDtestCreate()
+	public function	testCreate()
 	{
 		$usa = $this->testData->getUnusedUser();
 		
@@ -205,7 +206,7 @@ class userTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse( $dupuser->create(), "could create user which already exist" );
 	}
 
-	public function DDtestUserExists()
+	public function testUserExists()
 	{
 		foreach($this->testData->getTestUsers() as $user)
 		{
@@ -222,7 +223,7 @@ class userTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse( User::userExists( NULL ), "func returned true but no name was given as parameter" );
 	}
 
-	public function DDtestPlanetExists()
+	public function testPlanetExists()
 	{
 		$users = $this->testData->getTestUsers();
 	
@@ -260,7 +261,7 @@ class userTest extends PHPUnit_Framework_TestCase
 		}
 	}
 
-	public function DDtestSetActivePlanet()
+	public function testSetActivePlanet()
 	{	
 		$users = $this->testData->getTestUsers();
 	
@@ -298,7 +299,7 @@ class userTest extends PHPUnit_Framework_TestCase
 		}
 	}
 
-	public function DDtestGetPlanetByPos()
+	public function testGetPlanetByPos()
 	{
 		$users = $this->testData->getTestUsers();
 		
@@ -339,7 +340,7 @@ class userTest extends PHPUnit_Framework_TestCase
 	/*
 	 * checking if the returned planetlist is the same as our one of the created planets
 	 */
-	public function DDtestGetPlanetsList()
+	public function testGetPlanetsList()
 	{
 		$testUsers = $this->testData->getTestUsers();
 		$testusr = $testUsers[0];
@@ -363,7 +364,7 @@ class userTest extends PHPUnit_Framework_TestCase
     /*
      * checking if the returned planetlist is the same as our one of the created planets
      */
-    public function DDtestRemovePlanet()
+    public function testRemovePlanet()
     {
     	global $types_message_types;
     	
@@ -575,7 +576,7 @@ class userTest extends PHPUnit_Framework_TestCase
 		return $maxplanets;
 	}
 
-	public function DDtestRegisterPlanet()
+	public function testRegisterPlanet()
 	{
 		$fuser = Classes::User( "fakeuser1341" );
 		$freeKoords = getFreeKoords();
@@ -686,7 +687,7 @@ class userTest extends PHPUnit_Framework_TestCase
 	 * - only available for testUsers with more than 2 created planets
 	 * @return unknown_type
 	 */
-	public function DDtestMovePlanetDown()
+	public function testMovePlanetDown()
 	{
 	return;
 		$fuser = Classes::User( "fakeuser1341" );
