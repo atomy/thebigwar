@@ -8,13 +8,17 @@ if (!defined('PHPUnit_MAIN_METHOD'))
 
 require_once 'PHPUnit/Framework.php';
 
-if( is_file('../../../include/config_inc.php'))
+if( is_file('../../../include/config_inc.php') )
 {
 	require_once '../../../include/config_inc.php';
 }
-else if( is_file(require_once '../include/config_inc.php'))
+else if( is_file( '../include/config_inc.php') )
 {
 	require_once '../include/config_inc.php';
+}
+else
+{
+	require_once 'include/config_inc.php';
 }
 
 require_once TBW_ROOT.'engine/include.php' ;

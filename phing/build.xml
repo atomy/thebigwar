@@ -1,13 +1,57 @@
 <?xml version="1.0"?>
 
-<project name="thebigwar" basedir=".." default="test">
+<project name="thebigwar" basedir=".." default="all">
+
+  <target name="setupTestUni">
+    <!-- Setup TestUni1 using ./db_create script. -->
+    <exec command="create_database db admin admin" dir="./db_things" />
+    <exec command="mv db ../" dir="./db_things"/>
+
+	<!-- Setup general things -->
+    <exec command="cp -R * ../" dir="./default/"/>
+	<exec command="./addRootDir.sh ${project.basedir}" dir="./db_things/"/> 
+	<exec command="chmod +x *" dir="./db_things/"/>
+  </target>
+
+  <target name="prepare">
+    <phingcall target="setupTestUni"/>
+  </target>
+
+  <target name="all">
+    <phingcall target="prepare"/>
+    <phingcall target="test"/>
+    <phingcall target="coverage-report"/>
+  </target>
+
   <target name="test">
     <phpunit2 haltonfailure="true" printsummary="true">
+      <batchtest>
+        <fileset dir="test">
+          <include name="**/*Test.php"/>
+       	</fileset>
+      </batchtest>
+	</phpunit2>
+  </target>
+
+  <target name="coverage-report" depends="prepare">
+    <coverage-setup database="./coverage-report/database">
+      <fileset dir="test">
+        <include name="**/*Test.php"/>
+      </fileset>
+    </coverage-setup>
+
+	<phpunit2 codecoverage="true">>
 	  <batchtest>
-	    <fileset dir="./test/">
-	      <include name="AllTest.php"/>
-	    </fileset> 
+	    <fileset dir="test">
+	      <include name="**/*Test.php/"/>
+	    </fileset>
 	  </batchtest>
 	</phpunit2>
+
+    <coverage-report outfile="coverage-report/coverage.xml">
+      <report styledir="/usr/share/php5/data/phing/etc/coverage-frames.xsl"
+              todir="coverage-report"/>
+    </coverage-report>
+
   </target>
 </project>
