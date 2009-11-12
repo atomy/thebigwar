@@ -73,7 +73,7 @@
   <target name="pdepend">
     <echo msg="PHP Depend" />
 	<exec command="mkdir jdepend" dir="./tools" />
-	<exec command="pdepend --jdepend-xml=${project.basedir}/tools/jdepend/jdepend.xml ${project.basedir}" escape="false" />
+	<exec command="pdepend --bad-documentation --jdepend-xml=${project.basedir}/tools/jdepend/jdepend.xml ${project.basedir}" escape="false" />
   </target>
 
   <!-- PHP CodeSniffer -->
