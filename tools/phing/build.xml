@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+
+<project name="thebigwar" basedir=".." default="all">
+
+  <target name="setupTestUni">
+    <!-- Setup TestUni1 using ./db_create script. -->
+    <exec command="./create_database db admin admin" dir="./db_things" />
+    <exec command="mv db ../" dir="./db_things"/>
+
+	<!-- Setup general things -->
+    <exec command="cp -R * ../" dir="./default/"/>
+    <exec command="./addRootDir.sh ${project.basedir}" dir="./db_things/"/>
+    <exec command="chmod +x *" dir="./db_things/"/>
+  </target>
+
+  <target name="prepare">
+    <phingcall target="setupTestUni"/>
+	<exec command="mkdir tools" dir="." />
+  </target>
+
+  <target name="cleanup">
+    <!-- Remove global database stuff-->
+    <exec command="rm -Rf database.global/" dir="." /> 
+
+	<!-- Remove db -->
+	<exec command="rm -Rf db" dir="." />
+
+	<!-- Remove edited config -->
+	<exec command="rm -f include/config_inc.php" dir="." />
+
+	<!-- Remove all reports of tools -->
+	<exec command="rm -Rf tools" dir="." />
+  </target>
+
+  <target name="all">
+  	<phingcall target="cleanup" />
+    <phingcall target="prepare"/>
+  <!--  <phingcall target="test"/> -->
+  <!--  <phingcall target="coverage-report"/> -->
+	<phingcall target="phpcpd" />
+	<phingcall target="phpdoc" />
+	<phingcall target="pdepend" />
+	<phingcall target="phpcs" />
+	<phingcall target="phpunit" />
+  </target>
+
+  <target name="test">
+    <phpunit2 haltonerror="true" haltonfailure="true" printsummary="true">
+      <batchtest>
+        <fileset dir="test">
+          <include name="**/*Test.php"/>
+       	</fileset>
+      </batchtest>
+	</phpunit2>
+  </target>
+
+  <!-- Unit Tests & coverage analysis -->
+  <target name="phpunit" depends="prepare">
+    <echo msg="PHP Unit..." />
+	<exec command="mkdir phpunit" dir="./tools" />
+	<exec command="mkdir coverage" dir="./tools/phpunit" />
+	<exec command="phpunit --log-junit ${project.basedir}/tools/phpunit/phpunit.xml --log-pmd ${project.basedir}/tools/phpunit/phpunit.pmd.xml --coverage-clover ${project.basedir}/tools/phpunit/cloverage/clover.xml --coverage-html ${project.basedir}/tools/phpunit/coverage/ ./tests" dir="." />
+  </target>
+
+  <!-- PHP copy/paste analysis -->
+  <target name="phpcpd">
+    <echo msg="PHP Copy/Paste..." />
+	<exec command="mkdir pmd" dir="./tools" />
+	<exec command="phpcpd --log-pmd=${project.basedir}/tools/pmd/pmd.xml ${project.basedir}" dir="." escape="false" />
+  </target>
+
+  <!-- PHP dependency checker -->
+  <target name="pdepend">
+    <echo msg="PHP Depend" />
+	<exec command="mkdir jdepend" dir="./tools" />
+	<exec command="pdepend --jdepend-xml=${project.basedir}/tools/jdepend/jdepend.xml ${project.basedir}" escape="false" />
+  </target>
+
+  <!-- PHP CodeSniffer -->
+  <target name="phpcs">
+    <echo msg="PHP CodeSniffer..." />
+	<exec command="mkdir phpcs" dir="./tools" />
+    <exec command="phpcs --standard=ZEND --report=checkstyle ${project.basedir} > ${project.basedir}/tools/phpcs/checkstyle.xml" escape="false" />
+  </target>
+
+
+  <!-- PHP Documentator -->
+  <target name="phpdoc">
+    <echo msg="PHP Documentator" />
+    <exec command="mkdir docs" dir="./tools" />
+	<phpdoc title="API Documentation"
+	        destdir="${project.builddir}/tools/docs"
+			sourcecode="yes"
+			defaultpackagename="TBW"
+			output="HTML:Smarty:PHP">
+	  <fileset dir=".">
+	    <include name="**/*.php"/>
+	  </fileset>
+	</phpdoc>
+  </target>
+
+  <target name="coverage-report" depends="prepare">
+    <exec command="mkdir coverage-report" dir="."/>
+
+    <coverage-setup database="./coverage-report/database">
+      <fileset dir=".">
+        <include name="engine/**/*.php"/>
+        <exclude name="**/*Test.php"/>
+      </fileset>
+    </coverage-setup>
+
+	<phpunit2 codecoverage="true">
+	  <batchtest>
+	    <fileset dir="test">
+	      <include name="**/*Test.php"/>
+	    </fileset>
+	  </batchtest>
+	</phpunit2>
+
+    <coverage-report outfile="coverage-report/coverage.xml">
+      <report styledir="/usr/share/php5/data/phing/etc/"
+              todir="coverage-report"/>
+    </coverage-report>
+
+  </target>
+
+</project>
