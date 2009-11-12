@@ -4,13 +4,13 @@
 
   <target name="setupTestUni">
     <!-- Setup TestUni1 using ./db_create script. -->
-    <exec command="create_database db admin admin" dir="./db_things" />
+    <exec command="./create_database db admin admin" dir="./db_things" />
     <exec command="mv db ../" dir="./db_things"/>
 
 	<!-- Setup general things -->
     <exec command="cp -R * ../" dir="./default/"/>
-	<exec command="./addRootDir.sh ${project.basedir}" dir="./db_things/"/> 
-	<exec command="chmod +x *" dir="./db_things/"/>
+    <exec command="./addRootDir.sh ${project.basedir}" dir="./db_things/"/>
+    <exec command="chmod +x *" dir="./db_things/"/>
   </target>
 
   <target name="prepare">
