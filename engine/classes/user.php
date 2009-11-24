@@ -22,7 +22,7 @@
 				'planets' => array(),
 				'forschung' => array(),
 				'password' => 'x',
-				'punkte' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+				'punkte' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 				'registration' => time(),
 				'messages' => array(),
 				'description' => '',
@@ -177,206 +177,206 @@
 		 */
 		function getPlanetsList()
 		{
-			if( !$this->status ) 
-				return false;
+            if( !$this->status ) 
+                return false;
 
-			if( !isset( $this->cache['getPlanetsList'] ) )
-				$this->cache['getPlanetsList'] = array_keys( $this->raw['planets'] );
-
-			return $this->cache['getPlanetsList'];
-		}
-
-		function getTotalFields()
-		{
-			if ( !$this->status || !isset( $this->planet_info ) ) 
-				return false;
-
-			return $this->planet_info['size'][1];
-		}
-
-		function getUsedFields()
-		{
-			if ( !$this->status || !isset( $this->planet_info ) ) 
-				return false;
-
-			return $this->planet_info['size'][0];
-		}
-
-		function changeUsedFields($value)
-		{
-			if( !$this->status || !isset( $this->planet_info ) ) 
-				return false;
-
-			$this->planet_info['size'][0] += $value;
-			$this->changed = true;
-
-			return true;
-		}
-
-		function getRemainingFields()
-		{
-			if ( !$this->status || !isset( $this->planet_info ) ) 
-				return false;
-
-			return ( $this->planet_info['size'][1] - $this->planet_info['size'][0] );
-		}
-
-		function getBasicFields()
-		{
-			if( !$this->status || !isset( $this->planet_info ) ) 
-				return false;
-
-			return ( $this->planet_info['size'][1] / ( $this->getItemLevel( 'F9', 'forschung' ) + 1 ) );
-		}
-
-		function setFields( $size )
-		{
-			if ( !$this->status || !isset( $this->planet_info ) ) 
-				return false;
-
-			$this->planet_info['size'][1] = $size;
-			$this->changed = true;
-
-			return true;
-		}
+            if( !isset( $this->cache['getPlanetsList'] ) )
+                $this->cache['getPlanetsList'] = array_keys( $this->raw['planets'] );
 		
-		function getFields()
-		{
-			if ( !$this->status || !isset( $this->planet_info ) ) 
-				return false;
+            return $this->cache['getPlanetsList'];
+        }
 
-			return $this->planet_info['size'][1];			
-		}
+        function getTotalFields()
+        {
+            if ( !$this->status || !isset( $this->planet_info ) ) 
+                return false;
 
-		function getPos()
-		{
-			if ( !$this->status || !isset ( $this->planet_info ) ) 
-				return false;
+            return $this->planet_info['size'][1];
+        }
 
-			$pos = explode( ':', $this->planet_info['pos'], 3 );
-			
-			if ( count($pos ) < 3 ) 
-				return false;
+        function getUsedFields()
+        {
+            if ( !$this->status || !isset( $this->planet_info ) ) 
+                return false;
 
-			return $pos;
-		}
+            return $this->planet_info['size'][0];
+        }
 
-		function getPosString()
-		{
-			if( !$this->status || !isset( $this->planet_info ) ) 
-				return false;
+        function changeUsedFields($value)
+        {
+            if( !$this->status || !isset( $this->planet_info ) ) 
+                return false;
 
-			return $this->planet_info['pos'];
-		}
+            $this->planet_info['size'][0] += $value;
+            $this->changed = true;
 
-		function getPlanetClass()
-		{
-			if( !$this->status || !isset( $this->planet_info ) ) 
-				return false;
+            return true;
+        }
 
-			$pos = $this->getPos();
-			__autoload('Galaxy');
+        function getRemainingFields()
+        {
+            if ( !$this->status || !isset( $this->planet_info ) ) 
+                return false;
 
-			return getPlanetClass( $pos[0], $pos[1], $pos[2] );
-		}
+            return ( $this->planet_info['size'][1] - $this->planet_info['size'][0] );
+        }
 
-		/*
-		 * @testing added
-		 */
-		function removePlanet()
-		{
-			global $types_message_types;
+        function getBasicFields()
+        {
+            if( !$this->status || !isset( $this->planet_info ) ) 
+                return false;
 
-			if( !$this->status || !isset( $this->planet_info ) ) 
-				return false;
+            return ( $this->planet_info['size'][1] / ( $this->getItemLevel( 'F9', 'forschung' ) + 1 ) );
+        }
 
-			# Alle feindlichen Flotten, die auf diesen Planeten, zurueckrufen
-			$fleets = $this->getFleetsWithPlanet();
+        function setFields( $size )
+        {
+            if ( !$this->status || !isset( $this->planet_info ) ) 
+                return false;
 
-			foreach( $fleets as $fleet )
-			{
-				$fl = Classes::Fleet( $fleet );
-				$users = $fl->getUsersList();
+            $this->planet_info['size'][1] = $size;
+            $this->changed = true;
 
-				foreach( $users as $user )
-				{
-					$pos_string = $fl->from( $user );
-					$pos = explode( ':', $pos_string );
-					$type = $fl->getCurrentType();
-					$fl->callBack( $user );
+            return true;
+        }
+        
+        function getFields()
+        {
+            if ( !$this->status || !isset( $this->planet_info ) ) 
+                return false;
 
-					$this_galaxy = Classes::Galaxy( $pos[0] );
+            return $this->planet_info['size'][1];            
+        }
 
-					$message = Classes::Message();
+        function getPos()
+        {
+            if ( !$this->status || !isset ( $this->planet_info ) ) 
+                return false;
 
-					if( $message->create() )
-					{
-						$message->addUser( $user, $types_message_types[$type] );
-						$message->subject( "Flotte zur\xc3\xbcckgerufen" );
-						$message->from( $this->getName() );
-						$message->text( "Ihre Flotte befand sich auf dem Weg zum Planeten \xe2\x80\x9e".$this->planetName()."\xe2\x80\x9c (".$this->getPosString().", Eigent\xc3\xbcmer: ".utf8_htmlentities( $this->getName() )."). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den R\xc3\xbcckweg zu Ihrem Planeten \xe2\x80\x9e".$this_galaxy->getPlanetName( $pos[1], $pos[2] )."\xe2\x80\x9c (".$pos_string.") macht." );
-					}
-				}
-			}
+            $pos = explode( ':', $this->planet_info['pos'], 3 );
+            
+            if ( count($pos ) < 3 ) 
+                return false;
 
-			# Planeten aus der Karte loeschen
-			$this_pos = $this->getPos();
+            return $pos;
+        }
 
-			if( !$this_pos )
-				return false;
+        function getPosString()
+        {
+            if( !$this->status || !isset( $this->planet_info ) ) 
+                return false;
 
-			$galaxy = Classes::galaxy( $this_pos[0] );
-			
-			if (!$galaxy->resetPlanet( $this_pos[1], $this_pos[2] ))
-				return false;
+            return $this->planet_info['pos'];
+        }
 
-			$planets = $this->getPlanetsList();
-			$active_key = array_search( $this->getActivePlanet(), $planets );
+        function getPlanetClass()
+        {
+            if( !$this->status || !isset( $this->planet_info ) ) 
+                return false;
 
-			unset( $this->planet_info );
-			unset( $this->raw['planets'][$active_key] );
-			
-			$keys = array_keys( $this->raw['planets'] );
-			$this->raw['planets'] = array_values( $this->raw['planets'] );
-			
-			if( isset( $planets[$active_key + 1] ) )
-				$new_active_planet = array_search( $planets[$active_key+1], $keys );
-			else if( isset( $planets[$active_key - 1] ) ) 
-				$new_active_planet = array_search( $planets[$active_key-1], $keys );
-			else 
-				$new_active_planet = false;
+            $pos = $this->getPos();
+            __autoload('Galaxy');
 
-			$new_planets = $this->getPlanetsList();
+            return getPlanetClass( $pos[0], $pos[1], $pos[2] );
+        }
 
-			foreach( $new_planets as $planet )
-			{
-				$this->setActivePlanet( $planet );
-				$active_forschung = $this->checkBuildingThing( 'forschung' );
+        /*
+         * @testing added
+         */
+        function removePlanet()
+        {
+            global $types_message_types;
 
-				if( !$active_forschung )
-					continue;
+            if( !$this->status || !isset( $this->planet_info ) ) 
+                return false;
 
-				if( $active_forschung[2] )
-					$this->planet_info['building']['forschung'][4] = array_search( $active_forschung[4], $keys );
-			}
+            # Alle feindlichen Flotten, die auf diesen Planeten, zurueckrufen
+            $fleets = $this->getFleetsWithPlanet();
 
-			if( $new_active_planet !== false )
-				$this->setActivePlanet( $new_active_planet );
+            foreach( $fleets as $fleet )
+            {
+                $fl = Classes::Fleet( $fleet );
+                $users = $fl->getUsersList();
 
-			# Highscores neu berechnen
-			$this->recalcHighscores( true, true, true, true, true );
+                foreach( $users as $user )
+                {
+                    $pos_string = $fl->from( $user );
+                    $pos = explode( ':', $pos_string );
+                    $type = $fl->getCurrentType();
+                    $fl->callBack( $user );
 
-			if( isset( $this->cache['getPlanetsList'] ) ) 
-				unset( $this->cache['getPlanetsList'] );
+                    $this_galaxy = Classes::Galaxy( $pos[0] );
 
-			return true;
-		}
+                    $message = Classes::Message();
 
-		/**
-		 * @test - added for almost everything
-		 * @param $pos_string
-		 * @return unknown_type
-		 */
+                    if( $message->create() )
+                    {
+                        $message->addUser( $user, $types_message_types[$type] );
+                        $message->subject( "Flotte zur\xc3\xbcckgerufen" );
+                        $message->from( $this->getName() );
+                        $message->text( "Ihre Flotte befand sich auf dem Weg zum Planeten \xe2\x80\x9e".$this->planetName()."\xe2\x80\x9c (".$this->getPosString().", Eigent\xc3\xbcmer: ".utf8_htmlentities( $this->getName() )."). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den R\xc3\xbcckweg zu Ihrem Planeten \xe2\x80\x9e".$this_galaxy->getPlanetName( $pos[1], $pos[2] )."\xe2\x80\x9c (".$pos_string.") macht." );
+                    }
+                }
+            }
+
+            # Planeten aus der Karte loeschen
+            $this_pos = $this->getPos();
+
+            if( !$this_pos )
+                return false;
+
+            $galaxy = Classes::galaxy( $this_pos[0] );
+            
+            if (!$galaxy->resetPlanet( $this_pos[1], $this_pos[2] ))
+                return false;
+
+            $planets = $this->getPlanetsList();
+            $active_key = array_search( $this->getActivePlanet(), $planets );
+
+            unset( $this->planet_info );
+            unset( $this->raw['planets'][$active_key] );
+            
+            $keys = array_keys( $this->raw['planets'] );
+            $this->raw['planets'] = array_values( $this->raw['planets'] );
+            
+            if( isset( $planets[$active_key + 1] ) )
+                $new_active_planet = array_search( $planets[$active_key+1], $keys );
+            else if( isset( $planets[$active_key - 1] ) ) 
+                $new_active_planet = array_search( $planets[$active_key-1], $keys );
+            else 
+                $new_active_planet = false;
+
+            $new_planets = $this->getPlanetsList();
+
+            foreach( $new_planets as $planet )
+            {
+                $this->setActivePlanet( $planet );
+                $active_forschung = $this->checkBuildingThing( 'forschung' );
+
+                if( !$active_forschung )
+                    continue;
+
+                if( $active_forschung[2] )
+                    $this->planet_info['building']['forschung'][4] = array_search( $active_forschung[4], $keys );
+            }
+
+            if( $new_active_planet !== false )
+                $this->setActivePlanet( $new_active_planet );
+
+            # Highscores neu berechnen
+            $this->recalcHighscores( true, true, true, true, true );
+
+            if( isset( $this->cache['getPlanetsList'] ) ) 
+                unset( $this->cache['getPlanetsList'] );
+
+            return true;
+        }
+
+        /**
+         * @test - added for almost everything
+         * @param $pos_string
+         * @return unknown_type
+         */
         function registerPlanet( $pos_string )
         {
             if( !$this->status ) 
@@ -704,34 +704,98 @@
 
         function subtractRess($ress, $make_scores=true)
         {
-            if(!$this->status || !isset($this->planet_info)) return false;
+            if(!$this->status || !isset($this->planet_info)) 
+			{
+				return false;
+			}
 
-            if(!is_array($ress)) return false;
+            if(!is_array($ress)) 
+			{
+				return false;
+			}
 
-            if(isset($ress[0])){ $this->ress[0] -= $ress[0]; if($make_scores) $this->raw['punkte'][7] += $ress[0]; }
-            if(isset($ress[1])){ $this->ress[1] -= $ress[1]; if($make_scores) $this->raw['punkte'][8] += $ress[1]; }
-            if(isset($ress[2])){ $this->ress[2] -= $ress[2]; if($make_scores) $this->raw['punkte'][9] += $ress[2]; }
-            if(isset($ress[3])){ $this->ress[3] -= $ress[3]; if($make_scores) $this->raw['punkte'][10] += $ress[3]; }
-            if(isset($ress[4])){ $this->ress[4] -= $ress[4]; if($make_scores) $this->raw['punkte'][11] += $ress[4]; }
+            if(isset($ress[0]))
+            { 
+            	$this->ress[0] -= $ress[0]; 
+            	
+            	if($make_scores) 
+            	{
+            		$this->raw['punkte'][7] += $ress[0]; 
+            	}
+            }
+            
+            if(isset($ress[1]))
+			{ 
+				$this->ress[1] -= $ress[1]; if($make_scores) $this->raw['punkte'][8] += $ress[1]; 
+			}
+            
+			if(isset($ress[2]))
+			{ 
+				$this->ress[2] -= $ress[2]; if($make_scores) $this->raw['punkte'][9] += $ress[2]; 
+			}
+            
+			if(isset($ress[3]))
+			{ 
+				$this->ress[3] -= $ress[3]; if($make_scores) $this->raw['punkte'][10] += $ress[3]; 
+			}
+            
+			if(isset($ress[4]))
+			{ 
+				$this->ress[4] -= $ress[4]; if($make_scores) $this->raw['punkte'][11] += $ress[4]; 
+			}
 
-            if($make_scores && isset($this->cache['getSpentRess'])) unset($this->cache['getSpentRess']);
+            if($make_scores && isset($this->cache['getSpentRess'])) 
+			{
+				unset($this->cache['getSpentRess']);
+			}
 
             $this->changed = true;
 
+//			print "substracting res from user: ".$this->getName()."\n";
+//			throw new Exception("bt");
+//			print_r($ress);
+//			print "------------------\n";
+//			print_r($this->ress);
+//			print "===========================\n";
+	
             return true;
         }
 
         function checkRess($ress)
         {
-            if(!$this->status || !isset($this->planet_info)) return false;
+            if(!$this->status || !isset($this->planet_info)) 
+            {
+            	return false;
+            }
 
-            if(!is_array($ress)) return false;
+            if(!is_array($ress)) 
+            {
+            	return false;
+            }
 
-            if(isset($ress[0]) && $ress[0] > $this->ress[0]) return false;
-            if(isset($ress[1]) && $ress[1] > $this->ress[1]) return false;
-            if(isset($ress[2]) && $ress[2] > $this->ress[2]) return false;
-            if(isset($ress[3]) && $ress[3] > $this->ress[3]) return false;
-            if(isset($ress[4]) && $ress[4] > $this->ress[4]) return false;
+            if(isset($ress[0]) && $ress[0] > $this->ress[0]) 
+            {
+            	return false;
+            }
+            
+            if(isset($ress[1]) && $ress[1] > $this->ress[1]) 
+            {
+            	return false;
+            }
+            if(isset($ress[2]) && $ress[2] > $this->ress[2]) 
+            {
+            	return false;
+            }
+            
+            if(isset($ress[3]) && $ress[3] > $this->ress[3]) 
+            {
+            	return false;
+            }
+            
+            if(isset($ress[4]) && $ress[4] > $this->ress[4]) 
+            {
+            	return false;
+            }
 
             return true;
         }
@@ -922,7 +986,7 @@
         {
             if(!$this->status) 
             {
-            	return false;
+                return false;
             }
 
             if(isset($this->raw['messages']) && isset($this->raw['messages'][$type]) && isset($this->raw['messages'][$type][$message_id]))
@@ -935,14 +999,14 @@
         {
             if(!$this->status) 
             {
-            	return false;
+                return false;
             }
 
             foreach($this->raw['messages'] as $type=>$messages)
             {
                 if(isset($messages[$message_id])) 
                 {
-                	return $type;
+                    return $type;
                 }
             }
             return false;
@@ -965,33 +1029,33 @@
         {
             if(!$this->status) 
             {
-            	return false;
+                return false;
             }
 
             if(!isset($this->cache['getMessagesList'])) 
             {
-            	$this->cache['getMessagesList'] = array();
+                $this->cache['getMessagesList'] = array();
             }
             
             if(!isset($this->cache['getMessagesList'][$type]))
             {
                 if(!isset($this->raw['messages']) || !isset($this->raw['messages'][$type])) 
                 {
-                	$this->cache['getMessagesList'] = array();
+                    $this->cache['getMessagesList'] = array();
                 }
                 else 
                 {
-                	$this->cache['getMessagesList'][$type] = array_reverse(array_keys($this->raw['messages'][$type]));
+                    $this->cache['getMessagesList'][$type] = array_reverse(array_keys($this->raw['messages'][$type]));
                 }
             }
             
             if(isset($this->cache['getMessagesList'][$type]))
             {
-            	return $this->cache['getMessagesList'][$type];
+                return $this->cache['getMessagesList'][$type];
             }
             else
             {
-            	return false;
+                return false;
             }
         }
 
@@ -1224,7 +1288,6 @@
 
                 if($type === false)
                 {
-                echo "FAAAAAAAAAAALSE\n";
                     $type = $item->getType();
                 }
                 
@@ -1232,7 +1295,6 @@
 
                 if(!$info) 
                 {
-                echo "FAAAAAAAAAAALSE\n";
                     return false;
                 }
                 
@@ -2787,9 +2849,9 @@
             if(!$this->status) return false;
 
             if(global_setting("MAX_PLANETS") > 0 && count($this->raw['planets']) < global_setting("MAX_PLANETS")) 
-            	return true;
+                return true;
             else 
-            	return false;
+                return false;
         }
 
         function buildGebaeude($id, $rueckbau=false)
@@ -2838,26 +2900,66 @@
 
         function buildForschung($id, $global)
         {
-            if(!$this->status || !isset($this->planet_info)) return false;
+            if(!$this->status || !isset($this->planet_info)) 
+            {
+            	return false;
+            }
 
-            if($this->checkBuildingThing('forschung')) return false;
-            if(($gebaeude = $this->checkBuildingThing('gebaeude')) && $gebaeude[0] == 'B8') return false;
+            if($this->checkBuildingThing('forschung'))
+            {
+            	return false;
+            }
+            
+            if(($gebaeude = $this->checkBuildingThing('gebaeude')) && $gebaeude[0] == 'B8') 
+            {
+            	return false;
+            }
 
             $buildable = true;
             $planets = $this->getPlanetsList();
             $active_planet = $this->getActivePlanet();
+            
             foreach($planets as $planet)
             {
                 $this->setActivePlanet($planet);
-                if(($global && $this->checkBuildingThing('forschung')) || (!$global && ($building = $this->checkBuildingThing('forschung')) && $building[0] == $id))
+                
+                /*
+                 * WARNING BULLSHIT IF AHEAD
+                 * 
+                 * disallow to research when it is:
+                 *     - going to be global
+                 *   AND
+                 *     - we are already researching on the planet
+                 * OR
+                 *     - its not global
+                 *   AND
+                 *     - we are already researching on the planet
+                 *   AND
+                 *     - the thing we are going to research is already in research on the planet
+                 */
+                if(
+                	(
+                		$global 
+                		&& $this->checkBuildingThing('forschung')
+                	) 
+                	|| 
+                	(
+                		!$global 
+                		&& (
+                			$building = $this->checkBuildingThing('forschung')
+                		) 
+                		&& $building[0] == $id
+                	)
+                )
                 {
                     $buildable = false;
                     break;
                 }
             }
+            
             $this->setActivePlanet($active_planet);
-
             $item_info = $this->getItemInfo($id, 'forschung');
+            
             if($item_info && $item_info['buildable'] && $this->checkRess($item_info['ress']))
             {
                 $build_array = array($id, time()+$item_info['time_'.($global ? 'global' : 'local')], $global, $item_info['ress']);
@@ -2866,6 +2968,7 @@
                     $build_array[] = $this->getActivePlanet();
 
                     $planets = $this->getPlanetsList();
+                    
                     foreach($planets as $planet)
                     {
                         $this->setActivePlanet($planet);
@@ -2873,7 +2976,10 @@
                     }
                     $this->setActivePlanet($active_planet);
                 }
-                else $this->planet_info['building']['forschung'] = $build_array;
+                else 
+                {
+                	$this->planet_info['building']['forschung'] = $build_array;
+                }
 
                 $this->subtractRess($item_info['ress']);
 

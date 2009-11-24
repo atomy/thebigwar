@@ -1,6 +1,7 @@
 <?php
 
 require_once 'TestItem.php';
+require_once 'TestResearch.php';
 
 class TestPlanet
 {    
@@ -34,12 +35,16 @@ class TestPlanet
 	 */
 	private $isCreated;
 	
+	private $res = array();
+	
 	/*
 	 * holds all items on the planet, building levels etc.
 	 */
 	private $items = array();
 	
 	private $shouldCreate;
+	
+	private $activeResearch = array();
 	
 	/*
 	 * constructor
@@ -52,6 +57,58 @@ class TestPlanet
 		$this->index = 0;
 		$this->name = false;
 		$this->shouldCreate = false;
+	}
+	
+	public function addStartRes()
+	{
+		for( $i = 0; $i < 5; $i++ )
+		{
+			$this->res[] = 100000000000; // 100 mrd
+		}
+	}
+	
+	public function getRes()
+	{
+		return $this->res;
+	}
+	
+	public function subRes( $res )
+	{
+		foreach( $res as $key=>$value )
+		{
+			if ( !isset( $res[$key] ) )
+			{
+				throw new Exception("subRes() failed, key: ".$key." not set in $res");
+			}
+			
+			$this->res[$key] -= $value;
+			
+			if ( $this->res[$key] <= 0 )
+			{
+				throw new Exceptioin("subRes() failed, res with key ".$key." became negative");
+			}
+		}
+	}
+	
+	public function addActiveResearch($id, $global, $startPlanet = false)
+	{
+		$tRes = new TestResearch($id, $global);
+	
+		if ( $global && $startPlanet !== false )
+		{
+			$tRes->setStartPlanet($startPlanet);
+		}
+		else if ($global)
+		{
+			throw new Exception("addResearch() failed, research global but no start planet given");
+		}
+		
+		$this->activeResearch[] = $tRes;
+	}
+	
+	public function getActiveResearches()
+	{
+		return $this->activeResearch;
 	}
 	
 	public function setShouldCreate($should)

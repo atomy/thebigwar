@@ -12,7 +12,6 @@ class tester
 	
     public function setUp()
     {
-     
     	foreach( $this->testData->getTestUsers() as $user )
     	{
     		if ( !$user->shouldCreate() || !$user->shouldCreateOnSetup() )
@@ -25,37 +24,127 @@ class tester
     		
     		$setupResearch = true;
     		
-    		foreach( $user->getPlanets() as $planet )
+    		foreach( $user->getPlanets() as $planetData )
     		{
-    			if(!$planet->getShouldCreate())
+    			if( !$planetData->getShouldCreate())
     				continue;
     			
-    			$index = $this->setUp_NewPlanet($user->getName(), $planet);
+    			$index = $this->setUp_NewPlanet($user->getName(), $planetData);
     			
     			if ($index === false)
     			{
     				throw new Exception('setUp() failed, setting up planet failed.');
     			}
 
-    			$planet->setIndex($index);
-    				
-    			$this->setUp_RandomizePlanet($planet, $user->getName(), $setupResearch);
+    			$planetData->setIndex( $index );
+    			  
+    			$this->setUp_PlanetRes( $user, $planetData );
+    			$this->setUp_RandomizePlanet( $planetData, $user->getName(), $setupResearch);
+    			$this->setUp_RandomBuildingResearch( $user, $planetData );
     			
     			// LAST IN THAT FOREACH
     			if ($setupResearch)
     			{
     				$setupResearch = false;
     			}
-    		}    		
-    		
+    		}
     	}
     }
+    
+    protected function setUp_PlanetRes( &$testUser, &$planetData )
+    {
+    	$user = Classes::User( $testUser->getName() );
+    	$user->setActivePlanet( $planetData->getIndex() );
+    	$res = $planetData->getRes();
+   		
+    	if (!$user->addRess($res) )
+    	{
+    		throw new Exception("setUp_PlanetRes() failed, couldnt add ressources");
+    	}
+    }
+    
+    protected function setUp_RandomBuildingResearch( &$user, &$planetData )
+    {
+    	$items_instance = Classes::Items();
+        $itemsList = $items_instance->getItemsList('forschung');
+    	$i = array_rand($itemsList);
+    	$id = $itemsList[$i];
+    	$global = rand(0,1);
+    	
+    	// look for any researches active
+    	foreach( $user->getPlanets() as $planet )
+    	{
+    		if ( count($planet->getActiveResearches()) > 0)
+    		{
+    			// we already have a research going, return
+    			return;
+    		}
+    	}
+    	
+    	if ( $id && $id != '' )
+    	{
+    		$userObj = Classes::User($user->getName());
+    		$item_info = $userObj->getItemInfo( $id, 'forschung');
 
+/*
+            if ($global)
+                print "user ".$user->getName()." ".$userObj->getName()." is going to buy global research ".$id." for ".$item_info['ress'][0]." ".$item_info['ress'][1]." ".$item_info['ress'][2]." ".$item_info['ress'][3]." ".$item_info['ress'][4]."\n";
+            else
+                print "user ".$user->getName()." ".$userObj->getName()." is going to buy local research ".$id." for ".$item_info['ress'][0]." ".$item_info['ress'][1]." ".$item_info['ress'][2]." ".$item_info['ress'][3]." ".$item_info['ress'][4]."\n"; 
+*/
+ 	  		if ($global)
+    		{
+    			if ( !$userObj->getStatus() )
+    			{
+    				throw new Exception("setUp_RandomBuildingResearch() failed, invalid user obj");
+    			}
+    			
+    			foreach( $user->getPlanets() as $planet )
+    			{
+    				$userObj->setActivePlanet($planet->getIndex());
+    				
+    				if (!$userObj->buildForschung( $id, $global ))
+    				{
+						print "user ".$user->getName()." ".$userObj->getName()." is going to buy global research ".$id." for ".$item_info['ress'][0]." ".$item_info['ress'][1]." ".$item_info['ress'][2]." ".$item_info['ress'][3]." ".$item_info['ress'][4]."\n";
+    					throw new Exception("setUp_RandomBuildingResearch() failed, failed setting up global research");
+    				}
+    				
+    				$planet->addActiveResearch($id, $global, $planet->getIndex());
+    				
+    				break;
+    			}
+    		}
+    		else
+    		{
+    			if (!$userObj->buildForschung( $id, $global ))
+    			{
+					print "user ".$user->getName()." ".$userObj->getName()." is going to buy local research ".$id." for ".$item_info['ress'][0]." ".$item_info['ress'][1]." ".$item_info['ress'][2]." ".$item_info['ress'][3]." ".$item_info['ress'][4]."\n";
+    		        throw new Exception("setUp_RandomBuildingResearch() failed, failed to setup local research");
+                }
+                
+                $planetData->addActiveResearch($id, $global);
+            }
+            
+            // subtract ressources needed to build that from testData
+          	$planetData->subRes( $item_info['ress'] ); 
+          	
+			/*
+          	if ($global)
+          		print "user ".$user->getName()." ".$userObj->getName()." has bought global research ".$id." for ".$item_info['ress'][0]." ".$item_info['ress'][1]." ".$item_info['ress'][2]." ".$item_info['ress'][3]." ".$item_info['ress'][4]."\n\n";
+          	else
+          		print "user ".$user->getName()." ".$userObj->getName()." has bought local research ".$id." for ".$item_info['ress'][0]." ".$item_info['ress'][1]." ".$item_info['ress'][2]." ".$item_info['ress'][3]." ".$item_info['ress'][4]."\n\n";           		      
+			*/
+        }
+        else
+        {
+            throw new Exception("setup_RandomResearch() failed, no random research item");
+        }
+    }
     protected function setUp_NewUser( $testUser )
     {
         $nuser = Classes::User( $testUser->getName() );
         $nuser->create();
-		$testUser->setIsCreated(true);
+        $testUser->setIsCreated(true);
 
         return $nuser->getStatus();
     }
@@ -66,15 +155,15 @@ class tester
      */
     protected function setUp_RandomizePlanet( &$planetData, $uname, $research = false )
     {
-		$planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'gebaeude' ));
+        $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'gebaeude' ));
         $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'roboter' ) );
         $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'schiffe' ) );
         $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'verteidigung' ) );
 
         if ( $research )
         {
-        	$rData = $this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'forschung' );
-        	$planetData->addItemLevels($rData);      	
+            $rData = $this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'forschung' );
+            $planetData->addItemLevels($rData);          
         }
             
     }
@@ -92,8 +181,8 @@ class tester
         switch( $class )
         {
             case 'gebaeude' :
-                $minlvl = 0;
-                $maxlvl = 20;
+                $minlvl = 20;
+                $maxlvl = 40;
             break;
 
             case 'roboter' :
@@ -112,7 +201,7 @@ class tester
             break;
 
             case 'forschung' :
-                $minlvl = 0;
+                $minlvl = 10;
                 $maxlvl = 20;
             break;
 
@@ -126,7 +215,7 @@ class tester
         
         if ($user->setActivePlanet($planet) === false )
         {
-        	throw new Exception('setUp_RandomItemClass() failed, couldnt setactiveplanet to '.$planet.'\n');
+            throw new Exception('setUp_RandomItemClass() failed, couldnt setactiveplanet to '.$planet.'\n');
         }
         
         $itemList = $user->getItemsList( $class );
@@ -139,7 +228,7 @@ class tester
             $randomLevel = rand( $minlvl, $maxlvl );
             $randomItemLevels[$item] = $randomLevel;
             //if($class == 'forschung')
-            	//echo "changing lvl of ".$item." from ".$user->getItemLevel($item, 'forschung')." to ".$randomLevel."\n";
+                //echo "changing lvl of ".$item." from ".$user->getItemLevel($item, 'forschung')." to ".$randomLevel."\n";
             $user->changeItemLevel( $item, $randomLevel, $class );
 //            echo "added ".$randomLevel." items of ".$item."\n";
         }
@@ -154,15 +243,15 @@ class tester
      */
     protected function setUp_NewPlanet( $uname, &$planet )
     {
-    	$index = $this->setUp_addPlanet( $uname, $planet );
-    	
+        $index = $this->setUp_addPlanet( $uname, $planet );
+        
         if ( $index === false )
         {
             throw new Exception( 'setUp_MainPlanet() failed, setUp_addPlanet() returned false' );
         }
         else
         {
-        	return $index;
+            return $index;
         }
        
     }

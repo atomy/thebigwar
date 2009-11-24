@@ -72,7 +72,7 @@ class TestUser
     	
     	for( $i = 0; $i <= $maxplanets; $i++ )
 		{
-			$planet = new Testplanet();
+			$planet = &new Testplanet();
 			$planet->setName("TestPlanet".$i);
 			$planet->setIndex($i);
 			
@@ -85,6 +85,7 @@ class TestUser
 				$planet->setShouldCreate(false);
 			}
 			
+			$planet->addStartRes();
 			$this->planets[] = $planet;
 		}    	
     }
@@ -150,7 +151,7 @@ class TestUser
     public function addNewPlanetCreated($index, $koordString)
     {
     	$koords = explode(":", $koordString);
-    	$testPlanet = new TestPlanet();
+    	$testPlanet = &new TestPlanet();
     	$testPlanet->setIndex($index);
     	$testPlanet->setGalaxy($koords[0]);
     	$testPlanet->setSystem($koords[1]);
@@ -158,6 +159,18 @@ class TestUser
     	$testPlanet->setIsCreated(true);
     	
     	$this->planets[] = $testPlanet; 
+    }
+    
+    public function cyclePlanets($a, $b)
+    {
+    	$aPlanet = $this->planets[$a];
+    	$bPlanet = $this->planets[$b];
+    	
+    	$this->planets[$a] = $bPlanet;
+    	$this->planets[$b] = $aPlanet;
+    	
+    	$this->planets[$a]->setIndex($a);
+    	$this->planets[$b]->setIndex($b);
     }
 }
 
