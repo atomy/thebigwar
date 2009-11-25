@@ -9,8 +9,13 @@ then
 	exit 1
 fi
 
-cat ${CFGFILE} | head -n-1 > ${TMPCFGFILE}
-mv ${TMPCFGFILE} ${CFGFILE}
+# clear file
+touch ${TMPCFGFILE}
+> ${TMPCFGFILE}
 
-echo "define(\"TBW_ROOT\", \"${1}/\");" >> ${CFGFILE}
-echo '?>' >> ${CFGFILE}
+echo '<?php' >> ${TMPCFGFILE}
+echo "define(\"TBW_ROOT\", \"${1}/\");" >> ${TMPCFGFILE}
+cat ${CFGFILE} | head -n-1 | tail -n +2 >> ${TMPCFGFILE}
+echo '?>' >> ${TMPCFGFILE}
+
+mv ${TMPCFGFILE} ${CFGFILE}
