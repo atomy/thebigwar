@@ -3,7 +3,7 @@
 <?php
         $USE_OB = false;
         require_once '../include/config_inc.php';
-        require TBW_ROOT.'../engine/include.php';
+        require TBW_ROOT.'/engine/include.php';
 
         if(!isset($_SERVER['argv'][1]))
         {
