@@ -392,46 +392,6 @@ class userTest extends PHPUnit_Framework_TestCase
 			$this->_testSetup( $userData );
 		}
 	}
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-
-	}
-	
-	protected function cleanUp()
-	{
-
-		Classes::resetInstances();
-		/*
-		foreach( $this->testData->getTestUsers() as $user )
-		{
-			user_control::removeUser( $user->getName() );
-		}
-
-		Classes::resetInstances();
-*/
-		
-		$this->_tearDown_DeleteDir(global_setting("DB_PLAYERS"));
-		$this->_tearDown_DeleteDir(global_setting("DB_FLEETS"));
-		$this->_tearDown_DeleteDir(global_setting("DB_MESSAGES"));
-	}
-
-	/**
-	 * test our test setup
-	 */
-	public function testSetup()
-	{
-		foreach( $this->testData->getTestUsers() as $userData )
-		{
-			$this->_testSetup( $userData );
-		}
-	}
 	
 	/**
 	 * check new user creation
