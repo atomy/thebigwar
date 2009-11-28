@@ -46,21 +46,25 @@ class userTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertTrue($user->setActivePlanet($planetData->getIndex()));
 		
-		foreach( $planetData->getActiveResearches() as $research )
+		$research = $planetData->getActiveResearch();
+
+		if ( $research == false )
+			return;
+//		else
+//			print "testing research...\n";
+
+		$aForschung = $user->checkBuildingThing("forschung");
+		
+		$this->assertEquals($research->getId(), $aForschung[0], "failed comparing research id on planet ".$user->getActivePlanet()." on user ".$user->getName()."\n");
+		$this->assertEquals($research->getGlobal(), $aForschung[2]);
+	
+		if ( $research->isGlobal() )
 		{
-			$aForschung = $user->checkBuildingThing("forschung");
-			
-			$this->assertEquals($research->getId(), $aForschung[0]);
-			$this->assertEquals($research->getGlobal(), $aForschung[2]);
-			
-			if ( $research->isGlobal() )
-			{
-				$this->assertEquals($research->getStartPlanet(), $aForschung[4]);
-			}
-			else
-			{
-				$this->assertFalse( isset( $aForschung[4] ) );
-			}
+			$this->assertEquals($research->getStartPlanet(), $aForschung[4], "_testActiveResearch() failed for user ".$user->getName()." planet: ".$user->getActivePlanet()."\n");
+		}
+		else
+		{
+			$this->assertFalse( isset( $aForschung[4] ) );
 		}
 	}
 		
@@ -272,7 +276,7 @@ class userTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertGreaterThanOrEqual( 0, $planetData->getIndex() );
 		
-		$user->setActivePlanet( $planetData->getIndex() );
+		$this->assertTrue( $user->setActivePlanet( $planetData->getIndex() ) );
 
 		foreach( $planetData->getItems() as $itemData )
 		{
@@ -297,7 +301,7 @@ class userTest extends PHPUnit_Framework_TestCase
 	 */
 	public function _testRes( &$user, &$planetData )
 	{
-		$user->setActivePlanet( $planetData->getIndex() );
+		$this->assertTrue( $user->setActivePlanet( $planetData->getIndex() ) );
 		
 		$testRes = $planetData->getRes();
 		$planetRes = $user->getRess();
@@ -309,8 +313,9 @@ class userTest extends PHPUnit_Framework_TestCase
 			{
 			    continue;
 			}
-
-			$this->assertEquals($testRes[$key], $planetRes[$key], $key." didnt match of planet ".$planetData->getIndex(). " - ".$planetData->getName()." of user ".$user->getName()."\n");
+	
+			// TODO, needs more accurate check
+			$this->assertGreaterThanOrEqual($testRes[$key], $planetRes[$key], $key." didnt match of planet ".$planetData->getIndex(). " - ".$planetData->getName()." of user ".$user->getName()."\n");
 		}
 		
 	}
@@ -325,7 +330,7 @@ class userTest extends PHPUnit_Framework_TestCase
     {
         require_once 'PHPUnit/TextUI/TestRunner.php';
 
-        $suite  = new PHPUnit_Framework_TestSuite('userTest');
+        $suite  = new PHPUnit_Framework_TestSuite('userDevTest');
         $result = PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -346,6 +351,46 @@ class userTest extends PHPUnit_Framework_TestCase
     	$this->testData = new TestData();
     	$this->tester = new Tester( $this->testData );
     	$this->tester->setUp();
+	}
+
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     *
+     * @access protected
+     */
+    protected function tearDown()
+    {
+
+	}
+	
+	protected function cleanUp()
+	{
+
+		Classes::resetInstances();
+		/*
+		foreach( $this->testData->getTestUsers() as $user )
+		{
+			user_control::removeUser( $user->getName() );
+		}
+
+		Classes::resetInstances();
+*/
+		
+		$this->_tearDown_DeleteDir(global_setting("DB_PLAYERS"));
+		$this->_tearDown_DeleteDir(global_setting("DB_FLEETS"));
+		$this->_tearDown_DeleteDir(global_setting("DB_MESSAGES"));
+	}
+
+	/**
+	 * test our test setup
+	 */
+	public function testSetup()
+	{
+		foreach( $this->testData->getTestUsers() as $userData )
+		{
+			$this->_testSetup( $userData );
+		}
 	}
 
     /**
@@ -768,16 +813,14 @@ class userTest extends PHPUnit_Framework_TestCase
 	 * - not existing users cant call that \o/
 	 * - last planet cant be moved down \o/
 	 * - all other planets should be able to \o/
-	 * - check for reassigned researches \o/
+	 * - check for reassigned researches \o_
 	 * - check for all items on the planets \o/
 	 * - check the planetList if they matches the new one \o/
 	 * - w/o parameter active planet is moved down \o/
 	 * @return unknown_type
-	 */
-		
+	 */		
 	public function testMovePlanetDown()
 	{
-		return;
 		$fuser = Classes::User( "fakeuser1341" );
 		$this->assertFalse($fuser->movePlanetDown(0));
 		$testUsers = $this->testData->getTestUsers();
@@ -815,7 +858,7 @@ class userTest extends PHPUnit_Framework_TestCase
 			$testUser->cyclePlanets($planetIndex, $planetIndex+1);
 			$this->testSetup();
 			
-			$tUser->setActivePlanet($planetIndex);
+			$this->assertTrue( $tUser->setActivePlanet($planetIndex) );
 			$this->assertTrue($tUser->movePlanetdown());
 			$testUser->cyclePlanets($planetIndex, $planetIndex+1);
 			$this->testSetup();

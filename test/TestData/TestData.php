@@ -63,7 +63,7 @@ class TestData
 		$user->setShouldCreate(true);
 		$user->setShouldCreateOnSetup(true);
 		$this->users[] = $user;
-		
+	
 		// used for creating test users after setup within tests
 		$user = new TestUser( "herbert" );
 		$user->setShouldCreate(true);

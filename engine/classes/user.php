@@ -463,6 +463,7 @@
         }
 
         /**
+         * move planet up in the users planets list, this sets the planets index
          * @test in progress
          * @param $planet
          * @return unknown_type
@@ -482,12 +483,21 @@
 
             $planets = $this->getPlanetsList();
             $planet_key = array_search($planet, $planets);
-            if($planet_key === false || !isset($planets[$planet_key-1])) return false;
+            
+            if($planet_key === false || !isset($planets[$planet_key-1])) 
+            	return false;
+            	
             return $this->movePlanetDown($planets[$planet_key-1]);
         }
 
+        /**
+         * move planet down 1 step in the users planet lists, affects the planets index
+         * @test implemented
+         * @param unknown_type $planet
+         * @return unknown_type
+         */
         function movePlanetDown( $planet=false )
-        {
+        {       
             if( !$this->status )  
                 return false;
 
@@ -517,22 +527,25 @@
             unset( $this->planet_info );
 
             # Planeten vertauschen
+            //echo $this->getName()." -- moving down planet: ".$planet."\n";
             list( $this->raw['planets'][$planet], $this->raw['planets'][$planet2] ) = array( $this->raw['planets'][$planet2], $this->raw['planets'][$planet] );
 
             # Aktive Forschungen aendern
             $this->setActivePlanet( $planet );
             $active_forschung = $this->checkBuildingThing( 'forschung' );
 
-            if( $active_forschung && $active_forschung[2] )
-                $this->planet_info['building']['forschung'][4] = $planet2;
+            //TODO, why would we need that?
+           //if( $active_forschung && $active_forschung[2] )
+            //    $this->planet_info['building']['forschung'][4] = $planet2;
 
             $this->refreshMessengerBuildingNotifications();
 
             $this->setActivePlanet( $planet2 );
             $active_forschung = $this->checkBuildingThing( 'forschung' );
 
-            if( $active_forschung && $active_forschung[2] )
-                $this->planet_info['building']['forschung'][4] = $planet;
+            //TODO, why would we need that?
+            //if( $active_forschung && $active_forschung[2] )
+            //   $this->planet_info['building']['forschung'][4] = $planet;
 
             $this->refreshMessengerBuildingNotifications();
 

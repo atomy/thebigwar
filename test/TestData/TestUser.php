@@ -162,15 +162,46 @@ class TestUser
     }
     
     public function cyclePlanets($a, $b)
-    {
+    {	
     	$aPlanet = $this->planets[$a];
     	$bPlanet = $this->planets[$b];
+    	
+    	$resA = $aPlanet->getActiveResearch();
+    	$resB = $bPlanet->getActiveResearch();
+
+		if ( $resA )
+		{
+			$res = $resA;
+			
+	   		if ( $res->isGlobal() )
+	   		{
+	   			//echo "calling1 on planet: ".$a."\n";
+	   			//$aPlanet->setActiveResearch( $res->getId(), $res->getGlobal(), $b );
+	    	}
+		}
+
+		if ( $resB )
+		{
+			$res = $resB;
+			
+	   		if ( $res->isGlobal() )
+	   		{
+   				//echo "calling2 on planet: ".$b."\n";
+   				//$bPlanet->setActiveResearch( $res->getId(), $res->getGlobal(), $a );
+	    	}    	
+		}
     	
     	$this->planets[$a] = $bPlanet;
     	$this->planets[$b] = $aPlanet;
     	
     	$this->planets[$a]->setIndex($a);
     	$this->planets[$b]->setIndex($b);
+    	
+    	//echo "a ( ".$a." ) dump: \n";
+    	//print_r($this->planets[$a]->getActiveResearch());
+    	
+    	//echo "b ( ".$b." ) dump: \n";
+    	//print_r($this->planets[$b]->getActiveResearch());
     }
 }
 

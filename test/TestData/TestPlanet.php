@@ -44,7 +44,11 @@ class TestPlanet
 	
 	private $shouldCreate;
 	
-	private $activeResearch = array();
+	/**
+	 * holds the researches going on on the planet
+	 * @var TestResearch
+	 */
+	private $activeResearch;
 	
 	/*
 	 * constructor
@@ -90,10 +94,12 @@ class TestPlanet
 		}
 	}
 	
-	public function addActiveResearch($id, $global, $startPlanet = false)
+	public function setActiveResearch($id, $global, $startPlanet = false)
 	{
 		$tRes = new TestResearch($id, $global);
 	
+		//echo "setActiveResearch() id: ".$id." global: ".$global." startplanet: ".$startPlanet."\n";
+		
 		if ( $global && $startPlanet !== false )
 		{
 			$tRes->setStartPlanet($startPlanet);
@@ -103,12 +109,24 @@ class TestPlanet
 			throw new Exception("addResearch() failed, research global but no start planet given");
 		}
 		
-		$this->activeResearch[] = $tRes;
+		$this->activeResearch = $tRes;
 	}
 	
-	public function getActiveResearches()
+	public function getActiveResearch()
 	{
 		return $this->activeResearch;
+	}
+	
+	public function removeActiveResearch()
+	{	
+		//echo "removeActiveResearch(): ".$this->getActiveResearch()->getId()." global: ".$this->getActiveResearch()->isGlobal()." startplanet: ".$this->getActiveResearch()->getStartPlanet()."\n";
+		
+		if ( isset($this->activeResearch) && $this->activeResearch !== false )
+			$this->activeResearch = false;
+		else
+		{
+			throw new Exception("removeActiveResearch() failed, no active research exists");
+		}
 	}
 	
 	public function setShouldCreate($should)

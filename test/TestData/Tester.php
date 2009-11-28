@@ -40,13 +40,35 @@ class tester
     			  
     			$this->setUp_PlanetRes( $user, $planetData );
     			$this->setUp_RandomizePlanet( $planetData, $user->getName(), $setupResearch);
-    			$this->setUp_RandomBuildingResearch( $user, $planetData );
     			
     			// LAST IN THAT FOREACH
     			if ($setupResearch)
     			{
     				$setupResearch = false;
     			}
+    		}
+    		
+    		/*
+    		 * this needs to be done after creating ALL planets for the given user since global researches affects all planets
+    		 */
+    		$tries = 0;
+    		
+    		for ( $uPlanets = &$user->getPlanets(); $tries < 100; $planetData = $uPlanets[array_rand( $uPlanets )] ) 
+    		{
+    			$tries++;
+    			
+    			if ($tries == 100)
+    			{
+    				$planetData = &$uPlanets[0];
+    			}
+    			
+    			if ( $planetData->isCreated() )
+    			{
+    				$this->setUp_RandomBuildingResearch( $user, $planetData );
+    				break;
+    			}
+    			else
+    				continue;    		
     		}
     	}
     }
@@ -74,7 +96,7 @@ class tester
     	// look for any researches active
     	foreach( $user->getPlanets() as $planet )
     	{
-    		if ( count($planet->getActiveResearches()) > 0)
+    		if ( $planet->getActiveResearch() != false )
     		{
     			// we already have a research going, return
     			return;
@@ -86,12 +108,16 @@ class tester
     		$userObj = Classes::User($user->getName());
     		$item_info = $userObj->getItemInfo( $id, 'forschung');
 
-/*
-            if ($global)
-                print "user ".$user->getName()." ".$userObj->getName()." is going to buy global research ".$id." for ".$item_info['ress'][0]." ".$item_info['ress'][1]." ".$item_info['ress'][2]." ".$item_info['ress'][3]." ".$item_info['ress'][4]."\n";
-            else
-                print "user ".$user->getName()." ".$userObj->getName()." is going to buy local research ".$id." for ".$item_info['ress'][0]." ".$item_info['ress'][1]." ".$item_info['ress'][2]." ".$item_info['ress'][3]." ".$item_info['ress'][4]."\n"; 
-*/
+    		if ( !$userObj->setActivePlanet( $planetData->getIndex() ) )
+    		{
+    			throw new Exception("setUp_RandomBuildingResearch() failed, couldnt setActivePlanet to ".$planetData->getIndex()."\n");
+    		}
+    		
+            //if ($global)
+              //  print "user ".$user->getName()." ".$userObj->getName()." is going to buy global research on planet ".$userObj->getActivePlanet()." id ".$id." for ".$item_info['ress'][0]." ".$item_info['ress'][1]." ".$item_info['ress'][2]." ".$item_info['ress'][3]." ".$item_info['ress'][4]."\n";
+            //else
+              //  print "user ".$user->getName()." ".$userObj->getName()." is going to buy local research on planet ".$userObj->getActivePlanet()." id ".$id." for ".$item_info['ress'][0]." ".$item_info['ress'][1]." ".$item_info['ress'][2]." ".$item_info['ress'][3]." ".$item_info['ress'][4]."\n"; 
+
  	  		if ($global)
     		{
     			if ( !$userObj->getStatus() )
@@ -99,19 +125,22 @@ class tester
     				throw new Exception("setUp_RandomBuildingResearch() failed, invalid user obj");
     			}
     			
+    		    if (!$userObj->buildForschung( $id, $global ))
+    			{
+					print "user ".$user->getName()." ".$userObj->getName()." is going to buy global research ".$id." for ".$item_info['ress'][0]." ".$item_info['ress'][1]." ".$item_info['ress'][2]." ".$item_info['ress'][3]." ".$item_info['ress'][4]."\n";
+    				throw new Exception("setUp_RandomBuildingResearch() failed, failed setting up global research");
+    			}    			
+    			
     			foreach( $user->getPlanets() as $planet )
     			{
-    				$userObj->setActivePlanet($planet->getIndex());
+    				if ( !$planet->isCreated() )
+    					continue;
     				
-    				if (!$userObj->buildForschung( $id, $global ))
-    				{
-						print "user ".$user->getName()." ".$userObj->getName()." is going to buy global research ".$id." for ".$item_info['ress'][0]." ".$item_info['ress'][1]." ".$item_info['ress'][2]." ".$item_info['ress'][3]." ".$item_info['ress'][4]."\n";
-    					throw new Exception("setUp_RandomBuildingResearch() failed, failed setting up global research");
-    				}
+    				if ( !$userObj->setActivePlanet($planet->getIndex()) )
+    					throw new Exception("setUp_RandomBuildingResearch() failed, couldnt set activePlanet to ".$planet->getIndex()."\n");
     				
-    				$planet->addActiveResearch($id, $global, $planet->getIndex());
-    				
-    				break;
+    				//echo "setActiveResearch() on planet ".$userObj->getActivePlanet()." testData planet = ".$planetData->getIndex()."\n";
+    				$planet->setActiveResearch( $id, $global, $planetData->getIndex() );
     			}
     		}
     		else
@@ -122,7 +151,8 @@ class tester
     		        throw new Exception("setUp_RandomBuildingResearch() failed, failed to setup local research");
                 }
                 
-                $planetData->addActiveResearch($id, $global);
+               // echo "setActiveResearch() on planet ".$userObj->getActivePlanet()." testData planet = ".$planetData->getIndex()."\n";
+                $planetData->setActiveResearch($id, $global);
             }
             
             // subtract ressources needed to build that from testData
@@ -140,6 +170,7 @@ class tester
             throw new Exception("setup_RandomResearch() failed, no random research item");
         }
     }
+    
     protected function setUp_NewUser( $testUser )
     {
         $nuser = Classes::User( $testUser->getName() );
@@ -201,7 +232,7 @@ class tester
             break;
 
             case 'forschung' :
-                $minlvl = 10;
+                $minlvl = 15;
                 $maxlvl = 20;
             break;
 
