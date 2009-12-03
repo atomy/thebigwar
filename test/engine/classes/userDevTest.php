@@ -1,9 +1,9 @@
 <?php
 
 // Call userTest::main() if this source file is executed directly.
-if (!defined('PHPUnit_MAIN_METHOD')) 
+if (!defined('PHPUNIT_MAIN_METHOD')) 
 {
-    define('PHPUnit_MAIN_METHOD', 'userDevTest::main');
+    define('PHPUNIT_MAIN_METHOD', 'userDevTest::main');
 }
 
 require_once 'PHPUnit/Framework.php';
@@ -27,6 +27,7 @@ require_once TBW_ROOT.'test/TestData/TestConstants.php';
 require_once TBW_ROOT.'test/TestData/TestData.php';
 require_once TBW_ROOT.'test/TestData/Tester.php';
 require_once TBW_ROOT.'test/TestData/TestMessage.php';
+require_once TBW_ROOT.'test/TestData/TestScore.php';
 
 /**
  * Test class for user.
@@ -202,6 +203,8 @@ class userDevTest extends PHPUnit_Framework_TestCase
 			$this->assertFalse( User::userExists( $userData->getName() ));
 			return;
 		}
+		
+		$this->_testScoresOfUser($userData);
 
 		foreach($userData->getPlanets() as $planetData)
 		{
@@ -224,6 +227,39 @@ class userDevTest extends PHPUnit_Framework_TestCase
             }
 		}
 	}
+	
+    private function _testScoresOfUser(&$userData)
+    {
+        $testScores = &$userData->getScores();
+        $userObj = Classes::User($userData->getName());
+        $this->assertType('object',$userObj);
+        
+        foreach($testScores as $key=>$value)
+        {
+            $this->assertEquals($value, $userObj->getScores($key));
+        }
+        
+        $sum = 0;
+        $testScoresArray = $testScores->getAllScoresAsArray();
+        
+        for($i=0; $i<=6; $i++)
+        {
+            $sum += $testScoresArray[$i];
+        }
+         
+        
+        $userObj->clearCache();
+        $userObj->doRecalcHighscores(true,true,true,true,true);
+		$this->assertGreaterThan(0, $sum, "testscores of user ".$userData->getName()." are empty?!\n");
+        $this->assertEquals($sum, $userObj->getScores());
+               
+        // scores only exists up to 11, above shouldnt exists
+        $this->assertEquals(0, $userObj->getScores(12));
+        
+        // erase cache and retest
+        $userObj->doRecalcHighscores(true, true, true, true, true);                
+        $this->assertEquals($sum, $userObj->getScores());
+    }
 	
 	/*
 	 * test if a given fleet is existant, it is expected to do, otherwise this test will fail
@@ -330,8 +366,8 @@ class userDevTest extends PHPUnit_Framework_TestCase
     {
         require_once 'PHPUnit/TextUI/TestRunner.php';
 
-        $suite  = new PHPUnit_Framework_TestSuite('userDevTest');
-        $result = PHPUnit_TextUI_TestRunner::run($suite);
+        //$suite  = new PHPUnit_Framework_TestSuite('userDevTest');
+        //$result = PHPUnit_TextUI_TestRunner::run($suite);
     }
 
     /**
@@ -392,74 +428,75 @@ class userDevTest extends PHPUnit_Framework_TestCase
 			$this->_testSetup( $userData );
 		}
 	}
-		
 	
-	/**
-	 * @testing 
-	 * - not existing users cant call that \o/
-	 * - first planet cant be moved up
-	 * - all other planets should be able to \o/
-	 * - check for reassigned researches \o_
-	 * - check for all items on the planets \o/
-	 * - check the planetList if they matches the new one \o/
-	 * - w/o parameter active planet is moved up \o/
-	 * @return unknown_type
-	 */
-	/*
-	public function testMovePlanetDown()
-	{
-		$fuser = Classes::User( "fakeuser1341" );
-		$this->assertFalse($fuser->movePlanetDown(0));
-		$testUsers = $this->testData->getTestUsers();
-		
-		$testedUsers = 0;
-		
-		foreach($testUsers as &$testUser)
-		{
-			$tUser = Classes::User($testUser->getName());
-			
-			$planets = $tUser->getPlanetsList();
-			
-			$lastPlanetIndex = count($planets) - 1;
-			
-			if($lastPlanetIndex == 0)
-			{
-				continue;
-			}			
-			
-			$this->assertFalse($tUser->movePlanetDown($lastPlanetIndex));
-			
-			$planetIndex = array_rand($planets, 1);
-			
-			if($planetIndex == $lastPlanetIndex)
-			{
-				$planetIndex = $lastPlanetIndex - 1;				
-			}
-			$this->testSetup();
-			$this->assertTrue($tUser->movePlanetDown($planetIndex));
-			//$this->testSetup();
-			// array(0, 1, 2, 3, 4, 5, 6, 7, 8)
-			// movePlanetDown(1)
-			// array(0, 2, 1, 3, 4, 5, 6, 7, 8)
-			//echo "cycling planet: ".$planetIndex." with: ".($planetIndex + 1)." of user: ".$testUser->getName()."\n";
-			$testUser->cyclePlanets($planetIndex, $planetIndex+1);
-			$this->testSetup();
-			
-			$this->assertTrue( $tUser->setActivePlanet($planetIndex) );
-			$this->assertTrue($tUser->movePlanetdown());
-			$testUser->cyclePlanets($planetIndex, $planetIndex+1);
-			$this->testSetup();
+    /**
+     * @testing 
+     * - not existing users cant call that \o/
+     * - first planet cant be moved up
+     * - all other planets should be able to \o/
+     * - check for reassigned researches \o_
+     * - check for all items on the planets \o/
+     * - check the planetList if they matches the new one \o/
+     * - w/o parameter active planet is moved up \o/
+     * @return unknown_type
+     */
+     /*
+    public function testMovePlanetUp()
+    {	    
+        $fuser = Classes::User( "fakeuser1342" );
+        $this->assertFalse($fuser->movePlanetUp(0));
+        $testUsers = $this->testData->getTestUsers();
+        
+        $testedUsers = 0;
+        
+        foreach($testUsers as &$testUser)
+        {
+            $tUser = Classes::User($testUser->getName());
+            
+            $planets = $tUser->getPlanetsList();
+            
+            // this user has no planets, skip
+            if($planets === false || count($planets) == 0)
+            {
+                continue;
+            }
+            
+            $this->assertType('array', $planets);
+            
+            // 1st planet cant be moved up
+            $this->assertFalse($tUser->movePlanetUp(0));
+            
+            $planetIndex = array_rand($planets, 1);
+            
+            if($planetIndex == 0)
+            {
+                $planetIndex++;				
+            }
+            $this->testSetup();
+            $this->assertTrue($tUser->movePlanetUp($planetIndex));
+            //$this->testSetup();
+            // array(0, 1, 2, 3, 4, 5, 6, 7, 8)
+            // movePlanetUp(1)
+            // array(0, 2, 1, 3, 4, 5, 6, 7, 8)
+            //echo "cycling planet: ".$planetIndex." with: ".($planetIndex + 1)." of user: ".$testUser->getName()."\n";
+            $testUser->cyclePlanets($planetIndex, $planetIndex-1);
+            $this->testSetup();
+            
+            $this->assertTrue( $tUser->setActivePlanet($planetIndex) );
+            $this->assertTrue($tUser->movePlanetUp());
+            $testUser->cyclePlanets($planetIndex, $planetIndex-1);
+            $this->testSetup();
 
-			$testedUsers++;
-		}
-		
-		$this->assertGreaterThan(0, $testedUsers);
-	}
-	*/
+            $testedUsers++;
+        }
+        
+        $this->assertGreaterThan(0, $testedUsers);
+    }
+    */	
 }
 
 // Call userDevTest::main() if this source file is executed directly.
-if (PHPUnit_MAIN_METHOD == 'userDevTest::main') 
+if (PHPUNIT_MAIN_METHOD == 'userDevTest::main') 
 {
     userDevTest::main();
 }

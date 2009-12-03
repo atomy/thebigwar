@@ -557,25 +557,63 @@
             return true;
         }
 
+        
+        /**
+         * This is method getScores
+         *
+         * @param int $i index
+         * @return int - scores
+         *
+         */
         function getScores($i=false)
         {
-            if(!$this->status) return false;
+        	print "(".$this->getName().")\n";
+        	print_r($this->raw['punkte']);
+        	
+            if(!$this->status) 
+            {
+                return false;
+            }
 
+            // if $i not set return all scores
             if($i === false)
             {
                 if(!isset($this->cache['getScores']))
-                    $this->cache['getScores'] = $this->raw['punkte'][0]+$this->raw['punkte'][1]+$this->raw['punkte'][2]+$this->raw['punkte'][3]+$this->raw['punkte'][4]+$this->raw['punkte'][5]+$this->raw['punkte'][6];
+                {
+                    // summarize their index up to 6 - WTF? WHY? what happens with the other points?
+                    for($k=0; $k<=6;$k++)
+                    {                    	
+                    	if (isset($this->cache['getScores']))
+                    		$temp = $this->cache['getScores'];
+                    	else
+                    		$temp = -1;
+                    	
+                        $this->cache['getScores'] =+ $this->raw['punkte'][$k];
+                        print "(".$this->getName().") added ".$this->raw['punkte'][$k]." to ".$temp.".\n";
+                    }
+                }
+                   
+                // TODO, always returns -1 but score is set in array
+                print "(".$this->getName().") returning ".$this->cache['getScores']."\n";
+                    
                 return $this->cache['getScores'];
             }
-            elseif(!isset($this->raw['punkte'][$i]))
+            else if(!isset($this->raw['punkte'][$i]))
+            {               
                 return 0;
+            }
             else
+            {
                 return $this->raw['punkte'][$i];
+            }
         }
 
         function addScores($i, $scores)
         {
-            if(!$this->status) return false;
+            if(!$this->status) 
+            {
+                return false;
+            }
 
             if(!isset($this->raw['punkte'][$i]))
                 $this->raw['punkte'][$i] = $scores;
@@ -1357,17 +1395,40 @@
                         $max_rob_limit = floor($this->getBasicFields()/2 * ((0.01 + $this->getItemLevel('B9' ,'gebaeude'))/10));
                         #$max_rob_limit = 1000;
 
-                        $info['has_prod'] = ($info['prod'][0] > 0 || $info['prod'][1] > 0 || $info['prod'][2] > 0 || $info['prod'][3] > 0 || $info['prod'][4] > 0 || $info['prod'][5] > 0);
+                        if(isset($info['prod']))
+                        {
+                        	$info['has_prod'] = true;
+                        
+                        	for($i=0; $i<=5;$i++)
+                        	{
+	                        	if($info['prod'][$i] <= 0)
+                        		{
+	                        		$info['has_prod'] = false;
+                        			break;
+                        		}              
+                        	}
+                        }
+                        else
+                        {     
+                        	$info['has_prod'] = false;                   
+                        }
+                                                
                         $level_f = pow($info['level'], 2);
+                        
                         $percent_f = $this->checkProductionFactor($id);
-                        $info['prod'][0] *= $level_f*$percent_f;
-                        $info['prod'][1] *= $level_f*$percent_f;
-                        $info['prod'][2] *= $level_f*$percent_f;
-                        $info['prod'][3] *= $level_f*$percent_f;
-                        $info['prod'][4] *= $level_f*$percent_f;
-                        $info['prod'][5] *= $level_f*$percent_f;
+                        
+                        if(isset($info['prod']))
+                        {
+                        	for($i=0; $i<=5; $i++)
+                        	{
+	                        	$info['prod'][$i] *= $level_f*$percent_f;
+    	                    }
+                        }
 
-                        $minen_rob = 1+0.0003125*$this->getItemLevel('F2', 'forschung', $run_eventhandler);
+                        $lvlRobottec = $this->getItemLevel('F2', 'forschung', $run_eventhandler);
+                        
+                        $minen_rob = 1+0.0003125*$lvlRobottec;
+                        
                         if($minen_rob > 1)
                         {
                             $use_max_limit = !file_exists(global_setting('DB_NO_STRICT_ROB_LIMITS'));
@@ -1397,7 +1458,8 @@
                             if($use_max_limit && $rob > $max_rob_limit) $rob = $max_rob_limit;
                             $info['prod'][4] *= pow($minen_rob, $rob);
                         }
-                        if($info['prod'][5] > 0)
+                        
+                        if(isset($info['prod']) && $info['prod'][5] > 0)
                             $info['prod'][5] *= pow(1.05, $this->getItemLevel('F3', 'forschung', $run_eventhandler));
 
                         $info['time'] *= pow(1.3, $info['level']+1);
@@ -1426,18 +1488,21 @@
                         $info['debuildable'] = ($info['level'] >= 1 && -$info['fields'] <= $this->getRemainingFields());
 
                         # Runden
-                        stdround($info['prod'][0]);
-                        stdround($info['prod'][1]);
-                        stdround($info['prod'][2]);
-                        stdround($info['prod'][3]);
-                        stdround($info['prod'][4]);
-                        stdround($info['prod'][5]);
+                        if(isset($info['prod']))
+                        {
+                        	for($i=0; $i<=5; $i++)
+                        	{
+                        		stdround($info['prod'][$i]);                      		
+                        	}
+                        }
+
                         stdround($info['time']);
-                        stdround($info['ress'][0]);
-                        stdround($info['ress'][1]);
-                        stdround($info['ress'][2]);
-                        stdround($info['ress'][3]);
-                        stdround($info['ress'][4]);
+                        
+                		for($i=0; $i<=4; $i++)
+                        {
+                        	stdround($info['ress'][$i]);                      		
+                        }
+
                         break;
                     case 'forschung':
                         $info['time'] *= pow(1.5, $info['level']+1);
@@ -3844,7 +3909,14 @@
             }
             return true;
         }
-    
+        
+        function clearCache()
+    {
+                        if(isset($user->cache))
+                            unset($user->cache);
+                            
+                            $this->changed = true; 
+    }    
 
     }
     
@@ -3861,5 +3933,5 @@
         elseif($a[0] > $b[0]) return 1;
         else return 0;
     }
-    
+   
 ?>

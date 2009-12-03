@@ -773,7 +773,7 @@ class userTest extends PHPUnit_Framework_TestCase
 	 * - not existing users cant call that \o/
 	 * - last planet cant be moved down \o/
 	 * - all other planets should be able to \o/
-	 * - check for reassigned researches \o_
+	 * - check for reassigned researches _o_
 	 * - check for all items on the planets \o/
 	 * - check the planetList if they matches the new one \o/
 	 * - w/o parameter active planet is moved down \o/
@@ -828,6 +828,69 @@ class userTest extends PHPUnit_Framework_TestCase
 		
 		$this->assertGreaterThan(0, $testedUsers);
 	}
+	
+    /**
+     * @testing 
+     * - not existing users cant call that \o/
+     * - first planet cant be moved up \o/
+     * - all other planets should be able to \o/
+     * - check for reassigned researches _o_
+     * - check for all items on the planets \o/
+     * - check the planetList if they matches the new one \o/
+     * - w/o parameter active planet is moved up \o/
+     * @return unknown_type
+     */
+    public function testMovePlanetUp()
+    {	    
+        $fuser = Classes::User( "fakeuser1342" );
+        $this->assertFalse($fuser->movePlanetUp(0));
+        $testUsers = $this->testData->getTestUsers();
+        
+        $testedUsers = 0;
+        
+        foreach($testUsers as &$testUser)
+        {
+            $tUser = Classes::User($testUser->getName());
+            
+            $planets = $tUser->getPlanetsList();
+            
+            // this user has no planets, skip
+            if($planets === false || count($planets) == 0)
+            {
+                continue;
+            }
+            
+            $this->assertType('array', $planets);
+            
+            // 1st planet cant be moved up
+            $this->assertFalse($tUser->movePlanetUp(0));
+            
+            $planetIndex = array_rand($planets, 1);
+            
+            if($planetIndex == 0)
+            {
+                $planetIndex++;				
+            }
+            $this->testSetup();
+            $this->assertTrue($tUser->movePlanetUp($planetIndex));
+            //$this->testSetup();
+            // array(0, 1, 2, 3, 4, 5, 6, 7, 8)
+            // movePlanetUp(1)
+            // array(0, 2, 1, 3, 4, 5, 6, 7, 8)
+            //echo "cycling planet: ".$planetIndex." with: ".($planetIndex + 1)." of user: ".$testUser->getName()."\n";
+            $testUser->cyclePlanets($planetIndex, $planetIndex-1);
+            $this->testSetup();
+            
+            $this->assertTrue( $tUser->setActivePlanet($planetIndex) );
+            $this->assertTrue($tUser->movePlanetUp());
+            $testUser->cyclePlanets($planetIndex, $planetIndex-1);
+            $this->testSetup();
+
+            $testedUsers++;
+        }
+        
+        $this->assertGreaterThan(0, $testedUsers);
+    }	
 }
 
 // Call userTest::main() if this source file is executed directly.

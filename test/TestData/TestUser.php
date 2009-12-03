@@ -1,6 +1,7 @@
 <?php
  
 require_once 'TestPlanet.php';
+require_once 'TestScore.php';
 
  /**
   * this class holds all information needed during tests related to user
@@ -14,12 +15,23 @@ class TestUser
 	private $bCreateOnSetup;
 	private $messages = array();
 	
+	/**
+	 * holding TestScore obj
+	 */
+	private $scores;
+	
 	public function __construct( $name )
 	{
 		$this->name = $name;	
 		$this->bCreated = false;
 		$this->bShouldCreate = false;
 		$this->bCreateOnSetup = false;
+        $this->scores = new TestScore();
+	}
+	 
+	public function getScores()
+	{
+	    return $this->scores;
 	}
     
 	public function getMessages()

@@ -39,7 +39,7 @@ class tester
     			$planetData->setIndex( $index );
     			  
     			$this->setUp_PlanetRes( $user, $planetData );
-    			$this->setUp_RandomizePlanet( $planetData, $user->getName(), $setupResearch);
+    			$this->setUp_RandomizePlanet( $planetData, $user, $setupResearch);
     			
     			// LAST IN THAT FOREACH
     			if ($setupResearch)
@@ -70,6 +70,8 @@ class tester
     			else
     				continue;    		
     		}
+    		//$userObj = Classes::User($user->getName());
+    		//$userObj->doRecalcHighscores(true,true,true,true,true);
     	}
     }
     
@@ -184,16 +186,16 @@ class tester
      * helper func for setting up a random planet,
      * sets and gets back random item levels for each class
      */
-    protected function setUp_RandomizePlanet( &$planetData, $uname, $research = false )
+    protected function setUp_RandomizePlanet( &$planetData, &$testUser, $research = false )
     {
-        $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'gebaeude' ));
-        $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'roboter' ) );
-        $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'schiffe' ) );
-        $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'verteidigung' ) );
+        $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $testUser, 'gebaeude' ));
+        $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $testUser, 'roboter' ) );
+        $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $testUser, 'schiffe' ) );
+        $planetData->addItemLevels($this->setUp_RandomItemClass( $planetData->getIndex(), $testUser, 'verteidigung' ) );
 
         if ( $research )
         {
-            $rData = $this->setUp_RandomItemClass( $planetData->getIndex(), $uname, 'forschung' );
+            $rData = $this->setUp_RandomItemClass( $planetData->getIndex(), $testUser, 'forschung' );
             $planetData->addItemLevels($rData);          
         }
             
@@ -204,7 +206,7 @@ class tester
      * @args $class - name the class for which all available items should be randomized
      * @return - returns a list of the random levels with the id as key
      */
-    protected function setUp_RandomItemClass( $planet, $uname, $class )
+    protected function setUp_RandomItemClass( $planet, &$testUser, $class )
     {
         $minlvl = 0;
         $maxlvl = 0;
@@ -242,7 +244,7 @@ class tester
         }
 
         $randomItemLevels = array();
-        $user = Classes::User($uname);
+        $user = Classes::User($testUser->getName());
         
         if ($user->setActivePlanet($planet) === false )
         {
@@ -261,13 +263,34 @@ class tester
             //if($class == 'forschung')
                 //echo "changing lvl of ".$item." from ".$user->getItemLevel($item, 'forschung')." to ".$randomLevel."\n";
             $user->changeItemLevel( $item, $randomLevel, $class );
-//            echo "added ".$randomLevel." items of ".$item."\n";
+            //echo "added ".$randomLevel." items of ".$item." to ".$user->getName()."\n";
+            		
+            // add scores
+            $item_info = $user->getItemInfo($item, $class, true, true);
+          	$testScores = &$testUser->getScores();
+          	
+            if($class == "gebaeude")
+            {
+            	$testScores->addBuildingScore(0, $item_info['scores']);
+            }
+            else if($class == "roboter")
+            {
+            	$testScores->addBuildingScore(1, $item_info['scores']);
+            }
+            else if($class == "schiffe")
+            {
+            	$testScores->addBuildingScore(2, $item_info['scores']);
+            }
+            else if($class == "verteidigung")
+            {
+            	$testScores->addBuildingScore(3, $item_info['scores']);
+            }
         }
         unset( $user );
 
         return $randomItemLevels;
     }
-
+ 
     /*
      * sets up a new planet
      * @args $name - name of the new planet
