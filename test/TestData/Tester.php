@@ -271,19 +271,23 @@ class tester
           	
             if($class == "gebaeude")
             {
-            	$testScores->addBuildingScore(0, $item_info['scores']);
+            	$testScores->addScoreID(0, $item_info['scores']);
+		print "setUp_RandomItemClass() adding score ". $item_info['scores']." id: 0 to ".$user->getName()."\n";
             }
             else if($class == "roboter")
             {
-            	$testScores->addBuildingScore(1, $item_info['scores']);
+            	$testScores->addScoreID(1, $item_info['scores']);
+		print "setUp_RandomItemClass() adding score ". $item_info['scores']." id: 1 to ".$user->getName()."\n";
             }
             else if($class == "schiffe")
             {
-            	$testScores->addBuildingScore(2, $item_info['scores']);
+            	$testScores->addScoreID(2, $item_info['scores']);
+		print "setUp_RandomItemClass() adding score ". $item_info['scores']." id: 2 to ".$user->getName()."\n";
             }
             else if($class == "verteidigung")
             {
-            	$testScores->addBuildingScore(3, $item_info['scores']);
+            	$testScores->addScoreID(3, $item_info['scores']);
+		print "setUp_RandomItemClass() adding score ". $item_info['scores']." id: 3 to ".$user->getName()."\n";
             }
         }
         unset( $user );

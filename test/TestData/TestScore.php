@@ -63,4 +63,67 @@ class TestScore
     	
     	$this->buildings += $score;
     }
+
+   public function addScoreID($id=false, $score=false)
+   {
+   	if($score===false || $id === false)
+	{
+		throw new Exception("addScoreID() failed, invalid parameter");
+	}
+
+	switch($id)
+	{
+		case 0:
+		$this->buildings += $score;
+		break;
+
+                case 1:
+                $this->buildings += $score;
+                break;
+        
+                case 2:
+                $this->buildings += $score;
+                break;
+        
+                case 3:
+                $this->buildings += $score;
+                break;
+        
+                case 4:
+                $this->buildings += $score;
+                break;
+        
+                case 5:
+                $this->buildings += $score;
+                break;
+        
+                case 6:
+                $this->buildings += $score;
+                break;
+        
+                case 7:
+                $this->buildings += $score;
+                break;
+        
+                case 8:
+                $this->buildings += $score;
+                break;
+        
+                case 9:
+                $this->buildings += $score;
+                break;
+        
+                case 10:
+                $this->buildings += $score;
+                break;
+
+                case 10:
+                $this->buildings += $score;
+                break;
+        
+		default:
+		throw new Exception("addScoreID() wrong id: ".$id." given\n");
+		break;
+	}
+   }
 }

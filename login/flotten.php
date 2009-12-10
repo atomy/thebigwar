@@ -716,7 +716,7 @@
 ?>
 
              <dt class="c-haltezeit">Haltezeit/Minuten</dt>
-		<dd class="c-haltezeit"><?=($_POST['haltezeit'])," Minuten"?></dd>
+		<dd class="c-haltezeit"><?=($_POST['haltezeit'])." Minuten"?></dd>
 <?php
 												}
 												if(isset($_POST['saveflug']))

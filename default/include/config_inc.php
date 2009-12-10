@@ -4,10 +4,8 @@
     define("GLOBAL_DEMOACCNAME", "demo");
     define("GLOBAL_DEMOACCPASS", "demo");
 
-    define("MYSQL_USER","");
-    define("MYSQL_HOST","");
-    define("MYSQL_PASS","");
-    define("MYSQL_DB","");
+	// TODO
+  	//define("TBW_ROOT", "/var/www/tbw-test.jackinpoint.net/htdocs/");
 
 	require_once( TBW_ROOT."include/util.php" );
 

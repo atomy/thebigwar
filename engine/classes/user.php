@@ -567,8 +567,8 @@
          */
         function getScores($i=false)
         {
-        	print "(".$this->getName().")\n";
-        	print_r($this->raw['punkte']);
+//        	print "(".$this->getName().")\n";
+//        	print_r($this->raw['punkte']);
         	
             if(!$this->status) 
             {
@@ -584,17 +584,28 @@
                     for($k=0; $k<=6;$k++)
                     {                    	
                     	if (isset($this->cache['getScores']))
+			{
                     		$temp = $this->cache['getScores'];
+			}
                     	else
+			{
+				$this->cache['getScores'] = 0;
                     		$temp = -1;
+			}	
                     	
-                        $this->cache['getScores'] =+ $this->raw['punkte'][$k];
-                        print "(".$this->getName().") added ".$this->raw['punkte'][$k]." to ".$temp.".\n";
+//                        $this->cache['getScores'] =+ $this->raw['punkte'][$k]; // huh? whats that operator? seems like same as '=' - guess this was a typo then *shrug*
+			$this->cache['getScores'] += $this->raw['punkte'][$k];
+                        print "(".$this->getName().") added ".$this->raw['punkte'][$k]." to ".$temp." for: ".$k." now: ".$this->cache['getScores']."\n";
                     }
+//		    print "done\n";
                 }
+		else
+//		{
+//			print "cache set\n";
+//		}
                    
                 // TODO, always returns -1 but score is set in array
-                print "(".$this->getName().") returning ".$this->cache['getScores']."\n";
+//                print "(".$this->getName().") returning ".$this->cache['getScores']."\n";
                     
                 return $this->cache['getScores'];
             }
@@ -3314,6 +3325,7 @@
                         {
                             $item_info = $this->getItemInfo($item, 'gebaeude', true, true);
                             $this->raw['punkte'][0] += $item_info['scores'];
+			    print "doRecalcHighscores() adding score ".$item_info['scores']." to id: 0 (buildings) to user: ".$this->getName()."\n";
                         }
                     }
 
