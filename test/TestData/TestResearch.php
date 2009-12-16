@@ -10,13 +10,13 @@ class TestResearch
 	
 	// used when research is global, specifies the planet where it was started from
 	private $startPlanet;
-	
+		
 	public function __construct($id, $global)
 	{
 		$this->id = $id;
-		$this->global = $global;
-	}
-	
+		$this->global = $global;		
+    }
+
 	public function setStartPlanet($set)
 	{
 		$this->startPlanet = $set;
