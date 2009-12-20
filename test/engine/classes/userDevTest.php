@@ -554,20 +554,20 @@ class userDevTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testing for adding scores via User::addScores()
+     * testing for retrieving spent res via User::getSpentRess()
      * @return none
      */
-    /*
-    public function testAddScores( )
+    public function testGetSpentRess( )
     {
         $userObj = NULL;
+        $testCount = 0;
         
         foreach ( $this->testData->getTestUsers() as $testUser )
         {
             if ( ! $testUser->isCreated() )
             {
                 $userObj = Classes::User( $testUser->getName() );
-                $this->assertFalse( $userObj->addScores( 0, 0 ) );
+                $this->assertFalse( $userObj->getSpentRess( 0 ) );
                 continue;
             }
             else
@@ -575,35 +575,24 @@ class userDevTest extends PHPUnit_Framework_TestCase
                 $userObj = Classes::User( $testUser->getName() );
             }
             
-            $testScore = &$testUser->getScores();
+            $testScore = $testUser->getScores();
+            $sum = 0;
             
-            for ( $i = 0; $i < 20; $i ++ )
+            for ( $i = 0; $i <= 4; $i ++ )
             {
-                $rScore = rand( 0, 1000 );
-                
-                if ( $i >= 5 && $i <= 11 )
-                {
-                    $testScore->addScoreID( $i, $rScore );
-                    $this->assertTrue( $userObj->addScores( $i, $rScore ) );
-                }
-                else if ( $i >= 0 && $i <= 4 )
-                {
-                    // adding score for 0-4 should get erased on the recalculation
-                    $this->assertTrue( $userObj->addScores( $i, $rScore ) );
-                }
-                else
-                {
-                    $this->assertFalse( $userObj->addScores( $i, $rScore ) );
-                }
-          
+                $sum += $testScore->getScoreID( $i + 7 );                
+                $this->assertEquals( $userObj->getSpentRess( $i ), $testScore->getScoreID( $i + 7 ) );                          
             }
             
-            // do a test of all userScores, testing via User::getScore()
-            $this->_testScoresOfUser( $testUser );
+            $this->assertGreaterThan( 0, $sum );
+            $this->assertEquals( $userObj->getSpentRess(), $sum );
+                        
+            $testCount++;
         }
+        
+        $this->assertGreaterThan( 0, $testCount );
     }
-    */
-    
+     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

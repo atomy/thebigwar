@@ -1100,6 +1100,46 @@ class userTest extends PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * testing for retrieving spent res via User::getSpentRess()
+     * @return none
+     */
+    public function testGetSpentRess( )
+    {
+        $userObj = NULL;
+        $testCount = 0;
+        
+        foreach ( $this->testData->getTestUsers() as $testUser )
+        {
+            if ( ! $testUser->isCreated() )
+            {
+                $userObj = Classes::User( $testUser->getName() );
+                $this->assertFalse( $userObj->getSpentRess( 0 ) );
+                continue;
+            }
+            else
+            {
+                $userObj = Classes::User( $testUser->getName() );
+            }
+            
+            $testScore = $testUser->getScores();
+            $sum = 0;
+            
+            for ( $i = 0; $i <= 4; $i ++ )
+            {
+                $sum += $testScore->getScoreID( $i + 7 );                
+                $this->assertEquals( $userObj->getSpentRess( $i ), $testScore->getScoreID( $i + 7 ) );                          
+            }
+            
+            $this->assertGreaterThan( 0, $sum );
+            $this->assertEquals( $userObj->getSpentRess(), $sum );
+                        
+            $testCount++;
+        }
+        
+        $this->assertGreaterThan( 0, $testCount );
+    }    
+    
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

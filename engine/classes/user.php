@@ -602,7 +602,7 @@ class User extends Dataset
 
     /**
      * adds Score to the given index, see comment within class TestScore for details about the index
-     * @testing implemented
+     * @test implemented
      * @param $i - score index
      * @param $scores - score value
      * @return bool - true on success, false otherwise
@@ -626,6 +626,12 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * gets spent res for the given res type, 0-4 (5 types)
+     * @test implemented
+     * @param $i - res type (carbon=> 0, ...), if not given all res types are summarized
+     * @return int
+     */
     function getSpentRess( $i = false )
     {
         if ( ! $this->status )
