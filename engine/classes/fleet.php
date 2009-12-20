@@ -1184,26 +1184,31 @@ if( !$user_obj->getStatus() )
                 # Nicht stationieren: Flotte fliegt weiter
                 $further = true;
                 
-
                 $target = explode(':', $next_target_nt);
                 $target_galaxy = Classes::Galaxy($target[0], false);
+                
                 if(!$target_galaxy->getStatus()) 
                 {
-                    echo "AAAAAAAAAAA";
                     return false;
                 }
+                
                 $target_owner = $target_galaxy->getPlanetOwner($target[1], $target[2]);
+                
                 if($target_owner)
                 {
                     $target_user = Classes::User($target_owner);
+                    
                     if(!$target_user->getStatus()) 
                     {
-                        echo "BBBBBBBBBBBBBBB";
                         return false;
                     }
+                    
                     $target_user->setActivePlanet($target_user->getPlanetByPos($next_target_nt));
                 }
-                else $target_user = false;
+                else 
+                {
+                    $target_user = false;
+                }
 
                 if(($type == 3 || $type == 4) && !$target_owner)
                 {
@@ -2624,13 +2629,13 @@ EOF
                 # Stationieren
                 $target = explode(':', $next_target_nt);
                 $target_galaxy = Classes::Galaxy($target[0], $besiedeln);
+                
                 if(($besiedeln && $target_galaxy->getStatus() != 1) || !$target_galaxy->getStatus())
                 {
-                    echo "CCCCCCCCCCCCCCCCC";
                     return false;
                 }
+                
                 $owner = $target_galaxy->getPlanetOwner($target[1], $target[2]);
-
                 
                 if($besiedeln || $owner == $first_user)
                 {

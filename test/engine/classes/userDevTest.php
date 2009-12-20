@@ -16,7 +16,7 @@ else
     if ( is_file( '../include/config_inc.php' ) )
     {
         require_once '../include/config_inc.php';
-    }
+    } 
     else
     {
         require_once 'include/config_inc.php';
@@ -208,6 +208,7 @@ class userDevTest extends PHPUnit_Framework_TestCase
         }
         
         $this->_testScoresOfUser( $userData );
+        $userObj = Classes::User( $userData->getName() );
         
         foreach ( $userData->getPlanets() as $planetData )
         {
@@ -215,20 +216,21 @@ class userDevTest extends PHPUnit_Framework_TestCase
             
             if ( $planetData->isCreated() )
             {
-                $user = Classes::User( $userData->getName() );
-                $this->assertTrue( $user->setActivePlanet( $i ) );
-                $this->assertTrue( $user->planetExists( $i ) );
-                $this->assertEquals( $planetData->getName(), $user->planetName(), "for index: " . $i . "\n" );
-                $this->_testPlanetItems( $user, $planetData );
-                $this->_testRes( $user, $planetData );
+                $this->assertTrue( $userObj->setActivePlanet( $i ) );
+                $this->assertTrue( $userObj->planetExists( $i ) );
+                $this->assertEquals( $planetData->getName(), $userObj->planetName(), "for index: " . $i . "\n" );
+                $this->_testPlanetItems( $userObj, $planetData );
+                $this->_testRes( $userObj, $planetData );
             }
             else
             {
-                $this->assertFalse( $user->setActivePlanet( $i ) );
-                $this->assertFalse( $user->planetExists( $i ) );
-                //$this->assertFalse( $user->planetName() ); // doesnt work, cause we couldnt change to that planet with setActivePlanet()
+                $this->assertFalse( $userObj->setActivePlanet( $i ) );
+                $this->assertFalse( $userObj->planetExists( $i ) );
+                //$this->assertFalse( $userObj->planetName() ); // doesnt work, cause we couldnt change to that planet with setActivePlanet()
             }
         }
+        
+        //$userObj->doRecalcHighscores( true, true, true, true, true );
     }
 
     /**
@@ -368,16 +370,13 @@ class userDevTest extends PHPUnit_Framework_TestCase
         $userObj->doRecalcHighscores( true, true, true, true, true );
         $userObj->clearCache();
         
-        $this->assertGreaterThan( 0, $sum, "testscores of user " . $userData->getName() . " are empty?!\n" );
-        //$this->assertEquals($sum, $userObj->getScores(), "sumScores of user ".$userObj->getName()." doesnt match expected ones\n");
-        
+        $this->assertGreaterThan( 0, $sum, "testscores of user " . $userData->getName() . " are empty?!\n" );       
 
         // scores only exists up to 11, above shouldnt exists
         $this->assertEquals( 0, $userObj->getScores( 12 ) );
         
         // erase cache and retest
         $userObj->doRecalcHighscores( true, true, true, true, true );
-        //$this->assertEquals($sum, $userObj->getScores());
     }
 
     /*
@@ -550,48 +549,8 @@ class userDevTest extends PHPUnit_Framework_TestCase
         foreach ( $this->testData->getTestUsers() as $userData )
         {
             $this->_testSetup( $userData );
-        }
-    }
-
-    /**
-     * testing for retrieving spent res via User::getSpentRess()
-     * @return none
-     */
-    public function testGetSpentRess( )
-    {
-        $userObj = NULL;
-        $testCount = 0;
-        
-        foreach ( $this->testData->getTestUsers() as $testUser )
-        {
-            if ( ! $testUser->isCreated() )
-            {
-                $userObj = Classes::User( $testUser->getName() );
-                $this->assertFalse( $userObj->getSpentRess( 0 ) );
-                continue;
-            }
-            else
-            {
-                $userObj = Classes::User( $testUser->getName() );
-            }
-            
-            $testScore = $testUser->getScores();
-            $sum = 0;
-            
-            for ( $i = 0; $i <= 4; $i ++ )
-            {
-                $sum += $testScore->getScoreID( $i + 7 );                
-                $this->assertEquals( $userObj->getSpentRess( $i ), $testScore->getScoreID( $i + 7 ) );                          
-            }
-            
-            $this->assertGreaterThan( 0, $sum );
-            $this->assertEquals( $userObj->getSpentRess(), $sum );
-                        
-            $testCount++;
-        }
-        
-        $this->assertGreaterThan( 0, $testCount );
-    }
+        }               
+    }   
      
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////

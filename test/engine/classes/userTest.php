@@ -25,7 +25,7 @@ else
 require_once TBW_ROOT . 'engine/include.php';
 require_once TBW_ROOT . 'engine/classes/galaxy.php';
 require_once TBW_ROOT . 'test/TestData/TestConstants.php';
-require_once TBW_ROOT . 'test/TestData/TestData.php';
+require_once TBW_ROOT . 'test/TestData/TestData.php'; 
 require_once TBW_ROOT . 'test/TestData/Tester.php';
 require_once TBW_ROOT . 'test/TestData/TestMessage.php';
 
@@ -35,7 +35,6 @@ require_once TBW_ROOT . 'test/TestData/TestMessage.php';
  */
 class userTest extends PHPUnit_Framework_TestCase
 {
-
     private $testData;
 
     /**
@@ -207,6 +206,7 @@ class userTest extends PHPUnit_Framework_TestCase
         }
         
         $this->_testScoresOfUser( $userData );
+        $userObj = Classes::User( $userData->getName() );
         
         foreach ( $userData->getPlanets() as $planetData )
         {
@@ -214,20 +214,21 @@ class userTest extends PHPUnit_Framework_TestCase
             
             if ( $planetData->isCreated() )
             {
-                $user = Classes::User( $userData->getName() );
-                $this->assertTrue( $user->setActivePlanet( $i ) );
-                $this->assertTrue( $user->planetExists( $i ) );
-                $this->assertEquals( $planetData->getName(), $user->planetName(), "for index: " . $i . "\n" );
-                $this->_testPlanetItems( $user, $planetData );
-                $this->_testRes( $user, $planetData );
+                $this->assertTrue( $userObj->setActivePlanet( $i ) );
+                $this->assertTrue( $userObj->planetExists( $i ) );
+                $this->assertEquals( $planetData->getName(), $userObj->planetName(), "for index: " . $i . "\n" );
+                $this->_testPlanetItems( $userObj, $planetData );
+                $this->_testRes( $userObj, $planetData );
             }
             else
             {
-                $this->assertFalse( $user->setActivePlanet( $i ) );
-                $this->assertFalse( $user->planetExists( $i ) );
-                //$this->assertFalse( $user->planetName() ); // doesnt work, cause we couldnt change to that planet with setActivePlanet()
+                $this->assertFalse( $userObj->setActivePlanet( $i ) );
+                $this->assertFalse( $userObj->planetExists( $i ) );
+                //$this->assertFalse( $userObj->planetName() ); // doesnt work, cause we couldnt change to that planet with setActivePlanet()
             }
         }
+        
+        //$userObj->doRecalcHighscores( true, true, true, true, true );
     }
 
     /**
@@ -367,16 +368,13 @@ class userTest extends PHPUnit_Framework_TestCase
         $userObj->doRecalcHighscores( true, true, true, true, true );
         $userObj->clearCache();
         
-        $this->assertGreaterThan( 0, $sum, "testscores of user " . $userData->getName() . " are empty?!\n" );
-        //$this->assertEquals($sum, $userObj->getScores(), "sumScores of user ".$userObj->getName()." doesnt match expected ones\n");
-        
+        $this->assertGreaterThan( 0, $sum, "testscores of user " . $userData->getName() . " are empty?!\n" );       
 
         // scores only exists up to 11, above shouldnt exists
         $this->assertEquals( 0, $userObj->getScores( 12 ) );
         
         // erase cache and retest
         $userObj->doRecalcHighscores( true, true, true, true, true );
-        //$this->assertEquals($sum, $userObj->getScores());
     }
 
     /*
@@ -474,6 +472,30 @@ class userTest extends PHPUnit_Framework_TestCase
     
     }
 
+    protected function _buildTestHighScore()
+    {
+        $userObj = NULL;
+        
+        foreach ( $this->testData->getTestUsers() as $testUser )
+        {
+            if ( ! $testUser->isCreated() )
+            {
+                $userObj = Classes::User( $testUser->getName() );
+                continue;
+            }
+            else
+            {
+                $userObj = Classes::User( $testUser->getName() );
+            }
+
+            $userObj->doRecalcHighscores( true, true, true, true, true );
+            $testHighScore = &$this->testData->getTestHighscore();
+            $testHighScore->addUser( $userObj->getName(), $userObj->getScores() );
+        }        
+        
+        $testHighScore->buildRankList();
+    }       
+    
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -521,7 +543,7 @@ class userTest extends PHPUnit_Framework_TestCase
         $this->_tearDown_DeleteDir( global_setting( "DB_FLEETS" ) );
         $this->_tearDown_DeleteDir( global_setting( "DB_MESSAGES" ) );
     }
-
+    
     /**
      * Runs the test methods of this class.
      *
@@ -1138,6 +1160,40 @@ class userTest extends PHPUnit_Framework_TestCase
         }
         
         $this->assertGreaterThan( 0, $testCount );
+    }
+
+    /**
+     * testing for retrieving users rank in the highscore via User::getRank()
+     * - rank is above 0 \o/
+     * - rank is correct \o/
+     * @return none
+     */
+    public function testGetRank( )
+    {
+        $userObj = NULL;
+        $this->_buildTestHighScore();
+        $testHighScore = $this->testData->getTestHighscore();
+        
+        foreach ( $this->testData->getTestUsers() as $testUser )
+        {
+            if ( ! $testUser->isCreated() )
+            {
+                $userObj = Classes::User( $testUser->getName() );
+                continue;
+            }
+            else
+            {
+                $userObj = Classes::User( $testUser->getName() );
+            }
+            
+            $ranks = $testHighScore->getRankList(); 
+                    
+            // check if our user if on the position he says he is
+            $userObj->doRecalcHighscores( true, true, true, true, true );
+            $this->assertTrue( isset( $ranks[$userObj->getRank()] ), "key: ".$userObj->getRank()." not set user: ".$userObj->getName() );
+            $this->assertEquals( $ranks[$userObj->getRank()], $userObj->getName(), "user: ".$userObj->getName()." said he got rank: ".$userObj->getRank()." this rank is used by ".$ranks[$userObj->getRank()]." (testHighscore)\n" );                                   
+            $this->assertGreaterThan( 0, $userObj->getRank() );
+        }
     }    
     
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -582,10 +582,8 @@ class User extends Dataset
                     //print "(".$this->getName().") added ".$this->raw['punkte'][$k]." to ".$temp." for: ".$k." now: ".$this->cache['getScores']."\n";
                 }          
             }
-            else
-            {              
-                return $this->cache['getScores'];
-            }
+
+            return $this->cache['getScores'];
         }
         else
         {
@@ -630,30 +628,49 @@ class User extends Dataset
      * gets spent res for the given res type, 0-4 (5 types)
      * @test implemented
      * @param $i - res type (carbon=> 0, ...), if not given all res types are summarized
-     * @return int
+     * @return int - spent res
      */
     function getSpentRess( $i = false )
     {
         if ( ! $this->status )
+        {
             return false;
+        }
         
+        $spentRes = 0;
+                 
         if ( $i === false )
         {
             if ( ! isset( $this->cache['getSpentRess'] ) )
+            {
                 $this->cache['getSpentRess'] = $this->getScores( 7 ) + $this->getScores( 8 ) + $this->getScores( 9 ) + $this->getScores( 10 ) + $this->getScores( 11 );
-            return $this->cache['getSpentRess'];
+            }
+            
+            $spentRes = $this->cache['getSpentRess'];
         }
         else
-            return $this->getScores( $i + 7 );
+        {
+            $spentRes = $this->getScores( $i + 7 );
+        }
+        
+        return $spentRes;
     }
 
+    /**
+     * gets users rank in the highscore
+     * @return int - rank
+     */
     function getRank( )
     {
         if ( ! $this->status )
+        {
             return false;
+        }
         
         $highscores = Classes::Highscores();
-        return $highscores->getPosition( 'users', $this->getName() );
+        $rank = $highscores->getPosition( 'users', $this->getName() );
+        
+        return $rank;
     }
 
     function planetName( $name = false )
@@ -2303,7 +2320,9 @@ class User extends Dataset
     protected function getRawFromData( )
     {
         if ( $this->recalc_highscores[0] || $this->recalc_highscores[1] || $this->recalc_highscores[2] || $this->recalc_highscores[3] || $this->recalc_highscores[4] )
+        {
             $this->doRecalcHighscores( $this->recalc_highscores[0], $this->recalc_highscores[1], $this->recalc_highscores[2], $this->recalc_highscores[3], $this->recalc_highscores[4] );
+        }
         
         foreach ( $this->settings as $setting => $value )
             $this->raw[$setting] = $value;
@@ -3640,7 +3659,8 @@ class User extends Dataset
         }
         
         $new_scores = $this->getScores();
-        $highscores = Classes::Highscores();
+        $highscores = Classes::Highscores();#
+        //print "doRecalcHighscores() updating: ".$this->getName()." with new_scores: ".$new_scores."\n";
         $highscores->updateUser( $this->getName(), false, $new_scores );
         
         $my_alliance = $this->allianceTag();

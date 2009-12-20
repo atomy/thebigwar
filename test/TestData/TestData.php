@@ -2,6 +2,7 @@
 
 require_once "TestConstants.php";
 require_once "TestUser.php";
+require_once "TestHighscore.php";
 	
 /**
  * @author atomy
@@ -24,6 +25,11 @@ class TestData
 	 */
 	private $fleet = array();
 	
+	/*
+	 * holds highscore
+	 */
+	private $testHighScore;
+	
 	/**
 	 * constructor
 	 * @return 
@@ -31,6 +37,7 @@ class TestData
 	public function __construct()
 	{
 		$this->generateTestData();
+		$this->testHighScore = new TestHighscore();
 	}
 	
 	/**
@@ -142,6 +149,11 @@ class TestData
 	        throw new Exception( "getExistingTestUsers() didnt catch any existing users!");
 	        	    
 	    return $existingUsers;
+	}
+	
+	public function getTestHighscore()
+	{
+	    return $this->testHighScore;
 	}
 }
 ?>
