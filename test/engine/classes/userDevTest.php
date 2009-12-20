@@ -557,6 +557,7 @@ class userDevTest extends PHPUnit_Framework_TestCase
      * testing for adding scores via User::addScores()
      * @return none
      */
+    /*
     public function testAddScores( )
     {
         $userObj = NULL;
@@ -601,6 +602,7 @@ class userDevTest extends PHPUnit_Framework_TestCase
             $this->_testScoresOfUser( $testUser );
         }
     }
+    */
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////
