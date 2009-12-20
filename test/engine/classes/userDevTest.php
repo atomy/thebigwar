@@ -550,8 +550,24 @@ class userDevTest extends PHPUnit_Framework_TestCase
         {
             $this->_testSetup( $userData );
         }               
-    }   
-     
+    }
+
+    
+    /**
+	 * most of the User::getScores() is covered by the setupTest, however we need to fill some gaps in coverage
+     */
+    public function testGetScores( )
+    {       
+        foreach ( $this->testData->getTestUsers() as $testUser )
+        {
+            if ( ! $testUser->isCreated() )
+            {
+                $userObj = Classes::User( $testUser->getName() );
+                $this->assertFalse( $userObj->getScores() );
+            } 
+        }
+    }
+    
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
