@@ -127,5 +127,21 @@ class TestData
 			}
 		}
 	}
+	
+	public function getExistingTestUsers()
+	{
+	    $existingUsers = array();
+	    
+	    foreach( $this->users as $tUser )
+	    {
+	        if( $tUser->isCreated() )
+	            $existingUsers[] = $tUser;
+	    }
+	    
+	    if ( count($existingUsers) <= 0 )
+	        throw new Exception( "getExistingTestUsers() didnt catch any existing users!");
+	        	    
+	    return $existingUsers;
+	}
 }
 ?>

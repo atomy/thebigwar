@@ -305,9 +305,9 @@ class User extends Dataset
                 if ( $message->create() )
                 {
                     $message->addUser( $user, $types_message_types[$type] );
-                    $message->subject( "Flotte zur\xc3\xbcckgerufen" );
+                    $message->subject( "Flotte zur&uuml;ckgerufen" );
                     $message->from( $this->getName() );
-                    $message->text( "Ihre Flotte befand sich auf dem Weg zum Planeten \xe2\x80\x9e" . $this->planetName() . "\xe2\x80\x9c (" . $this->getPosString() . ", Eigent\xc3\xbcmer: " . utf8_htmlentities( $this->getName() ) . "). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den R\xc3\xbcckweg zu Ihrem Planeten \xe2\x80\x9e" . $this_galaxy->getPlanetName( $pos[1], $pos[2] ) . "\xe2\x80\x9c (" . $pos_string . ") macht." );
+                    $message->text( 'Ihre Flotte befand sich auf dem Weg zum Planeten &bdquo;'. $this->planetName() . '&ldquo; (' . $this->getPosString() . ', Eigent&uuml;mer: ' . utf8_htmlentities( $this->getName() ) . '). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den R&uuml;ckweg zu Ihrem Planeten &bdquo;' . $this_galaxy->getPlanetName( $pos[1], $pos[2] ) . '&ldquo; (' . $pos_string . ') macht.' );
                 }
             }
         }
@@ -538,23 +538,22 @@ class User extends Dataset
         
         if ( isset( $this->cache['getPlanetsList'] ) )
             unset( $this->cache['getPlanetsList'] );
+           
+        if ( isset( $this->cache['getItemInfo'] ) )        
+            unset( $this->cache['getItemInfo'] );
         
         return true;
     }
 
     /**
      * This is method getScores
-     *
+     * @test implented
      * @param int $i index
      * @return int - scores
      *
      */
     function getScores( $i = false )
     {
-        //        	print "(".$this->getName().")\n";
-        //        	print_r($this->raw['punkte']);
-        
-
         if ( ! $this->status )
         {
             return false;
@@ -578,17 +577,13 @@ class User extends Dataset
                         $temp = - 1;
                     }
                     
-                    //                        $this->cache['getScores'] =+ $this->raw['punkte'][$k]; // huh? whats that operator? seems like same as '=' - guess this was a typo then *shrug*
+                    // $this->cache['getScores'] =+ $this->raw['punkte'][$k]; // huh? whats that operator? seems like same as '=' - guess this was a typo then *shrug*
                     $this->cache['getScores'] += $this->raw['punkte'][$k];
                     //print "(".$this->getName().") added ".$this->raw['punkte'][$k]." to ".$temp." for: ".$k." now: ".$this->cache['getScores']."\n";
                 }          
             }
             else
-            {
-                // TODO, always returns -1 but score is set in array
-                //                print "(".$this->getName().") returning ".$this->cache['getScores']."\n";
-                
-
+            {              
                 return $this->cache['getScores'];
             }
         }
@@ -605,9 +600,16 @@ class User extends Dataset
         }
     }
 
+    /**
+     * adds Score to the given index, see comment within class TestScore for details about the index
+     * @testing implemented
+     * @param $i - score index
+     * @param $scores - score value
+     * @return bool - true on success, false otherwise
+     */    
     function addScores( $i, $scores )
     {
-        if ( ! $this->status )
+        if ( ! $this->status || $i > 11 )
         {
             return false;
         }
@@ -619,6 +621,7 @@ class User extends Dataset
         
         if ( isset( $this->cache['getScores'] ) )
             $this->cache['getScores'] += $scores;
+            
         $this->changed = true;
         return true;
     }

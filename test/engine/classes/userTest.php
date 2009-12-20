@@ -1,32 +1,33 @@
 <?php
 
 // Call userTest::main() if this source file is executed directly.
-if (!defined('PHPUnit_MAIN_METHOD')) 
+if ( ! defined( 'PHPUnit_MAIN_METHOD' ) )
 {
-    define('PHPUnit_MAIN_METHOD', 'userTest::main');
+    define( 'PHPUnit_MAIN_METHOD', 'userTest::main' );
 }
 
 require_once 'PHPUnit/Framework.php';
 
-if( is_file('../../../include/config_inc.php') )
+if ( is_file( '../../../include/config_inc.php' ) )
 {
-	require_once '../../../include/config_inc.php';
+    require_once '../../../include/config_inc.php';
 }
-else if( is_file( '../include/config_inc.php') )
-{
-	require_once '../include/config_inc.php';
-}
-else
-{
-	require_once 'include/config_inc.php';
-}
+else 
+    if ( is_file( '../include/config_inc.php' ) )
+    {
+        require_once '../include/config_inc.php';
+    }
+    else
+    {
+        require_once 'include/config_inc.php';
+    }
 
-require_once TBW_ROOT.'engine/include.php' ;
-require_once TBW_ROOT.'engine/classes/galaxy.php';
-require_once TBW_ROOT.'test/TestData/TestConstants.php';
-require_once TBW_ROOT.'test/TestData/TestData.php';
-require_once TBW_ROOT.'test/TestData/Tester.php';
-require_once TBW_ROOT.'test/TestData/TestMessage.php';
+require_once TBW_ROOT . 'engine/include.php';
+require_once TBW_ROOT . 'engine/classes/galaxy.php';
+require_once TBW_ROOT . 'test/TestData/TestConstants.php';
+require_once TBW_ROOT . 'test/TestData/TestData.php';
+require_once TBW_ROOT . 'test/TestData/Tester.php';
+require_once TBW_ROOT . 'test/TestData/TestMessage.php';
 
 /**
  * Test class for user.
@@ -34,304 +35,443 @@ require_once TBW_ROOT.'test/TestData/TestMessage.php';
  */
 class userTest extends PHPUnit_Framework_TestCase
 {
-	private $testData;
-	
-	/**
-	 * tests if all researches within testData exists on the user itself
-	 * @param User $user
-	 * @param TestPlanet $planetData
-	 * @return -
-	 */
-	public function _testActiveResearch( &$user, &$planetData )
-	{
-		$this->assertTrue($user->setActivePlanet($planetData->getIndex()));
-		
-		$research = $planetData->getActiveResearch();
 
-		if ( $research == false )
-			return;
-//		else
-//			print "testing research...\n";
+    private $testData;
 
-		$aForschung = $user->checkBuildingThing("forschung");
-		
-		$this->assertEquals($research->getId(), $aForschung[0], "failed comparing research id on planet ".$user->getActivePlanet()." on user ".$user->getName()."\n");
-		$this->assertEquals($research->getGlobal(), $aForschung[2]);
-	
-		if ( $research->isGlobal() )
-		{
-			$this->assertEquals($research->getStartPlanet(), $aForschung[4], "_testActiveResearch() failed for user ".$user->getName()." planet: ".$user->getActivePlanet()."\n");
-		}
-		else
-		{
-			$this->assertFalse( isset( $aForschung[4] ) );
-		}
-	}
-		
-	/**
-	 * tests if users messages equals their messages stored within the testdata
-	 * @param string $uname
-	 * @return -
-	 */
-	public function _testMessages($uname)
-	{
-		$user = Classes::User($uname);
-		$testUser = $this->testData->getUserWithName($uname);
-		$testMsgs = $testUser->getMessages();		
-		$i = 0;
-		
-		foreach($testMsgs as $testMsg)
-		{
-			$found = 0;
-			
-			foreach($user->getMessagesList($testMsg->getType()) as $msg)
-			{
-				$msgObj = Classes::Message($msg);
-				
-				if($msgObj->rawText() == $testMsg->getText() && $testMsg->getText() != "")
-				{
-					if ($msgObj->getSubject() == $testMsg->getSubject() && $testMsg->getSubject() != "")
-					{
-						if($msgObj->from( $uname ) == $testMsg->getFrom())
-						{
-							$found++;
-						}
-						else
-							echo "from doesnt match\n";
-					}
-					else
-						echo "subject doesnt match\n";
-				}
-				else
-					echo "test doesnt match - expected: \n".$testMsg->getText()."\n == \n".$msgObj->rawText()."\n";
-			}			
-			$this->assertEquals(1, $found);
-		}		
-		$this->greaterThan(0, $i);
-	}
-	
-	
-	/*
+    /**
+     * tests if all researches within testData exists on the user itself
+     * @param User $user
+     * @param TestPlanet $planetData
+     * @return -
+     */
+    public function _testActiveResearch( &$user, &$planetData )
+    {
+        $this->assertTrue( $user->setActivePlanet( $planetData->getIndex() ) );
+        
+        $research = $planetData->getActiveResearch();
+        
+        if ( $research == false )
+            return;
+            //		else
+        //			print "testing research...\n";
+        
+
+        $aForschung = $user->checkBuildingThing( "forschung" );
+        
+        $this->assertEquals( $research->getId(), $aForschung[0], "failed comparing research id on planet " . $user->getActivePlanet() . " on user " . $user->getName() . "\n" );
+        $this->assertEquals( $research->getGlobal(), $aForschung[2] );
+        
+        if ( $research->isGlobal() )
+        {
+            $this->assertEquals( $research->getStartPlanet(), $aForschung[4], "_testActiveResearch() failed for user " . $user->getName() . " planet: " . $user->getActivePlanet() . "\n" );
+        }
+        else
+        {
+            $this->assertFalse( isset( $aForschung[4] ) );
+        }
+    }
+
+    /**
+     * tests if users messages equals their messages stored within the testdata
+     * @param string $uname
+     * @return -
+     */
+    public function _testMessages( $uname )
+    {
+        $user = Classes::User( $uname );
+        $testUser = $this->testData->getUserWithName( $uname );
+        $testMsgs = $testUser->getMessages();
+        $i = 0;
+        
+        foreach ( $testMsgs as $testMsg )
+        {
+            $found = 0;
+            
+            foreach ( $user->getMessagesList( $testMsg->getType() ) as $msg )
+            {
+                $msgObj = Classes::Message( $msg );
+                
+                if ( $msgObj->rawText() == $testMsg->getText() && $testMsg->getText() != "" )
+                {
+                    if ( $msgObj->getSubject() == $testMsg->getSubject() && $testMsg->getSubject() != "" )
+                    {
+                        if ( $msgObj->from( $uname ) == $testMsg->getFrom() )
+                        {
+                            $found ++;
+                        }
+                        else
+                            echo "from doesnt match\n";
+                    }
+                    else
+                        echo "subject doesnt match\n";
+                }
+                else
+                    echo "test doesnt match - expected: \n" . $testMsg->getText() . "\n == \n" . $msgObj->rawText() . "\n";
+            }
+            $this->assertEquals( 1, $found );
+        }
+        $this->greaterThan( 0, $i );
+    }
+
+    /*
 	 * send a fleet and test if it were created
 	 * the actual testing it derivated into a sub method
 	 */
-	public function _testSendFleetTo( $uname, $pos )
-	{
-		$fleet = Classes::Fleet();
-		$user = Classes::User($uname);
-		$mypos =  $user->getPosString();
-		unset($user);
+    public function _testSendFleetTo( $uname, $pos )
+    {
+        $fleet = Classes::Fleet();
+        $user = Classes::User( $uname );
+        $mypos = $user->getPosString();
+        unset( $user );
+        
+        //		echo "\nflying from: ".$mypos. " to: ".$pos."\n";
+        
 
-//		echo "\nflying from: ".$mypos. " to: ".$pos."\n";
-	
-		/*
+        /*
 		 * flotte als transport mit 10 kleinen transportern zum ziel $pos versenden
 		 */
-		$type = 6; // stationieren
-		$fleet->create(); // no return 
-		$this->test_Fleets[$uname][] = $fleet->getName();
-		$this->assertTrue( $fleet->addTarget( $pos, $type, false ) );
-		$this->assertEquals( $uname, $fleet->addUser( $uname, $mypos, 1 /* default */ ) );
-		$this->assertTrue( $fleet->addTransport( $uname, array( 0, 0, 0, 0, 0 ), array() ) );
-		$this->assertTrue( $fleet->addFleet( "S1", 100, $uname) );
-		$this->assertTrue( $fleet->addHoldTime( 0 ) );
-		$this->assertGreaterThan( 0, $fleet->calcNeededTritium( $uname) );
-		$fleet->start(); // no return
-		$this->assertEquals( $pos, $fleet->getCurrentTarget() );
+        $type = 6; // stationieren
+        $fleet->create(); // no return 
+        $this->test_Fleets[$uname][] = $fleet->getName();
+        $this->assertTrue( $fleet->addTarget( $pos, $type, false ) );
+        $this->assertEquals( $uname, $fleet->addUser( $uname, $mypos, 1 /* default */ ) );
+        $this->assertTrue( $fleet->addTransport( $uname, array( 0, 0, 0, 0, 0 ), array() ) );
+        $this->assertTrue( $fleet->addFleet( "S1", 100, $uname ) );
+        $this->assertTrue( $fleet->addHoldTime( 0 ) );
+        $this->assertGreaterThan( 0, $fleet->calcNeededTritium( $uname ) );
+        $fleet->start(); // no return
+        $this->assertEquals( $pos, $fleet->getCurrentTarget() );
+        
+        $user = Classes::User( $uname );
+        $this->assertTrue( $user->addFleet( $fleet->getName() ) );
+        unset( $user );
+        unset( $fleet );
+        
+        $this->_testIsFleetExistingSpecific( $uname, $pos, $mypos, array( "S1", 10 ), $type, false );
+    }
 
-		$user = Classes::User($uname);
-		$this->assertTrue( $user->addFleet( $fleet->getName() ) );
-		unset($user);
-		unset($fleet);
+    /**
+     * returns the MAX_PLANETS global setting and tests it for plausibility
+     * @return unknown_type
+     */
+    public function _testAndGetMaxPlanets( )
+    {
+        $maxplanets = global_setting( "MAX_PLANETS" );
+        
+        $this->assertGreaterThan( 1, $maxplanets );
+        
+        return $maxplanets;
+    }
 
-		$this->_testIsFleetExistingSpecific( $uname, $pos, $mypos, array( "S1", 10 ), $type, false );
-	}
+    /**
+     * gets rid of old data stored in database for a fresh test setup
+     * @param string $dir
+     * @return -
+     */
+    protected function _tearDown_DeleteDir( $dir )
+    {
+        $exclude = array( '.', '..' );
+        $files = array_diff( scandir( $dir ), $exclude );
+        
+        foreach ( $files as $value )
+        {
+            $fname = $dir . "/" . $value;
+            
+            if ( ! is_dir( $fname ) && is_file( $fname ) && is_writable( $fname ) )
+            {
+                unlink( $fname );
+            }
+        }
+    }
 
-	/**
-	 * returns the MAX_PLANETS global setting and tests it for plausibility
-	 * @return unknown_type
-	 */
-	public function _testAndGetMaxPlanets()
-	{
-		$maxplanets = global_setting( "MAX_PLANETS" );
-
-		$this->assertGreaterThan( 1, $maxplanets );
-
-		return $maxplanets;
-	}
-		
-	/**
-	 * gets rid of old data stored in database for a fresh test setup
-	 * @param string $dir
-	 * @return -
-	 */
-	protected function _tearDown_DeleteDir( $dir )
-	{
-		$exclude = array('.', '..');
-		$files = array_diff(scandir($dir), $exclude);
-		   
-		foreach($files as $value)
-		{
-			$fname = $dir."/".$value;
-
-			if(!is_dir($fname) && is_file($fname) && is_writable($fname) )
-			{
-				unlink( $fname );
-			}
-		}
-	}
-	
-	/**
-	 * subfunc for testing the whole setup
-	 * @param TestUser $userData
-	 * @return -
-	 */
-	public function _testSetup( &$userData )
-	{	
-		if ( $userData->shouldCreate() && $userData->shouldCreateOnSetup() )
-		{
-			$this->assertTrue( User::userExists( $userData->getName() ) );
-		}
-		else
-		{
-			$this->assertFalse( User::userExists( $userData->getName() ), "user ".$userData->getName()." exists but shouldnt" );
-		}
-		
-		if(!$userData->isCreated())
-		{
-			$this->assertFalse( User::userExists( $userData->getName() ));
-			return;
-		}
-
-		foreach($userData->getPlanets() as $planetData)
-		{
-			$i = $planetData->getIndex();
-			
-			if ($planetData->isCreated())
-			{
-				$user = Classes::User($userData->getName());
+    /**
+     * subfunc for testing the whole setup
+     * @param TestUser $userData
+     * @return -
+     */
+    public function _testSetup( &$userData )
+    {
+        if ( $userData->shouldCreate() && $userData->shouldCreateOnSetup() )
+        {
+            $this->assertTrue( User::userExists( $userData->getName() ) );
+        }
+        else
+        {
+            $this->assertFalse( User::userExists( $userData->getName() ), "user " . $userData->getName() . " exists but shouldnt" );
+        }
+        
+        if ( ! $userData->isCreated() )
+        {
+            $this->assertFalse( User::userExists( $userData->getName() ) );
+            return;
+        }
+        
+        $this->_testScoresOfUser( $userData );
+        
+        foreach ( $userData->getPlanets() as $planetData )
+        {
+            $i = $planetData->getIndex();
+            
+            if ( $planetData->isCreated() )
+            {
+                $user = Classes::User( $userData->getName() );
                 $this->assertTrue( $user->setActivePlanet( $i ) );
                 $this->assertTrue( $user->planetExists( $i ) );
-                $this->assertEquals( $planetData->getName(), $user->planetName(), "for index: ".$i."\n" );
+                $this->assertEquals( $planetData->getName(), $user->planetName(), "for index: " . $i . "\n" );
                 $this->_testPlanetItems( $user, $planetData );
                 $this->_testRes( $user, $planetData );
-			}
-		    else
+            }
+            else
             {
                 $this->assertFalse( $user->setActivePlanet( $i ) );
                 $this->assertFalse( $user->planetExists( $i ) );
                 //$this->assertFalse( $user->planetName() ); // doesnt work, cause we couldnt change to that planet with setActivePlanet()
             }
-		}
-	}
-	
-	/*
+        }
+    }
+
+    /**
+     * 
+     * @param $userData
+     * @return unknown_type
+     */
+    private function _testScoresOfUser( &$userData )
+    {
+        $testScores = &$userData->getScores();
+        $userObj = Classes::User( $userData->getName() );
+        $this->assertType( 'object', $userObj );
+        
+        $userObj->doRecalcHighscores( true, true, true, true, true );
+        $userObj->clearCache();
+        
+        $testPlanets = $userData->getPlanets();
+        
+        foreach ( $testPlanets as $testPlanet )
+        {
+            $ret = $userObj->setActivePlanet( $testPlanet->getIndex() );
+            
+            if ( $ret === false )
+            {
+                $this->assertFalse( $testPlanet->isCreated() );
+                continue;
+            }
+            else
+                $this->assertTrue( $testPlanet->isCreated() );
+            
+            $testItems = $testPlanet->getItems();
+            
+            // check all buildings
+            $items = $userObj->getItemsList( 'gebaeude' );
+            
+            foreach ( $items as $item )
+            {
+                // test if item exists in our test data
+                $this->assertTrue( isset( $testItems[$item] ), "item: " . $item . " on planet: " . $testPlanet->getIndex() . " of user: " . $userData->getName() . " doesnt exists in testData" );
+                
+                $this->assertEquals( $testPlanet->getIndex(), $userObj->getActivePlanet() );
+                
+                $testItem = $testItems[$item];
+                $item_info = $userObj->getItemInfo( $item, 'gebaeude', true, true );
+                
+                // test if score of the item is the same as in our test data
+                $this->assertEquals( $item_info['scores'], $testItem->getScore(), "failed comparing score for " . $item . " user: " . $userObj->getName() . " planet: " . $testPlanet->getIndex() . " level of testItem: " . $testItem->getLevel() . " level of realItem: " . $item_info['level'] );
+            }
+            
+            // check all robots
+            $items = $userObj->getItemsList( 'roboter' );
+            
+            foreach ( $items as $item )
+            {
+                // test if item exists in our test data
+                $this->assertTrue( isset( $testItems[$item] ), "item: " . $item . " on planet: " . $testPlanet->getIndex() . " of user: " . $userData->getName() . " doesnt exists in testData" );
+                
+                $testItem = $testItems[$item];
+                $item_info = $userObj->getItemInfo( $item, 'roboter', true, true );
+                
+                // test if score of the item is the same as in our test data
+                $this->assertEquals( $item_info['scores'], $testItem->getScore(), "failed comparing score for " . $item . " user: " . $userObj->getName() . " planet: " . $testPlanet->getIndex() );
+            }
+            
+            // check all ships
+            $items = $userObj->getItemsList( 'schiffe' );
+            
+            foreach ( $items as $item )
+            {
+                // test if item exists in our test data
+                $this->assertTrue( isset( $testItems[$item] ), "item: " . $item . " on planet: " . $testPlanet->getIndex() . " of user: " . $userData->getName() . " doesnt exists in testData" );
+                
+                $testItem = $testItems[$item];
+                $item_info = $userObj->getItemInfo( $item, 'schiffe', true, true );
+                
+                // test if score of the item is the same as in our test data
+                $this->assertEquals( $item_info['scores'], $testItem->getScore(), "failed comparing score for " . $item . " user: " . $userObj->getName() . " planet: " . $testPlanet->getIndex() );
+            }
+            
+            // check all defense
+            $items = $userObj->getItemsList( 'verteidigung' );
+            
+            foreach ( $items as $item )
+            {
+                // test if item exists in our test data
+                $this->assertTrue( isset( $testItems[$item] ), "item: " . $item . " on planet: " . $testPlanet->getIndex() . " of user: " . $userData->getName() . " doesnt exists in testData" );
+                
+                $testItem = $testItems[$item];
+                $item_info = $userObj->getItemInfo( $item, 'verteidigung', true, true );
+                
+                // test if score of the item is the same as in our test data
+                $this->assertEquals( $item_info['scores'], $testItem->getScore(), "failed comparing score for " . $item . " user: " . $userObj->getName() . " planet: " . $testPlanet->getIndex() );
+            }
+        }
+        
+        $k = 0;
+        
+        // till 11 or more for ressource scores - but should be 11
+        for ( $i = 0; $userObj->getScores( $i ) != 0 || $i <= 11; $i ++ )
+        {
+            if ( $i == 1 )
+            {
+                continue;
+            }
+            
+            $sum = 0;
+            
+            //$userObj->doRecalcHighscores( true, true, true, true, true, true );
+            if ( $i >= 0 && $i <= 4 )
+                $sum = $userData->getSumScores( $i );
+            else 
+                if ( $i >= 4 && $i <= 11 )
+                {
+                    $testScores = $userData->getScores();
+                    $sum = $testScores->getScoreID( $i );
+                }
+            
+            $this->assertGreaterThanOrEqual( 0, $sum );
+            $diff = $sum - $userObj->getScores( $i );
+            $this->assertEquals( $sum, $userObj->getScores( $i ), "_testScoresOfUser() failed, for key: " . $i . " diff: " . $diff . "\n" );
+            
+            $k ++;
+        }
+        
+        // we expect to test 11 score values
+        $this->assertEquals( 11, $k );
+        
+        $sum = 0;
+        $testScoresArray = $testScores->getAllScoresAsArray();
+        
+        for ( $i = 0; $i <= 6; $i ++ )
+        {
+            $sum += $testScoresArray[$i];
+            //print "testScoresArray() adding " . $testScoresArray[$i] . " for id: " . $i . " user: " . $userData->getName() . "\n";
+        }
+        
+        $userObj->doRecalcHighscores( true, true, true, true, true );
+        $userObj->clearCache();
+        
+        $this->assertGreaterThan( 0, $sum, "testscores of user " . $userData->getName() . " are empty?!\n" );
+        //$this->assertEquals($sum, $userObj->getScores(), "sumScores of user ".$userObj->getName()." doesnt match expected ones\n");
+        
+
+        // scores only exists up to 11, above shouldnt exists
+        $this->assertEquals( 0, $userObj->getScores( 12 ) );
+        
+        // erase cache and retest
+        $userObj->doRecalcHighscores( true, true, true, true, true );
+        //$this->assertEquals($sum, $userObj->getScores());
+    }
+
+    /*
 	 * test if a given fleet is existant, it is expected to do, otherwise this test will fail
 	 */
-	public function _testIsFleetExistingSpecific( $from_user, $to_pos, $from_pos, $ships, $type, $flyingback )
-	{
-		$user = Classes::User($from_user);
-		$fleets = $user->getFleetsList();
-
-		$this->assertGreaterThan( 0, count( $fleets ), "no fleets found" );
-
-		$fleet = false;
-
-		foreach( $fleets as $ffleet )
-		{
-		 	$fleet = $ffleet;
-		}
-	
-		if ( $fleet == false )
-			throw new Exception( "_testIsFleetExistingSpecific() failed, no fleet found" );
-		
-		$fleet_obj = Classes::Fleet( $fleet );
-		$that = Classes::Fleet( $fleet );
-		$blub =	$user->getFleetsWithPlanet();
-		
-		unset( $user );
-
-		$targets = $that->getTargetsList();
-
-		$this->assertEquals( array( $to_pos ), $targets );
-		$this->assertEquals( array( "S1" => 100 ), $fleet_obj->getFleetList( $from_user) );
-		
-		if(!$flyingback)
-		{
-			$this->assertFalse( $fleet_obj->isFlyingBack() );
-		}
-		else
-		{
-			$this->assertTrue( $fleet_obj->isFlyingBack() );
-		}			
-	}
-	
-	/**
-	 * compares all planet items stored in testdata to the actual existing ones on the users planet
-	 * @param User $user
-	 * @param TestPlanet $planetData
-	 * @return -
-	 */
-	public function _testPlanetItems( &$user, &$planetData )
-	{
-		$this->assertGreaterThanOrEqual( 0, $planetData->getIndex() );
-		
-		$this->assertTrue( $user->setActivePlanet( $planetData->getIndex() ) );
-
-		foreach( $planetData->getItems() as $itemData )
-		{
-			$id = $itemData->getId();
-			$level = $itemData->getLevel();
-			
-			$lvl = $user->getItemLevel( $id, false, false );
-			if ($level != $lvl /*&& $planetData->getIndex() == 4*/)
-				echo "MISMATCH -- expected: ".$level." got: ".$lvl." for item: ".$id." on planet ".$planetData->getName()." (".$user->planetName().")\n";
-			$this->assertEquals( $level, $lvl, '_testPlanetItems() expected level didnt match for given item '.$id.' wanted: '.$level.' got: '.$lvl );
-			//echo "testing item: ".$id." for level: ".$level." which is: ".$lvl."\n";
-		}
-		
-		$this->_testActiveResearch( $user, $planetData );
-	}
-	
-	/**
-	 * compares main ressources from testData to the existing ones on the planet
-	 * @param User $user
-	 * @param TestPlanet $planetData
-	 * @return -
-	 */
-	public function _testRes( &$user, &$planetData )
-	{
-		$this->assertTrue( $user->setActivePlanet( $planetData->getIndex() ) );
-		
-		$testRes = $planetData->getRes();
-		$planetRes = $user->getRess();
-
-		foreach( $testRes as $key=>$value )
-		{
-		    // TODO, check and calc tritium
-			if ( $key == 4 )
-			{
-			    continue;
-			}
-	
-			// TODO, needs more accurate check
-			$this->assertGreaterThanOrEqual($testRes[$key], $planetRes[$key], $key." didnt match of planet ".$planetData->getIndex(). " - ".$planetData->getName()." of user ".$user->getName()."\n");
-		}
-		
-	}
-	
-   /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
+    public function _testIsFleetExistingSpecific( $from_user, $to_pos, $from_pos, $ships, $type, $flyingback )
     {
-        require_once 'PHPUnit/TextUI/TestRunner.php';
+        $user = Classes::User( $from_user );
+        $fleets = $user->getFleetsList();
+        
+        $this->assertGreaterThan( 0, count( $fleets ), "no fleets found" );
+        
+        $fleet = false;
+        
+        foreach ( $fleets as $ffleet )
+        {
+            $fleet = $ffleet;
+        }
+        
+        if ( $fleet == false )
+            throw new Exception( "_testIsFleetExistingSpecific() failed, no fleet found" );
+        
+        $fleet_obj = Classes::Fleet( $fleet );
+        $that = Classes::Fleet( $fleet );
+        $blub = $user->getFleetsWithPlanet();
+        
+        unset( $user );
+        
+        $targets = $that->getTargetsList();
+        
+        $this->assertEquals( array( $to_pos ), $targets );
+        $this->assertEquals( array( "S1" => 100 ), $fleet_obj->getFleetList( $from_user ) );
+        
+        if ( ! $flyingback )
+        {
+            $this->assertFalse( $fleet_obj->isFlyingBack() );
+        }
+        else
+        {
+            $this->assertTrue( $fleet_obj->isFlyingBack() );
+        }
+    }
 
-        $suite  = new PHPUnit_Framework_TestSuite('userDevTest');
-        $result = PHPUnit_TextUI_TestRunner::run($suite);
+    /**
+     * compares all planet items stored in testdata to the actual existing ones on the users planet
+     * @param User $user
+     * @param TestPlanet $planetData
+     * @return -
+     */
+    public function _testPlanetItems( &$user, &$planetData )
+    {
+        $this->assertGreaterThanOrEqual( 0, $planetData->getIndex() );
+        
+        $this->assertTrue( $user->setActivePlanet( $planetData->getIndex() ) );
+        
+        foreach ( $planetData->getItems() as $itemData )
+        {
+            $id = $itemData->getId();
+            $level = $itemData->getLevel();
+            
+            $lvl = $user->getItemLevel( $id, false, false );
+            if ( $level != $lvl /*&& $planetData->getIndex() == 4*/)
+				echo "MISMATCH -- expected: " . $level . " got: " . $lvl . " for item: " . $id . " on planet " . $planetData->getName() . " (" . $user->planetName() . ")\n";
+            $this->assertEquals( $level, $lvl, '_testPlanetItems() expected level didnt match for given item ' . $id . ' wanted: ' . $level . ' got: ' . $lvl );
+            //echo "testing item: ".$id." for level: ".$level." which is: ".$lvl."\n";
+        }
+        
+        $this->_testActiveResearch( $user, $planetData );
+    }
+
+    /**
+     * compares main ressources from testData to the existing ones on the planet
+     * @param User $user
+     * @param TestPlanet $planetData
+     * @return -
+     */
+    public function _testRes( &$user, &$planetData )
+    {
+        $this->assertTrue( $user->setActivePlanet( $planetData->getIndex() ) );
+        
+        $testRes = $planetData->getRes();
+        $planetRes = $user->getRess();
+        
+        foreach ( $testRes as $key => $value )
+        {
+            // TODO, check and calc tritium
+            if ( $key == 4 )
+            {
+                continue;
+            }
+            
+            // TODO, needs more accurate check
+            $this->assertGreaterThanOrEqual( $testRes[$key], $planetRes[$key], $key . " didnt match of planet " . $planetData->getIndex() . " - " . $planetData->getName() . " of user " . $user->getName() . "\n" );
+        }
+    
     }
 
     /**
@@ -340,18 +480,18 @@ class userTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {        
-    	// must be the FIRST line   	
-    	// define_globals( Uni ); to set globals like where db files are located etc
+    protected function setUp( )
+    {
+        // must be the FIRST line   	
+        // define_globals( Uni ); to set globals like where db files are located etc
         define_globals( 'TestUni1' );
         
         $this->cleanUp();
-    	
-    	$this->testData = new TestData();
-    	$this->tester = new Tester( $this->testData );
-    	$this->tester->setUp();
-	}
+        
+        $this->testData = new TestData( );
+        $this->tester = new Tester( $this->testData );
+        $this->tester->setUp();
+    }
 
     /**
      * Tears down the fixture, for example, closes a network connection.
@@ -359,40 +499,58 @@ class userTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
+    protected function tearDown( )
     {
 
-	}
-	
-	protected function cleanUp()
-	{
+    }
 
-		Classes::resetInstances();
-		/*
+    protected function cleanUp( )
+    {
+        
+        Classes::resetInstances();
+        /*
 		foreach( $this->testData->getTestUsers() as $user )
 		{
 			user_control::removeUser( $user->getName() );
 		}
 
 		Classes::resetInstances();
-*/
-		
-		$this->_tearDown_DeleteDir(global_setting("DB_PLAYERS"));
-		$this->_tearDown_DeleteDir(global_setting("DB_FLEETS"));
-		$this->_tearDown_DeleteDir(global_setting("DB_MESSAGES"));
-	}
+		*/
+        
+        $this->_tearDown_DeleteDir( global_setting( "DB_PLAYERS" ) );
+        $this->_tearDown_DeleteDir( global_setting( "DB_FLEETS" ) );
+        $this->_tearDown_DeleteDir( global_setting( "DB_MESSAGES" ) );
+    }  
 
-	/**
-	 * test our test setup
-	 */
-	public function testSetup()
-	{
-		foreach( $this->testData->getTestUsers() as $userData )
-		{
-			$this->_testSetup( $userData );
-		}
-	}
-	
+    /**
+     * Runs the test methods of this class.
+     *
+     * @access public
+     * @static
+     */
+    public static function main( )
+    {
+        require_once 'PHPUnit/TextUI/TestRunner.php';
+        
+    //$suite  = new PHPUnit_Framework_TestSuite('userDevTest');
+    //$result = PHPUnit_TextUI_TestRunner::run($suite);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////// TESTS START HERE //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * test our test setup
+     */
+    public function testSetup( )
+    {
+        foreach ( $this->testData->getTestUsers() as $userData )
+        {
+            $this->_testSetup( $userData );
+        }
+    }
+
 	/**
 	 * check new user creation
 	 */
@@ -648,8 +806,8 @@ class userTest extends PHPUnit_Framework_TestCase
         //echo $msg->rawText()."\n";
         
         $testMsg = new TestMessage();
-        $testMsg->setSubject('Flotte zurückgerufen');
-        $testMsg->setText('Ihre Flotte befand sich auf dem Weg zum Planeten „'.$toName.'“ ('.$pos.', Eigentümer: '.$user->getName().'). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den Rückweg zu Ihrem Planeten „'.$fromName.'“ ('.$mypos.') macht.');
+        $testMsg->setSubject('Flotte zur&uuml;ckgerufen');
+        $testMsg->setText('Ihre Flotte befand sich auf dem Weg zum Planeten &bdquo;'.$toName.'&ldquo; ('.$pos.', Eigent&uuml;mer: '.$user->getName().'). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den R&uuml;ckweg zu Ihrem Planeten &bdquo;'.$fromName.'&ldquo; ('.$mypos.') macht.');
         $testMsg->setFrom($uname);
         $testMsg->setType($types_message_types[$type]);
         $testUser->addMessage($testMsg);
@@ -665,7 +823,6 @@ class userTest extends PHPUnit_Framework_TestCase
 
      	//maybe TODO, highscores test, something happens with research
 	}
-
 
 	public function testRegisterPlanet()
 	{
@@ -767,134 +924,135 @@ class userTest extends PHPUnit_Framework_TestCase
 		$this->assertGreaterThan(0, $newUser->getBasicFields());	
 		$this->assertGreaterThan(0, $galaxy->getPlanetSize($freeKoordsArray[1], $freeKoordsArray[2]));		
 	}
-	
-	/**
-	 * @testing 
-	 * - not existing users cant call that \o/
-	 * - last planet cant be moved down \o/
-	 * - all other planets should be able to \o/
-	 * - check for reassigned researches _o_
-	 * - check for all items on the planets \o/
-	 * - check the planetList if they matches the new one \o/
-	 * - w/o parameter active planet is moved down \o/
-	 * @return unknown_type
-	 */		
-	public function testMovePlanetDown()
-	{
-		$fuser = Classes::User( "fakeuser1341" );
-		$this->assertFalse($fuser->movePlanetDown(0));
-		$testUsers = $this->testData->getTestUsers();
-		
-		$testedUsers = 0;
-		
-		foreach($testUsers as &$testUser)
-		{
-			$tUser = Classes::User($testUser->getName());
-			
-			$planets = $tUser->getPlanetsList();
-			
-			$lastPlanetIndex = count($planets) - 1;
-			
-			if($lastPlanetIndex == 0)
-			{
-				continue;
-			}			
-			
-			$this->assertFalse($tUser->movePlanetDown($lastPlanetIndex));
-			
-			$planetIndex = array_rand($planets, 1);
-			
-			if($planetIndex == $lastPlanetIndex)
-			{
-				$planetIndex = $lastPlanetIndex - 1;				
-			}
-			$this->testSetup();
-			$this->assertTrue($tUser->movePlanetDown($planetIndex));
-			//$this->testSetup();
-			// array(0, 1, 2, 3, 4, 5, 6, 7, 8)
-			// movePlanetDown(1)
-			// array(0, 2, 1, 3, 4, 5, 6, 7, 8)
-			//echo "cycling planet: ".$planetIndex." with: ".($planetIndex + 1)." of user: ".$testUser->getName()."\n";
-			$testUser->cyclePlanets($planetIndex, $planetIndex+1);
-			$this->testSetup();
-			
-			$this->assertTrue( $tUser->setActivePlanet($planetIndex) );
-			$this->assertTrue($tUser->movePlanetdown());
-			$testUser->cyclePlanets($planetIndex, $planetIndex+1);
-			$this->testSetup();
 
-			$testedUsers++;
-		}
-		
-		$this->assertGreaterThan(0, $testedUsers);
-	}
-	
     /**
-     * @testing 
      * - not existing users cant call that \o/
-     * - first planet cant be moved up \o/
+     * - last planet cant be moved down \o/
      * - all other planets should be able to \o/
      * - check for reassigned researches _o_
      * - check for all items on the planets \o/
      * - check the planetList if they matches the new one \o/
-     * - w/o parameter active planet is moved up \o/
-     * @return unknown_type
+     * - w/o parameter active planet is moved down \o/
+     * @return none
      */
-    public function testMovePlanetUp()
-    {	    
-        $fuser = Classes::User( "fakeuser1342" );
-        $this->assertFalse($fuser->movePlanetUp(0));
+    public function testMovePlanetDown( )
+    {
+        $fuser = Classes::User( "fakeuser1341" );
+        $this->assertFalse( $fuser->movePlanetDown( 0 ) );
         $testUsers = $this->testData->getTestUsers();
         
         $testedUsers = 0;
         
-        foreach($testUsers as &$testUser)
+        foreach ( $testUsers as &$testUser )
         {
-            $tUser = Classes::User($testUser->getName());
+            if ( !$testUser->isCreated() )
+                continue;
+                            
+            $tUser = Classes::User( $testUser->getName() );
             
             $planets = $tUser->getPlanetsList();
             
-            // this user has no planets, skip
-            if($planets === false || count($planets) == 0)
+            $lastPlanetIndex = count( $planets ) - 1;
+            
+            if ( $lastPlanetIndex == 0 )
             {
                 continue;
             }
             
-            $this->assertType('array', $planets);
+            $this->assertFalse( $tUser->movePlanetDown( $lastPlanetIndex ) );
             
-            // 1st planet cant be moved up
-            $this->assertFalse($tUser->movePlanetUp(0));
+            $planetIndex = array_rand( $planets, 1 );
             
-            $planetIndex = array_rand($planets, 1);
-            
-            if($planetIndex == 0)
+            if ( $planetIndex == $lastPlanetIndex )
             {
-                $planetIndex++;				
+                $planetIndex = $lastPlanetIndex - 1;
             }
             $this->testSetup();
-            $this->assertTrue($tUser->movePlanetUp($planetIndex));
-            //$this->testSetup();
-            // array(0, 1, 2, 3, 4, 5, 6, 7, 8)
-            // movePlanetUp(1)
-            // array(0, 2, 1, 3, 4, 5, 6, 7, 8)
-            //echo "cycling planet: ".$planetIndex." with: ".($planetIndex + 1)." of user: ".$testUser->getName()."\n";
-            $testUser->cyclePlanets($planetIndex, $planetIndex-1);
+            
+            $this->assertTrue( $tUser->movePlanetDown( $planetIndex ) );
+            
+            $testUser->cyclePlanets( $planetIndex, $planetIndex + 1 );
             $this->testSetup();
             
-            $this->assertTrue( $tUser->setActivePlanet($planetIndex) );
-            $this->assertTrue($tUser->movePlanetUp());
-            $testUser->cyclePlanets($planetIndex, $planetIndex-1);
+            $this->assertTrue( $tUser->setActivePlanet( $planetIndex ) );
+            $this->assertTrue( $tUser->movePlanetdown() );
+            $testUser->cyclePlanets( $planetIndex, $planetIndex + 1 );
             $this->testSetup();
-
-            $testedUsers++;
+            
+            $testedUsers ++;
         }
         
-        $this->assertGreaterThan(0, $testedUsers);
-    }	
+        $this->assertGreaterThan( 0, $testedUsers );
+    }
+
+    /**
+     * - not existing users cant call that \o/
+     * - first planet cant be moved up \o/
+     * - all other planets should be able to \o/
+     * - check for reassigned researches \o_
+     * - check for all items on the planets \o/
+     * - check the planetList if they matches the new one \o/
+     * - w/o parameter active planet is moved up \o/
+     * @return none
+     */
+    public function testMovePlanetUp( )
+    {
+        $fuser = Classes::User( "fakeuser1342" );
+        $this->assertFalse( $fuser->movePlanetUp( 0 ) );
+        $testUsers = $this->testData->getTestUsers();
+        
+        $testedUsers = 0;
+        
+        foreach ( $testUsers as &$testUser )
+        {
+            if ( !$testUser->isCreated() )
+                continue;
+                
+            $tUser = Classes::User( $testUser->getName() );
+            
+            $planets = $tUser->getPlanetsList();
+            
+            // this user has no planets, skip
+            if ( $planets === false || count( $planets ) == 0 )
+            {
+                continue;
+            }
+            
+            $this->assertType( 'array', $planets );
+            
+            // 1st planet cant be moved up
+            $this->assertFalse( $tUser->movePlanetUp( 0 ) );
+            
+            $planetIndex = array_rand( $planets, 1 );
+            
+            if ( $planetIndex == 0 )
+            {
+                $planetIndex ++;
+            }
+            $this->testSetup();
+            $this->assertTrue( $tUser->movePlanetUp( $planetIndex ) );
+            
+            $testUser->cyclePlanets( $planetIndex, $planetIndex - 1 );
+            $this->testSetup();
+            
+            $this->assertTrue( $tUser->setActivePlanet( $planetIndex ) );
+            $this->assertTrue( $tUser->movePlanetUp() );
+            $testUser->cyclePlanets( $planetIndex, $planetIndex - 1 );
+            $this->testSetup();
+            
+            $testedUsers ++;
+        }
+        
+        $this->assertGreaterThan( 0, $testedUsers );
+    }
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 // Call userTest::main() if this source file is executed directly.
-if (PHPUnit_MAIN_METHOD == 'userTest::main') 
+if ( PHPUnit_MAIN_METHOD == 'userTest::main' )
 {
     userTest::main();
 }

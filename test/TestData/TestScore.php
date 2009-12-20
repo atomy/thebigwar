@@ -4,19 +4,21 @@ class TestScore
 {
 
     /*
-    * 0 - gebaeude
-    * 1 - forschung
-    * 2 - roboter
-    * 3 - flotte
-    * 4 - verteidigung
-    * 5 - flugerfahrung
-    * 6 - kampferfahrung
-    * 7 - spent carbon
-    * 8 - spent alu
-    * 9 - spent wolf
-    * 10 - spent rad
-    * 11 - spent trit
-    */
+     * 0 up to 4 should be unused cause those can be calculated by the actual existing items and their levels!
+     * the others have to exist since they cant be recalculated
+     * 0 - gebaeude
+     * 1 - forschung
+     * 2 - roboter
+     * 3 - flotte
+     * 4 - verteidigung
+     * 5 - flugerfahrung
+     * 6 - kampferfahrung
+     * 7 - spent carbon
+     * 8 - spent alu
+     * 9 - spent wolf
+     * 10 - spent rad
+     * 11 - spent trit
+     */
     private $buildings = 0;
 
     private $research = 0;
@@ -90,47 +92,47 @@ class TestScore
                 break;
             
             case 1:
-                $this->buildings += $score;
+                $this->research += $score;
                 break;
             
             case 2:
-                $this->buildings += $score;
+                $this->robotic += $score;
                 break;
             
             case 3:
-                $this->buildings += $score;
+                $this->fleet += $score;
                 break;
             
             case 4:
-                $this->buildings += $score;
+                $this->defense += $score;
                 break;
             
             case 5:
-                $this->buildings += $score;
+                $this->fleetexp += $score;
                 break;
             
             case 6:
-                $this->buildings += $score;
+                $this->fightexp += $score;
                 break;
             
             case 7:
-                $this->buildings += $score;
+                $this->spent_carb += $score;
                 break;
             
             case 8:
-                $this->buildings += $score;
+                $this->spent_alu += $score;
                 break;
             
             case 9:
-                $this->buildings += $score;
+                $this->spent_wolf += $score;
                 break;
             
             case 10:
-                $this->buildings += $score;
+                $this->spent_rad += $score;
                 break;
             
-            case 10:
-                $this->buildings += $score;
+            case 11:
+                $this->spent_trit += $score;
                 break;
             
             default:
@@ -138,7 +140,7 @@ class TestScore
                 break;
         }
     }
-    
+
     public function addSpentRes( $arSpentRes )
     {
         $this->spent_carb += $arSpentRes[0];
@@ -147,42 +149,54 @@ class TestScore
         $this->spent_rad += $arSpentRes[3];
         $this->spent_trit += $arSpentRes[4];
     }
-    
-    public function getSpentResForScoreID( $id = false )
+
+    public function getScoreID( $id = false )
     {
         $sRes = 0;
         
         if ( $id === false )
         {
-            $sRes += $this->spent_carb;
-            $sRes += $this->spent_alu;
-            $sRes += $this->spent_wolf;
-            $sRes += $this->spent_rad;
-            $sRes += $this->spent_trit;          
+            throw new Exception( "getScoreID() called with invalid id" );
+        }
+        else if ( $id <= 4 && $id >= 0 )
+        {
+            throw new Exception( "getScoreID() shouldnt be called with ids being 0-4 since those need to be calculated live from testItem levels and their scores" );
         }
         else
         {
             switch ( $id )
             {
+                case 5:
+                    return $this->fleetexp;
+                    break;
+                
+                case 6:
+                    return $this->fightexp;
+                    break;
+                
                 case 7:
                     return $this->spent_carb;
                     break;
-                   
+                
                 case 8:
                     return $this->spent_alu;
                     break;
-                    
+                
                 case 9:
                     return $this->spent_wolf;
                     break;
-                    
+                
                 case 10:
                     return $this->spent_rad;
                     break;
-                    
+                
                 case 11:
                     return $this->spent_trit;
                     break;
+                    
+                default:
+                    throw new Exception( "getScoreID() wrong id: " . $id . " given\n" );
+                    break;                    
             }
         }
         
