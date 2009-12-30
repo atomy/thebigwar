@@ -254,7 +254,7 @@ echo ths($trans[0])."&nbsp;(".ths(round($trans[0]* pow(1.2, $lade_info['level'])
                 <td><? $speedy=$item->getInfo('speed');
                                         $speedy *= pow(1.025, $rueckstoss_info['level']);
                         $speedy *= pow(1.05, $ionen_info['level']);
-                        $speedy *= pow(1.25, $kern_info['level']); 
+                        $speedy *= pow(1.15, $kern_info['level']); 
             echo $item->getInfo('speed')."&nbsp;(".ths(round($speedy));?>)&thinsp;<abbr title="Mikroorbits pro Quadratsekunde">µOr&frasl;s²</abbr></td>
             </tr>
             <tr>
