@@ -799,7 +799,7 @@
 		<dd class="c-geschwindigkeit">
 			<select name="speed" id="speed" accesskey="w" tabindex="1" onchange="recalc_values();" onkeyup="recalc_values();">
 <?php
-							for($i=1,$pr=100; $i>0; $i-=.05,$pr-=5)
+							for($i=1,$pr=100; $i>0; $i-=.01,$pr-=1)
 							{
 ?>
 				<option value="<?=htmlentities($i)?>"><?=htmlentities($pr)?>&thinsp;%</option>
