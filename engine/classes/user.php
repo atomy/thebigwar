@@ -658,10 +658,11 @@ class User extends Dataset
 
     /**
      * gets users rank in the highscore
+     * @test implemented
      * @return int - rank
      */
     function getRank( )
-    {
+    { 
         if ( ! $this->status )
         {
             return false;
@@ -673,34 +674,58 @@ class User extends Dataset
         return $rank;
     }
 
+    /**
+     * set or get a planets name
+     * @test on it
+     * @param $name - new planet name
+     * @return bool - success?
+     */
     function planetName( $name = false )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
+        {
             return false;
+        }
+        
         $keyarray = array( 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Q', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', ' ' );
+        
         #Planiname Zeichen pruefen
         $stringplanet = $name;
         $noblockplanet = true;
+        
         for ( $i = 0; $i < strlen( $stringplanet ); $i ++ )
         {
             $explode[$i] = substr( $stringplanet, $i, 1 );
+            
             if ( ! in_array( $explode[$i], $keyarray ) )
+            {
                 $noblockplanet = false;
+            }
         }
+        
         if ( $noblockplanet == false )
+        {
             return true;
+        }
         
         if ( $name !== false && trim( $name ) != '' )
         {
             $name = substr( $name, 0, 24 );
+            
             if ( isset( $this->planet_info['name'] ) )
+            {
                 $old_name = $this->planet_info['name'];
+            }
             else
+            {
                 $old_name = '';
+            }
+            
             $this->planet_info['name'] = $name;
             
             $pos = $this->getPos();
             $galaxy = Classes::Galaxy( $pos[0] );
+            
             if ( ! $galaxy->setPlanetName( $pos[1], $pos[2], $name ) )
             {
                 $this->planet_info['name'] = $old_name;
