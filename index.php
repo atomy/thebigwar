@@ -26,37 +26,6 @@
 
 <br/>
 <?php
-/*
-        foreach($news_array as $news)
-        {
-                echo '<li class="entry">';
-
-                if(!is_array($news) || !isset($news['text_parsed']))
-                        continue;
-
-                $title = 'Kein Titel';
-                if(isset($news['title']) && trim($news['title']) != '')
-                        $title = trim($news['title']);
-
-                $author = '';
-                if(isset($news['author']) && trim($news['author']) != '')
-                        $author = trim($news['author']);
-
-                print '<div class="topic">'.utf8_htmlentities($title).'</div>';
-
-                if ( $author != '' )
-                                print '<div class="author"> von '.utf8_htmlentities($author).'</div>';
-                if(isset($news['time']))
-                {
-                        print '<div class="time">'.date('d.m.Y - H:i:s', $news['time']).'</div>';
-                }
-
-                print('<div class="content">'.str_replace("\n", "\n\t", $news['text_parsed']).'</div>');
-
-                echo "</li>";
-        }
-        */
-
         if ( defined( 'TBW_EXT_NEWSURL' ) )
         {
         ?> 
