@@ -30,7 +30,7 @@
         {
         ?> 
        
-<iframe name="newsbox" id="newsbox" height="1000" scrolling="no" frameborder="0" style="width:500px; position:absolute; top:200px; left:200px;" src="<?php print TBW_EXT_NEWSURL;?>" >
+<iframe name="newsbox" id="newsbox" height="1500" scrolling="no" frameborder="0" style="width:500px; position:absolute; top:200px; left:200px;" src="<?php print TBW_EXT_NEWSURL;?>" >
   <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen:
   Sie k&ouml;nnen die eingebettete Seite &uuml;ber den folgenden Verweis
   aufrufen: <a href="<?php print TBW_EXT_NEWSURL;?>">News</a></p>
