@@ -24,16 +24,18 @@
 </tr>
 </table>
 
-<div class="news"  style="width:400px; position:absolute; top:200px; left:200px;">
-<h2>T-B-W &ndash; News</h2>
+
+
 <?php
+/*
         $news_array = array();
         if(is_file(global_setting("DB_NEWS")) && filesize(global_setting("DB_NEWS")) > 0 && is_readable(global_setting("DB_NEWS")))
                 $news_array = array_reverse(unserialize(gzuncompress(file_get_contents(global_setting("DB_NEWS")))));
+                */
 ?>
 <br/>
-<ul>
 <?php
+/*
         foreach($news_array as $news)
         {
                 echo '<li class="entry">';
@@ -62,8 +64,20 @@
 
                 echo "</li>";
         }
-?>
-</ul>
+        */
+
+        if ( defined( 'TBW_EXT_NEWSURL' ) )
+        {
+        ?> 
+       
+<iframe name="newsbox" id="newsbox" height="1000" scrolling="no" frameborder="0" style="width:500px; position:absolute; top:200px; left:200px;" src="<?php print TBW_EXT_NEWSURL;?>" >
+  <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen:
+  Sie k&ouml;nnen die eingebettete Seite &uuml;ber den folgenden Verweis
+  aufrufen: <a href="<?php print $newsUrl;?>">News</a></p>
+</iframe>
+        <?php 
+		}
+		?>
 </div>
 
 <div class="donate" style="position:absolute; top:450px; left:5px;">

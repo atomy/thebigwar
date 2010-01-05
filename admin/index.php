@@ -391,7 +391,7 @@
       </td>
       <td style="width: 200px;" align="center" nowrap="nowrap" valign="middle">
 			<?php if(isset($admin_array['permissions'][17]) && $admin_array['permissions'][17]){?><a href="<?php echo $RELPATH; ?>index.php#action-17"><span xml:lang="en">News</span><br><span xml:lang="en">bearbeiten</span></a>
-			<?php } else {?><span xml:lang="en">News</span><br><span xml:lang="en">bearbeiten</span><?php }?>
+			<?php } else {?><span xml:lang="en">News</span><br><span xml:lang="en">bearbeiten (inaktiv, News via Forum!)</span><?php }?>
       </td>
     </tr>
 	

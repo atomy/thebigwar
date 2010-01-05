@@ -11,6 +11,9 @@
 
     if(isset($_POST['news']))
     {
+        echo "<h1>FEHLER, NEWS INS FORUM VERSCHOBEN!</h1>";
+        return;
+          
         foreach($_POST['news'] as $i=>$news)
         {
             if(isset($_POST['delete']) && $_POST['delete'] && isset($news_array[$i]))
