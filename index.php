@@ -24,15 +24,6 @@
 </tr>
 </table>
 
-
-
-<?php
-/*
-        $news_array = array();
-        if(is_file(global_setting("DB_NEWS")) && filesize(global_setting("DB_NEWS")) > 0 && is_readable(global_setting("DB_NEWS")))
-                $news_array = array_reverse(unserialize(gzuncompress(file_get_contents(global_setting("DB_NEWS")))));
-                */
-?>
 <br/>
 <?php
 /*
