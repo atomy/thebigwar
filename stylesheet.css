@@ -24,7 +24,7 @@ select { color:#CCCCCC; width:145px; background-color:#212025; border:solid; bor
 .h2 { color:#666666; font-size:14px; font-weight:bold; font-family:Tahoma; }
 * { margin:0; padding:0; }
 
-html { background-color:#4e4e4e; color:#bbb; font-size:12px; font-family:sans-serif; }
+html { color:#bbb; font-size:12px; font-family:sans-serif; }
 body { min-height:2000; width:100%; background-repeat:repeat; }
 #main-container { padding-left:205px; }
 
