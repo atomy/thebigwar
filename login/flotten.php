@@ -219,7 +219,7 @@ if($me->permissionToAct() && $my_flotten < $max_flotten && isset($_POST['flotte'
         else
         $target_koords = array($_POST["galaxie"], $_POST["system"], $_POST["planet"]);
 
-        	
+         
         $galaxy_obj = Classes::Galaxy($_POST['galaxie']);
         $planet_owner = $galaxy_obj->getPlanetOwner($_POST['system'], $_POST['planet']);
         $planet_owner_flag = $galaxy_obj->getPlanetOwnerFlag($_POST['system'], $_POST['planet']);
@@ -330,9 +330,9 @@ diesen Planeten anzufliegen.</p>
   		                $transport[1] += $item_info['trans'][1]*$anzahl;
   		                $ges_count += $anzahl;
   		            }
-  		            	
+  		             
   		            $show_form2 = true;
-  		            	
+  		             
   		            if(isset($_POST['auftrag']) || isset($_POST['buendnisflug1']))
   		            {
   		                $owner_obj = Classes::User($planet_owner);
@@ -417,7 +417,7 @@ Anfängerschutz.)</p>
   		                            {
   		                                $bndfleet_obj = $buendnisflug_fleet;
   		                            }
-  		                            	
+  		                             
 
   		                            # Geschwindigkeitsfaktor
   		                            if(!isset($_POST['speed']) || $_POST['speed'] < 0.05 || $_POST['speed'] > 1)
@@ -470,7 +470,7 @@ da eigene Flotten mit Angriffsauftrag zum Planeten unterwegs sind.</p>
   		                                }
 
 
-  		                                	
+  		                                 
   		                                if(!isset($_POST['transport'])) $_POST['transport'] = array(0,0,0,0,0);
   		                                if(!isset($_POST['rtransport'])) $_POST['rtransport'] = array();
   		                                if($_POST['transport'][0] > $ress[0]) $_POST['transport'][0] = $ress[0];
@@ -645,7 +645,7 @@ Sie müssen woanders mitfliegen oder zuhause bleiben.</p>
   		                                }
 
 
-  		                                	
+  		                                 
   		                                if($buendnisflug) $fleet_obj->destroy();
   		                                else $fleet_obj->start();
 
@@ -773,7 +773,7 @@ if(isset($_POST['saveflug']))
   		                    ?>
 <form
 	action="flotten.php?<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"
-	method="post" class="flotte-versenden-2"
+	method="post" class="flotte-versenden-2" name="sendfleet"
 	onsubmit="this.setAttribute('onsubmit', 'return confirm(\'Doppelklickschutz: Sie haben ein zweites Mal auf \u201eAbsenden\u201c geklickt. Dadurch wird Ihre Flotte auch zweimal abgesandt (sofern die nötigen Schiffe verfügbar sind). Sind Sie sicher, dass Sie diese Aktion durchführen wollen?\');');">
 <dl>
 	<dt class="c-ziel">Ziel</dt>
@@ -793,19 +793,55 @@ if(isset($_POST['saveflug']))
 		class="c-tritiumverbrauch <?=($this_ress[4] >= $tritium) ? 'ja' : 'nein'?>"
 		id="tritium-verbrauch"><?=ths($tritium)?>&thinsp;<abbr title="Tonnen">t</abbr></dd>
 
-	<dt class="c-geschwindigkeit"><label for="speed">Gesch<kbd>w</kbd>indigkeit</label></dt>
-	<dd class="c-geschwindigkeit"><select name="speed" id="speed"
-		accesskey="w" tabindex="1" onchange="recalc_values();"
-		onkeyup="recalc_values();">
-		<?php
-		for($i=1,$pr=100; $i>0; $i-=.01,$pr-=1)
-		{
-		    ?>
-		<option value="<?=htmlentities($i)?>"><?=htmlentities($pr)?>&thinsp;%</option>
-		<?php
-		}
-		?>
-	</select></dd>
+	<dt class="c-geschwindigkeit" style="height: 40px; line-height: 40px;"><label
+		for="speed">Gesch<kbd>w</kbd>indigkeit</label></dt>
+
+	<dd class="c-geschwindigkeit" style="height: 40px;">
+	<div class="vert_slider"
+		style="background-image: url(/images/speedbar.gif); background-no-repeat; background-color: #000000 border :   medium solid red; position: relative; left: 70px; width: 60%; margin-top: 10px;"></div>
+
+	<div class="formbox"
+		style="width: 50px; position: relative; top: -15px;"><input
+		type="text" name="speed" value="100" id="speed" style="width: 30px;"
+		onChange="recalc_values();" onKeyUp="recalc_values();"
+		onKeyDown="recalc_values();" maxlength="2" /> &#37;</div>
+	</dd>
+ 
+	<script type="text/javascript" src="<?=htmlentities(h_root.'/javascript/yui-min.js')?>"></script>
+
+	<script type="text/javascript">
+	// Create a YUI instance and request the slider module and its dependencies
+	YUI({combine: true, timeout: 10000}).use("slider", function (Y) {
+
+	// store the node to display the vertical Slider's current value
+	var v_report = Y.one('#speed'),
+	    vert_slider;
+    
+	// instantiate the vertical Slider.  Use the classic thumb provided with the
+	// Sam skin
+	vert_slider = new Y.Slider({
+    	axis: 'x', // vertical Slider
+    	value: 100, // initial value
+    	min: 1,
+    	max: 100,
+    	railSize: '11em', // range the thumb can move through
+    	thumbImage: '/images/thumb-classic-x.png'
+	});
+
+	// callback function to display Slider's current value
+	function reportValue(e) 
+	{
+	document.getElementById("speed").value = e.newVal;
+	recalc_values();
+	}
+
+	vert_slider.after('valueChange', reportValue);
+	
+	// 	render the slider into the first element with class vert_slider
+	vert_slider.render('.vert_slider');
+	
+	});
+	</script>
 
 	<dt class="c-flugzeit">Flugzeit</dt>
 	<dd class="c-flugzeit" id="flugzeit"
@@ -1024,7 +1060,12 @@ if(isset($_POST['saveflug']))
 
 				// Tritiumverbrauch
 				var speed_obj = document.getElementById('speed');
-				var speed = parseFloat(speed_obj.options[speed_obj.selectedIndex].value);
+
+				// reset to 100 if there's bullshit in
+				if(speed_obj.value.length > 3 || isNaN(speed_obj.value))
+					speed_obj.value = 100;
+				
+				var speed = parseFloat(speed_obj.value) / 100;
 				var tritium = <?=$tritium?>;
 				if(!isNaN(speed))
 					tritium = Math.floor(tritium*speed);
@@ -1336,17 +1377,17 @@ Bauen Sie das Kontrollwesen aus, um die maximale Anzahl zu erhöhen.</p>
 <script type="text/javascript">
  	  	                 activate_users_list(document.getElementById("i-buendnis-benutzername"));
  	  	         </script> <?php
-		}
-?>
+	}
+	?>
 <fieldset class="flotte-schiffe"><legend>Schiffe</legend>
 <dl>
-	<?php
-		$i = 5;
-		foreach($me->getItemsList('schiffe') as $id)
-		{
-			if($me->getItemLevel($id, 'schiffe') < 1) continue;
-			$item_info = $me->getItemInfo($id, 'schiffe');
-?>
+<?php
+$i = 5;
+foreach($me->getItemsList('schiffe') as $id)
+{
+    if($me->getItemLevel($id, 'schiffe') < 1) continue;
+    $item_info = $me->getItemInfo($id, 'schiffe');
+    ?>
 	<dt><a
 		href="help/description.php?id=<?=htmlentities(urlencode($id))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"
 		title="Genauere Informationen anzeigen"><?=utf8_htmlentities($item_info['name'])?></a>
@@ -1358,24 +1399,24 @@ Bauen Sie das Kontrollwesen aus, um die maximale Anzahl zu erhöhen.</p>
 		onclick='document.getElementById("<?=$i?>").value = "<?=$item_info['level']?>"'
 		ondblclick='document.getElementById("<?=$i?>").value = "0"'
 		value="max" /></dd>
-	<?php
-			$i++;
-		}
+		<?php
+		$i++;
+}
 ?>
 </dl>
 </fieldset>
 <?php
-		if($i>5 && $my_flotten < $max_flotten && $me->permissionToAct())
-		{
-?>
+if($i>5 && $my_flotten < $max_flotten && $me->permissionToAct())
+{
+    ?>
 <div>
 <button type="submit" accesskey="w" tabindex="<?=$i?>"><kbd>W</kbd>eiter</button>
 </div>
-<?php
-		}
+    <?php
+}
 ?></form>
 <?php
-	}
+}
 
-	login_gui::html_foot();
+login_gui::html_foot();
 ?>
