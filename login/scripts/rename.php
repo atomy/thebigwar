@@ -48,14 +48,16 @@
     if(isset($_POST['planet_name']))
     {
         $stringplanet = $_POST['planet_name'];
-        $noblockplanet = true;
+        $nameSyntaxOk = true;
         for($i=0;$i<strlen($stringplanet);$i++)
         {
             $explode[$i] = substr($stringplanet, $i, 1);
-            if(!in_array($explode[$i],$keyarray)) $noblockplanet = false;
+            if(!in_array($explode[$i],$keyarray)) $nameSyntaxOk = false;
         }
     }
-    if($planet_error)
+    
+    // check if planetName returned error and syntax IS ok (planetName will return false on wrong syntax too!)
+    if( $planet_error && $nameSyntaxOk )
     {
 ?>
 <p class="error">
@@ -79,11 +81,11 @@
 </p>
 <?php
     }
-    else if(isset($_POST['planet_name']) && $noblockplanet == false)
+    else if(isset($_POST['planet_name']) && $nameSyntaxOk == false)
     {
 ?>
 <p class="error">
-            Der Name des Planeten enthält ungültige Zeichen.
+            Der Name des Planeten enth&auml;lt ung&uuml;ltige Zeichen.
 </p>
 <?php
     }

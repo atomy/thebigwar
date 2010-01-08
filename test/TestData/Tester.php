@@ -31,7 +31,7 @@ class tester
                 
                 $index = $this->setUp_NewPlanet( $user->getName(), $planetData );
                 
-                if ( $index === false )
+                if ( $index === false ) 
                 {
                     throw new Exception( 'setUp() failed, setting up planet failed.' );
                 }

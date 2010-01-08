@@ -691,22 +691,17 @@ class User extends Dataset
         
         #Planiname Zeichen pruefen
         $stringplanet = $name;
-        $noblockplanet = true;
         
         for ( $i = 0; $i < strlen( $stringplanet ); $i ++ )
         {
             $explode[$i] = substr( $stringplanet, $i, 1 );
             
+            // char didnt match our postive list, return
             if ( ! in_array( $explode[$i], $keyarray ) )
             {
-                $noblockplanet = false;
+                return false;
             }
-        }
-        
-        if ( $noblockplanet == false )
-        {
-            return true;
-        }
+        }       
         
         if ( $name !== false && trim( $name ) != '' )
         {

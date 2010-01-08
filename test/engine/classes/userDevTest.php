@@ -554,31 +554,74 @@ class userDevTest extends PHPUnit_Framework_TestCase
 
     
     /**
-	 * most of the User::getScores() is covered by the setupTest, however we need to fill some gaps in coverage
+     * subtests:
+     * - setting illegal planet names \o/
+     * - setting legal planet name \o/
+     * - getting planet names and compare them to testdata \o/
+     * - getting planet names and compare them to previous set \o/ 
+     * - test galaxy kram TODO
      */
     public function testPlanetName( )
-    {       
+    {   
+        $tested = 0;
+            
         foreach ( $this->testData->getTestUsers() as $testUser )
         {
             if ( ! $testUser->isCreated() )
             {
                 $userObj = Classes::User( $testUser->getName() );
                 $this->assertFalse( $userObj->planetName() );
+                
+                continue;
             } 
             else
             {
                 $userObj = Classes::User( $testUser->getName() );
+                $this->assertGreaterThan( 0, $userObj->getStatus() );
+                
+                if ( $testUser->getPlanetCount() <= 0 )
+                {
+                    return;
+                }
             }
                       
-            $planets = $this->getPlanetsList();
+            $planets = $userObj->getPlanetsList();
+            
+            $this->assertType( 'array', $planets, "user: ".$testUser->getName() );
             
             foreach ( $planets as $planet )
             {
-                $this->setActivePlanet( $planet );            
+                $userObj->setActivePlanet( $planet );            
             
+                // comparing planet names with our internal saved ones
+                $testPlanets = $testUser->getPlanets();
+                $curTestPlanet = false;
+                                
+                foreach ( $testPlanets as $testPlanet )
+                {
+                    if ( $testPlanet->getIndex() == $planet )
+                    {
+                        $curTestPlanet = $testPlanet;
+                    }
+                }
+                
+                $this->assertType('object', $curTestPlanet );
+                $this->assertGreaterThan( 0, strlen( $userObj->planetName() ));                
+                $this->assertEquals( $curTestPlanet->getName(), $userObj->planetName() );                
+                
+                // trying different names, allowed ones and disallowed
                 $this->assertFalse( $userObj->planetName( 'invalid_name%&%??!.__aa' ) );
-            }            
+                $this->assertFalse( $userObj->planetName( '\\meh' ) );
+                $this->assertFalse( $userObj->planetName( '!!' ) );
+                $this->assertTrue( $userObj->planetName( 'holy shit' ) );
+                $this->assertTrue( $userObj->planetName( 'IMaCOOLname' ) );       
+                
+                $this->assertEquals( 'IMaCOOLname', $userObj->planetName() );          
+            }  
+            $tested++;          
         }
+        
+        $this->assertGreaterThan( 0, $tested );
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
