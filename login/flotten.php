@@ -801,15 +801,15 @@ if(isset($_POST['saveflug']))
 		style="background-image: url(/images/speedbar.gif); background-no-repeat; background-color: #000000 border :   medium solid red; position: relative; left: 70px; width: 60%; margin-top: 10px;"></div>
 
 	<div class="formbox"
-		style="width: 50px; position: relative; top: -15px;"><input
+		style="width:s50px; position: relative; top: -15px;"><input
 		type="text" name="speed" value="100" id="speed" style="width: 30px;"
 		onChange="recalc_values();" onKeyUp="recalc_values();"
 		onKeyDown="recalc_values();" maxlength="2" /> &#37;</div>
 	</dd>
  
-	<script type="text/javascript" src="../javascript/yui-min.js"></script>
+	<script type="text/javascript" src="<?=htmlentities(h_root.'/javascript/yui-min.js')?>"></script>
 
-	<script type="text/javascript">  
+	<script type="text/javascript">
 	// Create a YUI instance and request the slider module and its dependencies
 	YUI({combine: true, timeout: 10000}).use("slider", function (Y) {
 
