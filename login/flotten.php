@@ -807,9 +807,9 @@ if(isset($_POST['saveflug']))
 		onKeyDown="recalc_values();" maxlength="2" /> &#37;</div>
 	</dd>
  
-	<script type="text/javascript" src="<?=htmlentities(h_root.'/javascript/yui-min.js')?>"></script>
+	<script type="text/javascript" src="../javascript/yui-min.js"></script>
 
-	<script type="text/javascript">
+	<script type="text/javascript">  
 	// Create a YUI instance and request the slider module and its dependencies
 	YUI({combine: true, timeout: 10000}).use("slider", function (Y) {
 
