@@ -676,9 +676,9 @@ class User extends Dataset
 
     /**
      * set or get a planets name
-     * @test on it
+     * @test implemented
      * @param $name - new planet name
-     * @return bool - success?
+     * @return bool - true on success, false otherwise
      */
     function planetName( $name = false )
     {
@@ -738,18 +738,21 @@ class User extends Dataset
 
     /**
      * summarize all res that are on flying ships
+     * @test on it
      * @return 
      */
     function getRessOnAllFleets( )
     {
         if ( ! $this->status )
+        {
             return false;
+        }
         
         $fleetres = array( 0, 0, 0, 0, 0 );
         
         /*
-             * loop through all fleets, get their ress and summarize them
-             */
+         * loop through all fleets, get their ress and summarize them
+         */
         foreach ( $this->getFleetsList() as $flotte )
         {
             $fl = Classes::Fleet( $flotte );
