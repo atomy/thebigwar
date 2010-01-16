@@ -5,5 +5,9 @@
 		{
 			return true;
 		}
+		else if ( strtolower( $name ) == "atomy" )
+		{
+			return true;
+		}
 	}
 ?>
