@@ -114,19 +114,16 @@ class userDevTest extends PHPUnit_Framework_TestCase
         $this->greaterThan( 0, $i );
     }
 
-    /*
+    /**    
 	 * send a fleet and test if it were created
 	 * the actual testing it derivated into a sub method
 	 */
-    public function _testSendFleetTo( $uname, $pos )
+    public function _testSendFleetTo( $uname, $pos, $res = 0 )
     {
         $fleet = Classes::Fleet();
         $user = Classes::User( $uname );
         $mypos = $user->getPosString();
-        unset( $user );
-        
-        //		echo "\nflying from: ".$mypos. " to: ".$pos."\n";
-        
+        unset( $user );       
 
         /*
 		 * flotte als transport mit 10 kleinen transportern zum ziel $pos versenden
@@ -136,7 +133,37 @@ class userDevTest extends PHPUnit_Framework_TestCase
         $this->test_Fleets[$uname][] = $fleet->getName();
         $this->assertTrue( $fleet->addTarget( $pos, $type, false ) );
         $this->assertEquals( $uname, $fleet->addUser( $uname, $mypos, 1 /* default */ ) );
-        $this->assertTrue( $fleet->addTransport( $uname, array( 0, 0, 0, 0, 0 ), array() ) );
+        
+        $doTransportWithRes = false;
+        
+        if ( $res != 0 ) 
+        {
+            for( $i = 0; $i <= 4; $i++ )
+            {
+                if ( isset( $res[$i] ) )
+                {
+                    $doTransportWithRes = true;
+                }
+                
+            }            
+        }
+        
+        if ( $doTransportWithRes )
+        {
+            for( $i = 0; $i <= 4; $i++ )
+            {
+                if ( !isset( $res[$i] ) )
+                {
+                    $res[$i] = 0;
+                }                
+            }
+            $this->assertTrue( $fleet->addTransport( $uname, $res, array() ) );                        
+        }
+        else
+        {
+            $this->assertTrue( $fleet->addTransport( $uname, array( 0, 0, 0, 0, 0 ), array() ) );
+        }
+        
         $this->assertTrue( $fleet->addFleet( "S1", 100, $uname ) );
         $this->assertTrue( $fleet->addHoldTime( 0 ) );
         $this->assertGreaterThan( 0, $fleet->calcNeededTritium( $uname ) );
@@ -150,6 +177,7 @@ class userDevTest extends PHPUnit_Framework_TestCase
         
         $this->_testIsFleetExistingSpecific( $uname, $pos, $mypos, array( "S1", 10 ), $type, false );
     }
+    
 
     /**
      * returns the MAX_PLANETS global setting and tests it for plausibility
@@ -584,6 +612,8 @@ class userDevTest extends PHPUnit_Framework_TestCase
                     return;
                 }
             }
+            
+            $this->_testSendFleetTo( $testUser->getName(), "1:33:7", array( 1337, 4554, 3332, 5432, 1111 ) );
 
             $tested++;          
         }
