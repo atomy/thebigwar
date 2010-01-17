@@ -1416,10 +1416,15 @@ class User extends Dataset
     function getLastActivity( )
     {
         if ( ! $this->status )
+        {
             return false;
+        }
         
         if ( ! isset( $this->raw['last_active'] ) )
+        {
             return false;
+        }
+        
         return $this->raw['last_active'];
     }
 

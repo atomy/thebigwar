@@ -77,7 +77,7 @@
 	global_setting('THS_HTML', '&nbsp;');
 	global_setting('THS_UTF8', "\xc2\xa0");
 	global_setting('MIN_CLICK_DIFF', 0.3); # Sekunden, die zwischen zwei Klicks mindestens vergehen muessen, sonst Bremsung
-	global_setting('EMAIL_FROM', 'atomy@jackinpoint.net');
+	global_setting('EMAIL_FROM', 'atomy@thebigwar.org');
 	global_setting('MAX_PLANETS', 15);
 	global_setting('LIST_MIN_CHARS', 1); # Fuer Ajax-Auswahllisten
 	global_setting('ALLIANCE_RENAME_PERIOD', 3); # Minimalabstand fuers Umbenennen von Allianzen in Tagen
@@ -153,13 +153,13 @@
 
 	# Namen der Nachrichtensorten
 	$message_type_names = array (
-		1 => 'Kämpfe',
+		1 => 'K&auml;mpfe',
 		2 => 'Spionage',
 		3 => 'Transport',
 		4 => 'Sammeln',
 		5 => 'Besiedelung',
 		6 => 'Benutzernachrichten',
-		7 => 'Verbündete',
+		7 => 'Verb&uuml;ndete',
 		8 => 'Postausgang'
 	);
 
@@ -175,15 +175,16 @@
 
 	# Maximales Alter in Tagen der Nachrichtensorten
 	$message_type_times = array (
-		1 => 3,
-		2 => 3,
-		3 => 2,
-		4 => 2,
-		5 => 1,
-		6 => 5,
-		7 => 4,
-		8 => 2
+		1 => 3,     // kaempfe
+		2 => 3,     // spio
+		3 => 2,     // transport
+		4 => 2,     // sammeln
+		5 => 1,     // besiedlung
+		6 => 5,     // benutzernachrichten
+		7 => 4,     // verbuendete
+		8 => 2      // postausgang
 	);
+	
 	# Fuer veroeffentlichte Nachrichten
 	$public_messages_time = 365;
 
