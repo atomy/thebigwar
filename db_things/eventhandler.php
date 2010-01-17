@@ -8,6 +8,7 @@ require ( '../include/config_inc.php' );
 
 
 {
+    // goto ROOT dir
     chdir( dirname( __FILE__ ) );
     chdir( '..' );
     
@@ -15,9 +16,9 @@ require ( '../include/config_inc.php' );
     $error = false;
     $daemon = false;
     $verbose = false;
-    $use_jabber = $wanna_use_jabber = false;
-    
+    $use_jabber = $wanna_use_jabber = false;    
     $getopt_exists = false;
+    
     foreach ( explode( ':', get_include_path() ) as $path )
     {
         if ( is_file( $path . '/Console/Getopt.php' ) && is_readable( $path . '/Console/Getopt.php' ) )
@@ -27,6 +28,7 @@ require ( '../include/config_inc.php' );
         }
     }
     
+    // get command-line options
     if ( $getopt_exists )
     {
         require_once ( 'Console/Getopt.php' ); # PEAR
@@ -70,14 +72,13 @@ require ( '../include/config_inc.php' );
         else
             $stream = STDOUT;
         
-        fputs( $stream, <<<EOF
-Usage: {$_SERVER['argv'][0]} [Options]
+        fputs( $stream, '        
+Usage: '.$_SERVER['argv'][0].' [Options]
 Options:
   -h, --help:    Display this help and exit
   -d, --daemon:  Run in background
   -v, --verbose: Verbose output
-
-EOF );
+			' );
         
         if ( $error )
             exit( 1 );
