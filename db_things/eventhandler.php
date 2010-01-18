@@ -16,7 +16,8 @@ require ( '../include/config_inc.php' );
     $error = false;
     $daemon = false;
     $verbose = false;
-    $use_jabber = $wanna_use_jabber = false;    
+    $gCheckMsg = true;
+    $use_jabber = $wanna_use_jabber = false;
     $getopt_exists = false;
     
     foreach ( explode( ':', get_include_path() ) as $path )
@@ -32,7 +33,8 @@ require ( '../include/config_inc.php' );
     if ( $getopt_exists )
     {
         require_once ( 'Console/Getopt.php' ); # PEAR
-        $options = Console_Getopt::getopt( $_SERVER['argv'], 'hdvJ', array( 'help', 'daemon', 'verbose', 'no-jabber' ) );
+        $options = Console_Getopt::getopt( $_SERVER['argv'], 'hdvJ', array( 'help', 'daemon', 'verbose', 'no-jabber', 'checkmsg' ) );
+        
         if ( $options instanceof PEAR_Error )
         {
             fputs( STDERR, $options->message . "\n" );
@@ -59,6 +61,9 @@ require ( '../include/config_inc.php' );
                 case '--no-jabber':
                     $use_jabber = $wanna_use_jabber = false;
                     break;
+                case 'm':
+                case 'checkmsg':
+                    $gCheckMsg = true;
             }
         }
     }
@@ -73,11 +78,12 @@ require ( '../include/config_inc.php' );
             $stream = STDOUT;
         
         fputs( $stream, '        
-Usage: '.$_SERVER['argv'][0].' [Options]
+Usage: ' . $_SERVER['argv'][0] . ' [Options]
 Options:
   -h, --help:    Display this help and exit
   -d, --daemon:  Run in background
   -v, --verbose: Verbose output
+  -m, --checkmsg: Check for old Messages and delete them (expire)
 			' );
         
         if ( $error )
@@ -89,14 +95,17 @@ Options:
     $USE_OB = false;
     require ( 'engine/include.php' );
     
+    // endless execution
     set_time_limit( 0 );
     
+    // pid files are cool
     if ( ! touch( global_setting( "DB_EVENTHANDLER_PIDFILE" ) ) || ! ( $fh_pid = fopen( global_setting( "DB_EVENTHANDLER_PIDFILE" ), 'r+' ) ) )
     {
         fputs( STDERR, "Error, couldn't create pid file " . global_setting( "DB_EVENTHANDLER_PIDFILE" ) . ".\n" );
         exit( 1 );
     }
     
+    // locking is gay, but lets check if there's already something running
     if ( ! flock( $fh_pid, LOCK_EX + LOCK_NB ) )
     {
         fputs( STDERR, "Error, another instance seems already to be running. The PID seems to be " . trim( file_get_contents( global_setting( "DB_EVENTHANDLER_PIDFILE" ) ) ) . ".\n" );
@@ -107,10 +116,6 @@ Options:
     
     $databases = get_databases();
     
-    if ( $daemon )
-        $errlog = fopen( global_setting( "DB_EVENTHANDLER_LOG" ), 'a' );
-    else
-        $errlog = STDERR;
     
     __autoload( 'Classes' );
     __autoload( 'Fleet' );
@@ -129,11 +134,16 @@ Options:
         global $selected_database;
         
         $prefix = date( 'Y-m-d, H:i:s' ) . "\t";
+        
+        // we arent using multiple databases
         #if(isset($selected_database) && $selected_database)
         #	$prefix .= $selected_database."\t";
+        
+
         return $prefix;
     }
 
+    // are we going to terminate? exit some stuff
     function check_termination( )
     {
         global $errlog;
@@ -184,11 +194,12 @@ Options:
         
         if ( $pid == - 1 )
             fputs( STDERR, time_prefix() . "Forking failed, continuing.\n" );
-        elseif ( $pid )
-        {
-            fputs( STDOUT, time_prefix() . "Eventhandler forked, PID " . $pid . ".\n" );
-            exit( 0 );
-        }
+        else 
+            if ( $pid )
+            {
+                fputs( STDOUT, time_prefix() . "Eventhandler forked, PID " . $pid . ".\n" );
+                exit( 0 );
+            }
     }
     
     fwrite( $fh_pid, getmypid() . "\n" );
@@ -249,15 +260,15 @@ Options:
             case SIGUSR1:
                 fputs( $errlog, time_prefix() . "SIGUSR1 (" . SIGUSR1 . ")\n" );
                 fputs( $errlog, time_prefix() . "Rescanning databases... " );
-
+                
                 global $databases;
                 
-				$databases = get_databases();
+                $databases = get_databases();
                 fputs( $errlog, "Done\n" );
                 
                 global $use_jabber, $wanna_use_jabber, $jabber, $jabber_messengers, $jabber_auth_info;
                 
-				if ( $wanna_use_jabber )
+                if ( $wanna_use_jabber )
                 {
                     if ( $use_jabber && $jabber->connected )
                     {
@@ -327,13 +338,12 @@ Options:
 ##########################
 
 {
-
     function arrive( $fleet_id )
     {
         #$filename = s_root.'/logs/eventhandler.log';
         #$fo = fopen($filename, "a");
         #fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. Fleet-ID:  ".$fleet_id."\n");
-
+        
         global $errlog;
         
         if ( function_exists( 'pcntl_fork' ) )
@@ -375,7 +385,7 @@ Options:
             
             Classes::resetInstances();
 
-			if ( $pid != - 1 )
+            if ( $pid != - 1 )
             {
                 fputs( $errlog, time_prefix() . "Eventhandler Funktion Arrive. Exit Fleet-ID:  " . $fleet_id . "\n\n\n" );
                 exit( 0 );
@@ -389,6 +399,175 @@ Options:
         }
     }
 
+    function checkExpiredUsers( &$user )
+    {
+        global $errlog;
+        
+        $last_activity = $user->getLastActivity();
+        
+        // letztes login, abgerundet in tagen
+        if ( $last_activity !== false )
+        {
+            $days = ceil( ( time() - $last_activity ) / 86400 );
+        }
+        else
+        {
+            $days = ceil( ( time() - $user->getRegistrationTime() ) / 86400 );
+        }
+        
+        $today = date( 'Y-m-d' );
+        
+        # Wenn der Spieler inaktiv ist, loeschen
+        if ( $last_activity !== false )
+        {
+            if ( $user->umode() )
+            {
+                if ( $days == 21 && $user->lastMailSent() != $today ) # 3 Wochen: Nachricht
+                {
+                    if ( $user->checkSetting( 'email' ) )
+                    {
+                        mail( $user->checkSetting( 'email' ), "Accountinaktivit\xc3\xa4t in T-B-W", "Sie erhalten diese Nachricht, weil Sie sich seit geraumer Zeit nicht mehr in The Big War angemeldet haben. Sie haben zwei Wochen Zeit, sich anzumelden, danach wird Ihr Account einer automatischen Loeschung unterzogen.\n\nDas Spiel erreichen Sie unter " . GLOBAL_GAMEURL . " \xe2\x80\x93 Ihr Benutzername lautet " . $user->getName(), "Content-Type: text/plain;\r\n  charset=\"utf-8\"\r\nFrom: " . global_setting( "EMAIL_FROM" ) . "\r\nReply-To: " . global_setting( "EMAIL_FROM" ) );
+                        $user->lastMailSent( $today );
+                    }
+                }
+                else 
+                    if ( $days >= 35 ) # 5 Wochen: Loeschung
+                    {
+                        if ( $user->destroy() )
+                        {
+                            fputs( $errlog, "Deleted user `" . $user->getName() . "' because of inactivity.\n" );
+                        }
+                        else
+                        {
+                            fputs( $errlog, "Error: Couldn't delete user `" . $user->getName() . "'.\n" );
+                        }
+                        
+                        continue;
+                    }
+            }
+            else
+            {
+                if ( ( $days == 21 || $days == 34 ) && $user->lastMailSent() != $today )
+                {
+                    if ( $user->checkSetting( 'email' ) )
+                    {
+                        mail( $user->checkSetting( 'email' ), "Accountinaktivitaet in T-B-W", "Sie erhalten diese Nachricht, weil Sie sich seit geraumer Zeit nicht mehr in The Big War angemeldet haben. Sie haben " . ( ( $days == 34 ) ? 'einen Tag' : 'zwei Wochen' ) . " Zeit, sich anzumelden, danach wird Ihr Account einer automatischen Loeschung unterzogen.\n\nDas Spiel erreichen Sie unter " . GLOBAL_GAMEURL . " \xe2\x80\x93 Ihr Benutzername lautet " . $user->getName(), "Content-Type: text/plain;\r\n  charset=\"utf-8\"\r\nFrom: " . global_setting( "EMAIL_FROM" ) . "\r\nReply-To: " . global_setting( "EMAIL_FROM" ) );
+                        $user->lastMailSent( $today );
+                    }
+                }
+                elseif ( $days >= 35 )
+                {
+                    if ( $user->destroy() )
+                    {
+                        fputs( $errlog, "Deleted user `" . $user->getName() . "' because of inactivity.\n" );
+                    }
+                    else
+                    {
+                        fputs( $errlog, "Error: Couldn't delete user `" . $user->getName() . "'.\n" );
+                    }
+                    continue;
+                }
+            }
+        }
+        elseif ( $days == 7 && $user->lastMailSent() != $today )
+        {
+            if ( $user->checkSetting( 'email' ) )
+            {
+                mail( $user->checkSetting( 'email' ), "Accountinaktivit\xc3\xa4t in T-B-W", "Sie erhalten diese Nachricht, weil Sie sich seit geraumer Zeit nicht mehr in The Big War angemeldet haben. Sie haben eine Woche Zeit, sich anzumelden, danach wird Ihr Account einer automatischen L\xc3\xb6schung unterzogen.\n\nDas Spiel erreichen Sie unter " . GLOBAL_GAMEURL . " \xe2\x80\x93 Ihr Benutzername lautet " . $user->getName(), "Content-Type: text/plain;\r\n  charset=\"utf-8\"\r\nFrom: " . global_setting( "EMAIL_FROM" ) . "\r\nReply-To: " . global_setting( "EMAIL_FROM" ) );
+            }
+        }
+        elseif ( $days >= 14 )
+        {
+            if ( $user->destroy() )
+            {
+                fputs( $errlog, "Deleted user `" . $user->getName() . "' because of inactivity.\n" );
+            }
+            else
+            {
+                fputs( $errlog, "Error: Couldn't delete user `" . $user->getName() . "'.\n" );
+            }
+            continue;
+        }
+    }
+
+    /**
+     * check for old messages stored in given user object
+     * @return unknown_type
+     */
+    function checkExpiredMessages( &$user )
+    {
+        global $message_type_times;
+        
+        # Alte Nachrichten loeschen        
+        $deleted_messages = 0;
+        $processed_messages = array();
+        $max_ages = $message_type_times;
+        
+        foreach ( $max_ages as $k => $v )
+        {
+            $max_ages[$k] *= 86400; // *24h
+        }
+        
+        $message_categories = $user->getMessageCategoriesList();
+        
+        foreach ( $message_categories as $category )
+        {
+            $max_diff = $max_ages[$category];
+            $messages_list = $user->getMessagesList( $category );
+            
+            foreach ( $messages_list as $message_id )
+            {
+                $processed_messages[$message_id] = true;
+                
+                if ( $user->checkMessageStatus( $message_id, $category ) )
+                {
+                    continue; # Ungelesen / Archiviert
+                }
+                
+                $message_obj = Classes::Message( $message_id );
+                
+                if ( ! $message_obj->getStatus() || ( time() - $message_obj->getTime() ) > $max_diff )
+                {
+                    $user->removeMessage( $message_id, $category );
+                    $deleted_messages ++;
+                }
+                else
+                {
+                    if ( ! $message_obj->getStatus() )
+                    {
+                        fputs( $errlog, time_prefix() . "checkForOldMessages() invalid Status returned while trying to check message id: " . $message_id . "\n" );
+                    }
+                }
+            }
+        }
+        
+        echo "deleted " . $deleted_messages . " on user " . $user->getName() . " \n";
+        
+        // Nachrichten, die niemandem gehoeren, loeschen
+        $dh = opendir( global_setting( "DB_MESSAGES" ) );
+        
+        while ( ( $fname = readdir( $dh ) ) !== false )
+        {
+            if ( $fname[0] == '.' )
+            {
+                continue;
+            }
+            
+            $fname = urldecode( $fname );
+            
+            if ( ! isset( $processed_messages[$fname] ) )
+            {
+                $message = Classes::Message( $fname );
+                $message->destroy();
+            }
+        }
+        closedir( $dh );
+        
+        $processed_messages = count( $processed_messages );
+        fputs( $errlog, "Checked " . $processed_messages . " messages.\n" );
+        fputs( $errlog, "Deleted " . $deleted_messages . " messages.\n" );
+    }
+
     function walkthrough_users( )
     {
         global $errlog;
@@ -398,23 +577,10 @@ Options:
         fputs( $errlog, "\n" . time_prefix() . "Walking through users for database " . global_setting( "DB" ) . "...\n" );
         
         # Rohstoffe aller Planeten aller Benutzer zusammenzaehlen
-        # Alte Nachrichten loeschen
         $ges_ress = array( 0, 0, 0, 0, 0 );
-        $deleted_messages = 0;
-        $processed_messages = array();
-        
-        global $message_type_times;
-        
-		$max_ages = $message_type_times;
-
-        foreach ( $max_ages as $k => $v )
-		{
-            $max_ages[$k] *= 86400;
-		}
         
         $dh = opendir( global_setting( "DB_PLAYERS" ) );
-        
-		while ( ( $filename = readdir( $dh ) ) !== false )
+        while ( ( $filename = readdir( $dh ) ) !== false )
         {
             if ( ! is_file( global_setting( "DB_PLAYERS" ) . '/' . $filename ) )
                 continue;
@@ -423,69 +589,7 @@ Options:
             if ( ! $user->getStatus() )
                 continue;
             
-            $last_activity = $user->getLastActivity();
-            if ( $last_activity !== false )
-                $days = ceil( ( time() - $last_activity ) / 86400 );
-            else
-                $days = ceil( ( time() - $user->getRegistrationTime() ) / 86400 );
-            
-            $today = date( 'Y-m-d' );
-            
-            # Wenn der Spieler inaktiv ist, loeschen
-            if ( $last_activity !== false )
-            {
-                if ( $user->umode() )
-                {
-                    if ( $days == 21 && $user->lastMailSent() != $today ) # 3 Wochen: Nachricht
-                    {
-                        if ( $user->checkSetting( 'email' ) )
-                        {
-                            mail( $user->checkSetting( 'email' ), "Accountinaktivit\xc3\xa4t in T-B-W", "Sie erhalten diese Nachricht, weil Sie sich seit geraumer Zeit nicht mehr in The Big War angemeldet haben. Sie haben zwei Wochen Zeit, sich anzumelden, danach wird Ihr Account einer automatischen L\xc3\xb6schung unterzogen.\n\nDas Spiel erreichen Sie unter " . GLOBAL_GAMEURL . " \xe2\x80\x93 Ihr Benutzername lautet " . $user->getName(), "Content-Type: text/plain;\r\n  charset=\"utf-8\"\r\nFrom: " . global_setting( "EMAIL_FROM" ) . "\r\nReply-To: " . global_setting( "EMAIL_FROM" ) );
-                            $user->lastMailSent( $today );
-                        }
-                    }
-                    elseif ( $days >= 35 ) # 5 Wochen: Loeschung
-                    {
-                        if ( $user->destroy() )
-                            fputs( $errlog, "Deleted user `" . $user->getName() . "' because of inactivity.\n" );
-                        else
-                            fputs( $errlog, "Error: Couldn't delete user `" . $user->getName() . "'.\n" );
-                        continue;
-                    }
-                }
-                else
-                {
-                    if ( ( $days == 21 || $days == 34 ) && $user->lastMailSent() != $today )
-                    {
-                        if ( $user->checkSetting( 'email' ) )
-                        {
-                            mail( $user->checkSetting( 'email' ), "Accountinaktivit\xc3\xa4t in T-B-W", "Sie erhalten diese Nachricht, weil Sie sich seit geraumer Zeit nicht mehr in The Big War angemeldet haben. Sie haben " . ( ( $days == 34 ) ? 'einen Tag' : 'zwei Wochen' ) . " Zeit, sich anzumelden, danach wird Ihr Account einer automatischen L\xc3\xb6schung unterzogen.\n\nDas Spiel erreichen Sie unter " . GLOBAL_GAMEURL . " \xe2\x80\x93 Ihr Benutzername lautet " . $user->getName(), "Content-Type: text/plain;\r\n  charset=\"utf-8\"\r\nFrom: " . global_setting( "EMAIL_FROM" ) . "\r\nReply-To: " . global_setting( "EMAIL_FROM" ) );
-                            $user->lastMailSent( $today );
-                        }
-                    }
-                    elseif ( $days >= 35 )
-                    {
-                        if ( $user->destroy() )
-                            fputs( $errlog, "Deleted user `" . $user->getName() . "' because of inactivity.\n" );
-                        else
-                            fputs( $errlog, "Error: Couldn't delete user `" . $user->getName() . "'.\n" );
-                        continue;
-                    }
-                }
-            }
-            elseif ( $days == 7 && $user->lastMailSent() != $today )
-            {
-                if ( $user->checkSetting( 'email' ) )
-                    mail( $user->checkSetting( 'email' ), "Accountinaktivit\xc3\xa4t in T-B-W", "Sie erhalten diese Nachricht, weil Sie sich seit geraumer Zeit nicht mehr in The Big War angemeldet haben. Sie haben eine Woche Zeit, sich anzumelden, danach wird Ihr Account einer automatischen L\xc3\xb6schung unterzogen.\n\nDas Spiel erreichen Sie unter " . GLOBAL_GAMEURL . " \xe2\x80\x93 Ihr Benutzername lautet " . $user->getName(), "Content-Type: text/plain;\r\n  charset=\"utf-8\"\r\nFrom: " . global_setting( "EMAIL_FROM" ) . "\r\nReply-To: " . global_setting( "EMAIL_FROM" ) );
-            }
-            elseif ( $days >= 14 )
-            {
-                if ( $user->destroy() )
-                    fputs( $errlog, "Deleted user `" . $user->getName() . "' because of inactivity.\n" );
-                else
-                    fputs( $errlog, "Error: Couldn't delete user `" . $user->getName() . "'.\n" );
-                continue;
-            }
+            checkExpiredUsers( $user );
             
             $planets = $user->getPlanetsList();
             foreach ( $planets as $planet )
@@ -530,24 +634,7 @@ Options:
                 $ges_ress[4] += $ress[4];
             }
             
-            $message_categories = $user->getMessageCategoriesList();
-            foreach ( $message_categories as $category )
-            {
-                $max_diff = $max_ages[$category];
-                $messages_list = $user->getMessagesList( $category );
-                foreach ( $messages_list as $message_id )
-                {
-                    $processed_messages[$message_id] = true;
-                    if ( $user->checkMessageStatus( $message_id, $category ) )
-                        continue; # Ungelesen / Archiviert
-                    $message_obj = Classes::Message( $message_id );
-                    if ( ! $message_obj->getStatus() || ( time() - $message_obj->getTime() ) > $max_diff )
-                    {
-                        $user->removeMessage( $message_id, $category );
-                        $deleted_messages ++;
-                    }
-                }
-            }
+            checkExpiredMessages( $user );
             
             unset( $user );
             Classes::resetInstances();
@@ -603,30 +690,7 @@ Options:
         
         fputs( $errlog, "Handelskurs recalculated.\n" );
         
-        # Nachrichten, die niemandem gehoeren, loeschen
-        
-
-        $dh = opendir( global_setting( "DB_MESSAGES" ) );
-        while ( ( $fname = readdir( $dh ) ) !== false )
-        {
-            if ( $fname[0] == '.' )
-                continue;
-            
-            $fname = urldecode( $fname );
-            
-            if ( ! isset( $processed_messages[$fname] ) )
-            {
-                $message = Classes::Message( $fname );
-                $message->destroy();
-            }
-        }
-        closedir( $dh );
-        
-        $processed_messages = count( $processed_messages );
         Classes::resetInstances();
-        
-        fputs( $errlog, "Checked " . $processed_messages . " messages.\n" );
-        fputs( $errlog, "Deleted " . $deleted_messages . " messages.\n" );
         
         # Oeffentliche Nachrichten loeschen
         
@@ -704,7 +768,6 @@ Options:
         
         return true;
     }
-
 }
 
 #####################
@@ -747,6 +810,12 @@ if ( $wanna_use_jabber )
     #$fo = fopen($filename, "a");
     
 
+    global $gCheckMsg;
+    
+    if ( $gCheckMsg )
+    {// TODO
+}
+    
     $fposition = 0;
     
     if ( date( 'H' ) * 3600 + date( 'i' ) * 60 + 60 < 14400 )
