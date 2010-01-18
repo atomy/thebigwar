@@ -113,10 +113,15 @@ class Logger
 
 		switch( $type )
 		{
-			case LOG_USER:
-				$this->setLogFile( $type, LOGDIR.LOGFILE_USER );
+			case LOG_EVENTH_GENERAL:
+				$this->setLogFile( $type, LOGDIR . LOGFILE_EVENTH_GENERAL );
 				return true;
 			break;
+			
+			case LOG_EVENTH_FLEET:
+				$this->setLogFile( $type, LOGDIR . LOGFILE_EVENTH_FLEET );
+				return true;
+			break;			
 
 			default:
 				throw new Exception( __METHOD__." logtype $type not defined" );

@@ -1,6 +1,7 @@
 #!/usr/bin/php
 <?php
-require ( '../include/config_inc.php' );
+require_once ( '../include/config_inc.php' );
+require_once ( TBW_ROOT.'engine/classes/logger.php' );
 
 ###########################
 ### Parameter auswerten ###
@@ -10,7 +11,7 @@ require ( '../include/config_inc.php' );
 {
     // goto ROOT dir
     chdir( dirname( __FILE__ ) );
-    chdir( '..' );
+    chdir( '..' );                 
     
     $print_usage = false;
     $error = false;
@@ -33,6 +34,7 @@ require ( '../include/config_inc.php' );
     if ( $getopt_exists )
     {
         require_once ( 'Console/Getopt.php' ); # PEAR
+        
         $options = Console_Getopt::getopt( $_SERVER['argv'], 'hdvJ', array( 'help', 'daemon', 'verbose', 'no-jabber', 'checkmsg' ) );
         
         if ( $options instanceof PEAR_Error )
@@ -83,8 +85,9 @@ Options:
   -h, --help:    Display this help and exit
   -d, --daemon:  Run in background
   -v, --verbose: Verbose output
-  -m, --checkmsg: Check for old Messages and delete them (expire)
-			' );
+  -m, --checkmsg: check only for old expired messages, exit afterwards  
+
+' );
         
         if ( $error )
             exit( 1 );
@@ -115,11 +118,23 @@ Options:
     ftruncate( $fh_pid, 0 );
     
     $databases = get_databases();
-    
+
+    foreach ( $databases as $selected_database => $dbinfo )
+    {
+        if ( ! is_dir( $dbinfo[0] ) )
+        {
+            continue;
+        }
+        
+        define_globals( $selected_database ); 
+        break;
+    }      
     
     __autoload( 'Classes' );
     __autoload( 'Fleet' );
     __autoload( 'Galaxy' );
+    
+    $logger = new Logger();
 }
 
 ################
@@ -146,7 +161,7 @@ Options:
     // are we going to terminate? exit some stuff
     function check_termination( )
     {
-        global $errlog;
+        global $logger;
         global $use_jabber;
         global $jabber;
         global $fh_pid;
@@ -156,18 +171,16 @@ Options:
         {
             if ( $use_jabber && $jabber->connected )
             {
-                fputs( $errlog, time_prefix() . "Disconnecting Jabber client... " );
+                $logger->logIt( LOG_EVENTH_GENERAL, "Disconnecting Jabber client... " );
                 $jabber->Disconnect();
-                fputs( $errlog, "Done.\n" );
+                $logger->logIt( LOG_EVENTH_GENERAL, "Done.\n" );
             }
             
-            fputs( $errlog, time_prefix() . "Terminated.\n\n" );
+            $logger->logIt( LOG_EVENTH_GENERAL, "Terminated.\n\n" );
             
             ftruncate( $fh_pid, 0 );
             flock( $fh_pid, LOCK_UN );
             fclose( $fh_pid );
-            if ( $daemon )
-                fclose( $errlog );
             
             exit( 0 );
         }
@@ -206,65 +219,68 @@ Options:
 
     function error_handler( $errno, $errstr, $errfile, $errline, $errcontext )
     {
-        global $errlog;
+        global $logger;
 
-        fputs( $errlog, time_prefix() );
-
+        $logText = '';
+        
         switch ( $errno )
         {
             case E_WARNING:
-                fputs( $errlog, "Warning: " );
+                $logText .= "Warning: ";
                 break;
             case E_NOTICE:
-                fputs( $errlog, "Notice: " );
+                $logText .= "Notice: " ;
                 break;
             default:
-                fputs( $errlog, "Error " . $errno . ": " );
+                $logText .= "Error " . $errno . ": ";
                 break;
         }
         
-        fputs( $errlog, $errstr );
-        fputs( $errlog, " in " . $errfile . " on line " . $errline . "." );
-        
+        $logText .= $errstr;
+        $logger->logIt( LOG_EVENTH_GENERAL, $logText );
+        $logger->logIt( LOG_EVENTH_GENERAL, " in " . $errfile . " on line " . $errline . "." );
+                
         global $process;
 
         if ( isset( $process ) && isset( $process['fleet'] ) )
-            fputs( $errlog, " Last fleet was " . $process['fleet'] . "." );
-        
-        fputs( $errlog, "\n" );
+        {
+            $logger->logIt( LOG_EVENTH_GENERAL, " Last fleet was " . $process['fleet'] . "." );
+        }       
     }
 
     function sig_handler( $signo )
     {
-        global $errlog;
+        global $logger;
         global $databases;
 
         switch ( $signo )
         {
             case SIGTERM:
-                fputs( $errlog, time_prefix() . "SIGTERM (" . SIGTERM . ")\n" );
+                $logger->logIt( LOG_EVENTH_GENERAL, "SIGTERM (" . SIGTERM . ")" );
+                
                 if ( ! defined( 'terminate' ) )
                     define( 'terminate', true );
                 break;
 
             case SIGINT:
-                fputs( $errlog, time_prefix() . "SIGINT (" . SIGINT . ")\n" );
+               $logger->logIt( LOG_EVENTH_GENERAL, "SIGINT (" . SIGINT . ")" );
+               
                 if ( ! defined( 'terminate' ) )
                     define( 'terminate', true );
                 break;
 
             case SIGHUP:
-                fputs( $errlog, time_prefix() . "SIGHUP (" . SIGHUP . ")\n" );
+                $logger->logIt( LOG_EVENTH_GENERAL, "SIGHUP (" . SIGHUP . ")" );
                 break;
 
             case SIGUSR1:
-                fputs( $errlog, time_prefix() . "SIGUSR1 (" . SIGUSR1 . ")\n" );
-                fputs( $errlog, time_prefix() . "Rescanning databases... " );
+                $logger->logIt( LOG_EVENTH_GENERAL, "SIGUSR1 (" . SIGUSR1 . ")" );
+                $logger->logIt( LOG_EVENTH_GENERAL, "Rescanning databases... " );
                 
                 global $databases;
                 
                 $databases = get_databases();
-                fputs( $errlog, "Done\n" );
+                $logger->logIt( LOG_EVENTH_GENERAL, "Done\n" );
                 
                 global $use_jabber, $wanna_use_jabber, $jabber, $jabber_messengers, $jabber_auth_info;
                 
@@ -272,18 +288,21 @@ Options:
                 {
                     if ( $use_jabber && $jabber->connected )
                     {
-                        fputs( $errlog, time_prefix() . "Disconnecting Jabber and rescanning config... " );
+                        $logger->logIt( LOG_EVENTH_GENERAL, "Disconnecting Jabber and rescanning config... " );
                         $jabber->Disconnect();
                     }
                     else
-                        fputs( $errlog, time_prefix() . "Rescanning Jabber config... " );
+                    {
+                        $logger->logIt( LOG_EVENTH_GENERAL, "Rescanning Jabber config... " );
+                    }
+                    
                     $jabber_messengers = get_messenger_info( false, true );
                     $jabber_auth_info = get_messenger_info( 'jabber' );
-                    fputs( $errlog, "Done.\n" );
+                    $logger->logIt( LOG_EVENTH_GENERAL, "Done." );
                     
                     if ( ! $jabber_auth_info || ! isset( $jabber_auth_info['username'] ) || ! isset( $jabber_auth_info['password'] ) )
                     {
-                        fputs( $errlog, time_prefix() . "Notice: no Jabber account information. Won't use instant messaging.\n" );
+                        $logger->logIt( LOG_EVENTH_GENERAL, "Notice: no Jabber account information. Won't use instant messaging." );
                         $use_jabber = false;
                     }
                     else
@@ -291,19 +310,24 @@ Options:
                         $use_jabber = true;
                         $jabber->username = $jabber_auth_info['username'];
                         $jabber->password = $jabber_auth_info['password'];
-                        fputs( $errlog, time_prefix() . "Reconnecting Jabber... " );
+                        $logger->logIt( LOG_EVENTH_GENERAL, "Reconnecting Jabber... " );
                         connect_jabber();
-                        fputs( $errlog, "Done.\n" );
+                        $logger->logIt( LOG_EVENTH_GENERAL, "Done." );
                     }
                 }
                 
                 break;
+                
             case SIGUSR2:
-                fputs( $errlog, time_prefix() . "SIGUSR2 (" . SIGUSR2 . ")\n" );
+                
+                $logger->logIt( LOG_EVENTH_GENERAL, "SIGUSR2 (" . SIGUSR2 . ")" );
+                
                 foreach ( $databases as $selected_database => $dbinfo )
                 {
                     if ( ! is_dir( $dbinfo[0] ) )
+                    {
                         continue;
+                    }
                     
                     define_globals( $selected_database );
                     walkthrough_users();
@@ -323,14 +347,16 @@ Options:
         if ( $daemon )
         {
             pcntl_signal( SIGHUP, "sig_handler" );
+            
             if ( function_exists( 'posix_setsid' ) )
+            {
                 posix_setsid();
+            }
         }
     }
     
     set_error_handler( 'error_handler', E_WARNING );
     set_error_handler( 'error_handler', E_NOTICE );
-
 }
 
 ##########################
@@ -339,13 +365,10 @@ Options:
 
 {
     function arrive( $fleet_id )
-    {
-        #$filename = s_root.'/logs/eventhandler.log';
-        #$fo = fopen($filename, "a");
-        #fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. Fleet-ID:  ".$fleet_id."\n");
+    {       
+        global $logger;
         
-        global $errlog;
-        
+        // fork a child process to process fleets
         if ( function_exists( 'pcntl_fork' ) )
         {
             #fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. function_exists('pcntl_fork') Pid wird zugewiesen. Fleet-ID: ".$fleet_id."\n");
@@ -361,6 +384,7 @@ Options:
             $pid = - 1;
         }
         
+        // [CHILD] or parent if there's no child
         if ( ! $pid || $pid == - 1 )
         {
             if ( $pid != - 1 )
@@ -373,8 +397,8 @@ Options:
             
             if ( $fleet->getStatus() > 0 && ( $fleet->getStatus() > 1 || $fleet->getArrivalTime() > time() || ! $fleet->arriveAtNextTarget() ) )
             {
-                fputs( $errlog, time_prefix() . "Eventhandler Funktion Arrive. ##### F L O T T E N H � N G E R ##### Fleet-ID:  " . $fleet_id . "\n" );
-                fputs( $errlog, time_prefix() . "Warning: Couldn't complete fleet " . $fleet_id . ". Gonna process it later.\n" );
+                $logger->logIt( LOG_EVENTH_FLEET, "Eventhandler Funktion Arrive. ##### F L O T T E N H � N G E R ##### Fleet-ID:  " . $fleet_id );
+                $logger->logIt( LOG_EVENTH_FLEET, "Warning: Couldn't complete fleet " . $fleet_id . ". Gonna process it later." );
                 $eventfile = Classes::EventFile();
                 $eventfile->addNewFleet( time() + global_setting( "EVENTHANDLER_INTERVAL" ), $fleet_id );
                 unset( $fleet );
@@ -387,23 +411,23 @@ Options:
 
             if ( $pid != - 1 )
             {
-                fputs( $errlog, time_prefix() . "Eventhandler Funktion Arrive. Exit Fleet-ID:  " . $fleet_id . "\n\n\n" );
+                $logger->logIt( LOG_EVENTH_FLEET, "Eventhandler Funktion Arrive. Exit Fleet-ID:  " . $fleet_id );
                 exit( 0 );
             }
         }
         else
         {
-            fputs( $errlog, time_prefix() . "Eventhandler Funktion Arrive. pcntl_wait: " . $pid . "  Fleet-ID:  " . $fleet_id . "\n" );
-            
-            pcntl_waitpid( $pid, &$status );
+            $logger->logIt( LOG_EVENTH_FLEET, "Eventhandler Funktion Arrive. pcntl_wait: " . $pid . "  Fleet-ID:  " . $fleet_id );
+                        
+            pcntl_waitpid( $pid, $status );
         }
     }
 
-    function checkExpiredUsers( &$user )
+    function getLastLoginInDays( &$user )
     {
-        global $errlog;
-        
         $last_activity = $user->getLastActivity();
+
+        $days = false;
         
         // letztes login, abgerundet in tagen
         if ( $last_activity !== false )
@@ -412,13 +436,30 @@ Options:
         }
         else
         {
-            $days = ceil( ( time() - $user->getRegistrationTime() ) / 86400 );
+            $user_registration = $user->getRegistrationTime();
+            
+            if ( $user_registration !== false )
+            {
+                $days = ceil( ( time() - $user_registration ) / 86400 );
+            }
+            else
+            {
+                return false;
+            }
         }
         
+        return $days;
+    }
+    
+    function checkExpiredUsers( &$user )
+    {
+        global $logger;
+        
+        $days = getLastLoginInDays( $user );                
         $today = date( 'Y-m-d' );
         
         # Wenn der Spieler inaktiv ist, loeschen
-        if ( $last_activity !== false )
+        if ( $days !== false )
         {
             if ( $user->umode() )
             {
@@ -435,11 +476,11 @@ Options:
                     {
                         if ( $user->destroy() )
                         {
-                            fputs( $errlog, "Deleted user `" . $user->getName() . "' because of inactivity.\n" );
+                            $logger->logIt( LOG_EVENTH_GENERAL, "Deleted user `" . $user->getName() . "' because of inactivity." );
                         }
                         else
                         {
-                            fputs( $errlog, "Error: Couldn't delete user `" . $user->getName() . "'.\n" );
+                            $logger->logIt( LOG_EVENTH_GENERAL, "Error: Couldn't delete user `" . $user->getName() . "'." );
                         }
                         
                         continue;
@@ -459,11 +500,11 @@ Options:
                 {
                     if ( $user->destroy() )
                     {
-                        fputs( $errlog, "Deleted user `" . $user->getName() . "' because of inactivity.\n" );
+                        $logger->logIt( LOG_EVENTH_GENERAL, "Deleted user `" . $user->getName() . "' because of inactivity." );
                     }
                     else
                     {
-                        fputs( $errlog, "Error: Couldn't delete user `" . $user->getName() . "'.\n" );
+                        $logger->logIt( LOG_EVENTH_GENERAL, "Error: Couldn't delete user `" . $user->getName() . "'." );
                     }
                     continue;
                 }
@@ -480,11 +521,11 @@ Options:
         {
             if ( $user->destroy() )
             {
-                fputs( $errlog, "Deleted user `" . $user->getName() . "' because of inactivity.\n" );
+                $logger->logIt( LOG_EVENTH_GENERAL, "Deleted user `" . $user->getName() . "' because of inactivity." );
             }
             else
             {
-                fputs( $errlog, "Error: Couldn't delete user `" . $user->getName() . "'.\n" );
+                $logger->logIt( LOG_EVENTH_GENERAL, "Error: Couldn't delete user `" . $user->getName() . "'." );
             }
             continue;
         }
@@ -494,9 +535,10 @@ Options:
      * check for old messages stored in given user object
      * @return unknown_type
      */
-    function checkExpiredMessages( &$user )
+    function checkExpiredMessagesOnUser( &$user )
     {
         global $message_type_times;
+        global $logger;
         
         # Alte Nachrichten loeschen        
         $deleted_messages = 0;
@@ -528,6 +570,10 @@ Options:
                 
                 if ( ! $message_obj->getStatus() || ( time() - $message_obj->getTime() ) > $max_diff )
                 {
+                    /*
+                     * TODO, removeMessage doesnt really delete the message since it cant delete itself, it will unlink the user
+                     * this leads to deletion by checkForUnusedMessages() in the next run
+                     */                                        
                     $user->removeMessage( $message_id, $category );
                     $deleted_messages ++;
                 }
@@ -535,18 +581,45 @@ Options:
                 {
                     if ( ! $message_obj->getStatus() )
                     {
-                        fputs( $errlog, time_prefix() . "checkForOldMessages() invalid Status returned while trying to check message id: " . $message_id . "\n" );
+                        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Invalid Status returned while trying to check message id: " . $message_id . "\n" );
                     }
                 }
+                
+                Classes::resetInstances( 'Message' );
             }
         }
         
-        echo "deleted " . $deleted_messages . " on user " . $user->getName() . " \n";
+        /*
+         * log if we deleted any messages
+         */
+        if ( $deleted_messages >= 0 )
+        {
+            $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Deleted " . $deleted_messages . " old messages on user " . $user->getName() );
+        }
+
+        return $processed_messages;
+    }
+    
+    /**
+     * check for message without any owner and remove them
+     * TODO this used to be combined with checkExpiredMessagesOnUser() and is just removing messages that werent checked,
+     * bad way to do this, better check every msg if it belongs to someone
+     * @return unknown_type
+     */
+    function checkForUnusedMessages( &$processed_messages )
+    {
+        global $logger;
+        $deleted_messages = 0;
         
-        // Nachrichten, die niemandem gehoeren, loeschen
-        $dh = opendir( global_setting( "DB_MESSAGES" ) );
+        $messageDir = global_setting( "DB_MESSAGES" );
+        $dh = opendir( $messageDir );
         
-        while ( ( $fname = readdir( $dh ) ) !== false )
+        if ( ! $dh )
+        {
+            throw new Exception( __FUNCTION__." couldnt open dir: ".$messageDir );
+        }
+        
+        for( $fname = readdir( $dh ), $fname !== false; $fname = readdir( $dh ); )
         {
             if ( $fname[0] == '.' )
             {
@@ -559,53 +632,63 @@ Options:
             {
                 $message = Classes::Message( $fname );
                 $message->destroy();
+                $deleted_messages++;
+                Classes::resetInstances( 'Message' );
             }
         }
         closedir( $dh );
         
-        $processed_messages = count( $processed_messages );
-        fputs( $errlog, "Checked " . $processed_messages . " messages.\n" );
-        fputs( $errlog, "Deleted " . $deleted_messages . " messages.\n" );
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Checked " . count( $processed_messages ) . " messages (overall).\n" );
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Deleted " . $deleted_messages . " messages which didnt belong to any user.\n" );
     }
 
     function walkthrough_users( )
     {
-        global $errlog;
+        global $logger;
         global $last_walked;
+        
         $last_walked = date( 'Y-m-d' );
         
-        fputs( $errlog, "\n" . time_prefix() . "Walking through users for database " . global_setting( "DB" ) . "...\n" );
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Walking through users for database " . global_setting( "DB" ) . "..." );
         
         # Rohstoffe aller Planeten aller Benutzer zusammenzaehlen
         $ges_ress = array( 0, 0, 0, 0, 0 );
         
         $dh = opendir( global_setting( "DB_PLAYERS" ) );
+        
         while ( ( $filename = readdir( $dh ) ) !== false )
         {
             if ( ! is_file( global_setting( "DB_PLAYERS" ) . '/' . $filename ) )
+            {
                 continue;
+            }
             
             $user = Classes::User( urldecode( $filename ) );
+            
             if ( ! $user->getStatus() )
+            {
                 continue;
+            }
             
             checkExpiredUsers( $user );
+            $days = getLastLoginInDays( $user );
             
             $planets = $user->getPlanetsList();
+            
             foreach ( $planets as $planet )
             {
                 $user->setActivePlanet( $planet );
                 $ress = $user->getRess();
-                unset( $ress[5] ); # Energie soll nicht miteinberechnet werden
-                
+                unset( $ress[5] ); # Energie soll nicht miteinberechnet werden                
 
                 if ( min( $ress ) < 0 )
                 {
-                    fputs( $errlog, time_prefix() . "Warning: Planet " . $user->getPosString() . " (" . $user->getName() . ") has negative resources.\n" );
+                    $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Warning: Planet " . $user->getPosString() . " (" . $user->getName() . ") has negative resources." );
                     continue;
                 }
                 
                 $min = max( $ress );
+                
                 if ( $min != 0 )
                 {
                     foreach ( $ress as $val )
@@ -688,7 +771,7 @@ Options:
         flock( $fh, LOCK_UN );
         fclose( $fh );
         
-        fputs( $errlog, "Handelskurs recalculated.\n" );
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Handelskurs recalculated.\n" );
         
         Classes::resetInstances();
         
@@ -738,18 +821,18 @@ Options:
         #fputs($errlog, "Deleted ".$deleted_messages_public." public messages.\n");
         
 
-        fputs( $errlog, time_prefix() . "Finished.\n\n" );
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Finished.\n\n" );
     }
 
     function connect_jabber( )
     {
         global $jabber;
         global $jabber_messengers;
-        global $errlog;
+        global $logger;
         
         if ( ! $jabber->Connect() || ! $jabber->SendAuth() )
         {
-            fputs( $errlog, time_prefix() . "Warning: Could not connect to Jabber server.\n" );
+            $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Warning: Could not connect to Jabber server.\n" );
             return false;
         }
         
@@ -787,16 +870,16 @@ if ( $wanna_use_jabber )
     
     if ( ! $jabber_auth_info || ! isset( $jabber_auth_info['username'] ) || ! isset( $jabber_auth_info['password'] ) )
     {
-        fputs( $errlog, time_prefix() . "Notice: no Jabber account information. Won't use instant messaging.\n" );
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Notice: no Jabber account information. Won't use instant messaging." );
         $use_jabber = false;
     }
     else
     {
         $jabber->username = $jabber_auth_info['username'];
         $jabber->password = $jabber_auth_info['password'];
-        fputs( $errlog, time_prefix() . "Connecting Jabber client... " );
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Connecting Jabber client... " );
         connect_jabber();
-        fputs( $errlog, "Done.\n" );
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Done." );
     }
 }
 
@@ -804,26 +887,64 @@ if ( $wanna_use_jabber )
 ### Durchlauf ###
 #################
 
-
-{
-    #$filename = s_root.'/logs/eventhandler.log';
-    #$fo = fopen($filename, "a");
-    
-
+{    
     global $gCheckMsg;
     
     if ( $gCheckMsg )
-    {// TODO
-}
+    {
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." started to check for old messages and delete them, exiting afterwards..." );
+        
+        $playerDir = global_setting( "DB_PLAYERS" );
+        $dh = opendir( $playerDir );
+        $processedMessages = array();
+        
+        if ( ! $dh )
+        {
+            throw new Exception( __FUNCTION__." couldnt open dir: ".$playerDir );
+        }
+        
+        /*
+         * loop all players
+         */
+        for( $filename = readdir( $dh ); $filename !== false; $filename = readdir( $dh ) )
+        {
+            if ( ! is_file( global_setting( "DB_PLAYERS" ) . '/' . $filename ) )
+            {
+                continue;
+            }
+            
+            $user = Classes::User( urldecode( $filename ) );
+            
+            if ( ! $user->getStatus() )
+            {
+                continue;
+            }
+                        
+            $tmpMessages = $processedMessages;
+            $processedMessages = $tmpMessages + checkExpiredMessagesOnUser( $user );
+                        
+            Classes::resetInstances( 'Users' );
+        }    
+
+        checkForUnusedMessages( $processedMessages );
+        
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." done, good bye!" );
+        
+        define( 'terminate', true );
+    }
     
     $fposition = 0;
     
     if ( date( 'H' ) * 3600 + date( 'i' ) * 60 + 60 < 14400 )
+    {
         $last_walked = false;
+    }
     else
+    {
         $last_walked = date( 'Y-m-d' );
+    }
     
-    fputs( $errlog, time_prefix() . "Eventhandler started.\n" );
+    $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Eventhandler started.\n" );
     
     while ( true )
     {
@@ -838,9 +959,10 @@ if ( $wanna_use_jabber )
             define_globals( $selected_database );
             
             $event_obj = Classes::EventFile();
-            while ( $process = $event_obj->removeNextFleet() )
+            
+            for ( $process = $event_obj->removeNextFleet(); $process; $process = $event_obj->removeNextFleet() )
             {
-                fputs( $errlog, time_prefix() . "Eventhandler Eventobjekt remove next Fleet\n" );
+                $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Eventhandler Eventobjekt remove next Fleet\n" );
                 
                 arrive( $process['fleet'] );
                 check_termination();
@@ -855,7 +977,9 @@ if ( $wanna_use_jabber )
             foreach ( $databases as $selected_database => $dbinfo )
             {
                 if ( ! is_dir( $dbinfo[0] ) )
+                {
                     continue;
+                }
                 
                 define_globals( $selected_database );
                 walkthrough_users();
@@ -868,24 +992,31 @@ if ( $wanna_use_jabber )
         {
             if ( ! $jabber->connected )
             {
-                fputs( $errlog, time_prefix() . "Disconnected. Trying to reconnect.\n" );
+                $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Disconnected. Trying to reconnect.\n" );
                 connect_jabber();
                 
                 if ( $jabber->connected )
-                    fputs( $errlog, time_prefix() . "Reconnected!\n" );
+                {
+                    $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Reconnected!\n" );
+                }
                 else
-                    fputs( $errlog, time_prefix() . "Couldn't reconnect.\n" );
+                {
+                    $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Couldn't reconnect.\n" );
+                }
             }
             
             if ( $jabber->connected )
             {
-                while ( $next_notification = $imfile->shiftNextMessage() )
+                for( $next_notification = $imfile->shiftNextMessage(); $next_notification; $next_notification = $imfile->shiftNextMessage() )
                 {
                     $to = $next_notification['uin'];
                     if ( $next_notification['protocol'] != 'jabber' )
                     {
                         if ( ! isset( $jabber_messengers[$next_notification['protocol']] ) )
+                        {
                             continue;
+                        }
+                        
                         $to .= '@' . $jabber_messengers[$next_notification['protocol']]['server'];
                     }
                     
@@ -896,14 +1027,18 @@ if ( $wanna_use_jabber )
                 }
                 
                 $jabber->Listen();
-                while ( $p = array_shift( $jabber->packet_queue ) )
+                
+                for( $p = array_shift( $jabber->packet_queue ); $p; $p = array_shift( $jabber->packet_queue ) )
                 {
                     if ( ! isset( $p['message'] ) || ! isset( $p['message']['#']['body'] ) )
+                    {
                         continue;
+                    }
                     
-                    $message = $p['message']['#']['body'][0]['#'];
+                    $message = $p['message']['#']['body'][0]['#'];                    
                     list( $from ) = explode( '/', $p['message']['@']['from'], 2 );
                     $transport = 'jabber';
+                    
                     foreach ( $jabber_messengers as $tn => $t )
                     {
                         if ( substr( $from, - strlen( $t['server'] ) - 1 ) == '@' . $t['server'] )
@@ -915,19 +1050,26 @@ if ( $wanna_use_jabber )
                     }
                     
                     $username = $imfile->checkCheckID( $from, $transport, trim( $message ) );
+                    
                     if ( $username && isset( $databases[$username[1]] ) )
                     {
                         define_globals( $username[1] );
                         $user = Classes::User( $username[0] );
                         $old_settings = $user->getNotificationType();
+                        
                         if ( $user->getStatus() == 1 && $user->doSetNotificationType( $from, $transport ) )
                         {
                             $imfile->removeChecks( $username[0] );
                             
                             if ( $old_settings )
+                            {
                                 $imfile->changeUIN( $username[0], $from, $transport );
+                            }
                             else
+                            {
                                 $user->refreshMessengerBuildingNotifications();
+                            }
+                            
                             unset( $user );
                             Classes::resetInstances();
                             
@@ -935,7 +1077,9 @@ if ( $wanna_use_jabber )
                         }
                     }
                     else
+                    {
                         $jabber->sendMessage( $p['message']['@']['from'], 'normal', NULL, array( 'body' => 'Unrecognised command' ) );
+                    }
                 }
             }
         }

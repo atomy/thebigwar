@@ -19,10 +19,19 @@
     $bb2egg['pass'] = "";
     $bb2egg['channel_tbw'] = "#tbw";
 
-	// stuff for logging
-	define( "LOG_USER", 1 );
+    /**
+     * those are defines for the supported log types, 
+     * when adding more types they need to be also added to Logger::setupLog() for linkage to their filename
+     */
+    define( "LOG_EVENTH_GENERAL", 1 );
+    define( "LOG_EVENTH_FLEET", 2 );
+    
+    /**
+     * defines for logfiles, filenames for the above types
+     */
 	define( "LOGDIR", "./logs/" );
-	define( "LOGFILE_USER", "user.log" );
+	define( "LOGFILE_EVENTH_GENERAL", "eventhandler.general.log" );
+	define( "LOGFILE_EVENTH_FLEET", "eventhandler.fleet.log" );
 
     date_default_timezone_set("Europe/Berlin");
 ?>
