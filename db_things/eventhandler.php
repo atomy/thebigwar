@@ -171,9 +171,10 @@ Options:
 
 
 {
-    
+    // fork into background, papa dies and child becomes the new eventhandler
     if ( $daemon )
     {
+		// wth do we need this?
         declare(ticks = 1);
         
         if ( function_exists( 'pcntl_fork' ) )
@@ -195,7 +196,9 @@ Options:
     function error_handler( $errno, $errstr, $errfile, $errline, $errcontext )
     {
         global $errlog;
+
         fputs( $errlog, time_prefix() );
+
         switch ( $errno )
         {
             case E_WARNING:
@@ -213,6 +216,7 @@ Options:
         fputs( $errlog, " in " . $errfile . " on line " . $errline . "." );
         
         global $process;
+
         if ( isset( $process ) && isset( $process['fleet'] ) )
             fputs( $errlog, " Last fleet was " . $process['fleet'] . "." );
         
@@ -223,6 +227,7 @@ Options:
     {
         global $errlog;
         global $databases;
+
         switch ( $signo )
         {
             case SIGTERM:
@@ -230,24 +235,29 @@ Options:
                 if ( ! defined( 'terminate' ) )
                     define( 'terminate', true );
                 break;
+
             case SIGINT:
                 fputs( $errlog, time_prefix() . "SIGINT (" . SIGINT . ")\n" );
                 if ( ! defined( 'terminate' ) )
                     define( 'terminate', true );
                 break;
+
             case SIGHUP:
                 fputs( $errlog, time_prefix() . "SIGHUP (" . SIGHUP . ")\n" );
                 break;
+
             case SIGUSR1:
                 fputs( $errlog, time_prefix() . "SIGUSR1 (" . SIGUSR1 . ")\n" );
-                
                 fputs( $errlog, time_prefix() . "Rescanning databases... " );
+
                 global $databases;
-                $databases = get_databases();
+                
+				$databases = get_databases();
                 fputs( $errlog, "Done\n" );
                 
                 global $use_jabber, $wanna_use_jabber, $jabber, $jabber_messengers, $jabber_auth_info;
-                if ( $wanna_use_jabber )
+                
+				if ( $wanna_use_jabber )
                 {
                     if ( $use_jabber && $jabber->connected )
                     {
@@ -298,6 +308,7 @@ Options:
         pcntl_signal( SIGINT, "sig_handler" );
         pcntl_signal( SIGUSR1, "sig_handler" );
         pcntl_signal( SIGUSR2, "sig_handler" );
+
         if ( $daemon )
         {
             pcntl_signal( SIGHUP, "sig_handler" );
@@ -315,25 +326,19 @@ Options:
 ### Spezielle Routinen ###
 ##########################
 
-
 {
 
     function arrive( $fleet_id )
     {
         #$filename = s_root.'/logs/eventhandler.log';
         #$fo = fopen($filename, "a");
-        
-
         #fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. Fleet-ID:  ".$fleet_id."\n");
-        
 
         global $errlog;
         
         if ( function_exists( 'pcntl_fork' ) )
         {
             #fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. function_exists('pcntl_fork') Pid wird zugewiesen. Fleet-ID: ".$fleet_id."\n");
-            
-
             Classes::resetInstances();
             $pid = pcntl_fork();
             #fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. function_exists('pcntl_fork') Zugewiesene Pid: ".$pid." Fleet-ID: ".$fleet_id."\n");
@@ -351,8 +356,6 @@ Options:
             if ( $pid != - 1 )
             {
                 #fwrite($fo, time_prefix(). "Eventhandler Funktion Arrive. PID != -1, Timelimit 30 Fleet-ID:  ".$fleet_id."\n");
-                
-
                 set_time_limit( 30 );
             }
             
@@ -371,7 +374,8 @@ Options:
             unset( $fleet );
             
             Classes::resetInstances();
-            if ( $pid != - 1 )
+
+			if ( $pid != - 1 )
             {
                 fputs( $errlog, time_prefix() . "Eventhandler Funktion Arrive. Exit Fleet-ID:  " . $fleet_id . "\n\n\n" );
                 exit( 0 );
@@ -400,12 +404,17 @@ Options:
         $processed_messages = array();
         
         global $message_type_times;
-        $max_ages = $message_type_times;
+        
+		$max_ages = $message_type_times;
+
         foreach ( $max_ages as $k => $v )
+		{
             $max_ages[$k] *= 86400;
+		}
         
         $dh = opendir( global_setting( "DB_PLAYERS" ) );
-        while ( ( $filename = readdir( $dh ) ) !== false )
+        
+		while ( ( $filename = readdir( $dh ) ) !== false )
         {
             if ( ! is_file( global_setting( "DB_PLAYERS" ) . '/' . $filename ) )
                 continue;
