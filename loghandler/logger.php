@@ -5,7 +5,7 @@ if ( !defined( "TBW_ROOT" ) )
 	require_once( '../../include/config_inc.php' );
 }
 
-require_once( TBW_ROOT.'engine/classes/logfile.php' );
+require_once( TBW_ROOT.'loghandler/logfile.php' );
 
 /**
  * Logger 
@@ -111,6 +111,10 @@ class Logger
 			throw new Exception( __METHOD__." no type given" );
 		}
 
+		/*
+		 * catch the types and link them to their file,
+		 * add new types here
+		 */
 		switch( $type )
 		{
 			case LOG_EVENTH_GENERAL:

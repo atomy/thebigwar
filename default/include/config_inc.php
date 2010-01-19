@@ -32,6 +32,17 @@
 	define( "LOGDIR", "./logs/" );
 	define( "LOGFILE_EVENTH_GENERAL", "eventhandler.general.log" );
 	define( "LOGFILE_EVENTH_FLEET", "eventhandler.fleet.log" );
+	
+	/**
+	 * keep given days of logfiles
+	 * @var int    
+	 */
+	define( "KEEP_NUM_LOGS", 9 );	
+	 
+	define( "TEMPDIR", TBW_ROOT."tmp/" );
+	define( "KEYFILE", "ipcKey" );
+	define( "IPCPROJCHAR", "T" );
+	define( "IPC_MSG_INTERVAL", 2 );
 
     date_default_timezone_set("Europe/Berlin");
 ?>

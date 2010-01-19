@@ -17,7 +17,6 @@ if ( !defined( "TBW_ROOT" ) )
 class Logfile
 {
 	/**
-	 * filePath 
 	 * holds relative or full path to file
 	 * @var string
 	 * @access private
@@ -25,7 +24,6 @@ class Logfile
 	private $filePath;
 
 	/**
-	 * fileStream 
 	 * holds stream resource to open file
 	 * @var resource
 	 * @access private
@@ -33,15 +31,19 @@ class Logfile
 	private $fileStream;
 
 	/**
-	 * isOpen 
 	 * true if stream has been opened
 	 * @var bool
 	 * @access private
 	 */
 	private $isOpen;
+	
+	/**
+	 * day on which the file got opened, used for daily logrotating
+	 * @var unknown_type
+	 */
+	private $openDate;
 
 	/**
-	 * __construct 
 	 * initializes variables and sets the file path
 	 * @param string $path relative or fullpath to target file
 	 * @access protected
@@ -75,18 +77,16 @@ class Logfile
 	}
 
 	/**
-	 * __destruct 
 	 * close our resource handle
 	 * @access protected
 	 * @return void
 	 */
 	function __destruct()
 	{
-		fclose( $this->fileStream );
+		$this->logClose();
 	}
 
 	/**
-	 * logIt 
 	 * log given text, care about resources to get setup if not already
 	 * @param string $text 
 	 * @access public
@@ -119,19 +119,92 @@ class Logfile
 	}
 
 	/**
-	 * openLogfile 
+	 * responsible for closing the stream
+	 * @return void
+	 */
+	private function logClose( )
+	{
+	    $this->isOpen = false;
+	    fflush( $this->fileStream );
+	    fclose( $this->fileStream );
+	}
+	
+	/**
+	 * rotates logs when the day changed
+	 * @return unknown_type
+	 */
+	private function logRotate( )
+	{	   
+	    $this->logIt( "Rotating logfile..." );
+		$this->logClose();
+			
+		/*
+		 * start at the end and shift suffix of logfiles +1
+		 * ( logfile.log.8 => logfile.log.7, ... )
+		 */
+		for( $i = KEEP_NUM_LOGS; $i > 0; $i-- )
+		{
+		    $prev = $i - 1;
+		    $actFname = $this->filePath.".".$i;
+		    
+		    if ( $prev == 0 )
+		    {
+		        $prevFname = $this->filePath;
+		    }
+		    else
+		    {
+		        $prevFname = $this->filePath.".".$prev;
+		    }
+		    
+		    /*
+		     * previous name doesnt exists, skip this one
+		     */
+		    if ( !file_exists( $prevFname ) )
+		    {
+		        continue;
+		    }
+		    
+			/*
+		     * oldest logfile over here, remove it
+		     * and move the previous one over there
+		     */		    
+		    if ( file_exists( $this->filePath.".".$i ) )
+		    {
+                unlink( $actFname );
+		    }
+		    		   
+		    rename( $prevFname, $actFname );
+		}
+		
+		$this->logIt( "Logfile rotated" );	    
+	}
+	
+	/**
 	 * open our target logfile for appending
 	 * @access private
 	 * @return bool true on success false otherwise
 	 */
 	private function openLogfile()
 	{
+	    $curDay = date( "j" );
+	    
 		/*
 		 * if already open return, otherwise we need to open it
 		 */
-		if ( $this->isOpen )
+		if ( $this->isOpen )		
 		{
-			return true;
+		    /*
+		     * we are still on that day, no need to logrotate
+		     */		    		    
+		    if ( $this->openDate == $curDay )
+		    {
+		        return true;
+		    }
+		    else		    
+		    {
+		        $this->openDate = $curDay;
+		        $this->logRotate();
+		    }
 		}
 		else
 		{
@@ -152,6 +225,7 @@ class Logfile
 		else
 		{
 			$this->isOpen = true;
+			$this->openDate = $curDay;
 
 			return true;
 		}

@@ -1,7 +1,8 @@
 #!/usr/bin/php
 <?php
 require_once ( '../include/config_inc.php' );
-require_once ( TBW_ROOT.'engine/classes/logger.php' );
+require_once ( TBW_ROOT.'engine/classes/sendLogs.php' );
+require_once ( TBW_ROOT.'loghandler/LogHandler.php' );
 
 ###########################
 ### Parameter auswerten ###
@@ -17,7 +18,7 @@ require_once ( TBW_ROOT.'engine/classes/logger.php' );
     $error = false;
     $daemon = false;
     $verbose = false;
-    $gCheckMsg = true;
+    $gCheckMsg = false;
     $use_jabber = $wanna_use_jabber = false;
     $getopt_exists = false;
     
@@ -35,7 +36,7 @@ require_once ( TBW_ROOT.'engine/classes/logger.php' );
     {
         require_once ( 'Console/Getopt.php' ); # PEAR
         
-        $options = Console_Getopt::getopt( $_SERVER['argv'], 'hdvJ', array( 'help', 'daemon', 'verbose', 'no-jabber', 'checkmsg' ) );
+        $options = Console_Getopt::getopt( $_SERVER['argv'], 'hdvJm', array( 'help', 'daemon', 'verbose', 'no-jabber', 'checkmsg' ) );
         
         if ( $options instanceof PEAR_Error )
         {
@@ -64,7 +65,7 @@ require_once ( TBW_ROOT.'engine/classes/logger.php' );
                     $use_jabber = $wanna_use_jabber = false;
                     break;
                 case 'm':
-                case 'checkmsg':
+                case '--checkmsg':
                     $gCheckMsg = true;
             }
         }
@@ -116,7 +117,34 @@ Options:
     }
     
     ftruncate( $fh_pid, 0 );
+  
+    // start our logger receiving log messages
+    if ( function_exists( 'pcntl_fork' ) )
+    {
+        $pid = pcntl_fork();
+        
+        // [PARENT]
+        if ( $pid )
+        {
+            fputs( STDOUT, "Eventhandler forked, PID ".$pid." to handle logfiles.\n" );
+        }
+        // [CHILD]
+        else
+        {
+            fputs( STDOUT, "Going to setup LogHandler(), PID ".getmypid()." to handle logfiles.\n" );
+            
+            $logHandler = new LogHandler();
+            $logHandler->run();
+        }                
+    }
+    else
+    {
+        fputs( STDERR, "pcntl_fork unavailable, logging disabled." );
+    }    
     
+    // logger for eventhandler logs, sending
+    $logger = &new SendLogs();
+        
     $databases = get_databases();
 
     foreach ( $databases as $selected_database => $dbinfo )
@@ -133,8 +161,7 @@ Options:
     __autoload( 'Classes' );
     __autoload( 'Fleet' );
     __autoload( 'Galaxy' );
-    
-    $logger = new Logger();
+           
 }
 
 ################
@@ -173,10 +200,10 @@ Options:
             {
                 $logger->logIt( LOG_EVENTH_GENERAL, "Disconnecting Jabber client... " );
                 $jabber->Disconnect();
-                $logger->logIt( LOG_EVENTH_GENERAL, "Done.\n" );
+                $logger->logIt( LOG_EVENTH_GENERAL, "Done." );
             }
             
-            $logger->logIt( LOG_EVENTH_GENERAL, "Terminated.\n\n" );
+            $logger->logIt( LOG_EVENTH_GENERAL, "Terminated." );
             
             ftruncate( $fh_pid, 0 );
             flock( $fh_pid, LOCK_UN );
@@ -201,22 +228,39 @@ Options:
         declare(ticks = 1);
         
         if ( function_exists( 'pcntl_fork' ) )
+        {
             $pid = pcntl_fork();
+        }
         else
+        {
             $pid = - 1;
+        }
         
         if ( $pid == - 1 )
+        {
             fputs( STDERR, time_prefix() . "Forking failed, continuing.\n" );
-        else 
+        }
+        else
+        { 
             if ( $pid )
             {
                 fputs( STDOUT, time_prefix() . "Eventhandler forked, PID " . $pid . ".\n" );
                 exit( 0 );
             }
-    }
+        }
+    }     
     
     fwrite( $fh_pid, getmypid() . "\n" );
 
+    /**
+     * php error handler
+     * @param $errno
+     * @param $errstr
+     * @param $errfile
+     * @param $errline
+     * @param $errcontext
+     * @return none
+     */
     function error_handler( $errno, $errstr, $errfile, $errline, $errcontext )
     {
         global $logger;
@@ -248,6 +292,11 @@ Options:
         }       
     }
 
+    /**
+     * php signal handler
+     * @param $signo
+     * @return void
+     */
     function sig_handler( $signo )
     {
         global $logger;
@@ -280,7 +329,7 @@ Options:
                 global $databases;
                 
                 $databases = get_databases();
-                $logger->logIt( LOG_EVENTH_GENERAL, "Done\n" );
+                $logger->logIt( LOG_EVENTH_GENERAL, "Done" );
                 
                 global $use_jabber, $wanna_use_jabber, $jabber, $jabber_messengers, $jabber_auth_info;
                 
@@ -581,7 +630,7 @@ Options:
                 {
                     if ( ! $message_obj->getStatus() )
                     {
-                        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Invalid Status returned while trying to check message id: " . $message_id . "\n" );
+                        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Invalid Status returned while trying to check message id: " . $message_id );
                     }
                 }
                 
@@ -638,8 +687,8 @@ Options:
         }
         closedir( $dh );
         
-        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Checked " . count( $processed_messages ) . " messages (overall).\n" );
-        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Deleted " . $deleted_messages . " messages which didnt belong to any user.\n" );
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Checked " . count( $processed_messages ) . " messages (overall)." );
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Deleted " . $deleted_messages . " messages which didnt belong to any user." );
     }
 
     function walkthrough_users( )
@@ -771,7 +820,7 @@ Options:
         flock( $fh, LOCK_UN );
         fclose( $fh );
         
-        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Handelskurs recalculated.\n" );
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Handelskurs recalculated." );
         
         Classes::resetInstances();
         
@@ -821,7 +870,7 @@ Options:
         #fputs($errlog, "Deleted ".$deleted_messages_public." public messages.\n");
         
 
-        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Finished.\n\n" );
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Finished." );
     }
 
     function connect_jabber( )
@@ -832,7 +881,7 @@ Options:
         
         if ( ! $jabber->Connect() || ! $jabber->SendAuth() )
         {
-            $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Warning: Could not connect to Jabber server.\n" );
+            $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Warning: Could not connect to Jabber server." );
             return false;
         }
         
@@ -929,8 +978,11 @@ if ( $wanna_use_jabber )
         checkForUnusedMessages( $processedMessages );
         
         $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." done, good bye!" );
-        
-        define( 'terminate', true );
+
+        if ( !defined( 'terminate' ) )
+        {
+            define( 'terminate', true );
+        }
     }
     
     $fposition = 0;
@@ -944,7 +996,7 @@ if ( $wanna_use_jabber )
         $last_walked = date( 'Y-m-d' );
     }
     
-    $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Eventhandler started.\n" );
+    $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Eventhandler started. getmypid()" );
     
     while ( true )
     {
@@ -962,7 +1014,7 @@ if ( $wanna_use_jabber )
             
             for ( $process = $event_obj->removeNextFleet(); $process; $process = $event_obj->removeNextFleet() )
             {
-                $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Eventhandler Eventobjekt remove next Fleet\n" );
+                $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Eventhandler Eventobjekt remove next Fleet" );
                 
                 arrive( $process['fleet'] );
                 check_termination();
@@ -992,16 +1044,16 @@ if ( $wanna_use_jabber )
         {
             if ( ! $jabber->connected )
             {
-                $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Disconnected. Trying to reconnect.\n" );
+                $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Disconnected. Trying to reconnect." );
                 connect_jabber();
                 
                 if ( $jabber->connected )
                 {
-                    $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Reconnected!\n" );
+                    $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Reconnected!" );
                 }
                 else
                 {
-                    $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Couldn't reconnect.\n" );
+                    $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Couldn't reconnect." );
                 }
             }
             
