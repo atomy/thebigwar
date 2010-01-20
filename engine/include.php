@@ -1,8 +1,12 @@
 <?php
 	if ( !defined( "TBW_ROOT" ) )
-		define( "TBW_ROOT", "" );
+	{
+	    require_once ( '../include/config_inc.php' );
+	}
+		//define( "TBW_ROOT", "" );
 		
-	require_once( TBW_ROOT.'include/config_inc.php' );
+	require_once ( TBW_ROOT . 'engine/classes/sendLogs.php' );
+	//require_once( TBW_ROOT.'include/config_inc.php' );
 	
 	define('start_mtime', microtime(true));
 	ini_set( "session.gc_maxlifetime", 3600 );

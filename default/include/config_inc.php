@@ -25,6 +25,7 @@
      */
     define( "LOG_EVENTH_GENERAL", 1 );
     define( "LOG_EVENTH_FLEET", 2 );
+    define( "LOG_USER_FLEET", 3 );
     
     /**
      * defines for logfiles, filenames for the above types
@@ -32,6 +33,7 @@
 	define( "LOGDIR", "./logs/" );
 	define( "LOGFILE_EVENTH_GENERAL", "eventhandler.general.log" );
 	define( "LOGFILE_EVENTH_FLEET", "eventhandler.fleet.log" );
+	define( "LOGFILE_USER_FLEET", "user.fleet.log" );
 	
 	/**
 	 * keep given days of logfiles

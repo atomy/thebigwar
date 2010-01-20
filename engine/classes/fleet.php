@@ -1,11 +1,11 @@
 <?php
 
-if ( ! defined( TBW_ROOT ) )
+if ( !defined( "TBW_ROOT" ) )
 {
-    require_once ( '../../include/config_inc.php' );
+    require_once ( '../include/config_inc.php' );
 }
 
-require_once ( TBW_ROOT . 'engine/classes/sendLogs.php' );
+require_once ( TBW_ROOT.'engine/classes/sendLogs.php' );
 
 class Fleet extends Dataset
 {
@@ -54,10 +54,8 @@ class Fleet extends Dataset
         
         $status = ( unlink( $this->filename ) );
         
-        $filename = s_root . '/logs/fleet.log';
-        $fo = fopen( $filename, "a" );
-        fwrite( $fo, "destroy() -- fleet " . $this->filename . " deleted.\n" );
-        fclose( $fo );
+        $logger = &new SendLogs();
+        $logger->logIt( LOG_USER_FLEET, "destroy() -- fleet " . $this->filename . " deleted." );       
         
         if ( $status )
         {
@@ -674,8 +672,8 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
         
         $mass = 0;
         $user_obj = Classes::User( $user );
-        if ( ! $user_obj->getStatus() )
-            echo "BLERK\n";
+//        if ( ! $user_obj->getStatus() )
+//            echo "BLERK\n";
         foreach ( $this->raw[1][$user][0] as $id => $count )
         {
             $item_info = $user_obj->getItemInfo( $id, 'schiffe' );
@@ -784,10 +782,8 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
         if ( isset( $this->raw[1][$user]['startzeit'] ) )
             $timeex = ( time() - $this->raw[1][$user]['startzeit'] );
         
-        $filename = s_root . '/logs/fleet.log';
-        $fo = fopen( $filename, "a" );
-        fwrite( $fo, "\nCallback-User  " . $user . "\nFrom  " . $from . "\nTo  " . $to . "\nRueckflugzeit  " . $time3 . "\nVerflogene Zeit  " . $timeex );
-        fclose( $fo );
+        $logger = &new SendLogs();
+        $logger->logIt( LOG_USER_FLEET, "Callback-User  " . $user . "\nFrom  " . $from . "\nTo  " . $to . "\nRueckflugzeit  " . $time3 . "\nVerflogene Zeit  " . $timeex );
         
         if ( $immediately )
             $progress = 0;
@@ -879,10 +875,8 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
             
             unlink( $this->filename );
             
-            $filename = s_root . '/logs/fleet.log';
-            $fo = fopen( $filename, "a" );
-            fwrite( $fo, "callBack() -- fleet " . $this->filename . " deleted." );
-            fclose( $fo );
+            $logger = &new SendLogs();
+            $logger->logIt( LOG_USER_FLEET, "callBack() -- fleet " . $this->filename . " deleted." );
             
             $this->status = false;
             $this->changed = false;
@@ -1074,20 +1068,23 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
             return false;
         if ( count( $this->raw[1] ) <= 0 || count( $this->raw[0] ) <= 0 )
             return false;
-        $filename = s_root . '/logs/fleet.log';
-        $fo = fopen( $filename, "a" );
+
+        $logger = &new SendLogs();                   
         
         $keys = array_keys( $this->raw[1] );
         $user = array_shift( $keys );
         if ( array_sum( $this->raw[1][$user][0] ) <= 0 )
             return false;
-        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " start() -- Fleet Start. User: " . $user . "  Fleet-ID: " . $this->getName() . "\n" );
+            
+        $logger->logIt( LOG_USER_FLEET, "start() -- Fleet Start. User: " . $user . "  Fleet-ID: " . $this->getName() );
         
         # Geschwindigkeitsfaktoren der anderen Teilnehmer abstimmen
         $koords = array_keys( $this->raw[0] );
         $koords = $koords_t = array_shift( $koords );
+        
         if ( substr( $koords, - 1 ) == 'T' )
             $koords = substr( $koords, 0, - 1 );
+            
         $time = $this->calcTime( $user, $this->raw[1][$user][1], $koords );
         
         if ( count( $keys ) > 1 )
@@ -1185,14 +1182,13 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
         global $types_message_types;
         
         // Logs for arriveAtNextTarget() - mostly fleet stuff
-        $filename = s_root . '/logs/fleet.log';
-        $fo = fopen( $filename, "a" );
-        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Arrive at Next Target. Flotten-ID: " . $this->getName() . "\n" );
+        $logger = &new SendLogs();
+        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Arrive at Next Target. Flotten-ID: " . $this->getName() );
         
         if ( $this->status != 1 )
             return false;
         
-        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Arrive at Next Target nach Status. Flotten-ID:  " . $this->getName() . "\n" );
+        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Arrive at Next Target nach Status. Flotten-ID:  " . $this->getName() );
         
         $keys = array_keys( $this->raw[0] );
         $next_target = $next_target_nt = array_shift( $keys );
@@ -1207,11 +1203,11 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
         $back = $this->raw[0][$next_target][1];
         
         $besiedeln = false;
-        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Arrive at Next Target Zuordungen End. Flotten-ID:  " . $this->getName() . " User:" . $first_user . "\n" );
+        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Arrive at Next Target Zuordungen End. Flotten-ID:  " . $this->getName() . " User:" . $first_user );
         
         if ( $type == 1 && ! $back )
         {
-            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Besiedeln. Flotten-ID:  " . $this->getName() . "\n" );
+            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Besiedeln. Flotten-ID:  " . $this->getName() );
             
             # Besiedeln
             $target = explode( ':', $next_target_nt );
@@ -1221,7 +1217,7 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
             if ( $target_owner )
             {
                 # Planet ist bereits besiedelt
-                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Planet schon besiedelt. Planetenbesitzer: " . $target_owner . " Flotten-ID:  " . $this->getName() . "\n" );
+                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Planet schon besiedelt. Planetenbesitzer: " . $target_owner . " Flotten-ID:  " . $this->getName() );
                 
                 $message = Classes::Message();
                 if ( $message->create() )
@@ -1229,11 +1225,11 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
                     $message->text( 'Ihre Flotte erreicht den Planeten ' . $next_target_nt . ' und will mit der Besiedelung anfangen. Jedoch ist der Planet bereits vom Spieler ' . $target_owner . " besetzt, und Ihre Flotte macht sich auf den R\xc3\xbcckweg." );
                     $message->subject( 'Besiedelung von ' . $next_target_nt . ' fehlgeschlagen' );
                     $message->addUser( $first_user, 5 );
-                    #if(!$message->addUser($first_user, 5)) fwrite($fo, date('Y-m-d, H:i:s')."  Planet schon besiedlet. Message addUser fehlgeschlagen. User: ".$first_user." Flotten-ID:  ".$this->getName()."\n");
+                    #if(!$message->addUser($first_user, 5)) $logger->logIt( LOG_USER_FLEET, "Planet schon besiedlet. Message addUser fehlgeschlagen. User: ".$first_user." Flotten-ID:  ".$this->getName() );
                 
 
                 }
-                #if(!$message->create()) fwrite($fo, date('Y-m-d, H:i:s')."  Planet schon besiedelt Message fehlgeschlagen. User: ".$first_user." Flotten-ID:  ".$this->getName()."\n");
+                #if(!$message->create()) $logger->logIt( LOG_USER_FLEET, "Planet schon besiedelt Message fehlgeschlagen. User: ".$first_user." Flotten-ID:  ".$this->getName() );
             
 
             }
@@ -1242,7 +1238,7 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
                 $start_user = Classes::User( $first_user );
                 if ( ! $start_user->checkPlanetCount() )
                 {
-                    fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Planetenlimit erreicht. Flotten-ID:  " . $this->getName() . "\n" );
+                    $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Planetenlimit erreicht. Flotten-ID:  " . $this->getName() );
                     
                     # Planetenlimit erreicht
                     $message = Classes::Message();
@@ -1251,25 +1247,25 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
                         $message->subject( 'Besiedelung von ' . $next_target_nt . ' fehlgeschlagen' );
                         $message->text( "Ihre Flotte erreicht den Planeten " . $next_target_nt . " und will mit der Besiedelung anfangen. Als Sie jedoch Ihren Zentralcomputer um Bestätigung für die Besiedelung bittet, kommt dieser durcheinander, da Sie schon so viele Planeten haben und er nicht so viele gleichzeitig kontrollieren kann, und schickt in Panik Ihrer Flotte das Signal zum Rückflug." );
                         $message->addUser( $first_user, 5 );
-                        #if(!$message->addUser($first_user, 5)) fwrite($fo, date('Y-m-d, H:i:s')."  Planetenlimit erreicht. Message addUser fehlgeschlagen Flotten-ID:  ".$this->getName()."\n");
+                        #if(!$message->addUser($first_user, 5)) $logger->logIt( LOG_USER_FLEET, "Planetenlimit erreicht. Message addUser fehlgeschlagen Flotten-ID:  ".$this->getName() );
                     
 
                     }
-                    #if(!$message->create()) fwrite($fo, date('Y-m-d, H:i:s')."  Planetenlimit erreicht. Message fehlgeschlagen Flotten-ID:  ".$this->getName()."\n");
+                    #if(!$message->create()) $logger->logIt( LOG_USER_FLEET, "Planetenlimit erreicht. Message fehlgeschlagen Flotten-ID:  ".$this->getName() );
                 
 
                 }
                 else
                 {
                     $besiedeln = true;
-                    fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Besiedlen = true. Flotten-ID:  " . $this->getName() . "\n" );
+                    $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Besiedlen = true. Flotten-ID:  " . $this->getName() );
                 }
             }
         }
         
         if ( $type != 6 && ! $back && ! $besiedeln )
         {
-            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Nicht stationieren, Flotte fliegt weiter. Flotten-ID:  " . $this->getName() . "\n" );
+            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Nicht stationieren, Flotte fliegt weiter. Flotten-ID:  " . $this->getName() );
             
             # Nicht stationieren: Flotte fliegt weiter
             $further = true;
@@ -1306,7 +1302,7 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
                 # moeglich.
                 
 
-                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Angriff und Transport nur bei besiedleten Planeten. Flotten-ID:  " . $this->getName() . "\n" );
+                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Angriff und Transport nur bei besiedleten Planeten. Flotten-ID:  " . $this->getName() );
                 
                 $message_obj = Classes::Message();
                 if ( $message_obj->create() )
@@ -1322,7 +1318,7 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
                 switch ( $type )
                 {
                     case 2: # Sammeln
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Sammeln. Flotten-ID:  " . $this->getName() . "\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Sammeln. Flotten-ID:  " . $this->getName() );
                         
                         $ress_max = truemmerfeld::get( $target[0], $target[1], $target[2] );
                         $ress_max_total = array_sum( $ress_max );
@@ -1411,8 +1407,8 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
                                 continue;
                             $message->subject( 'Abbau auf ' . $next_target_nt );
                             $message->html( true );
-                            $message->text( sprintf( <<<EOF
-<p>Ihre Flotte erreicht das Truemmerfeld auf {$next_target_nt} und belaedt die %s Tonnen Sammlerkapazitaet mit folgenden Rohstoffen: %s Carbon, %s Aluminium, %s Wolfram und %s Radium.</p>
+                            $message->text( sprintf( '
+<p>Ihre Flotte erreicht das Truemmerfeld auf '.$next_target_nt.' und belaedt die %s Tonnen Sammlerkapazitaet mit folgenden Rohstoffen: %s Carbon, %s Aluminium, %s Wolfram und %s Radium.</p>
 <h3>Verbleibende Rohstoffe im Truemmerfeld</h3>
 <dl class="ress truemmerfeld-verbleibend">
     <dt class="c-carbon">Carbon</dt>
@@ -1427,14 +1423,15 @@ array( array( 0, 0, 0, 0, 0 ), array() ), # Handel
     <dt class="c-radium">Radium</dt>
     <dd class="c-radium">%s</dd>
 </dl>
-EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] ), ths( $rtrans[3] ), ths( $tr_verbl[0] ), ths( $tr_verbl[1] ), ths( $tr_verbl[2] ), ths( $tr_verbl[3] ) ) );
+', ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] ), ths( $rtrans[3] ), ths( $tr_verbl[0] ), ths( $tr_verbl[1] ), ths( $tr_verbl[2] ), ths( $tr_verbl[3] ) ) );
                             $message->addUser( $username, 4 );
                         }
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Sammeln Ende. Flotten-ID:  " . $this->getName() . "\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Sammeln Ende. Flotten-ID:  " . $this->getName() );
                         
                         break;
                     case 3: # Angriff
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Flotten-ID:  " . $this->getName() . "\n" );
+                    
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Flotten-ID:  " . $this->getName() );
                         
                         $angreifer = array();
                         $urangreifer = array();
@@ -1444,20 +1441,21 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                         #Angreiferpart                        
                         #Gemeinsame Flotten in ein Userarray bringen
                         $countangreifer = count( $this->raw[1] );
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Angreifer Count:  " . $countangreifer . "\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreifer Count:  " . $countangreifer );
                         
                         if ( $countangreifer > 1 )
                         {
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Angreiferflotten in ein Raw bringen-Anfang. Flotten-ID:  " . $this->getName() . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreiferflotten in ein Raw bringen-Anfang. Flotten-ID:  " . $this->getName() );
                             
                             foreach ( $this->raw[1] as $user1 => $info )
                             {
-                                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . "  User:  " . $user1 . "\n" );
+                                $logger->logIt( LOG_USER_FLEET, "User:  " . $user1 );
                                 $urangreifer[$user1] = $info[0];
                                 $exp = explode( "/", $user1 );
                                 foreach ( $this->raw[1][$user1][0] as $id => $anzahl )
                                 {
-                                    fwrite( $fo, "\nAngriff-Schiffe  " . $id . "  Anzahl  " . $anzahl );
+                                    $logger->logIt( LOG_USER_FLEET, "Angriff-Schiffe  " . $id . "  Anzahl  " . $anzahl );
+                                    
                                     if ( $exp[0] == $user1 )
                                         continue;
                                     if ( isset( $this->raw[1][$exp[0]] ) )
@@ -1466,13 +1464,13 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                         unset( $this->raw[1][$user1] );
                                 }
                             }
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Angreiferflotten in ein Raw bringen-Ende. Flotten-ID:  " . $this->getName() . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreiferflotten in ein Raw bringen-Ende. Flotten-ID:  " . $this->getName() );
                         }
                         
                         #Ende gemeinsame Flotten in ein Userarray bringen
                         foreach ( $this->raw[1] as $username => $info )
                         {
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Angreifer Raw Einzeluser User:  " . $username . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Angreifer Raw Einzeluser User:  " . $username );
                             $urangreifer[$username] = $info[0];
                             
                             $angreifer[$username] = $info[0];
@@ -1489,11 +1487,12 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                         $foreign_users = $target_user->getForeignFleetsArray();
                         $countforeign = count( $foreign_users );
                         
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Fremdverteidiger Count:  " . $countforeign . "\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Fremdverteidiger Count:  " . $countforeign );
                         
                         if ( $countforeign > 0 )
                         {
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Fremdverteidigerflotten in ein Raw bringen-Anfang. Flotten-ID:  " . $this->getName() . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Fremdverteidigerflotten in ein Raw bringen-Anfang. Flotten-ID:  " . $this->getName() );
+
                             foreach ( $foreign_users as $fleets1 )
                             {
                                 $that = Classes::Fleet( $fleets1 );
@@ -1508,9 +1507,11 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                         $urverteidiger[$username1][1] = $that->getName();
                                         #In ein Array bringen
                                         $exp = explode( "/", $username1 );
+                                        
                                         foreach ( $that->raw[1][$username1][0] as $id => $anzahl )
                                         {
-                                            fwrite( $fo, "\n arriveAtNextTarget() -- Angriff-Schiffe  " . $id . "  Anzahl  " . $anzahl );
+                                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Angriff-Schiffe  " . $id . "  Anzahl  " . $anzahl );
+                                            
                                             if ( $exp[0] == $target_owner )
                                             {
                                                 $p = 0;
@@ -1541,10 +1542,11 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                     }
                                 }
                             }
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Fremdverteidigerflotten in ein Raw bringen-Ende. Flotten-ID:  " . $this->getName() . "\n" );
+                            
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Fremdverteidigerflotten in ein Raw bringen-Ende. Flotten-ID:  " . $this->getName() );
                         }
                         #Verteidiger Planetenbesitzer
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Planetenbesitzer Verteidigung ermitteln-Anfang. Flotten-ID:  " . $this->getName() . "\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Planetenbesitzer Verteidigung ermitteln-Anfang. Flotten-ID:  " . $this->getName() );
                         
                         foreach ( $target_user->getItemsList( 'schiffe' ) as $item )
                         {
@@ -1562,12 +1564,14 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                             $verteidiger[$target_owner][$item] = $level;
                             $urverteidiger[$target_owner][$item] = $level;
                         }
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Planetenbesitzer Verteidigung ermitteln-Ende. Flotten-ID:  " . $this->getName() . "\n" );
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Funktion Battle �bergabe. Flotten-ID:  " . $this->getName() . "\n" );
+                        
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Planetenbesitzer Verteidigung ermitteln-Ende. Flotten-ID:  " . $this->getName() );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Funktion Battle �bergabe. Flotten-ID:  " . $this->getName() );
                         
                         list( $winner, $angreifer2, $verteidiger2, $nachrichten_text, $verteidiger_ress, $truemmerfeld ) = battle( $angreifer, $verteidiger );
                         
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Funktion Battle R�ckgabe. Flotten-ID:  " . $this->getName() . "\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Funktion Battle R�ckgabe. Flotten-ID:  " . $this->getName() );
+                        
                         if ( array_sum( $truemmerfeld ) > 0 )
                         {
                             truemmerfeld::add( $target[0], $target[1], $target[2], $truemmerfeld[0], $truemmerfeld[1], $truemmerfeld[2], $truemmerfeld[3] );
@@ -1577,26 +1581,30 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                         }
                         $count = ( count( $angreifer2 ) );
                         
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Angreifer Count:  " . $count . "\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreifer Count:  " . $count );
+                        
                         if ( $count > 0 )
                         {
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Urflotte Angreifer wieder einsetzen-Anfang. Flotten-ID:  " . $this->getName() . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Urflotte Angreifer wieder einsetzen-Anfang. Flotten-ID:  " . $this->getName() );
+                            
                             #Urflotten wieder einsetzen
                             $this->raw[1] = $urfleet;
                             #Kampfflotte IDs und Anzahl holen
                             $angreifer3 = array();
+                            
                             foreach ( $this->raw[1] as $username3 => $info )
                             {
-                                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Urflotte Angreifer3. User:  " . $username3 . "\n" );
+                                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Urflotte Angreifer3. User:  " . $username3 );
                                 
                                 $angreifer3[$username3] = $info[0];
                             }
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Urflotte Angreifer wieder einsetzen-Ende. Flotten-ID:  " . $this->getName() . "\n" );
+                            
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Urflotte Angreifer wieder einsetzen-Ende. Flotten-ID:  " . $this->getName() );
                             
                             #Flottenverluste uebertragen
                             foreach ( $angreifer2 as $username2 => $ida2 )
                             {
-                                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Angreifer Flottenverluste �bertragen-Anfang. Flotten-ID:  " . $this->getName() . "  User:  " . $username2 . "\n" );
+                                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreifer Flottenverluste �bertragen-Anfang. Flotten-ID:  " . $this->getName() . "  User:  " . $username2 );
                                 
                                 $gesamt3 = 0;
                                 foreach ( $ida2 as $id2 => $anzahl2 )
@@ -1605,7 +1613,9 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                     
                                     #Anzahl Einheiten Angreifer2 zaehlen
                                     $countid2[$id2] = $anzahl2;
-                                    fwrite( $fo, " arriveAtNextTarget() -- Nach Kampf-Flotten-ID  " . $id2 . "\nAnzahl  " . $anzahl2 . "\nUsername  " . $username2 );
+                                    
+                                    $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Nach Kampf-Flotten-ID  " . $id2 . "\nAnzahl  " . $anzahl2 . "\nUsername  " . $username2 );
+                                    
                                     #Anzahl Einheiten Angreifer3 und Diff vorbereiten;
                                     $gesamtid2 = 0;
                                     $gesamtangreifer3[$username2][$id2] = $gesamtid2;
@@ -1646,7 +1656,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                     $diff = $gesamtangreifer3[$username2][$id3] - $countid2[$id3];
                                     if ( $diff > 0 )
                                     {
-                                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Angreifer Zufallsschleife Anfang. User:  " . $username2 . "  ID:  " . $id3 . "\n" );
+                                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Angreifer Zufallsschleife Anfang. User:  " . $username2 . "  ID:  " . $id3 );
                                         
                                         #Diff einzeln bei den Users abzaehlen
                                         $i = 0;
@@ -1722,12 +1732,12 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                             {
                                                 $x = array_search( $userabzug, $usernamearray[$username2][$id3] );
                                                 unset( $usernamearray[$username2][$id3][$x] );
-                                                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Angreifer Zufallsschleife. User aus Zufallsraw l�schen User:  " . $userabzug . "  ID:  " . $id3 . "\n" );
+                                                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Angreifer Zufallsschleife. User aus Zufallsraw l�schen User:  " . $userabzug . "  ID:  " . $id3 );
                                             }
                                         
                                         }
                                         
-                                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Angreifer Zufallsschleife Ende. User:  " . $username2 . "  ID:  " . $id3 . "  Flotten abgezogen:  " . $i . "\n" );
+                                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Angreifer Zufallsschleife Ende. User:  " . $username2 . "  ID:  " . $id3 . "  Flotten abgezogen:  " . $i );
                                     }
                                 }
                                 #Angreifer 3 ohne gef�llte Id-Raws l�schen
@@ -1742,7 +1752,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                     if ( $checkcount == 0 )
                                     {
                                         unset( $angreifer3[$deleteusername] );
-                                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Angreifer nicht mehr vorhanden , deshalb L�schung. User:  " . $deleteusername . "\n" );
+                                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Angreifer nicht mehr vorhanden , deshalb L�schung. User:  " . $deleteusername );
                                     }
                                     #Falls der richtige Username nicht mehr in Angreifer 3, Userraw mit naechstem Imploded User fuellen
                                     if ( ! isset( $angreifer3[$exp1[0]] ) )
@@ -1753,7 +1763,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                 
                                 }
                                 
-                                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Angreifer Flottenverluste �bertragen-Ende. Flotten-ID:  " . $this->getName() . "\n" );
+                                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreifer Flottenverluste �bertragen-Ende. Flotten-ID:  " . $this->getName() );
                             }
                             $angreifer2 = $angreifer3;
                         }
@@ -1768,7 +1778,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                         # Rohstoffe stehlen
                         if ( $winner == 1 )
                         {
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Angreifer Rohstoffe stehlen. Flotten-ID:  " . $this->getName() . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreifer Rohstoffe stehlen. Flotten-ID:  " . $this->getName() );
                             
                             # Angreifer haben gewonnen
                             
@@ -1794,16 +1804,16 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                 foreach ( $fleet as $id => $count )
                                 {
                                     $item_info = $this_user->getItemInfo( $id, 'schiffe' );
-                                    #if($item_info) fwrite($fo, date('Y-m-d, H:i:s')."  Case Angriff. Angreifer Rohstoffe stehlen. Item_Info erfolgreich. Flotten-ID:  ".$this->getName()." User: ".$exp[0]."\n");
-                                    #if(!$item_info) fwrite($fo, date('Y-m-d, H:i:s')."  Case Angriff. Angreifer Rohstoffe stehlen. Item_Info fehlgeschlagen!!!!!!! Flotten-ID:  ".$this->getName()." User: ".$exp[0]."\n");
+                                    #if($item_info) $logger->logIt( LOG_USER_FLEET, "Case Angriff. Angreifer Rohstoffe stehlen. Item_Info erfolgreich. Flotten-ID:  ".$this->getName()." User: ".$exp[0] );
+                                    #if(!$item_info) $logger->logIt( LOG_USER_FLEET, "Case Angriff. Angreifer Rohstoffe stehlen. Item_Info fehlgeschlagen!!!!!!! Flotten-ID:  ".$this->getName()." User: ".$exp[0] );
                                     
 
                                     if ( $id != 'S5' )
                                         $this_trans = $item_info['trans'][0] * $count;
                                     else
                                         $this_trans = 0.00000000001;
-                                        #if($this_trans) fwrite($fo, date('Y-m-d, H:i:s')."  Case Angriff. Angreifer Rohstoffe stehlen. This_Trans erfolgreich. Flotten-ID:  ".$this->getName()." User: ".$exp[0]."\n");
-                                    #if(!$this_trans) fwrite($fo, date('Y-m-d, H:i:s')."  Case Angriff. Angreifer Rohstoffe stehlen. This_Trans fehlgeschlagen!!!!!!! Flotten-ID:  ".$this->getName()." User: ".$exp[0]."\n");
+                                        #if($this_trans) $logger->logIt( LOG_USER_FLEET, "Case Angriff. Angreifer Rohstoffe stehlen. This_Trans erfolgreich. Flotten-ID:  ".$this->getName()." User: ".$exp[0] );
+                                    #if(!$this_trans) $logger->logIt( LOG_USER_FLEET, "Case Angriff. Angreifer Rohstoffe stehlen. This_Trans fehlgeschlagen!!!!!!! Flotten-ID:  ".$this->getName()." User: ".$exp[0] );
                                     
 
                                     $trans[$username] += $this_trans;
@@ -1873,37 +1883,37 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                 }
                             }
                         }
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Angreifer Rohstoffe stehlen-Ende. Flotten-ID:  " . $this->getName() . "\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreifer Rohstoffe stehlen-Ende. Flotten-ID:  " . $this->getName() );
                         $angreifer_keys = array_keys( $urangreifer );
-                        #if(count($angreifer_keys ) == 0) fwrite($fo, date('Y-m-d, H:i:s')."  Case Angriff. Angreifer Keys == 0! Flotten-ID:  ".$this->getName()."\n");
-                        #if(count($angreifer_keys ) > 0) fwrite($fo, date('Y-m-d, H:i:s')."  Case Angriff. Angreifer Keys  > 0 Flotten-ID:  ".$this->getName()."\n");
+                        #if(count($angreifer_keys ) == 0) $logger->logIt( LOG_USER_FLEET, "Case Angriff. Angreifer Keys == 0! Flotten-ID:  ".$this->getName() );
+                        #if(count($angreifer_keys ) > 0) $logger->logIt( LOG_USER_FLEET, "Case Angriff. Angreifer Keys  > 0 Flotten-ID:  ".$this->getName() );
                         
 
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Gesamtanfang.\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Gesamtanfang." );
                         
                         foreach ( $angreifer_keys as $username )
                         {
                             $exp = explode( "/", $username );
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Anfang. User:  " . $username . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Anfang. User:  " . $username );
                             if ( ! isset( $angreifer2[$username] ) )
                             {
                                 
                                 #Flotten des Sub-Angreifers wurden zerstoert
-                                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Sub-Angreifer Raw loeschen. User: " . $username . "\n" );
+                                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Sub-Angreifer Raw loeschen. User: " . $username );
                                 unset( $this->raw[1][$username] );
                                 $agcount = count( $this->raw[1] );
                                 if ( ! isset( $this->raw[1][$username] ) && ! isset( $this->raw[1][$exp[0]] ) )
                                 {
                                     $user_obj = Classes::User( $exp[0] );
                                     $user_obj->unsetFleet( $this->getName() );
-                                    fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Sub-Angreifer aus User-Raw loeschen. User: " . $username . "\n" );
+                                    $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Sub-Angreifer aus User-Raw loeschen. User: " . $username );
                                 }
                                 if ( $agcount == 0 )
                                 {
                                     $further = false;
                                     #$user_obj = Classes::User($exp[0]);
                                     #$user_obj->unsetFleet($this->getName());
-                                    fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Angreifer Flotte Further False. Flotten-ID:  " . $this->getName() . "  User: " . $username . "\n" );
+                                    $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreifer Flotte Further False. Flotten-ID:  " . $this->getName() . "  User: " . $username );
                                 }
                             }
                             
@@ -1915,9 +1925,9 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                             $user_obj->recalcHighscores( false, false, false, true, false );
                             
                             $user_obj->unsetVerbFleet( $this->getName() );
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Ende. User:  " . $username . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Ende. User:  " . $username );
                         }
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Gesamtende.\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Gesamtende." );
                         
                         $messagevertaufbau = false;
                         
@@ -1927,7 +1937,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                         
                         foreach ( $verteidiger_keys as $username )
                         {
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Verteidiger Flotte Anzahl �bertragen in Urverteidiger-Anfang. Flotten-ID:  " . $this->getName() . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Verteidiger Flotte Anzahl �bertragen in Urverteidiger-Anfang. Flotten-ID:  " . $this->getName() );
                             
                             #Einheiten vor dem Kampf holen
                             #$count ist die Anzahl der zusammengefassen Usereinheiten vor dem Kampf
@@ -1976,7 +1986,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                                 $urusernamearray[$username][] = $usernameur;
                                         }
                                         #Diff einzeln bei den Users abzaehlen
-                                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Verteidiger-Zufallsschleife Anfang. ID: " . $id . " User:  " . $username . "\n" );
+                                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Verteidiger-Zufallsschleife Anfang. ID: " . $id . " User:  " . $username );
                                         
                                         $i = 0;
                                         while ( $i < $diff )
@@ -2053,12 +2063,12 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                                 unset( $urverteidiger[$uruserabzug][$id] );
                                             }
                                         }
-                                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Verteidiger Zufallsschleife Ende. ID: " . $id . " User:  " . $username . " Flotten abgezogen " . $i . "\n" );
+                                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Verteidiger Zufallsschleife Ende. ID: " . $id . " User:  " . $username . " Flotten abgezogen " . $i );
                                     }
                                 
                                 }
                             }
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff. Verteidiger Flotte Anzahl �bertragen in Urverteidiger-Ende. Flotten-ID:  " . $this->getName() . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Verteidiger Flotte Anzahl �bertragen in Urverteidiger-Ende. Flotten-ID:  " . $this->getName() );
                         
                         }
                         if ( $messagevertaufbau == true )
@@ -2070,7 +2080,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                         $exist = array();
                         foreach ( $urverteidiger as $username => $info )
                         {
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Urverteidiger in Urfleet einordnen Anfang. User:  " . $username . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Urverteidiger in Urfleet einordnen Anfang. User:  " . $username );
                             $fleet = $urverteidiger[$username][1];
                             unset( $urverteidiger[$username][1] );
                             $urfleetverteidiger[$fleet][$username][0] = $urverteidiger[$username];
@@ -2083,22 +2093,22 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                             
                             if ( $countur == true )
                             {
-                                fwrite( $fo, "\n" . time() . " arriveAtNextTarget() -- Urverteidiger existiert noch, daher keine Loeschung. Flotten-ID:  " . $this->getName() . "\n" );
+                                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Urverteidiger existiert noch, daher keine Loeschung. Flotten-ID:  " . $this->getName() );
                                 
                                 $exist[] = $username;
                             }
-                            #else fwrite($fo, "\n".time()."  Urverteidiger existiert nicht mehr, daher Loeschung. User:  ".$username);
+                            #else $logger->logIt( LOG_USER_FLEET, "Urverteidiger existiert nicht mehr, daher Loeschung. User:  ".$username );
                             
 
                             $that->changed = true;
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Urverteidiger in Urfleet einordnen Ende. User:  " . $username . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Urverteidiger in Urfleet einordnen Ende. User:  " . $username );
                         
                         }
                         #Fleets, die nicht in Exist sind, loeschen
                         $foreign_users = $target_user->getForeignFleetsArray();
                         foreach ( $foreign_users as $fleet1 )
                         {
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Urfleetverteidiger loeschen Anfang. Flotten-ID:  " . $fleet1 . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Urfleetverteidiger loeschen Anfang. Flotten-ID:  " . $fleet1 );
                             
                             $that = Classes::Fleet( $fleet1 );
                             $target = $that->getTargetsList();
@@ -2109,7 +2119,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                 {
                                     if ( ! in_array( $username, $exist ) )
                                     {
-                                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Verteidigerfleet, einzelnes Userraw loeschen. ID:  " . $fleet1 . "  Username:  " . $username . "\n" );
+                                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Verteidigerfleet, einzelnes Userraw loeschen. ID:  " . $fleet1 . "  Username:  " . $username );
                                         
                                         unset( $that->raw[1][$username] );
                                         if ( count( $that->raw[1] ) > 0 )
@@ -2124,7 +2134,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                                     {
                                                         $that->raw[1][$exp[0]] = $that->raw[1][$username1];
                                                         unset( $that->raw[1][$username1] );
-                                                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Verteidigerfleet, noch ein Userraw vorhanden. Userarray tauschen. ID:  " . $fleet1 . "  Username:  " . $username1 . "\n" );
+                                                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Verteidigerfleet, noch ein Userraw vorhanden. Userarray tauschen. ID:  " . $fleet1 . "  Username:  " . $username1 );
                                                     }
                                                     $i ++;
                                                 }
@@ -2133,17 +2143,17 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                         
                                         if ( count( $that->raw[1] ) < 1 )
                                         {
-                                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Verteidigerfleet, kein Userraw mehr vorhanden. Fleet loeschen. ID:  " . $fleet1 . "  Username:  " . $username . "\n" );
+                                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Verteidigerfleet, kein Userraw mehr vorhanden. Fleet loeschen. ID:  " . $fleet1 . "  Username:  " . $username );
                                             $that->destroy();
                                         }
                                         $that->changed = true;
                                     }
                                 }
                             }
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Urfleetverteidiger loeschen Ende. Flotten-ID:  " . $fleet1 . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Urfleetverteidiger loeschen Ende. Flotten-ID:  " . $fleet1 );
                         
                         }
-                        fwrite( $fo, "\n\n\n\n\n" );
+                        $logger->logIt( LOG_USER_FLEET, "-------------------------------" );
                         
                         #if($messagevertaufbau == true)
                         #$messages[$target_owner] .= "\n<p class=\"verteidigung-wiederverwertung\">Es konnten 75% der Verteidigungsanlagen wiederhergestellt werden.</p>\n";
@@ -2158,7 +2168,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                             $exp = explode( "/", $username );
                             if ( $exp[0] == $username )
                             {
-                                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Nachrichten versenden. Anfang. User:  " . $username . "\n" );
+                                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Nachrichten versenden. Anfang. User:  " . $username );
                                 
                                 #echo("Fleet.php Message versenden :".date('Y-m-d, H:i:s')."\n");
                                 $message = Classes::Message();
@@ -2170,15 +2180,15 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                 $message->text( $text );
                                 $message->subject( "Kampf auf " . $next_target_nt );
                                 $message->addUser( $exp[0], 1 );
-                                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Nachrichten versenden. Ende. User:  " . $username . "\n" );
+                                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Nachrichten versenden. Ende. User:  " . $username );
                             }
                         }
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Case Angriff Ende.\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff Ende.");
                         
                         break;
                     
                     case 4: # Transport
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Transport. Flotten-ID:  " . $this->getName() . "\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Transport. Flotten-ID:  " . $this->getName() );
                         if ( ! isset( $this->raw[6][1] ) )
                             $message_text = array( $target_owner => "Ein Transport erreicht Ihren Planeten \xe2\x80\x9e" . $target_user->planetName() . "\xe2\x80\x9c (" . $next_target_nt . "). Folgende Spieler liefern Güter ab:\n" );
                         else
@@ -2289,7 +2299,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                         }
                         foreach ( $message_text as $username => $text )
                         {
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Message Transport Anfang. User:  " . $username . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Message Transport Anfang. User:  " . $username );
                             
                             $message_obj = Classes::Message();
                             if ( $message_obj->create() )
@@ -2310,17 +2320,17 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                 $message_obj->text( $text );
                                 $message_obj->addUser( $username, $types_message_types[$type] );
                             }
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Message Transport Ende. User:  " . $username . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Message Transport Ende. User:  " . $username );
                         }
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Transport Ende. Flotten-ID:  " . $this->getName() . "\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Transport Ende. Flotten-ID:  " . $this->getName() );
                         
                         break;
                     case 5: # Spionage
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- CASE SPIONAGE. Fleet ID: " . $this->getName() . "\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- CASE SPIONAGE. Fleet ID: " . $this->getName() );
                         
                         if ( ! $target_owner )
                         {
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- CASE SPIONAGE. Unbesiedelter Planet.\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- CASE SPIONAGE. Unbesiedelter Planet." );
                             
                             # Zielplanet ist nicht besiedelt
                             $message_text = "<h3>Spionagebericht des Planeten " . utf8_htmlentities( $next_target_nt ) . "</h3>\n";
@@ -2350,7 +2360,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                         else
                         {
                             # Zielplanet ist besiedelt
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- CASE SPIONAGE. Besiedelter Planet.\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- CASE SPIONAGE. Besiedelter Planet." );
                             
                             $users = array_keys( $this->raw[1] );
                             $verbuendet = true;
@@ -2365,7 +2375,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                             if ( ! $verbuendet )
                             {
                                 # Spionagetechnikdifferenz ausrechnen
-                                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- CASE SPIONAGE. Spionagetechnik Anfang.\n" );
+                                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- CASE SPIONAGE. Spionagetechnik Anfang." );
                                 
                                 $owner_level = $target_user->getItemLevel( 'F1', 'forschung' );
                                 $others_level = 0;
@@ -2392,7 +2402,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                     $diff = 5;
                                 else
                                     $diff = floor( pow( $others_level / $owner_level, 2 ) );
-                                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- CASE SPIONAGE. Spionagetechnik Ende.\n" );
+                                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- CASE SPIONAGE. Spionagetechnik Ende." );
                             
                             }
                             else # Spionierter Planet liefert alle Daten aus, wenn alle Spionierenden verbuendet sind
@@ -2414,7 +2424,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                             switch ( $diff )
                             {
                                 case 5: # Roboter und Fremdflotte zeigen
-                                    fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- CASE SPIONAGE. Roboter und Fremdflotte.\n" );
+                                    $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- CASE SPIONAGE. Roboter und Fremdflotte." );
                                     
                                     $next = &$message_text2[];
                                     $next = "\n<div id=\"spionage-fremdschiffe\">";
@@ -2502,7 +2512,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                 case 4: # Forschung zeigen
                                     
 
-                                    fwrite( $fo, date( 'Y-m-d, H:i:s' ) . "  CASE SPIONAGE. Forschung.\n" );
+                                    $logger->logIt( LOG_USER_FLEET, "CASE SPIONAGE. Forschung." );
                                     
                                     $next = &$message_text2[];
                                     $next = "\n<div id=\"spionage-forschung\">";
@@ -2519,7 +2529,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                     $next .= "\n</div>";
                                     unset( $next );
                                 case 3: # Schiffe und Verteidigungsanlagen anzeigen
-                                    fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- CASE SPIONAGE. Schiffe und Verteidigung.\n" );
+                                    $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- CASE SPIONAGE. Schiffe und Verteidigung." );
                                     
                                     $next = &$message_text2[];
                                     $next = "\n<div id=\"spionage-schiffe\">";
@@ -2553,7 +2563,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                     unset( $next );
                                 
                                 case 2: # Gebaeude anzeigen
-                                    fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- CASE SPIONAGE. Geb�ude.\n" );
+                                    $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- CASE SPIONAGE. Gebaeude." );
                                     
                                     $next = &$message_text2[];
                                     $next = "\n<div id=\"spionage-gebaeude\">";
@@ -2570,7 +2580,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                                     $next .= "\n</div>";
                                     unset( $next );
                                 case 1: # Rohstoffe anzeigen
-                                    fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- CASE SPIONAGE. Rohstoffe.\n" );
+                                    $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- CASE SPIONAGE. Rohstoffe." );
                                     
                                     $next = &$message_text2[];
                                     $next = "\n<div id=\"spionage-rohstoffe\">";
@@ -2583,7 +2593,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                             $message = Classes::Message();
                             if ( $message->create() )
                             {
-                                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- CASE SPIONAGE. Message Spion.\n" );
+                                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- CASE SPIONAGE. Message Spion." );
                                 $message->html( true );
                                 $message->subject( 'Spionage des Planeten ' . $next_target_nt );
                                 $message->text( $message_text );
@@ -2596,7 +2606,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                             $message = Classes::Message();
                             if ( $message->create() )
                             {
-                                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- CASE SPIONAGE. Message Opfer.\n" );
+                                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- CASE SPIONAGE. Message Opfer." );
                                 
                                 $message->subject( 'Fremde Flotte auf dem Planeten ' . $next_target_nt );
                                 $first_user = array_shift( $users );
@@ -2612,17 +2622,17 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                 }
             }
             # Weiterfliegen
-            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Weiterfliegen Anfang. Flotten-ID:  " . $this->getName() . "\n" );
+            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Weiterfliegen Anfang. Flotten-ID:  " . $this->getName() );
             $users = array_keys( $this->raw[1] );
             if ( $further )
             {
-                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Weiterfliegen mit further = true. Flotten-ID:  " . $this->getName() . "\n" );
+                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Weiterfliegen mit further = true. Flotten-ID:  " . $this->getName() );
                 
                 #In die Halteschleife schicken
                 #echo("\nRaw6 ".$this->raw[6][0]."\n");
                 if ( isset( $this->raw[6][0] ) && $this->raw[6][0] > 0 )
                 {
-                    fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Weiterfliegen in Halteschleife. Flotten-ID:  " . $this->getName() . "\n" );
+                    $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Weiterfliegen in Halteschleife. Flotten-ID:  " . $this->getName() );
                     
                     $owner_obj = Classes::User( $target_owner );
                     $foreign_fleet = $owner_obj->getForeignFleetsArray();
@@ -2652,7 +2662,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                     #var_dump($permitjoin);
                     if ( $permitjoin == true )
                     {
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Erlaubnis Eindocken in vorhandene Halteflotte. Flotten-ID:  " . $this->getName() . "\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Erlaubnis Eindocken in vorhandene Halteflotte. Flotten-ID:  " . $this->getName() );
                         
                         $time = $this->getHoldTime();
                         $that = Classes::Fleet( $fleetid );
@@ -2663,7 +2673,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                         foreach ( $this->raw[1][$users[0]][0] as $id => $anzahl )
                         {
                             $that->addFleet( $id, $anzahl, $adduser );
-                            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Eindocken von Flotte. Flotten-ID:  " . $this->getName() . " in Flotte: " . $that->getName() . "\n" );
+                            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Eindocken von Flotte. Flotten-ID:  " . $this->getName() . " in Flotte: " . $that->getName() );
                         }
                         $further = false;
                         ;
@@ -2671,7 +2681,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                     
                     if ( $foreigncount <= 4 )
                     {
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Eindocken in Halteschleife am Plani. Flotten-ID:  " . $this->getName() . " \n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Eindocken in Halteschleife am Plani. Flotten-ID:  " . $this->getName() );
                         
                         $keys = array_keys( $this->raw[0] );
                         $to = $to_t = array_shift( $keys );
@@ -2698,7 +2708,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                 }
                 else
                 {
-                    fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Weiterfliegen ohne Halteschleife. Flotten-ID:  " . $this->getName() . "\n" );
+                    $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Weiterfliegen ohne Halteschleife. Flotten-ID:  " . $this->getName() );
                     
                     $first_user = array_shift( $users );
                     $this->raw[3][$next_target] = array_shift( $this->raw[0] );
@@ -2744,7 +2754,7 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                     
                     if ( $new_fleet->create() && $further == true )
                     {
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Neue Flotte.\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Neue Flotte." );
                         
                         $that = Classes::Fleet();
                         $that->raw[1][$exp[0]] = $this->raw[1][$user];
@@ -2752,23 +2762,23 @@ EOF, ths( $trans_total ), ths( $rtrans[0] ), ths( $rtrans[1] ), ths( $rtrans[2] 
                         $new_fleet->raw[7][0] = round( $new_fleet->getNextArrival() );
                         $user_obj->addFleet( $new_fleet->getName() );
                         $new_fleet->createNextEvent();
-                        fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Neue Flotte. ID: " . $new_fleet->getName() . "\n" );
+                        $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Neue Flotte. ID: " . $new_fleet->getName() );
                     
                     }
                     unset( $this->raw[1][$user] );
                 }
-                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Ende Neue Flotte oder Ende Weiterflug.\n" );
+                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Ende Neue Flotte oder Ende Weiterflug." );
             
             }
             if ( ! $further )
             {
                 $this->destroy();
-                fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Flotte Further = false. Destroy. L�sche Flotten-ID:  " . $this->getName() . "\n" );
+                $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Flotte Further = false. Destroy. L�sche Flotten-ID:  " . $this->getName() );
             }
         }
         else
         {
-            fwrite( $fo, date( 'Y-m-d, H:i:s' ) . " arriveAtNextTarget() -- Stationieren.\n" );
+            $logger->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Stationieren." );
             
             # Stationieren
             $target = explode( ':', $next_target_nt );

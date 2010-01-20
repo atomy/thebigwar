@@ -5,7 +5,7 @@ if ( !defined( "TBW_ROOT" ) )
 	require_once( '../../include/config_inc.php' );
 }
 
-require_once( TBW_ROOT.'loghandler/LogHandler.php' );
+//require_once( TBW_ROOT.'loghandler/LogHandler.php' );
 
 /**
  * Logger 
@@ -43,7 +43,7 @@ class SendLogs
             return false;
         }
         	    
-	    $this->ipcKey = LogHandler::getIPCKey();
+	    $this->ipcKey = getIPCKey();
 	    $pppid = getmypid();
 	    //print "meh: $this->ipcKey -- $pppid \n";
 	    $this->msgQue = msg_get_queue( $this->ipcKey );	

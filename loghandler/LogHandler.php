@@ -1,6 +1,7 @@
 <?php
 
-require_once ( '../include/config_inc.php' );
+require_once ( 'config_inc.php' );
+require_once ( TBW_ROOT.'loghandler/logger.php' );
 
 /**
  * class to receive log entries via ipc message queue and processing them
@@ -59,7 +60,7 @@ class LogHandler
         
         $logger = &new Logger( );
         $this->logger = &$logger;
-        $this->ipcKey = $this->getIPCKey();
+        $this->ipcKey = getIPCKey();
         $this->msgQue = msg_get_queue( $this->ipcKey );
         
         if ( !$this->msgQue )
@@ -89,23 +90,6 @@ class LogHandler
             sleep( IPC_MSG_INTERVAL );
         }
     }
-
-    /**
-     * retrieve ipc key via ftok of given file, if not created create one
-     * @return int returns ipc key used for queues
-     */
-    public static function getIPCKey( )
-    {
-        if ( ! file_exists( TEMPDIR . KEYFILE ) )
-        {
-            if ( ! touch( TEMPDIR . KEYFILE ) )
-            {
-                throw new Exception( __FUNCTION__ . " Unable to generate keyfile." );
-            }
-        }
-        
-        return ftok( TEMPDIR . KEYFILE, IPCPROJCHAR );
-    }   
 }
 
 ?>

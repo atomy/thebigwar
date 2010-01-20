@@ -126,6 +126,11 @@ class Logger
 				$this->setLogFile( $type, LOGDIR . LOGFILE_EVENTH_FLEET );
 				return true;
 			break;			
+			
+			case LOG_USER_FLEET:
+				$this->setLogFile( $type, LOGDIR . LOGFILE_USER_FLEET );
+				return true;
+			break; 
 
 			default:
 				throw new Exception( __METHOD__." logtype $type not defined" );

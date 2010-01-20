@@ -1,5 +1,8 @@
 #!/usr/bin/php
 <?php
+
+ini_set( 'include_path', ini_get( 'include_path' ).':../include:../engine:../engine/classes:../loghandler:' );
+
 require_once ( '../include/config_inc.php' );
 require_once ( TBW_ROOT.'engine/classes/sendLogs.php' );
 require_once ( TBW_ROOT.'loghandler/LogHandler.php' );
@@ -766,7 +769,7 @@ Options:
                 $ges_ress[4] += $ress[4];
             }
             
-            checkExpiredMessages( $user );
+            checkExpiredMessagesOnUser( $user );
             
             unset( $user );
             Classes::resetInstances();
