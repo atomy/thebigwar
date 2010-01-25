@@ -581,7 +581,6 @@
 
 <ul class="nachrichten-neu-link">
     <li><a href="nachrichten.php?to=Stoffel&<?=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="n" tabindex="1.3">Nachricht an <kbd>G</kbd>O (Stoffel)</a></li>
-    <li><a href="nachrichten.php?to=fzero&<?=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="n" tabindex="1.4">Nachricht an <kbd>G</kbd>O (fzero)</a></li>
 </ul>
 
 <dl class="nachrichten-kategorien">
