@@ -39,7 +39,19 @@ require_once( TBW_ROOT.'engine/include.php' );
 		"14.2" => "%s hat den Newseintrag mit dem Titel %s verändert.",
 		"14.3" => "%s hat den Newseintrag mit dem Titel %s gelöscht.",
 		"15.1" => "%s hat die Flottensperre eingeschaltet.",
-		"15.2" => "%s hat die Flottensperre ausgeschaltet."
+		"15.2" => "%s hat die Flottensperre ausgeschaltet.",
+		"18.1" => "%s verändert die Flotte von %s",
+		"18.15" => "  %s addiert %s zur Flotte (%s)",
+		"18.2" => "Flotte Ende",
+		"18.3" => "%s verändert die Verteidigung von %s.",
+		"18.35" => "  %s addiert %s zur Verteidigung (%s)",
+		"18.4" => "Verteidigung Ende",
+		"19.1" => "%s verändert die Gebäude von %s",
+		"19.15" => "  %s addiert %s zum Gebäude (%s)",
+		"19.2" => "Gebäude Ende",
+		"19.3" => "%s verändert die Forschung von %s.",
+		"19.35" => "  %s addiert %s zur Forschung (%s)",
+		"19.4" => "Forschung Ende"
 	);
 
 #	if(global_setting("PROTOCOL") != 'https')
@@ -92,7 +104,7 @@ require_once( TBW_ROOT.'engine/include.php' );
 			define_globals($_POST['database']);
 			$admins = get_admin_list();
 
-			if(isset($admins[$_POST['admin_username']]) && md5($_POST['admin_password']) == $admins[$_POST['admin_username']]['password'])
+			if((isset($admins[$_POST['admin_username']]) && md5($_POST['admin_password']) == $admins[$_POST['admin_username']]['password']))
 			{
 				$_SESSION['admin_username'] = $_POST['admin_username'];
 				$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
@@ -168,10 +180,13 @@ require_once( TBW_ROOT.'engine/include.php' );
 		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 		<title>T-B-W &ndash; Adminbereich</title>
 		<link rel="stylesheet" href="<?=htmlspecialchars(h_root.'/admin/style.css')?>" type="text/css" />
+		<script type="text/javascript" src="<?=htmlspecialchars(h_root.'/login/scripts.js.php')?>"></script>
+		<script type="text/javascript" src="<?=htmlspecialchars(h_root.'/sarissa.js')?>"></script>
+		<script type="text/javascript" src="<?=htmlspecialchars(h_root.'/javascript/jQuery.js')?>"></script>
 	</head>
-	<a name="top"></a>
-	<fieldset><legend>TBW Admin-Interface (Version 1.04)</legend>
 	<body>
+		<a name="top"></a>
+		<fieldset><legend>TBW Admin-Interface (Version 1.04)</legend>
 		<? 
 		if ( isset($_SESSION['admin_username']) )
 			print "<div>Logged in as <b>".$_SESSION['admin_username']."</b></div>";

@@ -291,6 +291,90 @@
                 }
         }
 
+	/*if(isset($admin_array['permissions'][18]) && $admin_array['permissions'][18] && isset($_POST['username']) && isset($_POST['planetnr']) && (isset($_POST['fleetadd']) || isset($_POST['vertadd'])))
+        {
+		$_POST['username'] = trim($_POST['username']);
+		$_POST['planetnr'] = trim($_POST['planetnr']);
+		if(User::userExists($_POST['username'])) {
+			$that_user = Classes::User($_POST['username']);
+			if($that_user->isOwnPlanet($_POST['planetnr'])) {
+				$active_backup = $that_user->getActivePlanet();
+				$that_user->setActivePlanet($that_user->getPlanetByPos($_POST['planetnr']));
+				$flotten = $_POST['fleetadd'];
+				$counter = 0;
+				if(isset($flotten) && is_array($flotten) && count($flotten)>0) {
+					protocol("18.1", $_POST['username']);
+					foreach($flotten as $flotte) {
+						if(isset($flotte) && trim($flotte)!='') {
+							$id = 'S'.$counter;
+							$that_user->changeItemLevel($id,$flotte,'schiffe');
+							protocol("18.15", $flotte, $id);
+						}
+						$counter++;
+					}
+					protocol("18.2");
+				}
+				$verteidigungen = $_POST['vertadd'];
+				$counter = 0;
+				if(isset($verteidigungen) && is_array($verteidigungen) && count($verteidigungen)>0) {
+					protocol("18.3", $_POST['username']);
+					foreach($verteidigungen as $verteidigung) {
+						if(isset($verteidigung) && trim($verteidigung)!='') {
+							$id = 'V'.$counter;
+							$that_user->changeItemLevel($id,$verteidigung,'verteidigung');
+							protocol("18.35", $verteidigung,$id);
+						}
+						$counter++;
+					}
+					protocol("18.4");
+				}
+				$that_user->setActivePlanet($active_backup);
+			}
+		}
+        }
+
+	if(isset($admin_array['permissions'][19]) && $admin_array['permissions'][19] && isset($_POST['username']) && isset($_POST['planetnr']) && (isset($_POST['gebadd']) || isset($_POST['forsadd'])))
+        {
+		$_POST['username'] = trim($_POST['username']);
+		$_POST['planetnr'] = trim($_POST['planetnr']);
+		if(User::userExists($_POST['username'])) {
+			$that_user = Classes::User($_POST['username']);
+			if($that_user->isOwnPlanet($_POST['planetnr'])) {
+				$active_backup = $that_user->getActivePlanet();
+				$that_user->setActivePlanet($that_user->getPlanetByPos($_POST['planetnr']));
+				$buildings = $_POST['gebadd'];
+				$counter = 0;
+				if(isset($buildings) && is_array($buildings) && count($buildings)>0) {
+					protocol("19.1", $_POST['username']);
+					foreach($buildings as $building) {
+						if(isset($building) && trim($building)!='') {
+							$id = 'B'.$counter;
+							$that_user->changeItemLevel($id,$building,'gebaeude');
+							protocol("19.15", $building,$id);
+						}
+						$counter++;
+					}
+					protocol("19.2");
+				}
+				$forschungen = $_POST['forsadd'];
+				$counter = 0;
+				if(isset($forschungen) && is_array($forschungen) && count($forschungen)>0) {
+					protocol("19.3", $_POST['username']);
+					foreach($forschungen as $forschung) {
+						if(isset($forschung) && trim($forschung)!='') {
+							$id = 'F'.$counter;
+							$that_user->changeItemLevel($id,$forschung,'forschung');
+							protocol("19.35", $forschung,$id);
+						}
+						$counter++;
+					}
+					protocol("19.4");
+				}
+				$that_user->setActivePlanet($active_backup);
+			}
+		}
+        }*/
+
 	
 	admin_gui::html_head();
 ?>
@@ -397,12 +481,8 @@
 	
 	<tr>
        <td style="width: 200px;" align="center" nowrap="nowrap" valign="middle">
-            <?php if(isset($admin_array['permissions'][18]) && $admin_array['permissions'][18]){?><a href="<?php echo $RELPATH; ?>index.php#action-18">Flotte / Verteidigung<br>ersetzen</a>
-			<?php } else {?>Flotte / Verteidigung<br>ersetzen<?php }?>
-      </td>
-      <td style="width: 200px;" align="center" nowrap="nowrap" valign="middle">
-            <?php if(isset($admin_array['permissions'][19]) && $admin_array['permissions'][19]){?><a href="<?php echo $RELPATH; ?>index.php#action-19">Geb&auml;ude / Forschung<br>ersetzen</a>
-			<?php } else {?>Geb&auml;ude / Forschung<br>ersetzen<?php }?>
+            <?php if(isset($admin_array['permissions'][18]) && $admin_array['permissions'][18]){?><a href="<?php echo $RELPATH; ?>index.php#action-18">Items<br>ersetzen</a>
+			<?php } else {?>Items<br>ersetzen<?php }?>
       </td>
 	  <td style="width: 200px;" align="center" nowrap="nowrap" valign="middle">
       </td>
@@ -848,145 +928,13 @@
 
 ?>
 
-
-<fieldset><legend id="action-18">Flotte / Verteidigung ersetzten [+/-] (NOCH NICHT AKTIV!)</legend>
-<form action="index.php" method="post">
-<table cellpadding="2" cellspacing="2">
-	<thead>
-			<tr>
-				<td>
-					<dt><label for="username-input">Benutzername</label></dt>
-					<dt><input type="text" name="username" id="username-input" /></dt>
-					<script type="text/javascript">
-					// Autocompletion
-						activate_users_list(document.getElementById('username-input'));
-					</script>
-				</td>
-				
-				<td>
-					<dt><label for="planet-input">Planetennummer</label></dt>
-					<dt><input type="text" name="planetnr" id="planet-input" /></dt>
-				</td>
-			</tr>
-	</thead>
-	<tbody>
-			<tr>
-				<td>
-					<dl>
-						<label for="fleetadd-S0">Kleiner Transporter</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S0" /></dt>
-						<dt><label for="fleetadd-S1">Großer Transporter</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S1" /></dt>
-						<dt><label for="fleetadd-S2">Transcube</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S2" /></dt>
-						<dt><label for="fleetadd-S3">Sammler</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S3" /></dt>
-						<dt><label for="fleetadd-S5">Spionagesonde</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S5" /></dt>
-						<dt><label for="fleetadd-S6">Besiedelungsschiff</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S5" /></dt>
-						<dt><label for="fleetadd-S7">Kampfkapsel</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S7" /></dt>
-						<dt><label for="fleetadd-S8">Leichter Jäger</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S8" /></dt>
-						<dt><label for="fleetadd-S9">Schwerer Jäger</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S9" /></dt>
-						<dt><label for="fleetadd-S10">Leichte Fregatte</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S10" /></dt>
-						<dt><label for="fleetadd-S11">Schwere Fregatte</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S11" /></dt>
-						<dt><label for="fleetadd-S12">Leichter Kreuzer</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S12" /></dt>
-						<dt><label for="fleetadd-S13">Schwerer Kreuzer</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S13" /></dt>
-						<dt><label for="fleetadd-S14">Schlachtschiff</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S14" /></dt>
-						<dt><label for="fleetadd-S15">Zerstörer</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S15" /></dt>
-						<dt><label for="fleetadd-S16">Warcube</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-S16" /></dt>
-					</dl>
-				</td>
-			
-				<td>
-					<dl>
-						<dt><label for="fleetadd-V0">Einfaches Lasergeschütz</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-V0" /></dt>
-						<dt><label for="fleetadd-V1">Gatling</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-V1" /></dt>
-						<dt><label for="fleetadd-V2">Mehrfachraketenwerfer</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-V2" /></dt>
-						<dt><label for="fleetadd-V6">Schweres Lasergeschütz</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-V6" /></dt>
-						<dt><label for="fleetadd-V3">EMP</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-V3" /></dt>
-						<dt><label for="fleetadd-V4">Ionenkanone</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-V4" /></dt>
-						<dt><label for="fleetadd-V5">Radonkanone</label>&nbsp;<dt><input type="text" name="fleetadd" id="fleetadd-V5" /></dt>
-					</dl>
-				</td>	
-			</tr>	
-	</tbody>
-	
-	<tfoot>
-			<tr><td style="text-align: center" colspan="20"><div><button type="submit">ersetzen</button></div></td></tr>
-	</tfoot>
-</table>	
-</form>
-<p><a href="#top">Zurück zum Menü</a></p></fieldset>
+<fieldset><legend id="action-18">Items ersetzten [+/-]</legend>
+<h2><a href="<?php echo h_root; ?>/admin/changeItems.php">Items ersetzen</a></h2>
+	<p><a href="#top">Zurück zum Menü</a></p>
+</fieldset>
 
 <?php
 	}
-
-
-if(isset($admin_array['permissions'][19]) && $admin_array['permissions'][19])
-	{
-
-?>
-<fieldset><legend id="action-19">Geb&auml;ude/ Forschung ersetzten [+/-]</legend>
-<form action="index.php" method="post">
-<table cellpadding="2" cellspacing="2">
-	<thead>
-			<tr>
-				<td>
-					<dt><label for="username-input">Benutzername</label></dt>
-					<dt><input type="text" name="username" id="username-input" /></dt>
-					<script type="text/javascript">
-					// Autocompletion
-						activate_users_list(document.getElementById('username-input'));
-					</script>
-				</td>
-				
-				<td>
-					<dt><label for="planet-input">Planetennummer</label></dt>
-					<dt><input type="text" name="planetnr" id="planet-input" /></dt>
-				</td>
-			</tr>
-	</thead>
-	<tbody>
-			<tr>
-				<td>
-					<dl>
-						<dt><label for="gebadd-B0">Carbonfabrik</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-B0" /></dt>
-						<dt><label for="gebadd-B1">Aluminiumgießerei</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-B1" /></dt>
-						<dt><label for="gebadd-B2">Radiumgrube</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-B2" /></dt>
-						<dt><label for="gebadd-B3">Tritiumgenerator</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-B3" /></dt>
-						<dt><label for="gebadd-B5">Bolarkraftwerk</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-B5" /></dt>
-						<dt><label for="gebadd-B6">Bonnenwindkraftwerk</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-B5" /></dt>
-						<dt><label for="gebadd-B7">Wärmekraftwerk</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-B7" /></dt>
-						<dt><label for="gebadd-B8">Forschungslabor</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-B8" /></dt>
-						<dt><label for="gebadd-B9">Roboterfabrik</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-B9" /></dt>
-						<dt><label for="gebadd-B10">Werft</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-B10" /></dt>
-					</dl>
-				</td>
-
-				<td>
-					<dl>
-						<dt><label for="gebadd-F0">Kontrollwesen</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-F0" /></dt>
-						<dt><label for="gebadd-F1">Spionagetechnik</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-F1" /></dt>
-						<dt><label for="gebadd-F2">Roboterbautechnik</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-F2" /></dt>
-						<dt><label for="gebadd-F3">Energietechnik</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-F3" /></dt>
-						<dt><label for="gebadd-F4">Waffentechnik</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-F4" /></dt>
-						<dt><label for="gebadd-F5">Verteidigungsstrategie</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-F5" /></dt>
-						<dt><label for="gebadd-F10">Schildtechnik</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-F10" /></dt>
-						<dt><label for="gebadd-F6">Rückstoßantrieb</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-F6" /></dt>
-						<dt><label for="gebadd-F7">Ionenantrieb</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-F7" /></dt>
-						<dt><label for="gebadd-F8">Kernantrieb</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-F8" /></dt>
-						<dt><label for="gebadd-F9">Ingenieurswissenschaft</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-F9" /></dt>
-						<dt><label for="gebadd-F11">Laderaumerweiterung</label>&nbsp;<dt><input type="text" name="gebadd" id="gebadd-F11" /></dt>
-					</dl>
-				</td>
-			</tr>	
-	</tbody>
-	
-	<tfoot>
-			<tr><td style="text-align: center" colspan="20"><div><button type="submit">ersetzen</button></div></td></tr>
-	</tfoot>
-</table>	
-</form>
-<p><a href="#top">Zurück zum Menü</a></p></fieldset>
-
-<?php
-	}
-	
 
 	admin_gui::html_foot();
 ?>
