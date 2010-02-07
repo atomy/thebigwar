@@ -231,6 +231,8 @@
 			var database_id = '<?=str_replace('\'', '\\\'', $_SESSION['database'])?>';
 		</script>
 		<script type="text/javascript" src="<?=htmlentities(h_root.'/login/scripts.js.php')?>"></script>
+		<script type="text/javascript" src="<?=htmlentities(h_root.'/javascript/jQuery.js')?>"></script>
+		<script type="text/javascript" src="<?=htmlentities(h_root.'/javascript/jQueryUI.js')?>"></script>
 <?php
 			if($me->checkSetting('ajax'))
 			{
