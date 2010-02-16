@@ -3233,7 +3233,9 @@ EOF
             $nachrichten_text .= "\t<ol>\n";
             while($staerke > 0)
             {
+		shuffle($d);
                 $att_user = array_rand($d);
+		shuffle($d[$att_user]);
                 $att_id = array_rand($d[$att_user]);
                 
                 $item_info = ${'users_'.$runde_anderer}[$att_user]->getItemInfo($att_id);
