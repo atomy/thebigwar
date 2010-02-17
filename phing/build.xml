@@ -16,7 +16,24 @@
 
   <target name="prepare">
     <phingcall target="setupTestUni"/>
-	<exec command="mkdir tools" dir="." />
+    <exec command="mkdir tools" dir="." />
+    <exec command="mkdir tmp" dir="." />
+  </target>
+
+  <!-- daemonise the eventhandler  -->
+  <target name="eventhandler">
+  	<exec command="./eventhandler.php --daemon" spawn="true" dir="./db_things/"/>
+  </target>
+
+  <target name="killeventhandler">
+      <!-- Kill Eventhandler -->
+    <exec command="kill `cat database.global/eventhandler.pid`"/>
+    <exec command="killall eventhandler.php" />
+
+    <!-- wait 5s and kill -9 him -->
+    <exec command="sleep 5"/>
+    <exec command="kill -9 `cat database.global/eventhandler.pid`"/>
+    <exec command="killall -9 eventhandler.php" />
   </target>
 
   <target name="cleanup">
@@ -31,6 +48,8 @@
 
 	<!-- Remove all reports of tools -->
 	<exec command="rm -Rf tools" dir="." />
+
+	<exec command="rm -Rf tmp" dir="." />
   </target>
 
   <target name="all">
@@ -42,7 +61,9 @@
 	<phingcall target="phpdoc" />
 	<phingcall target="pdepend" />
 	<phingcall target="phpcs" />
+	<phingcall target="eventhandler" />
 	<phingcall target="phpunit" />
+	<phingcall target="killeventhandler" />
   </target>
 
   <target name="test">
