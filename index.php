@@ -2,65 +2,72 @@
 	require_once( 'include/config_inc.php' );
 	require( TBW_ROOT.'include.php' );
 
-	function repl_nl($nls)
-	{
-		$len = strlen($nls);
-		if($len == 1)
-			return "<br />\n\t\t";
-		elseif($len == 2)
-			return "\n\t</p>\n\t<p>\n\t\t";
-		elseif($len > 2)
-			return "\n\t</p>\n".str_repeat('<br />', $len-2)."\n\t<p>\n\t\t";
-	}
-
-	$SHOW_META_DESCRIPTION = true;
-	gui::html_head();
+    startseite_html_head();
 ?>
 
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
+<div id="importantbox">
 
-<br/>
-<?php
-        if ( defined( 'TBW_EXT_NEWSURL' ) )
-        {
-        ?> 
-       
-<iframe name="newsbox" id="newsbox" height="1500" scrolling="no" frameborder="0" style="width:500px; position:absolute; top:200px; left:200px;" src="<?php print TBW_EXT_NEWSURL;?>" >
+<div id="newsbox">
+
+<div>
+Neuigkeiten:
+</div>
+<iframe name="newsframe" id="newsframe" scrolling="no" frameborder="0" src="http://forum.thebigwar.org/ext/smallnews.php" >
   <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen:
   Sie k&ouml;nnen die eingebettete Seite &uuml;ber den folgenden Verweis
-  aufrufen: <a href="<?php print TBW_EXT_NEWSURL;?>">News</a></p>
+  aufrufen: <a href="http://forum.thebigwar.org/ext/news.php">News</a></p>
 </iframe>
-        <?php 
-		}
-		?>
-</div>
 
-<div class="donate" style="position:absolute; top:450px; left:5px;">
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-<input type="hidden" name="cmd" value="_donations">
-<input type="hidden" name="business" value="spenden@thebigwar.org">
-<input type="hidden" name="lc" value="DE">
-<input type="hidden" name="item_name" value="thebigwar.org">
-<input type="hidden" name="currency_code" value="EUR">
-<input type="hidden" name="bn" value="PP-DonationsBF:btn_donate_LG.gif:NonHostedGuest">
-<input type="image" src="https://www.paypal.com/de_DE/DE/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="Jetzt einfach, schnell und sicher online bezahlen – mit PayPal.">
-<img alt="" border="0" src="https://www.paypal.com/de_DE/i/scr/pixel.gif" width="1" height="1">
+</div> <!-- newsbox -->
+
+<div id="middlebox">
+
+<div id="loginbox">
+
+<form method="post" action="http://tbwalpha.jackinpoint.net/login/index.php" id="login-form">
+
+<div id="inputbox">
+
+<div id="login_user">
+<div>Name:</div>
+<input type="text" id="login-username" name="username" class="name" />
+</div> <!-- login_user/ -->
+
+<div id="login_pass">
+Passwort:
+<input type="password" id="login-password" name="password" class="passwort" />
+</div> <!-- login_pass/ -->
+
+</div> <!-- inputbox/ -->
+
+<div id="login_button">
+<input type="submit" name="anmelden" value="Anmelden" />
+</div> <!-- login_button/ -->
+
 </form>
+
+</div> <!-- loginbox/ -->
+
+<div id="login_links">
+<a id="login_links_pass" href="http://www.thebigwar.org/passwd.php">Passwort vergessen?</a>
+<a id="login_links_guest" href="http://www.thebigwar.org/login/guest.php?database=Universum1">Probezugang</a>
+</div> <!-- login_links/ -->
+
+<div id="votebox">
+<div id="gdynamite" style="">
+<a href="http://bgs.gdynamite.de/charts_vote_1066.html" target="_blank"><img src="http://voting.gdynamite.de/images/gd_animbutton.gif" alt="games-dynamite vote button" border="0" /></a>
 </div>
 
-<div class="gdynamite"  style="position:absolute; top:490px; left:10px;">
-<a href="http://bgs.gdynamite.de/charts_vote_1066.html" target="_blank"><img src="http://voting.gdynamite.de/images/gd_animbutton.gif" border="0"></a>
+<div id="gnews">
+<a href="http://www.galaxy-news.de/charts/?op=vote&amp;game_id=3353" target="_blank"><img src="images/vote.gif" style="border:0;" alt="galaxy-news vote button" /></a>
 </div>
-<div class="gnews" style="position:absolute; top:530px; left:10px;">
-<a href=http://www.galaxy-news.de/charts/?op=vote&game_id=3353 target="_blank"><img src="images/vote.gif" style="border:0;" alt="Die besten Browsergames in den Galaxy-News MMOG-Charts!"></a>
-</div>
-<div class="spamtrap" style="position:absolute; left:100px; top:1980px; color:#000000">
-Spammers send mail to spbox2@eum-gilde.de - DO NOT SEND MAILS THERE
-</div>
-</body>
-</html>
+
+</div> <!-- votebox/ -->
+
+</div> <!-- middlebox/ -->
+
+</div> <!-- importantbox/ -->
+
+<?php 
+    startseite_html_foot();
+?>
