@@ -1,7 +1,15 @@
 # !/bin/bash
+# no restart file to prevent eventhandler starts by crontab - KEEP IN SYNC WITH tbw.svn.deploy.sh
+NORESTARTSFILE="$HOME/EVENTHANDLER.KEEPDEAD"
 
 cmdexec="./eventhandler --daemon --no-jabber"
 pidfile="../database.global/eventhandler.pid"
+
+if [ -e ${NORESTARTSFILE} ] ;
+then
+	echo "lock file exists, exiting..."
+	exit 0
+fi
 
 if test -r ${pidfile}
 then
