@@ -1438,6 +1438,18 @@ class User extends Dataset
         return $this->raw['registration'];
     }
 
+    /**
+     * @param $time - unix time stamp for registration time
+     */
+    function setRegistrationTime( $time = 0 )
+    {
+        if ( ! $this->status || $time == 0 )
+            return false;
+
+        $this->raw['registration'] = $time;
+        $this->write( true, false );
+    }
+
     function getItemsList( $type = false )
     {
         if ( ! $this->status )
