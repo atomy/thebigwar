@@ -6,12 +6,24 @@
     <!-- Setup TestUni1 using ./db_create script. -->
     <exec command="./create_database db admin admin" dir="./db_things" />
     <exec command="mv db ../" dir="./db_things"/>
-	<exec command="rm locked" dir="./db" />
+    <exec command="rm locked" dir="./db" />
 
-	<!-- Setup general things -->
+    <!-- Setup general things -->
     <exec command="cp -R * ../" dir="./default/"/>
     <exec command="./addRootDir.sh ${project.basedir}" dir="./db_things/"/>
     <exec command="chmod +x *" dir="./db_things/"/>
+
+    <!-- Setup symlinks -->
+    <exec command="ln -fs ../../database.global/schiffe schiffe" dir="./db/items/" />
+    <exec command="ln -fs ../../database.global/gebaeude gebaeude" dir="./db/items/" />
+    <exec command="ln -fs ../../database.global/forschung forschung" dir="./db/items/" />
+    <exec command="ln -fs ../../database.global/verteidigung verteidigung" dir="./db/items/" />
+    <exec command="ln -fs ../../database.global/roboter roboter" dir="./db/items/" />
+    <exec command="ln -fs ../database.global/schiffe schiffe" dir="./db_things/" />
+    <exec command="ln -fs ../database.global/gebaeude gebaeude" dir="./db_things/" />
+    <exec command="ln -fs ../database.global/forschung forschung" dir="./db_things/" />
+    <exec command="ln -fs ../database.global/verteidigung verteidigung" dir="./db_things/" />
+    <exec command="ln -fs ../database.global/roboter roboter" dir="./db_things/" />
   </target>
 
   <target name="prepare">
@@ -54,7 +66,7 @@
 
   <target name="all">
   	<phingcall target="cleanup" />
-    <phingcall target="prepare"/>
+    <phingcall target="prepare" />
   <!--  <phingcall target="test"/> -->
   <!--  <phingcall target="coverage-report"/> -->
 	<phingcall target="phpcpd" />
