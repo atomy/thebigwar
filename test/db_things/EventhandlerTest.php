@@ -1,6 +1,6 @@
 <?php
 
-ini_set( 'include_path', ini_get( 'include_path' ).':../../include:../../engine:../../engine/classes:../../loghandler:../../db_things:../../:' );
+ini_set( 'include_path', ini_get( 'include_path' ).':../../include:../../engine:../../engine/classes:../../loghandler:../../db_things:../../:'.TBW_ROOT.':' );
 
 // Call userTest::main() if this source file is executed directly.
 if ( ! defined( 'PHPUNIT_MAIN_METHOD' ) )
@@ -10,7 +10,7 @@ if ( ! defined( 'PHPUNIT_MAIN_METHOD' ) )
 
 require_once 'PHPUnit/Framework.php';
 
-require_once 'config_inc.php';
+require_once 'include/config_inc.php';
 require_once 'engine/include.php';
 
 /** 
