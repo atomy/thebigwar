@@ -22,8 +22,10 @@ require_once ( TBW_ROOT.'loghandler/LogHandler.php' );
     $daemon = false;
     $verbose = false;
     $gCheckMsg = false;
+    $gTestRun = false;
     $use_jabber = $wanna_use_jabber = false;
     $getopt_exists = false;
+    $gLoggerPID = 0;
     
     foreach ( explode( ':', get_include_path() ) as $path )
     {
@@ -39,7 +41,7 @@ require_once ( TBW_ROOT.'loghandler/LogHandler.php' );
     {
         require_once ( 'Console/Getopt.php' ); # PEAR
         
-        $options = Console_Getopt::getopt( $_SERVER['argv'], 'hdvJm', array( 'help', 'daemon', 'verbose', 'no-jabber', 'checkmsg' ) );
+        $options = Console_Getopt::getopt( $_SERVER['argv'], 'hdvJm', array( 'help', 'daemon', 'verbose', 'no-jabber', 'checkmsg', 'testrun' ) );
         
         if ( $options instanceof PEAR_Error )
         {
@@ -52,7 +54,7 @@ require_once ( TBW_ROOT.'loghandler/LogHandler.php' );
             switch ( $o[0] )
             {
                 case 'h':
-                case '--help':
+                case '--help': 
                     $print_usage = true;
                     break;
                 case 'd':
@@ -70,6 +72,8 @@ require_once ( TBW_ROOT.'loghandler/LogHandler.php' );
                 case 'm':
                 case '--checkmsg':
                     $gCheckMsg = true;
+                case '--testrun' :
+                    $gTestRun = true;                                        
             }
         }
     }
@@ -90,6 +94,7 @@ Options:
   -d, --daemon:  Run in background
   -v, --verbose: Verbose output
   -m, --checkmsg: check only for old expired messages, exit afterwards  
+  --testrun: run only once and exit
 
 ' );
         
@@ -130,6 +135,7 @@ Options:
         if ( $pid )
         {
             fputs( STDOUT, "Eventhandler forked, PID ".$pid." to handle logfiles.\n" );
+            $gLoggerPID = $pid;
         }
         // [CHILD]
         else
@@ -503,12 +509,19 @@ Options:
         return $days;
     }
     
+    /**
+     * check for expired users, mail them or delete them or just leave them alone
+     * @param $user
+     * @return bool, true on delete
+     */
     function checkExpiredUsers( &$user )
     {
         global $logger;
         
         $days = getLastLoginInDays( $user );                
         $today = date( 'Y-m-d' );
+        
+        $logger->logIt( LOG_EVENTH_GENERAL, "Checking user " . $user->getName() . " [".$user->checkSetting( 'email' )."] against inactivity. ( days: $days )" );
         
         # Wenn der Spieler inaktiv ist, loeschen
         if ( $days !== false )
@@ -519,23 +532,27 @@ Options:
                 {
                     if ( $user->checkSetting( 'email' ) )
                     {
-                        mail( $user->checkSetting( 'email' ), "Accountinaktivit\xc3\xa4t in T-B-W", "Sie erhalten diese Nachricht, weil Sie sich seit geraumer Zeit nicht mehr in The Big War angemeldet haben. Sie haben zwei Wochen Zeit, sich anzumelden, danach wird Ihr Account einer automatischen Loeschung unterzogen.\n\nDas Spiel erreichen Sie unter " . GLOBAL_GAMEURL . " \xe2\x80\x93 Ihr Benutzername lautet " . $user->getName(), "Content-Type: text/plain;\r\n  charset=\"utf-8\"\r\nFrom: " . global_setting( "EMAIL_FROM" ) . "\r\nReply-To: " . global_setting( "EMAIL_FROM" ) );
+                        $logger->logIt( LOG_EVENTH_GENERAL, "Sending mail to user " . $user->getName() . " [".$user->checkSetting( 'email' )." because of inactivity. ( 21 days, holiday-mode enabled )" );
+                        mail( $user->checkSetting( 'email' ), "Accountinaktivit\xc3\xa4t in T-B-W", "Sie erhalten diese Nachricht, weil Sie sich seit geraumer Zeit nicht mehr in The Big War angemeldet haben. Sie haben zwei Wochen Zeit, sich anzumelden, danach wird Ihr Account einer automatischen Loeschung unterzogen.\n\nDas Spiel erreichen Sie unter " . GLOBAL_GAMEURL . " \xe2\x80\x93 Ihr Benutzername lautet " . $user->getName(), "Content-Type: text/plain;\r\n  charset=\"utf-8\"\r\nFrom: " . global_setting( "EMAIL_FROM" ) . "\r\nReply-To: " . global_setting( "EMAIL_FROM" ) );                        
                         $user->lastMailSent( $today );
                     }
                 }
                 else 
                     if ( $days >= 35 ) # 5 Wochen: Loeschung
                     {
-                        if ( $user->destroy() )
+                        $uname = $user->getName();
+                        $user->__destruct();
+                        Classes::resetInstances();
+                    
+                        if ( user_control::removeUser( $uname ) )
                         {
                             $logger->logIt( LOG_EVENTH_GENERAL, "Deleted user `" . $user->getName() . "' because of inactivity." );
+                            return true;
                         }
                         else
                         {
                             $logger->logIt( LOG_EVENTH_GENERAL, "Error: Couldn't delete user `" . $user->getName() . "'." );
                         }
-                        
-                        continue;
                     }
             }
             else
@@ -544,21 +561,26 @@ Options:
                 {
                     if ( $user->checkSetting( 'email' ) )
                     {
-                        mail( $user->checkSetting( 'email' ), "Accountinaktivitaet in T-B-W", "Sie erhalten diese Nachricht, weil Sie sich seit geraumer Zeit nicht mehr in The Big War angemeldet haben. Sie haben " . ( ( $days == 34 ) ? 'einen Tag' : 'zwei Wochen' ) . " Zeit, sich anzumelden, danach wird Ihr Account einer automatischen Loeschung unterzogen.\n\nDas Spiel erreichen Sie unter " . GLOBAL_GAMEURL . " \xe2\x80\x93 Ihr Benutzername lautet " . $user->getName(), "Content-Type: text/plain;\r\n  charset=\"utf-8\"\r\nFrom: " . global_setting( "EMAIL_FROM" ) . "\r\nReply-To: " . global_setting( "EMAIL_FROM" ) );
+                        $logger->logIt( LOG_EVENTH_GENERAL, "Sending mail to user " . $user->getName() . " [".$user->checkSetting( 'email' )."] because of inactivity. ( 21 days or 34 days and no mail sent today, no holiday-mode enabled )" );
+                        mail( $user->checkSetting( 'email' ), "Accountinaktivitaet in T-B-W", "Sie erhalten diese Nachricht, weil Sie sich seit geraumer Zeit nicht mehr in The Big War angemeldet haben. Sie haben " . ( ( $days == 34 ) ? 'einen Tag' : 'zwei Wochen' ) . " Zeit, sich anzumelden, danach wird Ihr Account einer automatischen Loeschung unterzogen.\n\nDas Spiel erreichen Sie unter " . GLOBAL_GAMEURL . " \xe2\x80\x93 Ihr Benutzername lautet " . $user->getName(), "Content-Type: text/plain;\r\n  charset=\"utf-8\"\r\nFrom: " . global_setting( "EMAIL_FROM" ) . "\r\nReply-To: " . global_setting( "EMAIL_FROM" ) );                        
                         $user->lastMailSent( $today );
                     }
                 }
                 elseif ( $days >= 35 )
                 {
-                    if ( $user->destroy() )
+                    $uname = $user->getName();
+                    $user->__destruct();
+                    Classes::resetInstances();
+                    
+                    if ( user_control::removeUser( $uname ) )
                     {
-                        $logger->logIt( LOG_EVENTH_GENERAL, "Deleted user `" . $user->getName() . "' because of inactivity." );
+                        $logger->logIt( LOG_EVENTH_GENERAL, "Deleted user `" . $uname . "' because of inactivity." );
+                        return true;
                     }
                     else
                     {
-                        $logger->logIt( LOG_EVENTH_GENERAL, "Error: Couldn't delete user `" . $user->getName() . "'." );
+                        $logger->logIt( LOG_EVENTH_GENERAL, "Error: Couldn't delete user `" . $uname . "'." );
                     }
-                    continue;
                 }
             }
         }
@@ -566,21 +588,27 @@ Options:
         {
             if ( $user->checkSetting( 'email' ) )
             {
+                $logger->logIt( LOG_EVENTH_GENERAL, "Sending mail to user " . $user->getName() . " [".$user->checkSetting( 'email' )." because of inactivity. ( 7 days )" );                
                 mail( $user->checkSetting( 'email' ), "Accountinaktivit\xc3\xa4t in T-B-W", "Sie erhalten diese Nachricht, weil Sie sich seit geraumer Zeit nicht mehr in The Big War angemeldet haben. Sie haben eine Woche Zeit, sich anzumelden, danach wird Ihr Account einer automatischen L\xc3\xb6schung unterzogen.\n\nDas Spiel erreichen Sie unter " . GLOBAL_GAMEURL . " \xe2\x80\x93 Ihr Benutzername lautet " . $user->getName(), "Content-Type: text/plain;\r\n  charset=\"utf-8\"\r\nFrom: " . global_setting( "EMAIL_FROM" ) . "\r\nReply-To: " . global_setting( "EMAIL_FROM" ) );
             }
         }
         elseif ( $days >= 14 )
         {
-            if ( $user->destroy() )
+            $uname = $user->getName();
+            $user->__destruct();
+            Classes::resetInstances();
+                    
+            if ( user_control::removeUser( $uname ) )
             {
                 $logger->logIt( LOG_EVENTH_GENERAL, "Deleted user `" . $user->getName() . "' because of inactivity." );
+                return true;
             }
             else
             {
                 $logger->logIt( LOG_EVENTH_GENERAL, "Error: Couldn't delete user `" . $user->getName() . "'." );
             }
-            continue;
         }
+        return false;
     }
 
     /**
@@ -716,13 +744,17 @@ Options:
             }
             
             $user = Classes::User( urldecode( $filename ) );
-            
+
             if ( ! $user->getStatus() )
             {
                 continue;
             }
             
-            checkExpiredUsers( $user );
+            if ( checkExpiredUsers( $user ) )
+            {
+                continue;
+            }
+   
             $days = getLastLoginInDays( $user );
             
             $planets = $user->getPlanetsList();
@@ -941,6 +973,7 @@ if ( $wanna_use_jabber )
 
 {    
     global $gCheckMsg;
+    global $gLoggerPID;
     
     if ( $gCheckMsg )
     {
@@ -1001,6 +1034,11 @@ if ( $wanna_use_jabber )
     
     $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." Eventhandler started. getmypid()" );
     
+    if ( $gTestRun )
+    {
+        $logger->logIt( LOG_EVENTH_GENERAL, __FUNCTION__." This is a testrun, will only loop once!" );
+    }
+    
     while ( true )
     {
         check_termination();
@@ -1027,7 +1065,8 @@ if ( $wanna_use_jabber )
         check_termination();
         
         # Handelskurs neu berechnen und Inaktive loeschen
-        if ( date( 'H' ) * 3600 + date( 'i' ) * 60 + 60 > 14400 && $last_walked != date( 'Y-m-d' ) ) // 4:30 Uhr
+        // do this if its 4.30 a.m. or its a test run
+        if ( date( 'H' ) * 3600 + date( 'i' ) * 60 + 60 > 14400 && $last_walked != date( 'Y-m-d' ) || $gTestRun ) // 4:30 Uhr
         {
             foreach ( $databases as $selected_database => $dbinfo )
             {
@@ -1140,6 +1179,13 @@ if ( $wanna_use_jabber )
         }
         
         sleep( global_setting( "EVENTHANDLER_INTERVAL" ) );
+        
+        // exit if this is a test run 
+        if ( $gTestRun )
+        {
+            exec( "kill $gLoggerPID" );
+            exit(0);
+        }
     }
 }
 ?>

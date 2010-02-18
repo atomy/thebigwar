@@ -12,7 +12,6 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'config_inc.php';
 require_once 'engine/include.php';
-require_once 'eventhandler.php';
 
 /** 
  * Test class for user.
@@ -31,6 +30,8 @@ class EventhandlerTest extends PHPUnit_Framework_TestCase
         // must be the FIRST line   	
         // define_globals( Uni ); to set globals like where db files are located etc
         define_globals( 'TestUni1' );
+        
+        $this->cleanUp();
     }
 
     /**
@@ -43,7 +44,46 @@ class EventhandlerTest extends PHPUnit_Framework_TestCase
     {
 
     }
+    
+    protected function cleanUp( )
+    {
+        
+        Classes::resetInstances();
+        /*
+		foreach( $this->testData->getTestUsers() as $user )
+		{
+			user_control::removeUser( $user->getName() );
+		}
 
+		Classes::resetInstances();
+		*/
+        
+        $this->_tearDown_DeleteDir( global_setting( "DB_PLAYERS" ) );
+        $this->_tearDown_DeleteDir( global_setting( "DB_FLEETS" ) );
+        $this->_tearDown_DeleteDir( global_setting( "DB_MESSAGES" ) );
+    }    
+
+    /**
+     * gets rid of old data stored in database for a fresh test setup
+     * @param string $dir
+     * @return -
+     */
+    protected function _tearDown_DeleteDir( $dir )
+    {
+        $exclude = array( '.', '..' );
+        $files = array_diff( scandir( $dir ), $exclude );
+        
+        foreach ( $files as $value )
+        {
+            $fname = $dir . "/" . $value;
+            
+            if ( ! is_dir( $fname ) && is_file( $fname ) && is_writable( $fname ) )
+            {
+                unlink( $fname );
+            }
+        }
+    }
+    
     /**
      * Runs the test methods of this class.
      *
@@ -57,7 +97,13 @@ class EventhandlerTest extends PHPUnit_Framework_TestCase
     //$suite  = new PHPUnit_Framework_TestSuite('userDevTest');
     //$result = PHPUnit_TextUI_TestRunner::run($suite);
     }
-
+    
+    public function _runEventhandler( )
+    {
+        $meh = TBW_ROOT;
+        exec( "cd $meh; cd db_things; ./eventhandler.php --testrun" );
+    }
+ 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////// TESTS START HERE //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,23 +111,63 @@ class EventhandlerTest extends PHPUnit_Framework_TestCase
 
     /**
      * subtests:
-	 * - checking for deletion of a very old (>=14 days w/o urlaubsmodus, >=35 days w urlaubsmodus enabled) user _o_
+	 * - check for deletion of 35 days and above inactivity accounts
      */
     public function testExpireUser( )
     {   
-		$uname = "haxx0r";
+		$uname = "test123";
 
-        $this->assertGreaterThan( 0, $tested );
-
+		/*
+		 * 34 days, do not delete
+		 */	
         $userObj = Classes::User( $uname );
         $this->assertTrue( $userObj->create(), "couldnt create user" );
 
-		// set reg time to 40 days ago
-		$userObj->setRegistrationTime( time() - ( 3600 * 24 * 40 ) );
+		// set reg time to 30 days ago
+		$userObj->setRegistrationTime( time() - ( 3600 * 24 * 30 ) );
+        
+		// get rid of the userobj
+		$userObj = false;
+        Classes::resetInstances();
+        
+		// run eventhandler
+		$this->_runEventhandler();
+		
+		$this->assertTrue( User::userExists( $uname ) );
+		
+	 	/*
+		 * 35 days, delete
+		 */	
+		// set reg time to 35 days ago
+		$userObj = Classes::User( $uname );		
+		$userObj->setRegistrationTime( time() - ( 3600 * 24 * 35 ) );
+        
+		// get rid of the userobj
+		$userObj = false;
+        Classes::resetInstances();
+        
+		// run eventhandler
+		$this->_runEventhandler();
+		
+		$this->assertFalse( User::userExists( $uname ) );	
 
-		checkExpiredUsers( );
-	
-		$this->assertFalse( User::userExists( $uname ) );
+		/*
+		 * 36 days, delete
+		 */		
+		$userObj = Classes::User( $uname );
+        $this->assertTrue( $userObj->create(), "couldnt create user" );
+        
+		// set reg time to 36 days ago
+		$userObj->setRegistrationTime( time() - ( 3600 * 24 * 36 ) );
+        
+		// get rid of the userobj
+		$userObj = false;
+        Classes::resetInstances();
+        
+		// run eventhandler
+		$this->_runEventhandler();
+		
+		$this->assertFalse( User::userExists( $uname ) );		
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

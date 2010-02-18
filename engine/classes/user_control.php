@@ -6,19 +6,23 @@ class user_control
     public static function removeUser( $strUsername )
     {
         if ( !isset( $strUsername ) || $strUsername == NULL )
+        {
             return false;
+        }
             
         $userObj = Classes::User( $strUsername );
         
         if ( !$userObj || !$userObj->getStatus() )
+        { 
             return false;
+        }
 
         # Planeten zuruecksetzen
         $planets = $userObj->getPlanetsList();
         
         foreach( $planets as $planet )
         {
-            $userObj->setActivePlanet( $planet );
+            $userObj->setActivePlanet( $planet ); 
             
             if( !$userObj->removePlanet() ) 
                 return false;
