@@ -1,10 +1,9 @@
 <?php
 
-ini_set( 'include_path', ini_get( 'include_path' ).':../../include:../../engine:../../engine/classes:../../loghandler:../../db_things:../../:'.TBW_ROOT.':' );
+ini_set( 'include_path', ini_get( 'include_path' ) . ':../../include:../../engine:../../engine/classes:../../loghandler:../../db_things:../../:' . TBW_ROOT . ':' );
 
 // Call userTest::main() if this source file is executed directly.
-if ( ! defined( 'PHPUNIT_MAIN_METHOD' ) )
-{
+if ( ! defined( 'PHPUNIT_MAIN_METHOD' ) ) {
     define( 'PHPUNIT_MAIN_METHOD', 'EventhandlerTest::main' );
 }
 
@@ -19,6 +18,7 @@ require_once 'engine/include.php';
  */
 class EventhandlerTest extends PHPUnit_Framework_TestCase
 {
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -44,7 +44,7 @@ class EventhandlerTest extends PHPUnit_Framework_TestCase
     {
 
     }
-    
+
     protected function cleanUp( )
     {
         
@@ -61,7 +61,7 @@ class EventhandlerTest extends PHPUnit_Framework_TestCase
         $this->_tearDown_DeleteDir( global_setting( "DB_PLAYERS" ) );
         $this->_tearDown_DeleteDir( global_setting( "DB_FLEETS" ) );
         $this->_tearDown_DeleteDir( global_setting( "DB_MESSAGES" ) );
-    }    
+    }
 
     /**
      * gets rid of old data stored in database for a fresh test setup
@@ -73,17 +73,15 @@ class EventhandlerTest extends PHPUnit_Framework_TestCase
         $exclude = array( '.', '..' );
         $files = array_diff( scandir( $dir ), $exclude );
         
-        foreach ( $files as $value )
-        {
+        foreach ( $files as $value ) {
             $fname = $dir . "/" . $value;
             
-            if ( ! is_dir( $fname ) && is_file( $fname ) && is_writable( $fname ) )
-            {
+            if ( ! is_dir( $fname ) && is_file( $fname ) && is_writable( $fname ) ) {
                 unlink( $fname );
             }
         }
     }
-    
+
     /**
      * Runs the test methods of this class.
      *
@@ -97,13 +95,13 @@ class EventhandlerTest extends PHPUnit_Framework_TestCase
     //$suite  = new PHPUnit_Framework_TestSuite('userDevTest');
     //$result = PHPUnit_TextUI_TestRunner::run($suite);
     }
-    
+
     public function _runEventhandler( )
     {
         $meh = TBW_ROOT;
         exec( "cd $meh; cd db_things; ./eventhandler.php --testrun" );
     }
- 
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////// TESTS START HERE //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,74 +109,74 @@ class EventhandlerTest extends PHPUnit_Framework_TestCase
 
     /**
      * subtests:
-	 * - check for deletion of 35 days and above inactivity accounts
+     * - check for deletion of 35 days and above inactivity accounts
      */
     public function testExpireUser( )
-    {   
-		$uname = "test123";
-
-		/*
+    {
+        $uname = "test123";
+        
+        /*
 		 * 34 days, do not delete
-		 */	
+		 */
         $userObj = Classes::User( $uname );
         $this->assertTrue( $userObj->create(), "couldnt create user" );
-
-		// set reg time to 30 days ago
-		$userObj->setRegistrationTime( time() - ( 3600 * 24 * 30 ) );
         
-		// get rid of the userobj
-		$userObj = false;
+        // set reg time to 30 days ago
+        $userObj->setRegistrationTime( time() - ( 3600 * 24 * 30 ) );
+        
+        // get rid of the userobj
+        $userObj = false;
         Classes::resetInstances();
         
-		// run eventhandler
-		$this->_runEventhandler();
-		
-		$this->assertTrue( User::userExists( $uname ) );
-		
-	 	/*
+        // run eventhandler
+        $this->_runEventhandler();
+        
+        $this->assertTrue( User::userExists( $uname ) );
+        
+        /*
 		 * 35 days, delete
-		 */	
-		// set reg time to 35 days ago
-		$userObj = Classes::User( $uname );		
-		$userObj->setRegistrationTime( time() - ( 3600 * 24 * 35 ) );
+		 */
+        // set reg time to 35 days ago
+        $userObj = Classes::User( $uname );
+        $userObj->setRegistrationTime( time() - ( 3600 * 24 * 35 ) );
         
-		// get rid of the userobj
-		$userObj = false;
+        // get rid of the userobj
+        $userObj = false;
         Classes::resetInstances();
         
-		// run eventhandler
-		$this->_runEventhandler();
-		
-		$this->assertFalse( User::userExists( $uname ) );	
-
-		/*
+        // run eventhandler
+        $this->_runEventhandler();
+        
+        $this->assertFalse( User::userExists( $uname ) );
+        
+        /*
 		 * 36 days, delete
-		 */		
-		$userObj = Classes::User( $uname );
+		 */
+        $userObj = Classes::User( $uname );
         $this->assertTrue( $userObj->create(), "couldnt create user" );
         
-		// set reg time to 36 days ago
-		$userObj->setRegistrationTime( time() - ( 3600 * 24 * 36 ) );
+        // set reg time to 36 days ago
+        $userObj->setRegistrationTime( time() - ( 3600 * 24 * 36 ) );
         
-		// get rid of the userobj
-		$userObj = false;
+        // get rid of the userobj
+        $userObj = false;
         Classes::resetInstances();
         
-		// run eventhandler
-		$this->_runEventhandler();
-		
-		$this->assertFalse( User::userExists( $uname ) );		
+        // run eventhandler
+        $this->_runEventhandler();
+        
+        $this->assertFalse( User::userExists( $uname ) );
     }
     
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 }
 
 // Call userDevTest::main() if this source file is executed directly.
-if ( PHPUNIT_MAIN_METHOD == 'EventhandlerTest::main' )
-{
+if ( PHPUNIT_MAIN_METHOD == 'EventhandlerTest::main' ) {
     eventhandlerTest::main();
 }
 ?>

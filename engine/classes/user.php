@@ -75,8 +75,7 @@ class User extends Dataset
         if ( ! isset( $this->raw['planets'][$planet] ) )
             return false;
         
-        if ( isset( $this->planet_info ) )
-        {
+        if ( isset( $this->planet_info ) ) {
             if ( isset( $this->items['gebaeude'] ) )
                 $this->planet_info['gebaeude'] = $this->items['gebaeude'];
             
@@ -135,12 +134,10 @@ class User extends Dataset
         $planets = $this->getPlanetsList();
         $active_planet = $this->getActivePlanet();
         
-        foreach ( $planets as $i => $planet )
-        {
+        foreach ( $planets as $i => $planet ) {
             $this->setActivePlanet( $i );
             
-            if ( $this->getPosString() == $pos )
-            {
+            if ( $this->getPosString() == $pos ) {
                 //echo "\n".$pos." matches: ".$i."\n";
                 
 
@@ -286,13 +283,11 @@ class User extends Dataset
         # Alle feindlichen Flotten, die auf diesen Planeten, zurueckrufen
         $fleets = $this->getFleetsWithPlanet();
         
-        foreach ( $fleets as $fleet )
-        {
+        foreach ( $fleets as $fleet ) {
             $fl = Classes::Fleet( $fleet );
             $users = $fl->getUsersList();
             
-            foreach ( $users as $user )
-            {
+            foreach ( $users as $user ) {
                 $pos_string = $fl->from( $user );
                 $pos = explode( ':', $pos_string );
                 $type = $fl->getCurrentType();
@@ -302,12 +297,11 @@ class User extends Dataset
                 
                 $message = Classes::Message();
                 
-                if ( $message->create() )
-                {
+                if ( $message->create() ) {
                     $message->addUser( $user, $types_message_types[$type] );
                     $message->subject( "Flotte zur&uuml;ckgerufen" );
                     $message->from( $this->getName() );
-                    $message->text( 'Ihre Flotte befand sich auf dem Weg zum Planeten &bdquo;'. $this->planetName() . '&ldquo; (' . $this->getPosString() . ', Eigent&uuml;mer: ' . utf8_htmlentities( $this->getName() ) . '). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den R&uuml;ckweg zu Ihrem Planeten &bdquo;' . $this_galaxy->getPlanetName( $pos[1], $pos[2] ) . '&ldquo; (' . $pos_string . ') macht.' );
+                    $message->text( 'Ihre Flotte befand sich auf dem Weg zum Planeten &bdquo;' . $this->planetName() . '&ldquo; (' . $this->getPosString() . ', Eigent&uuml;mer: ' . utf8_htmlentities( $this->getName() ) . '). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den R&uuml;ckweg zu Ihrem Planeten &bdquo;' . $this_galaxy->getPlanetName( $pos[1], $pos[2] ) . '&ldquo; (' . $pos_string . ') macht.' );
                 }
             }
         }
@@ -342,8 +336,7 @@ class User extends Dataset
         
         $new_planets = $this->getPlanetsList();
         
-        foreach ( $new_planets as $planet )
-        {
+        foreach ( $new_planets as $planet ) {
             $this->setActivePlanet( $planet );
             $active_forschung = $this->checkBuildingThing( 'forschung' );
             
@@ -373,41 +366,35 @@ class User extends Dataset
      */
     function registerPlanet( $pos_string )
     {
-        if ( ! $this->status )
-        {
+        if ( ! $this->status ) {
             return false;
         }
         
         $pos = explode( ':', $pos_string );
         
-        if ( count( $pos ) != 3 )
-        {
+        if ( count( $pos ) != 3 ) {
             return false;
         }
         
-        if ( ! $this->checkPlanetCount() )
-        {
+        if ( ! $this->checkPlanetCount() ) {
             return false;
         }
         
         $galaxy = Classes::Galaxy( $pos[0] );
         
-        if ( $galaxy->getStatus() != 1 )
-        {
+        if ( $galaxy->getStatus() != 1 ) {
             return false;
         }
         
         $owner = $galaxy->getPlanetOwner( $pos[1], $pos[2] );
         
-        if ( $owner === false || $owner )
-        {
+        if ( $owner === false || $owner ) {
             return false;
         }
         
         $planet_name = 'Kolonie';
         
-        if ( ! $galaxy->setPlanetOwner( $pos[1], $pos[2], $this->getName() ) )
-        {
+        if ( ! $galaxy->setPlanetOwner( $pos[1], $pos[2], $this->getName() ) ) {
             return false;
         }
         
@@ -454,8 +441,7 @@ class User extends Dataset
         if ( ! $this->status )
             return false;
         
-        if ( $planet === false )
-        {
+        if ( $planet === false ) {
             if ( ! isset( $this->planet_info ) )
                 return false;
             
@@ -482,8 +468,7 @@ class User extends Dataset
         if ( ! $this->status )
             return false;
         
-        if ( $planet === false )
-        {
+        if ( $planet === false ) {
             if ( ! isset( $this->planet_info ) )
                 return false;
             
@@ -538,8 +523,8 @@ class User extends Dataset
         
         if ( isset( $this->cache['getPlanetsList'] ) )
             unset( $this->cache['getPlanetsList'] );
-           
-        if ( isset( $this->cache['getItemInfo'] ) )        
+        
+        if ( isset( $this->cache['getItemInfo'] ) )
             unset( $this->cache['getItemInfo'] );
         
         return true;
@@ -554,25 +539,19 @@ class User extends Dataset
      */
     function getScores( $i = false )
     {
-        if ( ! $this->status )
-        {
+        if ( ! $this->status ) {
             return false;
         }
         
         // if $i not set return all scores
-        if ( $i === false )
-        {
-            if ( ! isset( $this->cache['getScores'] ) )
-            {
+        if ( $i === false ) {
+            if ( ! isset( $this->cache['getScores'] ) ) {
                 // summarize their index up to 6 - WTF? WHY? what happens with the other points?
-                for ( $k = 0; $k <= 6; $k ++ )
-                {
-                    if ( isset( $this->cache['getScores'] ) )
-                    {
+                for ( $k = 0; $k <= 6; $k ++ ) {
+                    if ( isset( $this->cache['getScores'] ) ) {
                         $temp = $this->cache['getScores'];
                     }
-                    else
-                    {
+                    else {
                         $this->cache['getScores'] = 0;
                         $temp = - 1;
                     }
@@ -580,19 +559,16 @@ class User extends Dataset
                     // $this->cache['getScores'] =+ $this->raw['punkte'][$k]; // huh? whats that operator? seems like same as '=' - guess this was a typo then *shrug*
                     $this->cache['getScores'] += $this->raw['punkte'][$k];
                     //print "(".$this->getName().") added ".$this->raw['punkte'][$k]." to ".$temp." for: ".$k." now: ".$this->cache['getScores']."\n";
-                }          
+                }
             }
-
+            
             return $this->cache['getScores'];
         }
-        else
-        {
-            if ( ! isset( $this->raw['punkte'][$i] ) )
-            {
+        else {
+            if ( ! isset( $this->raw['punkte'][$i] ) ) {
                 return 0;
             }
-            else
-            {
+            else {
                 return $this->raw['punkte'][$i];
             }
         }
@@ -604,11 +580,10 @@ class User extends Dataset
      * @param $i - score index
      * @param $scores - score value
      * @return bool - true on success, false otherwise
-     */    
+     */
     function addScores( $i, $scores )
     {
-        if ( ! $this->status || $i > 11 )
-        {
+        if ( ! $this->status || $i > 11 ) {
             return false;
         }
         
@@ -619,7 +594,7 @@ class User extends Dataset
         
         if ( isset( $this->cache['getScores'] ) )
             $this->cache['getScores'] += $scores;
-            
+        
         $this->changed = true;
         return true;
     }
@@ -632,24 +607,20 @@ class User extends Dataset
      */
     function getSpentRess( $i = false )
     {
-        if ( ! $this->status )
-        {
+        if ( ! $this->status ) {
             return false;
         }
         
         $spentRes = 0;
-                 
-        if ( $i === false )
-        {
-            if ( ! isset( $this->cache['getSpentRess'] ) )
-            {
+        
+        if ( $i === false ) {
+            if ( ! isset( $this->cache['getSpentRess'] ) ) {
                 $this->cache['getSpentRess'] = $this->getScores( 7 ) + $this->getScores( 8 ) + $this->getScores( 9 ) + $this->getScores( 10 ) + $this->getScores( 11 );
             }
             
             $spentRes = $this->cache['getSpentRess'];
         }
-        else
-        {
+        else {
             $spentRes = $this->getScores( $i + 7 );
         }
         
@@ -662,9 +633,8 @@ class User extends Dataset
      * @return int - rank
      */
     function getRank( )
-    { 
-        if ( ! $this->status )
-        {
+    {
+        if ( ! $this->status ) {
             return false;
         }
         
@@ -682,8 +652,7 @@ class User extends Dataset
      */
     function planetName( $name = false )
     {
-        if ( ! $this->status || ! isset( $this->planet_info ) )
-        {
+        if ( ! $this->status || ! isset( $this->planet_info ) ) {
             return false;
         }
         
@@ -692,27 +661,22 @@ class User extends Dataset
         #Planiname Zeichen pruefen
         $stringplanet = $name;
         
-        for ( $i = 0; $i < strlen( $stringplanet ); $i ++ )
-        {
+        for ( $i = 0; $i < strlen( $stringplanet ); $i ++ ) {
             $explode[$i] = substr( $stringplanet, $i, 1 );
             
             // char didnt match our postive list, return
-            if ( ! in_array( $explode[$i], $keyarray ) )
-            {
+            if ( ! in_array( $explode[$i], $keyarray ) ) {
                 return false;
             }
-        }       
+        }
         
-        if ( $name !== false && trim( $name ) != '' )
-        {
+        if ( $name !== false && trim( $name ) != '' ) {
             $name = substr( $name, 0, 24 );
             
-            if ( isset( $this->planet_info['name'] ) )
-            {
+            if ( isset( $this->planet_info['name'] ) ) {
                 $old_name = $this->planet_info['name'];
             }
-            else
-            {
+            else {
                 $old_name = '';
             }
             
@@ -721,13 +685,11 @@ class User extends Dataset
             $pos = $this->getPos();
             $galaxy = Classes::Galaxy( $pos[0] );
             
-            if ( ! $galaxy->setPlanetName( $pos[1], $pos[2], $name ) )
-            {
+            if ( ! $galaxy->setPlanetName( $pos[1], $pos[2], $name ) ) {
                 $this->planet_info['name'] = $old_name;
                 return false;
             }
-            else
-            {
+            else {
                 $this->changed = true;
                 return true;
             }
@@ -743,8 +705,7 @@ class User extends Dataset
      */
     function getRessOnAllFleets( )
     {
-        if ( ! $this->status )
-        {
+        if ( ! $this->status ) {
             return false;
         }
         
@@ -753,8 +714,7 @@ class User extends Dataset
         /*
          * loop through all fleets, get their ress and summarize them
          */
-        foreach ( $this->getFleetsList() as $flotte )
-        {
+        foreach ( $this->getFleetsList() as $flotte ) {
             $fl = Classes::Fleet( $flotte );
             $flres = array( 0, 0, 0, 0, 0 );
             
@@ -781,8 +741,7 @@ class User extends Dataset
         
         $ress = $this->ress;
         
-        if ( $refresh )
-        {
+        if ( $refresh ) {
             $prod = $this->getProduction();
             $ress[5] = $prod[5];
         }
@@ -819,56 +778,47 @@ class User extends Dataset
 
     function subtractRess( $ress, $make_scores = true )
     {
-        if ( ! $this->status || ! isset( $this->planet_info ) )
-        {
+        if ( ! $this->status || ! isset( $this->planet_info ) ) {
             return false;
         }
         
-        if ( ! is_array( $ress ) )
-        {
+        if ( ! is_array( $ress ) ) {
             return false;
         }
         
-        if ( isset( $ress[0] ) )
-        {
+        if ( isset( $ress[0] ) ) {
             $this->ress[0] -= $ress[0];
             
-            if ( $make_scores )
-            {
+            if ( $make_scores ) {
                 $this->raw['punkte'][7] += $ress[0];
             }
         }
         
-        if ( isset( $ress[1] ) )
-        {
+        if ( isset( $ress[1] ) ) {
             $this->ress[1] -= $ress[1];
             if ( $make_scores )
                 $this->raw['punkte'][8] += $ress[1];
         }
         
-        if ( isset( $ress[2] ) )
-        {
+        if ( isset( $ress[2] ) ) {
             $this->ress[2] -= $ress[2];
             if ( $make_scores )
                 $this->raw['punkte'][9] += $ress[2];
         }
         
-        if ( isset( $ress[3] ) )
-        {
+        if ( isset( $ress[3] ) ) {
             $this->ress[3] -= $ress[3];
             if ( $make_scores )
                 $this->raw['punkte'][10] += $ress[3];
         }
         
-        if ( isset( $ress[4] ) )
-        {
+        if ( isset( $ress[4] ) ) {
             $this->ress[4] -= $ress[4];
             if ( $make_scores )
                 $this->raw['punkte'][11] += $ress[4];
         }
         
-        if ( $make_scores && isset( $this->cache['getSpentRess'] ) )
-        {
+        if ( $make_scores && isset( $this->cache['getSpentRess'] ) ) {
             unset( $this->cache['getSpentRess'] );
         }
         
@@ -887,37 +837,30 @@ class User extends Dataset
 
     function checkRess( $ress )
     {
-        if ( ! $this->status || ! isset( $this->planet_info ) )
-        {
+        if ( ! $this->status || ! isset( $this->planet_info ) ) {
             return false;
         }
         
-        if ( ! is_array( $ress ) )
-        {
+        if ( ! is_array( $ress ) ) {
             return false;
         }
         
-        if ( isset( $ress[0] ) && $ress[0] > $this->ress[0] )
-        {
+        if ( isset( $ress[0] ) && $ress[0] > $this->ress[0] ) {
             return false;
         }
         
-        if ( isset( $ress[1] ) && $ress[1] > $this->ress[1] )
-        {
+        if ( isset( $ress[1] ) && $ress[1] > $this->ress[1] ) {
             return false;
         }
-        if ( isset( $ress[2] ) && $ress[2] > $this->ress[2] )
-        {
-            return false;
-        }
-        
-        if ( isset( $ress[3] ) && $ress[3] > $this->ress[3] )
-        {
+        if ( isset( $ress[2] ) && $ress[2] > $this->ress[2] ) {
             return false;
         }
         
-        if ( isset( $ress[4] ) && $ress[4] > $this->ress[4] )
-        {
+        if ( isset( $ress[3] ) && $ress[3] > $this->ress[3] ) {
+            return false;
+        }
+        
+        if ( isset( $ress[4] ) && $ress[4] > $this->ress[4] ) {
             return false;
         }
         
@@ -932,11 +875,9 @@ class User extends Dataset
         $planets = $this->getPlanetsList();
         $active_planet = $this->getActivePlanet();
         $return = false;
-        foreach ( $planets as $planet )
-        {
+        foreach ( $planets as $planet ) {
             $this->setActivePlanet( $planet );
-            if ( ( is_array( $pos ) && $pos == $this->getPos() ) || ( ! is_array( $pos ) && $pos == $this->getPosString() ) )
-            {
+            if ( ( is_array( $pos ) && $pos == $this->getPos() ) || ( ! is_array( $pos ) && $pos == $this->getPosString() ) ) {
                 $return = true;
                 break;
             }
@@ -950,13 +891,10 @@ class User extends Dataset
         if ( ! $this->status )
             return false;
         
-        if ( isset( $this->raw['flotten'] ) )
-        {
-            foreach ( $this->raw['flotten'] as $i => $flotte )
-            {
+        if ( isset( $this->raw['flotten'] ) ) {
+            foreach ( $this->raw['flotten'] as $i => $flotte ) {
                 __autoload( 'Fleet' );
-                if ( ! Fleet::fleetExists( $flotte ) )
-                {
+                if ( ! Fleet::fleetExists( $flotte ) ) {
                     unset( $this->raw['flotten'][$i] );
                     $this->changed = true;
                 }
@@ -987,8 +925,7 @@ class User extends Dataset
         if ( $this->status != 1 )
             return false;
         
-        if ( ! isset( $this->raw['flotten'] ) )
-        {
+        if ( ! isset( $this->raw['flotten'] ) ) {
             $this->raw['flotten'] = array();
             return true;
         }
@@ -1020,8 +957,7 @@ class User extends Dataset
         if ( ! $this->status || ! isset( $this->planet_info ) )
             return false;
         
-        foreach ( $this->getFleetsList() as $flotte )
-        {
+        foreach ( $this->getFleetsList() as $flotte ) {
             $fl = Classes::Fleet( $flotte );
             if ( in_array( $this->getName(), $fl->getUsersList() ) && ( $fl->from( $this->getName() ) == $this->getPosString() || $fl->isATarget( $this->getPosString() ) ) )
                 return true;
@@ -1035,8 +971,7 @@ class User extends Dataset
             return false;
         
         $fleets = array();
-        foreach ( $this->getFleetsList() as $flotte )
-        {
+        foreach ( $this->getFleetsList() as $flotte ) {
             $fl = Classes::Fleet( $flotte );
             
             if ( in_array( $this->getName(), $fl->getUsersList() ) && ( $fl->from( $this->getName() ) == $this->getPosString() || $fl->isATarget( $this->getPosString() ) ) )
@@ -1051,15 +986,13 @@ class User extends Dataset
             return false;
         
         $fleets = array();
-        foreach ( $this->getFleetsList() as $flotte )
-        {
+        foreach ( $this->getFleetsList() as $flotte ) {
             $fl = Classes::Fleet( $flotte );
             $name = $fl->getUsersList();
             $name1 = array();
             $name1[] = $this->getName();
             $back = $fl->isFlyingBack();
-            if ( $name == $name1 && $back == false )
-            {
+            if ( $name == $name1 && $back == false ) {
                 $fleets[] = $flotte;
             }
         }
@@ -1077,8 +1010,7 @@ class User extends Dataset
         $werft = 0;
         $planets = $this->getPlanetsList();
         $active_planet = $this->getActivePlanet();
-        foreach ( $planets as $planet )
-        {
+        foreach ( $planets as $planet ) {
             $this->setActivePlanet( $planet );
             if ( $this->getItemLevel( 'B10', 'gebaeude' ) > 0 )
                 $werft ++;
@@ -1094,12 +1026,10 @@ class User extends Dataset
             return false;
         
         $fleets = 0;
-        foreach ( $this->getFleetsList() as $flotte )
-        {
+        foreach ( $this->getFleetsList() as $flotte ) {
             $fl = Classes::Fleet( $flotte );
             $key = array_search( $this->getName(), $fl->getUsersList() );
-            if ( $key !== false )
-            {
+            if ( $key !== false ) {
                 if ( $key )
                     $fleets ++;
                 else
@@ -1127,8 +1057,7 @@ class User extends Dataset
 
     function checkMessageStatus( $message_id, $type )
     {
-        if ( ! $this->status )
-        {
+        if ( ! $this->status ) {
             return false;
         }
         
@@ -1140,15 +1069,12 @@ class User extends Dataset
 
     function findMessageType( $message_id )
     {
-        if ( ! $this->status )
-        {
+        if ( ! $this->status ) {
             return false;
         }
         
-        foreach ( $this->raw['messages'] as $type => $messages )
-        {
-            if ( isset( $messages[$message_id] ) )
-            {
+        foreach ( $this->raw['messages'] as $type => $messages ) {
+            if ( isset( $messages[$message_id] ) ) {
                 return $type;
             }
         }
@@ -1171,34 +1097,27 @@ class User extends Dataset
 
     function getMessagesList( $type )
     {
-        if ( ! $this->status )
-        {
+        if ( ! $this->status ) {
             return false;
         }
         
-        if ( ! isset( $this->cache['getMessagesList'] ) )
-        {
+        if ( ! isset( $this->cache['getMessagesList'] ) ) {
             $this->cache['getMessagesList'] = array();
         }
         
-        if ( ! isset( $this->cache['getMessagesList'][$type] ) )
-        {
-            if ( ! isset( $this->raw['messages'] ) || ! isset( $this->raw['messages'][$type] ) )
-            {
+        if ( ! isset( $this->cache['getMessagesList'][$type] ) ) {
+            if ( ! isset( $this->raw['messages'] ) || ! isset( $this->raw['messages'][$type] ) ) {
                 $this->cache['getMessagesList'] = array();
             }
-            else
-            {
+            else {
                 $this->cache['getMessagesList'][$type] = array_reverse( array_keys( $this->raw['messages'][$type] ) );
             }
         }
         
-        if ( isset( $this->cache['getMessagesList'][$type] ) )
-        {
+        if ( isset( $this->cache['getMessagesList'][$type] ) ) {
             return $this->cache['getMessagesList'][$type];
         }
-        else
-        {
+        else {
             return false;
         }
     }
@@ -1208,8 +1127,7 @@ class User extends Dataset
         if ( ! $this->status )
             return false;
         
-        if ( ! isset( $this->cache['getMessageCategoriesList'] ) )
-        {
+        if ( ! isset( $this->cache['getMessageCategoriesList'] ) ) {
             if ( ! isset( $this->raw['messages'] ) )
                 $this->cache['getMessageCategoriesList'] = array();
             elseif ( ! isset( $this->raw['messages'] ) )
@@ -1250,8 +1168,7 @@ class User extends Dataset
         if ( isset( $this->cache['getMessagesList'] ) )
             unset( $this->cache['getMessagesList'] );
         
-        if ( $edit_message )
-        {
+        if ( $edit_message ) {
             $message = Classes::Message( $message_id );
             return $message->removeUser( $this->name, false );
         }
@@ -1266,11 +1183,9 @@ class User extends Dataset
         
         if ( ! isset( $this->raw['password'] ) )
             return false;
-        if ( md5( $password ) == $this->raw['password'] )
-        {
+        if ( md5( $password ) == $this->raw['password'] ) {
             # Passwort stimmt, Passwort-vergessen-Funktion deaktivieren
-            if ( isset( $this->raw['email_passwd'] ) && $this->raw['email_passwd'] )
-            {
+            if ( isset( $this->raw['email_passwd'] ) && $this->raw['email_passwd'] ) {
                 $this->raw['email_passwd'] = false;
                 $this->changed = true;
             }
@@ -1320,8 +1235,7 @@ class User extends Dataset
         
         if ( ! isset( $this->settings[$setting] ) )
             return false;
-        else
-        {
+        else {
             $this->settings[$setting] = $value;
             $this->changed = true;
         }
@@ -1335,10 +1249,8 @@ class User extends Dataset
         if ( ! isset( $this->raw['description'] ) )
             $this->raw['description'] = '';
         
-        if ( $parsed )
-        {
-            if ( ! isset( $this->raw['description_parsed'] ) )
-            {
+        if ( $parsed ) {
+            if ( ! isset( $this->raw['description_parsed'] ) ) {
                 $this->raw['description_parsed'] = parse_html( $this->raw['description'] );
                 $this->changed = true;
             }
@@ -1356,8 +1268,7 @@ class User extends Dataset
         if ( ! isset( $this->raw['description'] ) )
             $this->raw['description'] = '';
         
-        if ( $description != $this->raw['description'] )
-        {
+        if ( $description != $this->raw['description'] ) {
             $this->raw['description'] = $description;
             $this->raw['description_parsed'] = parse_html( $this->raw['description'] );
             $this->changed = true;
@@ -1373,8 +1284,7 @@ class User extends Dataset
         if ( ! $this->status )
             return false;
         
-        if ( $last_request === false && $last_planet === false )
-        {
+        if ( $last_request === false && $last_planet === false ) {
             $return = array();
             if ( ! isset( $this->raw['last_request'] ) && ! isset( $this->raw['last_planet'] ) )
                 return false;
@@ -1384,8 +1294,7 @@ class User extends Dataset
             else
                 $return[0] = $this->raw['last_request'];
             
-            if ( ! isset( $this->raw['last_planet'] ) || ! $this->planetExists( $this->raw['last_planet'] ) )
-            {
+            if ( ! isset( $this->raw['last_planet'] ) || ! $this->planetExists( $this->raw['last_planet'] ) ) {
                 $planets = $this->getPlanetsList();
                 $return[1] = array_shift( $planets );
             }
@@ -1415,13 +1324,11 @@ class User extends Dataset
 
     function getLastActivity( )
     {
-        if ( ! $this->status )
-        {
+        if ( ! $this->status ) {
             return false;
         }
         
-        if ( ! isset( $this->raw['last_active'] ) )
-        {
+        if ( ! isset( $this->raw['last_active'] ) ) {
             return false;
         }
         
@@ -1445,7 +1352,7 @@ class User extends Dataset
     {
         if ( ! $this->status || $time == 0 )
             return false;
-
+        
         $this->raw['registration'] = $time;
         $this->write( true, false );
     }
@@ -1461,8 +1368,7 @@ class User extends Dataset
 
     function getItemInfo( $id, $type = false, $run_eventhandler = true, $calc_scores = false )
     {
-        if ( ! $this->status )
-        {
+        if ( ! $this->status ) {
             return false;
         }
         
@@ -1474,19 +1380,16 @@ class User extends Dataset
         if ( ! isset( $this->cache['getItemInfo'][$this_planet] ) )
             $this->cache['getItemInfo'][$this_planet] = array();
         
-        if ( ! isset( $this->cache['getItemInfo'][$this_planet][$id] ) || ( $calc_scores && ! isset( $this->cache['getItemInfo'][$this_planet][$id]['scores'] ) ) )
-        {
+        if ( ! isset( $this->cache['getItemInfo'][$this_planet][$id] ) || ( $calc_scores && ! isset( $this->cache['getItemInfo'][$this_planet][$id]['scores'] ) ) ) {
             $item = Classes::Item( $id );
             
-            if ( $type === false )
-            {
+            if ( $type === false ) {
                 $type = $item->getType();
             }
             
             $info = $item->getInfo();
             
-            if ( ! $info )
-            {
+            if ( ! $info ) {
                 return false;
             }
             
@@ -1513,8 +1416,7 @@ class User extends Dataset
             if ( isset( $info['time'] ) )
                 $info['time'] *= $global_factors['time'];
             
-            if ( isset( $info['prod'] ) )
-            {
+            if ( isset( $info['prod'] ) ) {
                 $info['prod'][0] *= $global_factors['prod'];
                 $info['prod'][1] *= $global_factors['prod'];
                 $info['prod'][2] *= $global_factors['prod'];
@@ -1522,36 +1424,30 @@ class User extends Dataset
                 $info['prod'][4] *= $global_factors['prod'];
                 $info['prod'][5] *= $global_factors['prod'];
             }
-            if ( isset( $info['ress'] ) )
-            {
+            if ( isset( $info['ress'] ) ) {
                 $info['ress'][0] *= $global_factors['cost'];
                 $info['ress'][1] *= $global_factors['cost'];
                 $info['ress'][2] *= $global_factors['cost'];
                 $info['ress'][3] *= $global_factors['cost'];
             }
             
-            switch ( $type )
-            {
+            switch ( $type ) {
                 case 'gebaeude':
                     $max_rob_limit = floor( $this->getBasicFields() / 2 * ( ( 0.01 + $this->getItemLevel( 'B9', 'gebaeude' ) ) / 10 ) );
                     #$max_rob_limit = 1000;
                     
 
-                    if ( isset( $info['prod'] ) )
-                    {
+                    if ( isset( $info['prod'] ) ) {
                         $info['has_prod'] = true;
                         
-                        for ( $i = 0; $i <= 5; $i ++ )
-                        {
-                            if ( $info['prod'][$i] <= 0 )
-                            {
+                        for ( $i = 0; $i <= 5; $i ++ ) {
+                            if ( $info['prod'][$i] <= 0 ) {
                                 $info['has_prod'] = false;
                                 break;
                             }
                         }
                     }
-                    else
-                    {
+                    else {
                         $info['has_prod'] = false;
                     }
                     
@@ -1559,10 +1455,8 @@ class User extends Dataset
                     
                     $percent_f = $this->checkProductionFactor( $id );
                     
-                    if ( isset( $info['prod'] ) )
-                    {
-                        for ( $i = 0; $i <= 5; $i ++ )
-                        {
+                    if ( isset( $info['prod'] ) ) {
+                        for ( $i = 0; $i <= 5; $i ++ ) {
                             $info['prod'][$i] *= $level_f * $percent_f;
                         }
                     }
@@ -1571,8 +1465,7 @@ class User extends Dataset
                     
                     $minen_rob = 1 + 0.0003125 * $lvlRobottec;
                     
-                    if ( $minen_rob > 1 )
-                    {
+                    if ( $minen_rob > 1 ) {
                         $use_max_limit = ! file_exists( global_setting( 'DB_NO_STRICT_ROB_LIMITS' ) );
                         
                         $rob = $this->getItemLevel( 'R02', 'roboter', $run_eventhandler );
@@ -1621,8 +1514,7 @@ class User extends Dataset
                         $rob = $max_rob_limit;
                     $info['time'] *= pow( $baurob, $rob );
                     
-                    if ( $calc_scores )
-                    {
+                    if ( $calc_scores ) {
                         $ress = array_sum( $info['ress'] );
                         $scores = 0;
                         for ( $i = 1; $i <= $info['level']; $i ++ )
@@ -1641,18 +1533,15 @@ class User extends Dataset
                     $info['debuildable'] = ( $info['level'] >= 1 && - $info['fields'] <= $this->getRemainingFields() );
                     
                     # Runden
-                    if ( isset( $info['prod'] ) )
-                    {
-                        for ( $i = 0; $i <= 5; $i ++ )
-                        {
+                    if ( isset( $info['prod'] ) ) {
+                        for ( $i = 0; $i <= 5; $i ++ ) {
                             stdround( $info['prod'][$i] );
                         }
                     }
                     
                     stdround( $info['time'] );
                     
-                    for ( $i = 0; $i <= 4; $i ++ )
-                    {
+                    for ( $i = 0; $i <= 4; $i ++ ) {
                         stdround( $info['ress'][$i] );
                     }
                     
@@ -1664,8 +1553,7 @@ class User extends Dataset
                     $global_labs = 0;
                     $planets = $this->getPlanetsList();
                     $active_planet = $this->getActivePlanet();
-                    foreach ( $planets as $planet )
-                    {
+                    foreach ( $planets as $planet ) {
                         $this->setActivePlanet( $planet );
                         if ( $planet == $active_planet )
                             $local_labs += $this->getItemLevel( 'B8', 'gebaeude', $run_eventhandler );
@@ -1678,8 +1566,7 @@ class User extends Dataset
                     unset( $info['time'] );
                     $info['time_global'] = $info['time_local'] * pow( 0.99, $global_labs );
                     
-                    if ( $calc_scores )
-                    {
+                    if ( $calc_scores ) {
                         $ress = array_sum( $info['ress'] );
                         $scores = 0;
                         for ( $i = 1; $i <= $info['level']; $i ++ )
@@ -1705,8 +1592,7 @@ class User extends Dataset
                 case 'roboter':
                     $info['time'] *= pow( 0.95, $this->getItemLevel( 'B9', 'gebaeude', $run_eventhandler ) );
                     
-                    if ( $calc_scores )
-                    {
+                    if ( $calc_scores ) {
                         $info['simple_scores'] = array_sum( $info['ress'] ) / 1000;
                         $info['scores'] = $info['simple_scores'] * $info['level'];
                     }
@@ -1724,8 +1610,7 @@ class User extends Dataset
                     $info['speed'] *= pow( 1.05, $this->getItemLevel( 'F7', 'forschung', $run_eventhandler ) );
                     $info['speed'] *= pow( 1.15, $this->getItemLevel( 'F8', 'forschung', $run_eventhandler ) );
                     
-                    if ( $calc_scores )
-                    {
+                    if ( $calc_scores ) {
                         $info['simple_scores'] = array_sum( $info['ress'] ) / 1000;
                         $info['scores'] = $info['simple_scores'] * $info['level'];
                     }
@@ -1743,8 +1628,7 @@ class User extends Dataset
                     $info['def'] *= pow( 1.05, $this->getItemLevel( 'F5', 'forschung', $run_eventhandler ) );
                     $info['time'] *= pow( 0.95, $this->getItemLevel( 'B10', 'gebaeude', $run_eventhandler ) );
                     
-                    if ( $calc_scores )
-                    {
+                    if ( $calc_scores ) {
                         $info['simple_scores'] = array_sum( $info['ress'] ) / 1000;
                         $info['scores'] = $info['simple_scores'] * $info['level'];
                     }
@@ -1801,26 +1685,22 @@ class User extends Dataset
         
         $recalc = array( 'gebaeude' => 0, 'forschung' => 1, 'roboter' => 2, 'schiffe' => 3, 'verteidigung' => 4 );
         
-        if ( $type !== false && $type != 'ids' )
-        {
+        if ( $type !== false && $type != 'ids' ) {
             if ( ! isset( $this->items[$type] ) )
                 $this->items[$type] = array();
             if ( isset( $this->items[$type][$id] ) )
                 $this->items[$type][$id] += $value;
-            else
-            {
+            else {
                 $this->items[$type][$id] = $value;
                 $this->items['ids'][$id] = &$this->items[$type][$id];
             }
         }
-        else
-        {
+        else {
             $item = Classes::Item( $id );
             $type = $item->getType();
             if ( isset( $this->items['ids'][$id] ) )
                 $this->items['ids'][$id] += $value;
-            else
-            {
+            else {
                 if ( ! isset( $this->items[$type] ) )
                     $this->items[$type] = array();
                 $this->items[$type][$id] = $value;
@@ -1831,21 +1711,18 @@ class User extends Dataset
         $this->recalc_highscores[$recalc[$type]] = true;
         
         # Felder belegen
-        if ( $type == 'gebaeude' )
-        {
+        if ( $type == 'gebaeude' ) {
             $item_info = $this->getItemInfo( $id, 'gebaeude' );
             if ( $item_info['fields'] > 0 )
                 $this->changeUsedFields( $item_info['fields'] * $value );
         }
         
-        switch ( $id )
-        {
+        switch ( $id ) {
             # Ingeneurswissenschaft: Planeten vergroessern
             case 'F9':
                 $planets = $this->getPlanetsList();
                 $active_planet = $this->getActivePlanet();
-                foreach ( $planets as $planet )
-                {
+                foreach ( $planets as $planet ) {
                     $this->setActivePlanet( $planet );
                     $size = $this->getTotalFields() / ( $this->getItemLevel( 'F9', false, false ) - $value + 1 );
                     $this->setFields( $size * ( $this->getItemLevel( 'F9', false, false ) + 1 ) );
@@ -1856,21 +1733,18 @@ class User extends Dataset
             # Bauroboter: Laufende Bauzeit verkuerzen
             case 'R01':
                 $building = $this->checkBuildingThing( 'gebaeude' );
-                if ( $building && $building[1] > $time )
-                {
+                if ( $building && $building[1] > $time ) {
                     $remaining = ( $building[1] - $time ) * pow( 1 - 0.00025 * $this->getItemLevel( 'F2', 'forschung', false ), $value );
                     $this->raw['building']['gebaeude'][1] = $time + $remaining;
                 }
                 
                 # Auch in $actions schauen
                 $one = false;
-                foreach ( $actions as $i => $action2 )
-                {
+                foreach ( $actions as $i => $action2 ) {
                     if ( $action2[4] != $this->getActivePlanet() )
                         continue;
                     $this_item = Classes::Item( $action2[1] );
-                    if ( $this_item->getType() == 'gebaeude' )
-                    {
+                    if ( $this_item->getType() == 'gebaeude' ) {
                         $remaining = ( $action2[0] - $time ) * pow( 1 - 0.00025 * $this->getItemLevel( 'F2', 'forschung', false ), $value );
                         $actions[$i][0] = $time + $remaining;
                         $one = true;
@@ -1885,14 +1759,12 @@ class User extends Dataset
             case 'F2':
                 $planets = $this->getPlanetsList();
                 $active_planet = $this->getActivePlanet();
-                foreach ( $planets as $planet )
-                {
+                foreach ( $planets as $planet ) {
                     $this->setActivePlanet( $planet );
                     
                     $building = $this->checkBuildingThing( 'gebaeude' );
                     $robs = $this->getItemLevel( 'R01', 'roboter', false );
-                    if ( $robs > 0 && $building && $building[1] > $time )
-                    {
+                    if ( $robs > 0 && $building && $building[1] > $time ) {
                         $f_1 = pow( 1 - 0.00025 * ( $this->getItemLevel( 'F2', false, false ) - $value ), $robs );
                         $f_2 = pow( 1 - 0.00025 * $this->getItemLevel( 'F2', false, false ), $robs );
                         $remaining = ( $building[1] - $time ) * $f_2 / $f_1;
@@ -1900,16 +1772,13 @@ class User extends Dataset
                     }
                     
                     # Auch in $actions schauen
-                    if ( $actions !== false && $planet == $active_planet )
-                    {
+                    if ( $actions !== false && $planet == $active_planet ) {
                         $one = false;
-                        foreach ( $actions as $i => $action2 )
-                        {
+                        foreach ( $actions as $i => $action2 ) {
                             if ( $action2[4] != $this->getActivePlanet() )
                                 continue;
                             $this_item = Classes::Item( $action2[1] );
-                            if ( $this_item->getType() == 'gebaeude' )
-                            {
+                            if ( $this_item->getType() == 'gebaeude' ) {
                                 $f_1 = pow( 1 - 0.00025 * ( $this->getItemLevel( 'F2', false, false ) - $value ), $robs );
                                 $f_2 = pow( 1 - 0.00025 * $this->getItemLevel( 'F2', false, false ), $robs );
                                 $remaining = ( $action2[0] - $time ) * $f_2 / $f_1;
@@ -1936,8 +1805,7 @@ class User extends Dataset
         if ( ! $this->status || ! isset( $this->planet_info ) )
             return false;
         
-        if ( $time === false )
-        {
+        if ( $time === false ) {
             $this->eventhandler( 0, 1, 1, 1, 0, 0 );
             $time = time();
         }
@@ -2006,18 +1874,15 @@ class User extends Dataset
         if ( ! isset( $this->cache['getProduction'] ) )
             $this->cache['getProduction'] = array();
         $planet = $this->getActivePlanet();
-        if ( ! isset( $this->cache['getProduction'][$planet] ) )
-        {
+        if ( ! isset( $this->cache['getProduction'][$planet] ) ) {
             $prod = array( 0, 0, 0, 0, 0, 0, 0 );
-            if ( $this->permissionToAct() )
-            {
+            if ( $this->permissionToAct() ) {
                 $gebaeude = $this->getItemsList( 'gebaeude' );
                 
                 $energie_prod = 0;
                 $energie_need = 0;
                 
-                foreach ( $gebaeude as $id )
-                {
+                foreach ( $gebaeude as $id ) {
                     $item = $this->getItemInfo( $id, 'gebaeude', false );
                     
                     if ( $item['prod'][5] < 0 )
@@ -2034,7 +1899,7 @@ class User extends Dataset
                 
                 $f = 1;
                 if ( $energie_need > $energie_prod ) # Nicht genug Energie
-                {
+{
                     $f = $energie_prod / $energie_need;
                     $prod[0] *= $f;
                     $prod[1] *= $f;
@@ -2102,8 +1967,7 @@ class User extends Dataset
             $flag = 'g';
         $active_planet = $this->getActivePlanet();
         $planets = $this->getPlanetsList();
-        foreach ( $planets as $planet )
-        {
+        foreach ( $planets as $planet ) {
             $this->setActivePlanet( $planet );
             $pos = $this->getPos();
             $galaxy = Classes::Galaxy( $pos[0] );
@@ -2120,52 +1984,42 @@ class User extends Dataset
         if ( ! $this->status )
             return false;
             #Beim Betreten des Umods Bedingungen und Zeiten setzen
-        if ( $set !== - 1 && $this->raw['umode'] == false )
-        {
+        if ( $set !== - 1 && $this->raw['umode'] == false ) {
             #Kein Umod bei wegfliegenden Eigenflotten
             $flotte = $this->getFleetsForUmode();
-            if ( $flotte == true )
-            {
-                foreach ( $flotte as $fl )
-                {
+            if ( $flotte == true ) {
+                foreach ( $flotte as $fl ) {
                     $cb = Classes::Fleet( $fl );
                     $cb->callBack( $this->getName() );
                 }
             }
             
             $planets1 = $this->getPlanetsList();
-            foreach ( $planets1 as $planet1 )
-            {
+            foreach ( $planets1 as $planet1 ) {
                 $this->setActivePlanet( $planet1 );
                 
                 #Gebauede verbleibende Bauzeit setzen
                 $geb = $this->checkBuildingThing( 'gebaeude', false );
-                if ( $geb == true )
-                {
+                if ( $geb == true ) {
                     $gremtime = $geb[1] - time();
                     $this->planet_info['building']['gebaeude'][1] = $gremtime;
                     $this->changed = true;
                 }
                 #Forschung verbleibende Bauzeit setzen
                 $fors = $this->checkBuildingThing( 'forschung', false );
-                if ( $fors == true )
-                {
+                if ( $fors == true ) {
                     $fremtime = $fors[1] - time();
                     $this->planet_info['building']['forschung'][1] = $fremtime;
                     $this->changed = true;
                 }
                 #Roboter verbleibende Bauzeit setzen
                 $rob = $this->checkBuildingThing( 'roboter', false );
-                if ( $rob == true )
-                {
-                    foreach ( $rob as $i => $r )
-                    {
-                        if ( time() > $r[1] )
-                        {
+                if ( $rob == true ) {
+                    foreach ( $rob as $i => $r ) {
+                        if ( time() > $r[1] ) {
                             $rremtime = $r[3] - ( time() - $r[1] );
                         }
-                        if ( time() < $r[1] )
-                        {
+                        if ( time() < $r[1] ) {
                             $rremtime = time() - $r[1] - $r[3];
                             $rremtime = $rremtime * - 1;
                         }
@@ -2175,16 +2029,12 @@ class User extends Dataset
                 }
                 #Schiffe verbleibende Bauzeit setzen
                 $schi = $this->checkBuildingThing( 'schiffe', false );
-                if ( $schi == true )
-                {
-                    foreach ( $schi as $si => $sr )
-                    {
-                        if ( time() > $sr[1] )
-                        {
+                if ( $schi == true ) {
+                    foreach ( $schi as $si => $sr ) {
+                        if ( time() > $sr[1] ) {
                             $sremtime = $sr[3] - ( time() - $sr[1] );
                         }
-                        if ( time() < $sr[1] )
-                        {
+                        if ( time() < $sr[1] ) {
                             $sremtime = time() - $sr[1] - $sr[3];
                             $sremtime = $sremtime * - 1;
                         }
@@ -2194,16 +2044,12 @@ class User extends Dataset
                 }
                 #Vereidigung verbleibende Bauzeit setzen
                 $ver = $this->checkBuildingThing( 'verteidigung', false );
-                if ( $ver == true )
-                {
-                    foreach ( $ver as $vi => $vr )
-                    {
-                        if ( time() > $vr[1] )
-                        {
+                if ( $ver == true ) {
+                    foreach ( $ver as $vi => $vr ) {
+                        if ( time() > $vr[1] ) {
                             $vremtime = $vr[3] - ( time() - $vr[1] );
                         }
-                        if ( time() < $vr[1] )
-                        {
+                        if ( time() < $vr[1] ) {
                             $vremtime = time() - $vr[1] - $vr[3];
                             $vremtime = $vremtime * - 1;
                         }
@@ -2214,52 +2060,42 @@ class User extends Dataset
             }
         }
         #Bei Rueckkehren aus Umod Zeiten setzen
-        if ( $set == false && $this->raw['umodeback'] == 1 )
-        {
+        if ( $set == false && $this->raw['umodeback'] == 1 ) {
             $planets1 = $this->getPlanetsList();
-            foreach ( $planets1 as $planet1 )
-            {
+            foreach ( $planets1 as $planet1 ) {
                 $this->setActivePlanet( $planet1 );
                 #Gebaeudebauzeit setzen
                 $bui = $this->checkBuildingThing( 'gebaeude' );
-                if ( $bui[1] < 1111118969 )
-                {
+                if ( $bui[1] < 1111118969 ) {
                     $time = time() + $bui[1];
                     $this->planet_info['building']['gebaeude'][1] = $time;
                 }
                 #Forschungsbauzeit setzen
                 $for = $this->checkBuildingThing( 'forschung' );
-                if ( $for[1] < 1111118969 )
-                {
+                if ( $for[1] < 1111118969 ) {
                     $time = time() + $for[1];
                     $this->planet_info['building']['forschung'][1] = $time;
                 }
                 #Roboterbauzeit setzen
                 $rob = $this->checkBuildingThing( 'roboter' );
-                foreach ( $rob as $i => $r )
-                {
-                    if ( $r[1] < 1111118969 )
-                    {
+                foreach ( $rob as $i => $r ) {
+                    if ( $r[1] < 1111118969 ) {
                         $time = time() + $r[1] - $r[3];
                         $this->planet_info['building']['roboter'][$i][1] = $time;
                     }
                 }
                 #Flottenbauzeit setzen
                 $flo = $this->checkBuildingThing( 'schiffe' );
-                foreach ( $flo as $i => $r )
-                {
-                    if ( $r[1] < 1111118969 )
-                    {
+                foreach ( $flo as $i => $r ) {
+                    if ( $r[1] < 1111118969 ) {
                         $time = time() + $r[1] - $r[3];
                         $this->planet_info['building']['schiffe'][$i][1] = $time;
                     }
                 }
                 #Verteidigungsbauzeit setzen
                 $ver = $this->checkBuildingThing( 'verteidigung' );
-                foreach ( $ver as $i => $r )
-                {
-                    if ( $r[1] < 1111118969 )
-                    {
+                foreach ( $ver as $i => $r ) {
+                    if ( $r[1] < 1111118969 ) {
                         $time = time() + $r[1] - $r[3];
                         $this->planet_info['building']['verteidigung'][$i][1] = $time;
                     }
@@ -2268,8 +2104,7 @@ class User extends Dataset
         }
         
         #Umode Flags setzen und wieder loeschen
-        if ( $set !== - 1 )
-        {
+        if ( $set !== - 1 ) {
             $set = (bool) $set;
             if ( $set == $this->umode() )
                 return true;
@@ -2281,8 +2116,7 @@ class User extends Dataset
             $flag = ( $this->raw['umode'] ? 'U' : '' );
             $active_planet = $this->getActivePlanet();
             $planets = $this->getPlanetsList();
-            foreach ( $planets as $planet )
-            {
+            foreach ( $planets as $planet ) {
                 $this->setActivePlanet( $planet );
                 $pos = $this->getPos();
                 $galaxy_obj = Classes::Galaxy( $pos[0] );
@@ -2336,8 +2170,7 @@ class User extends Dataset
         $settings = array( 'skin' => false, 'schrift' => true, 'sonden' => 1, 'ress_refresh' => 0, 'fastbuild' => false, 'shortcuts' => false, 'tooltips' => true, 'ipcheck' => true, 'noads' => false, 'show_extern' => true, 'notify' => true, 'email' => true, 'ajax' => true, 'receive' => array( 1 => array( true, true ), 2 => array( true, false ), 3 => array( true, false ), 4 => array( true, true ), 5 => array( true, false ) ), 'show_building' => array( 'gebaeude' => 1, 'forschung' => 1, 'roboter' => 0, 'schiffe' => 0, 'verteidigung' => 0 ), 'prod_show_days' => 1, 'messenger_receive' => array( 'messages' => array( 1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true, 7 => true ), 'building' => array( 'gebaeude' => 1, 'forschung' => 1, 'roboter' => 3, 'schiffe' => 3, 'verteidigung' => 3 ) ) );
         
         $this->settings = array();
-        foreach ( $settings as $setting => $default )
-        {
+        foreach ( $settings as $setting => $default ) {
             if ( isset( $this->raw[$setting] ) )
                 $this->settings[$setting] = $this->raw[$setting];
             else
@@ -2359,8 +2192,7 @@ class User extends Dataset
 
     protected function getRawFromData( )
     {
-        if ( $this->recalc_highscores[0] || $this->recalc_highscores[1] || $this->recalc_highscores[2] || $this->recalc_highscores[3] || $this->recalc_highscores[4] )
-        {
+        if ( $this->recalc_highscores[0] || $this->recalc_highscores[1] || $this->recalc_highscores[2] || $this->recalc_highscores[3] || $this->recalc_highscores[4] ) {
             $this->doRecalcHighscores( $this->recalc_highscores[0], $this->recalc_highscores[1], $this->recalc_highscores[2], $this->recalc_highscores[3], $this->recalc_highscores[4] );
         }
         
@@ -2369,8 +2201,7 @@ class User extends Dataset
         $this->raw['forschung'] = $this->items['forschung'];
         
         $active_planet = $this->getActivePlanet();
-        if ( $active_planet !== false )
-        {
+        if ( $active_planet !== false ) {
             $this->planet_info['gebaeude'] = $this->items['gebaeude'];
             $this->planet_info['roboter'] = $this->items['roboter'];
             $this->planet_info['schiffe'] = $this->items['schiffe'];
@@ -2391,10 +2222,8 @@ class User extends Dataset
         if ( ! $this->status || ! isset( $this->planet_info ) )
             return false;
         
-        if ( $run_eventhandler )
-        {
-            switch ( $type )
-            {
+        if ( $run_eventhandler ) {
+            switch ( $type ) {
                 case 'gebaeude':
                     $this->eventhandler( false, 1, 0, 0, 0, 0 );
                     break;
@@ -2415,8 +2244,7 @@ class User extends Dataset
             }
         }
         
-        switch ( $type )
-        {
+        switch ( $type ) {
             case 'gebaeude':
             case 'forschung':
                 
@@ -2444,22 +2272,19 @@ class User extends Dataset
         if ( ! $this->status || ! isset( $this->planet_info ) )
             return false;
         
-        switch ( $type )
-        {
+        switch ( $type ) {
             case 'gebaeude':
             case 'forschung':
                 if ( ! isset( $this->planet_info['building'] ) || ! isset( $this->planet_info['building'][$type] ) || trim( $this->planet_info['building'][$type][0] ) == '' )
                     return false;
                 
-                if ( $type == 'forschung' && $this->planet_info['building'][$type][2] )
-                {
+                if ( $type == 'forschung' && $this->planet_info['building'][$type][2] ) {
                     $source_planet = $this->planet_info['building'][$type][4];
                     //if(!isset($this->raw['planets'][$source_planet]['building'][$type]) || trim($this->raw['planets'][$source_planet]['building'][$type][0]) == '')
                     //    return false;
                     $active_planet = $this->getActivePlanet();
                     $planets = $this->getPlanetsList();
-                    foreach ( $planets as $planet )
-                    {
+                    foreach ( $planets as $planet ) {
                         $this->setActivePlanet( $planet );
                         if ( $planet == $source_planet && $cancel )
                             $this->addRess( $this->planet_info['building'][$type][3] );
@@ -2471,8 +2296,7 @@ class User extends Dataset
                 elseif ( $cancel )
                     $this->addRess( $this->planet_info['building'][$type][3] );
                 
-                if ( $cancel )
-                {
+                if ( $cancel ) {
                     $this->raw['punkte'][7] -= $this->planet_info['building'][$type][3][0];
                     $this->raw['punkte'][8] -= $this->planet_info['building'][$type][3][1];
                     $this->raw['punkte'][9] -= $this->planet_info['building'][$type][3][2];
@@ -2524,14 +2348,11 @@ class User extends Dataset
         
         $active_planet = $this->getActivePlanet();
         
-        foreach ( $this->getPlanetsList() as $planet )
-        {
+        foreach ( $this->getPlanetsList() as $planet ) {
             $this->setActivePlanet( $planet );
-            if ( ! isset( $this->raw['umode'] ) || $this->raw['umode'] == 0 )
-            {
+            if ( ! isset( $this->raw['umode'] ) || $this->raw['umode'] == 0 ) {
                 $building = $this->checkBuildingThing( 'gebaeude', false );
-                if ( $building !== false && $building[1] <= time() && $this->removeBuildingThing( 'gebaeude', false ) )
-                {
+                if ( $building !== false && $building[1] <= time() && $this->removeBuildingThing( 'gebaeude', false ) ) {
                     $stufen = 1;
                     if ( $building[2] )
                         $stufen = - 1;
@@ -2539,32 +2360,27 @@ class User extends Dataset
                 }
                 
                 $building = $this->checkBuildingThing( 'forschung', false );
-                if ( $building !== false && $building[1] <= time() && $this->removeBuildingThing( 'forschung', false ) )
-                {
+                if ( $building !== false && $building[1] <= time() && $this->removeBuildingThing( 'forschung', false ) ) {
                     $actions[] = array( $building[1], $building[0], 1, true, $planet );
                 }
             
             }
             
             $building = $this->checkBuildingThing( 'roboter', false );
-            foreach ( $building as $j => $items )
-            {
+            foreach ( $building as $j => $items ) {
                 $info = $this->getItemInfo( $items[0], 'roboter', false );
                 if ( ! $info || isset( $this->raw['umode'] ) && $this->raw['umode'] == 1 )
                     continue;
                 
                 $time = $items[1];
-                for ( $i = 0; $i < $items[2]; $i ++ )
-                {
+                for ( $i = 0; $i < $items[2]; $i ++ ) {
                     $time += $items[3];
-                    if ( $time <= time() )
-                    {
+                    if ( $time <= time() ) {
                         $actions[] = array( $time, $items[0], 1, true, $planet );
                         
                         # Roboter entfernen
                         $this->planet_info['building']['roboter'][$j][2] --;
-                        if ( $this->planet_info['building']['roboter'][$j][2] <= 0 )
-                        {
+                        if ( $this->planet_info['building']['roboter'][$j][2] <= 0 ) {
                             unset( $this->planet_info['building']['roboter'][$j] );
                             break;
                         }
@@ -2577,23 +2393,19 @@ class User extends Dataset
             }
             
             $building = $this->checkBuildingThing( 'schiffe', false );
-            foreach ( $building as $j => $items )
-            {
+            foreach ( $building as $j => $items ) {
                 $info = $this->getItemInfo( $items[0], 'schiffe', false );
                 if ( ! $info || isset( $this->raw['umode'] ) && $this->raw['umode'] == 1 )
                     continue;
                 $time = $items[1];
-                for ( $i = 0; $i < $items[2]; $i ++ )
-                {
+                for ( $i = 0; $i < $items[2]; $i ++ ) {
                     $time += $items[3];
-                    if ( $time <= time() )
-                    {
+                    if ( $time <= time() ) {
                         $actions[] = array( $time, $items[0], 1, true, $planet );
                         
                         # Schiff entfernen
                         $this->planet_info['building']['schiffe'][$j][2] --;
-                        if ( $this->planet_info['building']['schiffe'][$j][2] <= 0 )
-                        {
+                        if ( $this->planet_info['building']['schiffe'][$j][2] <= 0 ) {
                             unset( $this->planet_info['building']['schiffe'][$j] );
                             break;
                         }
@@ -2606,24 +2418,20 @@ class User extends Dataset
             }
             
             $building = $this->checkBuildingThing( 'verteidigung', false );
-            foreach ( $building as $j => $items )
-            {
+            foreach ( $building as $j => $items ) {
                 $info = $this->getItemInfo( $items[0], 'verteidigung', false );
                 if ( ! $info || isset( $this->raw['umode'] ) && $this->raw['umode'] == 1 )
                     continue;
                 
                 $time = $items[1];
-                for ( $i = 0; $i < $items[2]; $i ++ )
-                {
+                for ( $i = 0; $i < $items[2]; $i ++ ) {
                     $time += $items[3];
-                    if ( $time <= time() )
-                    {
+                    if ( $time <= time() ) {
                         $actions[] = array( $time, $items[0], 1, true, $planet );
                         
                         # Schiff entfernen
                         $this->planet_info['building']['verteidigung'][$j][2] --;
-                        if ( $this->planet_info['building']['verteidigung'][$j][2] <= 0 )
-                        {
+                        if ( $this->planet_info['building']['verteidigung'][$j][2] <= 0 ) {
                             unset( $this->planet_info['building']['verteidigung'][$j] );
                             break;
                         }
@@ -2635,12 +2443,10 @@ class User extends Dataset
                 }
             }
             
-            if ( count( $actions ) > 0 )
-            {
+            if ( count( $actions ) > 0 ) {
                 usort( $actions, 'sortEventhandlerActions' );
                 
-                while ( $action = array_shift( $actions ) )
-                {
+                while ( $action = array_shift( $actions ) ) {
                     
                     $this->setActivePlanet( $action[4] );
                     
@@ -2818,16 +2624,14 @@ class User extends Dataset
             return false;
         
         $that_user = Classes::User( $user );
-        if ( $that_user->_addVerbuendetRequest( $this->getName() ) )
-        {
+        if ( $that_user->_addVerbuendetRequest( $this->getName() ) ) {
             if ( ! isset( $this->raw['verbuendete_bewerbungen'] ) )
                 $this->raw['verbuendete_bewerbungen'] = array();
             $this->raw['verbuendete_bewerbungen'][] = $user;
             $this->changed = true;
             
             $message = Classes::Message();
-            if ( $message->create() )
-            {
+            if ( $message->create() ) {
                 $message->addUser( $user, 7 );
                 $message->subject( "Anfrage auf ein B\xc3\xbcndnis" );
                 $message->from( $this->getName() );
@@ -2861,8 +2665,7 @@ class User extends Dataset
         $this->_addVerbuendet( $user );
         
         $message = Classes::Message();
-        if ( $message->create() )
-        {
+        if ( $message->create() ) {
             $message->from( $this->getName() );
             $message->subject( "B\xc3\xbcndnisanfrage angenommen" );
             $message->text( "Der Spieler " . $this->getName() . " hat Ihre B\xc3\xbcndnisanfrage angenommen." );
@@ -2887,8 +2690,7 @@ class User extends Dataset
         unset( $this->raw['verbuendete_anfragen'][array_search( $user, $this->raw['verbuendete_anfragen'] )] );
         
         $message = Classes::Message();
-        if ( $message->create() )
-        {
+        if ( $message->create() ) {
             $message->from( $this->getName() );
             $message->subject( "B\xc3\xbcndnisanfrage abgelehnt" );
             $message->text( "Der Spieler " . $this->getName() . " hat Ihre B\xc3\xbcndnisanfrage abgelehnt." );
@@ -2907,13 +2709,11 @@ class User extends Dataset
             return false;
         
         $user_obj = Classes::User( $user );
-        if ( $user_obj->_removeVerbuendet( $user ) )
-        {
+        if ( $user_obj->_removeVerbuendet( $user ) ) {
             $this->_removeVerbuendet( $user );
             
             $message = Classes::Message();
-            if ( $message->create() )
-            {
+            if ( $message->create() ) {
                 $message->from( $this->getName() );
                 $message->subject( "B\xc3\xbcndnis gek\xc3\xbcndigt" );
                 $message->text( "Der Spieler " . $this->getName() . " hat sein B\xc3\xbcndnis mit Ihnen gek\xc3\xbcndigt." );
@@ -2939,8 +2739,7 @@ class User extends Dataset
             return false;
         
         $message = Classes::Message();
-        if ( $message->create() )
-        {
+        if ( $message->create() ) {
             $message->from( $this->getName() );
             $message->to( 'Bündnisrundschreiben' );
             
@@ -2961,13 +2760,11 @@ class User extends Dataset
             return false;
         
         $user_obj = Classes::User( $user );
-        if ( $user_obj->_removeVerbuendetRequest( $this->getName() ) )
-        {
+        if ( $user_obj->_removeVerbuendetRequest( $this->getName() ) ) {
             unset( $this->raw['verbuendete_bewerbungen'][array_search( $user, $this->raw['verbuendete_bewerbungen'] )] );
             
             $message = Classes::Message();
-            if ( $message->create() )
-            {
+            if ( $message->create() ) {
                 $message->from( $this->getName() );
                 $message->subject( "B\xc3\xbcndnisanfrage zur\xc3\xbcckgezogen" );
                 $message->text( "Der Spieler " . $this->getName() . " hat seine B\xc3\xbcndnisanfrage an Sie zur\xc3\xbcckgezogen." );
@@ -2985,27 +2782,22 @@ class User extends Dataset
         if ( ! $this->status )
             return false;
         
-        if ( $tag === '' )
-        {
+        if ( $tag === '' ) {
             __autoload( 'Alliance' );
             if ( ! isset( $this->raw['alliance'] ) || trim( $this->raw['alliance'] ) == '' || ! Alliance::allianceExists( $this->raw['alliance'] ) )
                 return false;
             else
                 return trim( $this->raw['alliance'] );
         }
-        else
-        {
-            if ( $tag && $check )
-            {
+        else {
+            if ( $tag && $check ) {
                 $that_alliance = Classes::Alliance( $tag );
                 if ( ! $that_alliance->getStatus() )
                     return false;
             }
-            if ( ( isset( $this->raw['alliance'] ) && trim( $this->raw['alliance'] ) != '' ) && ( ! $tag || $tag != $this->raw['alliance'] ) )
-            {
+            if ( ( isset( $this->raw['alliance'] ) && trim( $this->raw['alliance'] ) != '' ) && ( ! $tag || $tag != $this->raw['alliance'] ) ) {
                 # Aus der aktuellen Allianz austreten
-                if ( $check )
-                {
+                if ( $check ) {
                     $my_alliance = Classes::Alliance( trim( $this->raw['alliance'] ) );
                     if ( ! $my_alliance->getStatus() )
                         return false;
@@ -3016,10 +2808,8 @@ class User extends Dataset
                 $this->changed = true;
             }
             
-            if ( $check )
-            {
-                if ( $tag )
-                {
+            if ( $check ) {
+                if ( $tag ) {
                     $that_alliance->addUser( $this->getName(), $this->getScores() );
                     $tag = $that_alliance->getName();
                 }
@@ -3038,8 +2828,7 @@ class User extends Dataset
             
             $active_planet = $this->getActivePlanet();
             $planets = $this->getPlanetsList();
-            foreach ( $planets as $planet )
-            {
+            foreach ( $planets as $planet ) {
                 $this->setActivePlanet( $planet );
                 $pos = $this->getPos();
                 $galaxy = Classes::Galaxy( $pos[0] );
@@ -3067,11 +2856,9 @@ class User extends Dataset
         $alliance_obj = Classes::Alliance( $this->raw['alliance_bewerbung'] );
         if ( ! $alliance_obj->deleteApplication( $this->getName() ) )
             return false;
-        if ( $message )
-        {
+        if ( $message ) {
             $message_obj = Classes::Message();
-            if ( $message_obj->create() )
-            {
+            if ( $message_obj->create() ) {
                 $message_obj->from( $this->getName() );
                 $message_obj->subject( "Allianzbewerbung zur\xc3\xbcckgezogen" );
                 $message_obj->text( 'Der Benutzer ' . $this->getName() . " hat seine Bewerbung bei Ihrer Allianz zur\xc3\xbcckgezogen." );
@@ -3093,14 +2880,12 @@ class User extends Dataset
         if ( $this->allianceTag() )
             return false;
         
-        if ( ! $alliance )
-        {
+        if ( ! $alliance ) {
             if ( ! isset( $this->raw['alliance_bewerbung'] ) )
                 return false;
             return $this->raw['alliance_bewerbung'];
         }
-        else
-        {
+        else {
             if ( $this->status != 1 )
                 return false;
             if ( isset( $this->raw['alliance_bewerbung'] ) && $this->raw['alliance_bewerbung'] )
@@ -3114,8 +2899,7 @@ class User extends Dataset
                 return false;
             
             $message = Classes::Message();
-            if ( $message->create() )
-            {
+            if ( $message->create() ) {
                 $message_text = "Der Benutzer " . $this->getName() . " hat sich bei Ihrer Allianz beworben. Gehen Sie auf Ihre Allianzseite, um die Bewerbung anzunehmen oder abzulehnen.";
                 if ( ! trim( $text ) )
                     $message_text .= "\n\nDer Bewerber hat keinen Bewerbungstext hinterlassen.";
@@ -3148,11 +2932,9 @@ class User extends Dataset
             return false;
         
         $members = $alliance->getUsersList();
-        if ( $members )
-        {
+        if ( $members ) {
             $message = Classes::Message();
-            if ( $message->create() )
-            {
+            if ( $message->create() ) {
                 $message->from( $this->getName() );
                 $message->subject( 'Benutzer aus Allianz ausgetreten' );
                 $message->text( 'Der Benutzer ' . $this->getName() . ' hat Ihre Allianz verlassen.' );
@@ -3193,13 +2975,11 @@ class User extends Dataset
             return false;
         
         $item_info = $this->getItemInfo( $id, 'gebaeude' );
-        if ( $item_info && ( ( ! $rueckbau && $item_info['buildable'] ) || ( $rueckbau && $item_info['debuildable'] ) ) )
-        {
+        if ( $item_info && ( ( ! $rueckbau && $item_info['buildable'] ) || ( $rueckbau && $item_info['debuildable'] ) ) ) {
             # Rohstoffkosten
             $ress = $item_info['ress'];
             
-            if ( $rueckbau )
-            {
+            if ( $rueckbau ) {
                 $ress[0] = $ress[0] >> 1;
                 $ress[1] = $ress[1] >> 1;
                 $ress[2] = $ress[2] >> 1;
@@ -3231,18 +3011,15 @@ class User extends Dataset
 
     function buildForschung( $id, $global )
     {
-        if ( ! $this->status || ! isset( $this->planet_info ) )
-        {
+        if ( ! $this->status || ! isset( $this->planet_info ) ) {
             return false;
         }
         
-        if ( $this->checkBuildingThing( 'forschung' ) )
-        {
+        if ( $this->checkBuildingThing( 'forschung' ) ) {
             return false;
         }
         
-        if ( ( $gebaeude = $this->checkBuildingThing( 'gebaeude' ) ) && $gebaeude[0] == 'B8' )
-        {
+        if ( ( $gebaeude = $this->checkBuildingThing( 'gebaeude' ) ) && $gebaeude[0] == 'B8' ) {
             return false;
         }
         
@@ -3250,8 +3027,7 @@ class User extends Dataset
         $planets = $this->getPlanetsList();
         $active_planet = $this->getActivePlanet();
         
-        foreach ( $planets as $planet )
-        {
+        foreach ( $planets as $planet ) {
             $this->setActivePlanet( $planet );
             
             /*
@@ -3268,8 +3044,7 @@ class User extends Dataset
                  *   AND
                  *     - the thing we are going to research is already in research on the planet
                  */
-            if ( ( $global && $this->checkBuildingThing( 'forschung' ) ) || ( ! $global && ( $building = $this->checkBuildingThing( 'forschung' ) ) && $building[0] == $id ) )
-            {
+            if ( ( $global && $this->checkBuildingThing( 'forschung' ) ) || ( ! $global && ( $building = $this->checkBuildingThing( 'forschung' ) ) && $building[0] == $id ) ) {
                 $buildable = false;
                 break;
             }
@@ -3278,24 +3053,20 @@ class User extends Dataset
         $this->setActivePlanet( $active_planet );
         $item_info = $this->getItemInfo( $id, 'forschung' );
         
-        if ( $item_info && $item_info['buildable'] && $this->checkRess( $item_info['ress'] ) )
-        {
+        if ( $item_info && $item_info['buildable'] && $this->checkRess( $item_info['ress'] ) ) {
             $build_array = array( $id, time() + $item_info['time_' . ( $global ? 'global' : 'local' )], $global, $item_info['ress'] );
-            if ( $global )
-            {
+            if ( $global ) {
                 $build_array[] = $this->getActivePlanet();
                 
                 $planets = $this->getPlanetsList();
                 
-                foreach ( $planets as $planet )
-                {
+                foreach ( $planets as $planet ) {
                     $this->setActivePlanet( $planet );
                     $this->planet_info['building']['forschung'] = $build_array;
                 }
                 $this->setActivePlanet( $active_planet );
             }
-            else
-            {
+            else {
                 $this->planet_info['building']['forschung'] = $build_array;
             }
             
@@ -3332,8 +3103,7 @@ class User extends Dataset
         $ress[2] *= $anzahl;
         $ress[3] *= $anzahl;
         
-        if ( ! $this->checkRess( $ress ) )
-        {
+        if ( ! $this->checkRess( $ress ) ) {
             $planet_ress = $this->getRess();
             $ress = $item_info['ress'];
             $anzahlen = array();
@@ -3358,19 +3128,16 @@ class User extends Dataset
         $roboter = $this->checkBuildingThing( 'roboter' );
         $make_new = true;
         $last_time = time();
-        if ( $roboter && count( $roboter ) > 0 )
-        {
+        if ( $roboter && count( $roboter ) > 0 ) {
             $roboter_keys = array_keys( $this->planet_info['building']['roboter'] );
             $last = &$this->planet_info['building']['roboter'][array_pop( $roboter_keys )];
             $last_time = $last[1] + $last[2] * $last[3];
-            if ( $last[0] == $id && $last[3] == $item_info['time'] )
-            {
+            if ( $last[0] == $id && $last[3] == $item_info['time'] ) {
                 $build_array = &$last;
                 $make_new = false;
             }
         }
-        if ( $make_new )
-        {
+        if ( $make_new ) {
             if ( ! isset( $this->planet_info['building'] ) )
                 $this->planet_info['building'] = array();
             if ( ! isset( $this->planet_info['building']['roboter'] ) )
@@ -3412,8 +3179,7 @@ class User extends Dataset
         $ress[2] *= $anzahl;
         $ress[3] *= $anzahl;
         
-        if ( ! $this->checkRess( $ress ) )
-        {
+        if ( ! $this->checkRess( $ress ) ) {
             $planet_ress = $this->getRess();
             $ress = $item_info['ress'];
             $anzahlen = array();
@@ -3438,19 +3204,16 @@ class User extends Dataset
         $schiffe = $this->checkBuildingThing( 'schiffe' );
         $make_new = true;
         $last_time = time();
-        if ( $schiffe && count( $schiffe ) > 0 )
-        {
+        if ( $schiffe && count( $schiffe ) > 0 ) {
             $schiffe_keys = array_keys( $this->planet_info['building']['schiffe'] );
             $last = &$this->planet_info['building']['schiffe'][array_pop( $schiffe_keys )];
             $last_time = $last[1] + $last[2] * $last[3];
-            if ( $last[0] == $id && $last[3] == $item_info['time'] )
-            {
+            if ( $last[0] == $id && $last[3] == $item_info['time'] ) {
                 $build_array = &$last;
                 $make_new = false;
             }
         }
-        if ( $make_new )
-        {
+        if ( $make_new ) {
             if ( ! isset( $this->planet_info['building'] ) )
                 $this->planet_info['building'] = array();
             if ( ! isset( $this->planet_info['building']['schiffe'] ) )
@@ -3492,8 +3255,7 @@ class User extends Dataset
         $ress[2] *= $anzahl;
         $ress[3] *= $anzahl;
         
-        if ( ! $this->checkRess( $ress ) )
-        {
+        if ( ! $this->checkRess( $ress ) ) {
             $planet_ress = $this->getRess();
             $ress = $item_info['ress'];
             $anzahlen = array();
@@ -3518,19 +3280,16 @@ class User extends Dataset
         $verteidigung = $this->checkBuildingThing( 'verteidigung' );
         $make_new = true;
         $last_time = time();
-        if ( $verteidigung && count( $verteidigung ) > 0 )
-        {
+        if ( $verteidigung && count( $verteidigung ) > 0 ) {
             $verteidigung_keys = array_keys( $this->planet_info['building']['verteidigung'] );
             $last = &$this->planet_info['building']['verteidigung'][array_pop( $verteidigung_keys )];
             $last_time = $last[1] + $last[2] * $last[3];
-            if ( $last[0] == $id && $last[3] == $item_info['time'] )
-            {
+            if ( $last[0] == $id && $last[3] == $item_info['time'] ) {
                 $build_array = &$last;
                 $make_new = false;
             }
         }
-        if ( $make_new )
-        {
+        if ( $make_new ) {
             if ( ! isset( $this->planet_info['building'] ) )
                 $this->planet_info['building'] = array();
             if ( ! isset( $this->planet_info['building']['verteidigung'] ) )
@@ -3567,8 +3326,7 @@ class User extends Dataset
 
     function doRecalcHighscores( $recalc_gebaeude = false, $recalc_forschung = false, $recalc_roboter = false, $recalc_schiffe = false, $recalc_verteidigung = false )
     {
-        if ( $recalc_gebaeude || $recalc_forschung || $recalc_roboter || $recalc_schiffe || $recalc_verteidigung )
-        {
+        if ( $recalc_gebaeude || $recalc_forschung || $recalc_roboter || $recalc_schiffe || $recalc_verteidigung ) {
             if ( $recalc_gebaeude )
                 $this->raw['punkte'][0] = 0;
             if ( $recalc_forschung )
@@ -3582,46 +3340,37 @@ class User extends Dataset
             
             $planets = $this->getPlanetsList();
             $active_planet = $this->getActivePlanet();
-            foreach ( $planets as $planet )
-            {
+            foreach ( $planets as $planet ) {
                 $this->setActivePlanet( $planet );
                 
-                if ( $recalc_gebaeude )
-                {
+                if ( $recalc_gebaeude ) {
                     $items = $this->getItemsList( 'gebaeude' );
-                    foreach ( $items as $item )
-                    {
+                    foreach ( $items as $item ) {
                         $item_info = $this->getItemInfo( $item, 'gebaeude', true, true );
                         $this->raw['punkte'][0] += $item_info['scores'];
                         //print "doRecalcHighscores() adding score ".$item_info['scores']." to id: 0 (buildings) to user: ".$this->getName()."\n";
                     }
                 }
                 
-                if ( $recalc_roboter )
-                {
+                if ( $recalc_roboter ) {
                     $items = $this->getItemsList( 'roboter' );
-                    foreach ( $items as $item )
-                    {
+                    foreach ( $items as $item ) {
                         $item_info = $this->getItemInfo( $item, 'roboter', true, true );
                         $this->raw['punkte'][2] += $item_info['scores'];
                     }
                 }
                 
-                if ( $recalc_schiffe )
-                {
+                if ( $recalc_schiffe ) {
                     $items = $this->getItemsList( 'schiffe' );
-                    foreach ( $items as $item )
-                    {
+                    foreach ( $items as $item ) {
                         $item_info = $this->getItemInfo( $item, 'schiffe', true, true );
                         $this->raw['punkte'][3] += $item_info['scores'];
                     }
                 }
                 
-                if ( $recalc_verteidigung )
-                {
+                if ( $recalc_verteidigung ) {
                     $items = $this->getItemsList( 'verteidigung' );
-                    foreach ( $items as $item )
-                    {
+                    foreach ( $items as $item ) {
                         $item_info = $this->getItemInfo( $item, 'verteidigung', true, true );
                         $this->raw['punkte'][4] += $item_info['scores'];
                     }
@@ -3629,44 +3378,33 @@ class User extends Dataset
             }
             $this->setActivePlanet( $active_planet );
             
-            if ( $recalc_forschung )
-            {
+            if ( $recalc_forschung ) {
                 $items = $this->getItemsList( 'forschung' );
-                foreach ( $items as $item )
-                {
+                foreach ( $items as $item ) {
                     $item_info = $this->getItemInfo( $item, 'forschung', true, true );
                     $this->raw['punkte'][1] += $item_info['scores'];
                 }
             }
             
-            if ( $recalc_schiffe || $recalc_roboter )
-            {
-                foreach ( $this->getFleetsList() as $flotte )
-                {
+            if ( $recalc_schiffe || $recalc_roboter ) {
+                foreach ( $this->getFleetsList() as $flotte ) {
                     $fl = Classes::Fleet( $flotte, false );
                     if ( ! $fl->getStatus() )
                         continue;
-                    if ( $fl->userExists( $this->getName() ) )
-                    {
-                        if ( $recalc_schiffe )
-                        {
+                    if ( $fl->userExists( $this->getName() ) ) {
+                        if ( $recalc_schiffe ) {
                             $schiffe = $fl->getFleetList( $this->getName() );
-                            if ( $schiffe )
-                            {
-                                foreach ( $schiffe as $id => $count )
-                                {
+                            if ( $schiffe ) {
+                                foreach ( $schiffe as $id => $count ) {
                                     $item_info = $this->getItemInfo( $id, 'schiffe', true, true );
                                     $this->raw['punkte'][3] += $count * $item_info['simple_scores'];
                                 }
                             }
                         }
-                        if ( $recalc_roboter )
-                        {
+                        if ( $recalc_roboter ) {
                             $transport = $fl->getTransport( $this->getName() );
-                            if ( $transport )
-                            {
-                                foreach ( $transport[1] as $id => $count )
-                                {
+                            if ( $transport ) {
+                                foreach ( $transport[1] as $id => $count ) {
                                     $item_info = $this->getItemInfo( $id, 'roboter', true, true );
                                     $this->raw['punkte'][2] += $count * $item_info['simple_scores'];
                                 }
@@ -3674,17 +3412,13 @@ class User extends Dataset
                         }
                     }
                     
-                    if ( $recalc_roboter )
-                    {
+                    if ( $recalc_roboter ) {
                         # Handel miteinbeziehen
                         $users = $fl->getUsersList();
-                        foreach ( $users as $user )
-                        {
+                        foreach ( $users as $user ) {
                             $handel = $fl->getHandel( $user );
-                            if ( $handel )
-                            {
-                                foreach ( $handel[1] as $id => $count )
-                                {
+                            if ( $handel ) {
+                                foreach ( $handel[1] as $id => $count ) {
                                     $item_info = $this->getItemInfo( $id, 'roboter', true, true );
                                     $this->raw['punkte'][2] += $count * $item_info['simple_scores'];
                                 }
@@ -3699,13 +3433,12 @@ class User extends Dataset
         }
         
         $new_scores = $this->getScores();
-        $highscores = Classes::Highscores();#
+        $highscores = Classes::Highscores(); #
         //print "doRecalcHighscores() updating: ".$this->getName()." with new_scores: ".$new_scores."\n";
         $highscores->updateUser( $this->getName(), false, $new_scores );
         
         $my_alliance = $this->allianceTag();
-        if ( $my_alliance )
-        {
+        if ( $my_alliance ) {
             $alliance = Classes::Alliance( $my_alliance );
             $alliance->setUserScores( $this->getName(), $new_scores );
         }
@@ -3725,8 +3458,7 @@ class User extends Dataset
         if ( $this->isVerbuendet( $user ) )
             return true;
         
-        if ( $this->allianceTag() )
-        {
+        if ( $this->allianceTag() ) {
             $alliance = Classes::Alliance( $this->allianceTag() );
             if ( ! $alliance->getStatus() )
                 return false;
@@ -3743,8 +3475,7 @@ class User extends Dataset
         # Ueberpruefen
         $really_rename = ( strtolower( $new_name ) != strtolower( $this->name ) );
         
-        if ( $really_rename )
-        {
+        if ( $really_rename ) {
             $new_fname = $this->save_dir . '/' . urlencode( strtolower( $new_name ) );
             if ( file_exists( $new_fname ) )
                 return false;
@@ -3752,8 +3483,7 @@ class User extends Dataset
         
         # Planeteneigentuemer aendern
         $active_planet = $this->getActivePlanet();
-        foreach ( $this->getPlanetsList() as $planet )
-        {
+        foreach ( $this->getPlanetsList() as $planet ) {
             $this->setActivePlanet( $planet );
             $pos = $this->getPos();
             $galaxy_obj = Classes::Galaxy( $pos[0] );
@@ -3764,8 +3494,7 @@ class User extends Dataset
         # Nachrichtenabsender aendern
         Classes::resetInstances( 'Message' );
         $dh = opendir( global_setting( "DB_MESSAGES" ) );
-        while ( ( $fname = readdir( $dh ) ) !== false )
-        {
+        while ( ( $fname = readdir( $dh ) ) !== false ) {
             if ( $fname == '.' || $fname == '..' )
                 continue;
             
@@ -3777,8 +3506,7 @@ class User extends Dataset
         
         # Bei Buendnispartnern abaendern
         Classes::resetInstances( 'Users' );
-        foreach ( array_merge( $this->getVerbuendetList(), $this->getVerbuendetRequestList(), $this->getVerbuendetApplicationList() ) as $username )
-        {
+        foreach ( array_merge( $this->getVerbuendetList(), $this->getVerbuendetRequestList(), $this->getVerbuendetApplicationList() ) as $username ) {
             $user = new User( $username );
             $user->renameVerbuendet( $this->name, $new_name );
             unset( $user );
@@ -3786,15 +3514,13 @@ class User extends Dataset
         
         # In Flottenbewegungen umbenennen
         Classes::resetInstances( 'Fleet' );
-        foreach ( $this->getFleetsList() as $fleet )
-        {
+        foreach ( $this->getFleetsList() as $fleet ) {
             $fleet = new Fleet( $fleet );
             $fleet->renameUser( $this->name, $new_name );
         }
         
         # In der Allianz umbenennen
-        if ( $this->allianceTag() )
-        {
+        if ( $this->allianceTag() ) {
             $alliance = Classes::Alliance( $this->allianceTag() );
             $alliance->renameUser( $this->name, $new_name );
         }
@@ -3810,8 +3536,7 @@ class User extends Dataset
         $this->raw['username'] = $new_name;
         $this->changed = true;
         
-        if ( $really_rename )
-        {
+        if ( $really_rename ) {
             # Datei umbenennen
             $this->__destruct();
             rename( $this->filename, $new_fname );
@@ -3829,8 +3554,7 @@ class User extends Dataset
         if ( ! $this->status )
             return false;
         
-        if ( $time !== false )
-        {
+        if ( $time !== false ) {
             $this->raw['last_mail'] = $time;
             $this->changed = true;
             return true;
@@ -3877,13 +3601,10 @@ class User extends Dataset
         if ( ! $this->status )
             return false;
         
-        if ( isset( $this->raw['halteflotten'] ) )
-        {
-            foreach ( $this->raw['halteflotten'] as $i => $flotte )
-            {
+        if ( isset( $this->raw['halteflotten'] ) ) {
+            foreach ( $this->raw['halteflotten'] as $i => $flotte ) {
                 __autoload( 'Fleet' );
-                if ( ! Fleet::fleetExists( $flotte ) )
-                {
+                if ( ! Fleet::fleetExists( $flotte ) ) {
                     unset( $this->raw['halteflotten'][$i] );
                     $this->changed = true;
                 }
@@ -3900,8 +3621,7 @@ class User extends Dataset
             return false;
         $activep = $this->getActivePlanet();
         $fleets = array();
-        foreach ( $this->getForeignFleetsArray() as $flotte )
-        {
+        foreach ( $this->getForeignFleetsArray() as $flotte ) {
             $fl = Classes::Fleet( $flotte );
             #if($activep = $fl->raw[0][$pos])
             $fleets[] = $flotte;
@@ -3952,8 +3672,7 @@ class User extends Dataset
         
         # Ueberpruefen, ob die Flotte noch die Kriterien erfuellt, ansonsten aus der Liste loeschen
         $fleet = Classes::Fleet( $fleet_id );
-        if ( $fleet->getCurrentType() != 3 || $fleet->isFlyingBack() || array_search( $this->getName(), $fleet->getUsersList() ) !== 0 )
-        {
+        if ( $fleet->getCurrentType() != 3 || $fleet->isFlyingBack() || array_search( $this->getName(), $fleet->getUsersList() ) !== 0 ) {
             unset( $this->raw["flotten_passwds"][$passwd] );
             $this->changed = true;
             return null;
@@ -4164,8 +3883,7 @@ class User extends Dataset
         if ( ! $this->status || ! $this->planet_info )
             return false;
         
-        if ( $type == false )
-        {
+        if ( $type == false ) {
             return ( $this->refreshMessengerBuildingNotifications( 'gebaeude' ) && $this->refreshMessengerBuildingNotifications( 'forschung' ) && $this->refreshMessengerBuildingNotifications( 'roboter' ) && $this->refreshMessengerBuildingNotifications( 'schiffe' ) && $this->refreshMessengerBuildingNotifications( 'verteidigung' ) );
         }
         
@@ -4186,8 +3904,7 @@ class User extends Dataset
         if ( ! $messenger_settings )
             return 2;
         
-        switch ( $type )
-        {
+        switch ( $type ) {
             case 'gebaeude':
             case 'forschung':
                 if ( ! $building || ( $type == 'forschung' && $building[2] && $this->getActivePlanet() != $building[4] ) )
@@ -4204,8 +3921,7 @@ class User extends Dataset
             case 'roboter':
             case 'schiffe':
             case 'verteidigung':
-                switch ( $type )
-                {
+                switch ( $type ) {
                     case 'roboter':
                         $singular = 'Roboter';
                         $plural = 'Roboter';
@@ -4223,23 +3939,19 @@ class User extends Dataset
                         break;
                 }
                 
-                switch ( $messenger_receive['building'][$type] )
-                {
+                switch ( $messenger_receive['building'][$type] ) {
                     case 1:
-                        foreach ( $building as $b )
-                        {
+                        foreach ( $building as $b ) {
                             $item_info = $this->getItemInfo( $b[0], $type );
                             $time = $b[1];
-                            for ( $i = 0; $i < $b[2]; $i ++ )
-                            {
+                            for ( $i = 0; $i < $b[2]; $i ++ ) {
                                 $time += $b[3];
                                 $imfile->addMessage( $messenger_settings[0], $messenger_settings[1], $this->getName(), ucfirst( $art ) . " " . $singular . " der Sorte " . $item_info['name'] . " wurde fertiggestellt.", $special_id, $time );
                             }
                         }
                         break;
                     case 2:
-                        foreach ( $building as $b )
-                        {
+                        foreach ( $building as $b ) {
                             $item_info = $this->getItemInfo( $b[0], $type );
                             $imfile->addMessage( $messenger_settings[0], $messenger_settings[1], $this->getName(), $b[2] . " " . ( $b[2] == 1 ? $singular : $plural ) . " der Sorte " . $item_info['name'] . " " . ( $b[2] == 1 ? 'wurde' : 'wurden' ) . " fertiggestellt.", $special_id, $b[1] + $b[2] * $b[3] );
                         }

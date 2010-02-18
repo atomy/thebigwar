@@ -2,22 +2,21 @@
 
 class TestFleet
 {
-    private $name;
-    
-    public function __construct()
+
+    private $_name;
+
+    public function __construct( )
     {
-        
+
     }
-    
+
     public function setName( $newname )
     {
-        $this->name = $newname;
+        $this->_name = $newname;
     }
-    
-    public function getName()
+
+    public function getName( )
     {
-        return $this->name;
+        return $this->_name;
     }
 }
-
-?>

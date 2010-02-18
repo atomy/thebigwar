@@ -9,12 +9,10 @@ class Highscores
 
     function __construct( )
     {
-        if ( ! $this->status )
-        {
+        if ( ! $this->status ) {
             # Datenbankverbindung herstellen
             $this->connection = sqlite_open( global_setting( "DB_HIGHSCORES" ), 0666 );
-            if ( $this->connection )
-            {
+            if ( $this->connection ) {
                 $table_check1 = sqlite_query( $this->connection, "SELECT name FROM sqlite_master WHERE type='table' AND name='highscores_users'" );
                 $table_check2 = sqlite_query( $this->connection, "SELECT name FROM sqlite_master WHERE type='table' AND name='highscores_alliances'" );
                 if ( ( sqlite_num_rows( $table_check1 ) > 0 || sqlite_query( $this->connection, "CREATE TABLE highscores_users ( username, alliance, scores INTEGER, changed INTEGER );" ) ) && ( sqlite_num_rows( $table_check2 ) > 0 || sqlite_query( $this->connection, "CREATE TABLE highscores_alliances ( tag, scores_average INTEGER, scores_total INTEGER, members_count INTEGER, changed INTEGER );" ) ) )
@@ -25,8 +23,7 @@ class Highscores
 
     function __destruct( )
     {
-        if ( $this->status )
-        {
+        if ( $this->status ) {
             # Datenbankerbindung schliessen
             sqlite_close( $this->connection );
             $this->status = false;
@@ -50,14 +47,14 @@ class Highscores
             
         //print "updateUser() for user: ".$username." with scores: ".$scores."\n";
         
+
         $exists_query = sqlite_query( $this->connection, "SELECT username FROM highscores_users WHERE username='" . sqlite_escape_string( $username ) . "' LIMIT 1;" );
         $exists = ( sqlite_num_rows( $exists_query ) > 0 );
         
         if ( $scores !== false )
             $scores = (float) $scores;
         
-        if ( $exists )
-        {
+        if ( $exists ) {
             if ( $alliance === false && $scores === false )
                 return true;
             
@@ -65,16 +62,14 @@ class Highscores
             $set = array();
             if ( $alliance !== false )
                 $set[] = "alliance = '" . sqlite_escape_string( $alliance ) . "'";
-            if ( $scores !== false )
-            {
+            if ( $scores !== false ) {
                 $set[] = "scores = '" . sqlite_escape_string( $scores ) . "'";
                 $set[] = "changed = '" . sqlite_escape_string( microtime( true ) ) . "'";
             }
             $query .= implode( ', ', $set );
             $query .= " WHERE username = '" . sqlite_escape_string( $username ) . "';";
         }
-        else
-        {
+        else {
             $scores = (float) $scores;
             $query = "INSERT INTO highscores_users ( username, alliance, scores, changed ) VALUES ( '" . sqlite_escape_string( $username ) . "', '" . sqlite_escape_string( $alliance ) . "', '" . sqlite_escape_string( $scores ) . "', '" . sqlite_escape_string( microtime( true ) ) . "' );";
         }
@@ -106,8 +101,7 @@ class Highscores
         $exists_query = sqlite_query( $this->connection, "SELECT tag FROM highscores_alliances WHERE tag='" . sqlite_escape_string( $tag ) . "' LIMIT 1;" );
         $exists = ( sqlite_num_rows( $exists_query ) > 0 );
         
-        if ( $exists )
-        {
+        if ( $exists ) {
             if ( $scores_average === false && $scores_total === false && $members_count === false )
                 return true;
             
@@ -167,8 +161,7 @@ class Highscores
         
         $connection = false;
         
-        if ( $highscores_file !== false )
-        {
+        if ( $highscores_file !== false ) {
             if ( is_file( $highscores_file ) )
                 $connection = sqlite_open( $highscores_file );
         }
@@ -188,53 +181,52 @@ class Highscores
 
     function getPosition( $type, $id, $sort_field = false )
     {
-        if ( ! $this->status || ( $type != 'users' && $type != 'alliances' ) )
-        {
+        if ( ! $this->status || ( $type != 'users' && $type != 'alliances' ) ) {
             return false;
         }
         
-        if ( $type == 'users' )
-        {
+        if ( $type == 'users' ) {
             $index = 'username';
         }
-        else
-        {
+        else {
             $index = 'tag';
         }
         
         $allowed_sort_fields = array( 'alliances' => array( 'scores_average', 'scores_total' ), 'users' => array( 'scores' ) );
         
-        if ( $sort_field === false )
-        {
+        if ( $sort_field === false ) {
             $sort_field = array_shift( $allowed_sort_fields[$type] );
         }
-        else if ( ! in_array( $sort_field, $allowed_sort_fields[$type] ) )
-        {
-            return false;
-        }
-            
+        else 
+            if ( ! in_array( $sort_field, $allowed_sort_fields[$type] ) ) {
+                return false;
+            }
+        
         # Zuerst Punkte herausfinden
         $query = sqlite_query( $this->connection, "SELECT " . $sort_field . ",changed FROM highscores_" . $type . " WHERE " . $index . " = '" . sqlite_escape_string( $id ) . "' LIMIT 1;" );
         
-        if ( ! $query )
-        {
+        if ( ! $query ) {
             return false;
         }
         
         list( $scores, $changed ) = sqlite_fetch_array( $query, SQLITE_NUM );
         //print "current scores: ".$scores."\n";
         
+
         # Wieviele Spieler sind von den Punkten her darueber?
         $above = sqlite_single_query( $this->connection, "SELECT COUNT(*) FROM highscores_" . $type . " WHERE " . $sort_field . " > '" . sqlite_escape_string( $scores ) . "';", true );
-                
+        
         //print "above1: ".$above." for id: ".$id."\n";
         
+
         # Wieviele Spieler haben die gleiche Punktzahl, aber hatten diese frueher?
         $above += sqlite_single_query( $this->connection, "SELECT COUNT(*) FROM highscores_" . $type . " WHERE " . $sort_field . " = '" . sqlite_escape_string( $scores ) . "' AND changed < '" . sqlite_escape_string( $changed ) . "';", true );
         //print "QRY: SELECT COUNT(*) FROM highscores_" . $type . " WHERE " . $sort_field . " = '" . sqlite_escape_string( $scores ) . "' AND changed < '" . sqlite_escape_string( $changed ) . "';\n";
         
-       // print "above2: ".$above." for id: ".$id."\n";
+
+        // print "above2: ".$above." for id: ".$id."\n";
         
+
         return ( $above + 1 );
     }
 

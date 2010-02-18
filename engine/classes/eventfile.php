@@ -11,15 +11,14 @@ class EventFile
 
     function __construct( )
     {
-        if ( ! $this->status )
-        {
+        if ( ! $this->status ) {
             //$filename = s_root.'/logs/events.log';
             //$this->fo = fopen($filename, "a");            
+            
 
             # Datenbankverbindung herstellen
             $this->connection = sqlite_open( global_setting( "EVENT_FILE" ), 0666 );
-            if ( $this->connection )
-            {
+            if ( $this->connection ) {
                 $table_check = sqlite_query( $this->connection, "SELECT name FROM sqlite_master WHERE type='table' AND name='events'" );
                 if ( sqlite_num_rows( $table_check ) != 0 || sqlite_query( $this->connection, "CREATE TABLE events ( time INT(11), fleet VARCHAR(16) );" ) )
                     $this->status = true;
@@ -29,8 +28,7 @@ class EventFile
 
     function __destruct( )
     {
-        if ( $this->status )
-        {
+        if ( $this->status ) {
             # Datenbankerbindung schliessen
             sqlite_close( $this->connection );
             $this->status = false;
@@ -91,8 +89,7 @@ class EventFile
         
 
         # Gefundenes Feld aus der Datenbank loeschen
-        if ( ! sqlite_query( $this->connection, "DELETE FROM events WHERE time = '" . $field['time'] . "' AND fleet = '" . sqlite_escape_string( $field['fleet'] ) . "';", SQLITE_ASSOC ) )
-        {
+        if ( ! sqlite_query( $this->connection, "DELETE FROM events WHERE time = '" . $field['time'] . "' AND fleet = '" . sqlite_escape_string( $field['fleet'] ) . "';", SQLITE_ASSOC ) ) {
             //echo "removeNextFleet() ---- DELETE FROM events WHERE time = '".$field['time']."' AND fleet = '".sqlite_escape_string($field['fleet'])."';\n";
             #fwrite( $this->fo, time(). "EventFile::removeNextFleet(): DELETE FROM events WHERE time... FAILED\n" );
             return false;
