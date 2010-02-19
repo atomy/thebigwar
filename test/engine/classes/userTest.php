@@ -1410,14 +1410,7 @@ class userTest extends PHPUnit_Framework_TestCase
                 $curTestPlanet->setEnergy( $prod[5] );
                 
                 $newRes = $userObj->getRess( true );
-                $this->assertEquals( $curTestPlanet->getRes(), $newRes );                
-                
-                // make sure we proceed in time and got some new res in by refreshing
-                // for everything but energy, cause we dont get it via User::getRess( false )
-                for( $i = 0; $i < 5; $i++)
-                {
-                    $this->assertNotEquals( $oldRes[$i], $newRes[$i] );
-                }
+                $this->assertEquals( $curTestPlanet->getRes(), $newRes );                               
                 
                 $checked++;
             }                
