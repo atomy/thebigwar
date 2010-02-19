@@ -157,6 +157,14 @@ abstract class Dataset
         return true;
     }
 
+    /**
+     * return true if obj was changed
+     */
+    public function isChanged()
+    {
+        return $this->changed;
+    }
+    
     abstract protected function getDataFromRaw( );
 
     abstract protected function getRawFromData( );

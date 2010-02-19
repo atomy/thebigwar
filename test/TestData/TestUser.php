@@ -21,6 +21,16 @@ class TestUser
 
     private $messages = array();
 
+    /*
+     * increasing index used to retrieve testplanetlist elements
+     */
+    private $testPlanetListIndex;
+
+    /*
+     * holds a compiled list of all our testplanets
+     */
+    private $testPlanetList;
+
     /**
      * holding TestScore obj
      */
@@ -32,7 +42,9 @@ class TestUser
         $this->bCreated = false;
         $this->bShouldCreate = false;
         $this->bCreateOnSetup = false;
-        $this->scores = new TestScore( );
+        $this->scores = new TestScore();
+        $this->testPlanetListIndex = 0;
+        $this->testPlanetList = array();
     }
 
     public function getScores( )
@@ -85,23 +97,19 @@ class TestUser
     {
         $maxplanets = global_setting( "MAX_PLANETS" );
         
-        if ( $maxplanets <= 0 )
-        {
+        if ( $maxplanets <= 0 ) {
             throw new Exception( "generateTestPlanets() failed, maxplanet constant is 0 or below" );
         }
         
-        for ( $i = 0; $i <= $maxplanets; $i ++ )
-        {
-            $planet = &new Testplanet( );
+        for ( $i = 0; $i <= $maxplanets; $i ++ ) {
+            $planet = &new Testplanet();
             $planet->setName( "TestPlanet" . $i );
             $planet->setIndex( $i );
             
-            if ( $i <= 4 )
-            {
+            if ( $i <= 4 ) {
                 $planet->setShouldCreate( true );
             }
-            else
-            {
+            else {
                 $planet->setShouldCreate( false );
             }
             
@@ -137,10 +145,8 @@ class TestUser
 
     public function hasCreatedPlanetAtIndex( $index )
     {
-        foreach ( $this->getPlanets() as $planet )
-        {
-            if ( $planet->getIndex() == $index && $planet->isCreated() )
-            {
+        foreach ( $this->getPlanets() as $planet ) {
+            if ( $planet->getIndex() == $index && $planet->isCreated() ) {
                 return true;
             }
         }
@@ -157,10 +163,8 @@ class TestUser
     {
         $count = 0;
         
-        foreach ( $this->planets as $planet )
-        {
-            if ( $planet->isCreated() )
-            {
+        foreach ( $this->planets as $planet ) {
+            if ( $planet->isCreated() ) {
                 $count ++;
             }
         }
@@ -171,7 +175,7 @@ class TestUser
     public function addNewPlanetCreated( $index, $koordString )
     {
         $koords = explode( ":", $koordString );
-        $testPlanet = &new TestPlanet( );
+        $testPlanet = &new TestPlanet();
         $testPlanet->setIndex( $index );
         $testPlanet->setGalaxy( $koords[0] );
         $testPlanet->setSystem( $koords[1] );
@@ -189,22 +193,18 @@ class TestUser
         $resA = $aPlanet->getActiveResearch();
         $resB = $bPlanet->getActiveResearch();
         
-        if ( $resA )
-        {
+        if ( $resA ) {
             $res = $resA;
             
-            if ( $res->isGlobal() )
-            {//echo "calling1 on planet: ".$a."\n";
+            if ( $res->isGlobal() ) {//echo "calling1 on planet: ".$a."\n";
 //$aPlanet->setActiveResearch( $res->getId(), $res->getGlobal(), $b );
             }
         }
         
-        if ( $resB )
-        {
+        if ( $resB ) {
             $res = $resB;
             
-            if ( $res->isGlobal() )
-            {//echo "calling2 on planet: ".$b."\n";
+            if ( $res->isGlobal() ) {//echo "calling2 on planet: ".$b."\n";
 //$bPlanet->setActiveResearch( $res->getId(), $res->getGlobal(), $a );
             }
         }
@@ -227,10 +227,8 @@ class TestUser
     {
         $sum = 0;
         
-        foreach ( $this->planets as $planet )
-        {
-            foreach ( $planet->getItems() as $item )
-            {
+        foreach ( $this->planets as $planet ) {
+            foreach ( $planet->getItems() as $item ) {
                 // skipping elements that doesnt match our key filter
                 if ( $key !== false && $key != $item->getNumClass() )
                     continue;
@@ -241,43 +239,78 @@ class TestUser
         
         //echo "getSumScores() returning: " . $sum . " for key: " . $key . "\n";
         
+
         return $sum;
     }
-    
+
     public function destroyPlanet( $planetIndex = -1 )
     {
         return;
-        if ( $planetIndex < 0 )
-        {
+        if ( $planetIndex < 0 ) {
             throw new Exception( "given planetIndex is invalid" );
-        }   
-
-        $remIndex = -1;
+        }
+        
+        $remIndex = - 1;
         // search for a testplanetobject with the given planetindex, save its index      
-        foreach ( $this->planets as $i => &$planetObj )    
-        {            
-            if ( $planetObj->getIndex() == $planetIndex )
-            {
+        foreach ( $this->planets as $i => &$planetObj ) {
+            if ( $planetObj->getIndex() == $planetIndex ) {
                 $planetObj->setIsCreated( false );
                 $planetObj->setIndex( 0 );
-                $remIndex = $planetIndex;  
+                $remIndex = $planetIndex;
                 break;
             }
-        }   
-
+        }
+        
         // reorder all planets, those whos index is over the removed one
-        foreach ( $this->planets as &$planetObj )    
-        {            
-            if ( $remIndex != -1 )
-            {
+        foreach ( $this->planets as &$planetObj ) {
+            if ( $remIndex != - 1 ) {
                 $oldIndex = $planetObj->getIndex();
                 
-                if ( $oldIndex > $remIndex )
-                {
+                if ( $oldIndex > $remIndex ) {
                     $planetObj->setIndex( $oldIndex - 1 );
-                }                
-            }     
-        }   
+                }
+            }
+        }
+    }
+
+    /**
+     * gathers all active planets in the testData enviroment and saves them to a list for later usage
+     */
+    private function generateTestPlanetList( )
+    {
+        $this->testPlanetListIndex = 0;
+        $this->testPlanetList = array();
+        
+        foreach ( $this->getPlanets() as $testPlanet ) {
+            if ( ! $testPlanet->isCreated() ) {
+                continue;
+            }
+            
+            $this->testPlanetList[] = $testPlanet;
+        }       
+    }
+
+    /**
+     * returns testPlanet objects as long we have ones
+     */
+    public function getNextTestPlanet( )
+    {
+        if ( count( $this->testPlanetList ) == 0 ) {
+            $this->generateTestPlanetList();
+        }
+        
+        $index = $this->testPlanetListIndex;
+        
+        // as long we arent out of elements return it!
+        if ( isset( $this->testPlanetList[$index] ) ) {
+            $this->testPlanetListIndex ++;
+            
+            return $this->testPlanetList[$index];
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 

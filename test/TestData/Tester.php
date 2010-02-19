@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * this class is responsible for setting up a complete test enviroment,
+ * including test users,
+ * test planets,
+ * test items on the planets,
+ * test researches,
+ * test ships,
+ * etc.
+ * @author atomy
+ *
+ */
 class tester
 {
 
@@ -121,7 +132,8 @@ class tester
             //else
             //  print "user ".$user->getName()." ".$userObj->getName()." is going to buy local research on planet ".$userObj->getActivePlanet()." id ".$id." for ".$item_info['ress'][0]." ".$item_info['ress'][1]." ".$item_info['ress'][2]." ".$item_info['ress'][3]." ".$item_info['ress'][4]."\n"; 
             
-
+            $spentRes = array( 0, 0, 0, 0, 0 );
+            
             if ( $global )
             {
                 if ( ! $userObj->getStatus() )
@@ -176,7 +188,7 @@ class tester
             }
             
             // subtract ressources needed to build that from testData
-            $planetData->subRes( $item_info['ress'] );
+            $planetData->subRes( $spentRes );
             
         /*
           	if ($global)

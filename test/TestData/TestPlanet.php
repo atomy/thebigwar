@@ -67,14 +67,13 @@ class TestPlanet
 
     public function addStartRes( )
     {
-        for ( $i = 0; $i < 5; $i ++ )
-        {
+        for ( $i = 0; $i < 5; $i ++ ) {
             $this->res[$i] = 100000000000; // 100 mrd
-        }      
+        }
     }
 
     public function getRes( $refreshRes = false )
-    {   
+    {
         return $this->res;
     }
 
@@ -86,30 +85,12 @@ class TestPlanet
     {
         $this->res = $res;
     }
-    
+
     public function setEnergy( $energy )
     {
         $this->res[5] = $energy;
-    }    
-    
-    public function subRes( $res )
-    {
-        foreach ( $res as $key => $value )
-        {
-            if ( ! isset( $res[$key] ) )
-            {
-                throw new Exception( "subRes() failed, key: " . $key . " not set in $res" );
-            }
-            
-            $this->res[$key] -= $value;
-            
-            if ( $this->res[$key] <= 0 )
-            {
-                throw new Exception( "subRes() failed, res with key " . $key . " became negative" );
-            }
-        }
     }
-
+    
     public function setActiveResearch( $id, $global, $startPlanet = false )
     {
         $tRes = new TestResearch( $id, $global );
@@ -117,13 +98,11 @@ class TestPlanet
         //echo "setActiveResearch() id: ".$id." global: ".$global." startplanet: ".$startPlanet."\n";
         
 
-        if ( $global && $startPlanet !== false )
-        {
+        if ( $global && $startPlanet !== false ) {
             $tRes->setStartPlanet( $startPlanet );
         }
         else 
-            if ( $global )
-            {
+            if ( $global ) {
                 throw new Exception( "addResearch() failed, research global but no start planet given" );
             }
         
@@ -142,8 +121,7 @@ class TestPlanet
 
         if ( isset( $this->activeResearch ) && $this->activeResearch !== false )
             $this->activeResearch = false;
-        else
-        {
+        else {
             throw new Exception( "removeActiveResearch() failed, no active research exists" );
         }
     }
@@ -176,12 +154,10 @@ class TestPlanet
      */
     public function setGalaxy( $gala )
     {
-        if ( $gala > 0 && $gala <= 999 )
-        {
+        if ( $gala > 0 && $gala <= 999 ) {
             $this->galaxy = $gala;
         }
-        else
-        {
+        else {
             throw new Exception( "setSystem() failed, impossible $galaxy submitted" );
         }
     }
@@ -193,13 +169,11 @@ class TestPlanet
 
     public function setSysIndex( $ind )
     {
-        if ( $ind > 0 && $ind <= 999 )
-        {
+        if ( $ind > 0 && $ind <= 999 ) {
             $this->sysindex = $ind;
         }
-        else
-        {
-            throw new Exception( "setSystem() failed, impossible ".$sysindex." submitted" );
+        else {
+            throw new Exception( "setSystem() failed, impossible " . $sysindex . " submitted" );
         }
     }
 
@@ -222,6 +196,7 @@ class TestPlanet
     public function setIndex( $index )
     {
         //echo "setting index of planet: ".$this->getName()." index: ".$index."\n";
+        
 
         $this->index = $index;
     }
@@ -244,13 +219,11 @@ class TestPlanet
      */
     public function setSystem( $system )
     {
-        if ( $system > 0 && $system <= 999 )
-        {
+        if ( $system > 0 && $system <= 999 ) {
             $this->system = $system;
         }
-        else
-        {
-            throw new Exception( "setSystem() failed, impossible ".$system." submitted" );
+        else {
+            throw new Exception( "setSystem() failed, impossible " . $system . " submitted" );
         }
     }
 
@@ -269,14 +242,12 @@ class TestPlanet
     {
         $apos = explode( ":", $pos );
         
-        if ( $apos[0] > 0 && $apos[1] > 0 && $apos[2] > 0 )
-        {
+        if ( $apos[0] > 0 && $apos[1] > 0 && $apos[2] > 0 ) {
             $this->setGalaxy( $apos[0] );
             $this->setSystem( $apos[1] );
             $this->setSysIndex( $apos[2] );
         }
-        else
-        {
+        else {
             //print_r( $pos );
             throw new Exception( "setPosString() failed, couldnt split argument into seperate koords" );
         }
@@ -315,8 +286,7 @@ class TestPlanet
 
     public function addItemLevels( $itemLevels, $class = false )
     {
-        foreach ( $itemLevels as $id => $level )
-        {
+        foreach ( $itemLevels as $id => $level ) {
             $item = new TestItem( $id );
             $item->setLevel( $level );
             
@@ -325,23 +295,22 @@ class TestPlanet
             
             $this->items[$id] = $item;
         }
-    } 
+    }
 
     public function setItemScores( $itemScores )
-    {    
-        foreach ( $itemScores as $id => $score )
-        {
-            if ( !isset( $this->items[$id] ) )           
-                throw new Exception("setItemScores() failed, wanted to set score for item: ".$id." which doesnt exists!");
-                            
+    {
+        foreach ( $itemScores as $id => $score ) {
+            if ( ! isset( $this->items[$id] ) )
+                throw new Exception( "setItemScores() failed, wanted to set score for item: " . $id . " which doesnt exists!" );
+            
             $item = &$this->items[$id];
             $item->setScore( $score );
         }
     }
-    
+
     public function getItemScores( $item )
     {
-        if ( !isset( $this->items[$item] ) )
+        if ( ! isset( $this->items[$item] ) )
             return 0;
         else
             return $this->items[$item]->score;
@@ -351,18 +320,41 @@ class TestPlanet
     {
         return $this->items;
     }
-    
+
     public function setItemSpentRes( $sRes )
     {
-        foreach ( $sRes as $id => $resArray )
-        {
-            if ( !isset( $this->items[$id] ) )           
-                throw new Exception("setItemSpentRes() failed, wanted to set score for item: ".$id." which doesnt exists!");
-                            
+        foreach ( $sRes as $id => $resArray ) {
+            if ( ! isset( $this->items[$id] ) )
+                throw new Exception( "setItemSpentRes() failed, wanted to set score for item: " . $id . " which doesnt exists!" );
+            
             $item = &$this->items[$id];
-            $item->setSpentResViaArray( $resArray );                       
+            $item->setSpentResViaArray( $resArray );
         }
     }
+    
+    /**
+     * subtracting given res from testPlanet
+     * @param $res - array()
+     */
+    public function subRes( $res = -1 )
+    {
+        if ( $res == -1 )
+        {
+            throw new Exception( __FUNCTION__. "invalid parameter given");            
+        }
+        
+        // subtract each single res
+        for( $i = 0; $i < 5; $i++)
+        {
+            if ( $res[$i] < 0 )
+            {
+                throw new Exception( __FUNCTION__. "subtracting res is restricted to positive values only, use addRes() instead");
+            }
+            
+            $this->res[$i] -= $res[$i];
+        }
+    }
+    
 }
 
 ?>

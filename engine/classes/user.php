@@ -817,27 +817,38 @@ class User extends Dataset
         return $ress;
     }
 
+    /**
+     * adds ressources to the active planet
+     * @test implemented
+     * @param $ress array() ressources to add
+     * @return bool true on success
+     */
     function addRess( $ress )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
+        {
             return false;
+        }
         
         if ( ! is_array( $ress ) )
+        {
             return false;
+        }
         
-        if ( isset( $ress[0] ) )
-            $this->ress[0] += $ress[0];
-        if ( isset( $ress[1] ) )
-            $this->ress[1] += $ress[1];
-        if ( isset( $ress[2] ) )
-            $this->ress[2] += $ress[2];
-        if ( isset( $ress[3] ) )
-            $this->ress[3] += $ress[3];
-        if ( isset( $ress[4] ) )
-            $this->ress[4] += $ress[4];
+        // add res
+        for ( $i = 0; $i < 5; $i++ )
+        {
+            if ( isset( $ress[$i] ))
+            {
+                $this->ress[$i] += $ress[$i];
+            }
+            
+        }
         
         if ( isset( $this->cache['getItemInfo'] ) && isset( $this->cache['getItemInfo'][$this->getActivePlanet()] ) )
+        {
             unset( $this->cache['getItemInfo'][$this->getActivePlanet()] );
+        }
         
         $this->changed = true;
         
@@ -1432,6 +1443,27 @@ class User extends Dataset
         
         $items_instance = Classes::Items();
         return $items_instance->getItemsList( $type );
+    }
+    
+    public function getCache( $cache = -1, $subcache = -1 )
+    {        
+        if( $cache == -1 )
+        {
+            throw new Exception( __FUNCTION__." called with invalid parameters " );
+        }
+        
+        if ( $subcache == -1 && isset($this->cache[$cache]))
+        {
+            return $this->cache[$cache];
+        }
+        else if ( isset($this->cache[$cache]) && isset($this->cache[$cache][$subcache]) )
+        {
+            return $this->cache[$cache][$subcache];
+        }
+        else
+        {
+            return false;
+        }
     }
 
     function getItemInfo( $id, $type = false, $run_eventhandler = true, $calc_scores = false )

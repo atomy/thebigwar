@@ -603,7 +603,7 @@ class userTest extends PHPUnit_Framework_TestCase
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////// TESTS START HERE //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    
     /**
      * test our test setup
      */
@@ -1353,6 +1353,50 @@ class userTest extends PHPUnit_Framework_TestCase
     //maybe TODO, highscores test, something happens with research
     } 
       
+  
+    
+    /**
+     * test for function User::addRess()
+     * - test if added res gets added \o/
+     * - test if cache is erased \o/
+     * - test obj is marked as changed \o/
+     */
+    public function testAddRess()
+    {
+        // add those res
+        $addRes = array( 55, 44, 2929, 23123, 666 );
+                
+        // fake, non-existing user
+        $fuser = Classes::User( "fakeuser1341" );
+        $this->assertFalse( $fuser->addRess( $addRes ));
+        $checked = 0;
+                
+        for ( $testUser = &$this->testData->getNextTestUser(); $testUser != false; $testUser = &$this->testData->getNextTestUser() )
+        {
+            $userObj = Classes::User( $testUser->getName() );
+            
+            for ( $testPlanet = &$testUser->getNextTestPlanet(); $testPlanet != false; $testPlanet = &$testUser->getNextTestPlanet() )
+            {
+                $this->assertTrue( $userObj->setActivePlanet( $testPlanet->getIndex() ), "failed to set planet with index :".$testPlanet->getIndex() );
+                
+                // this shouldnt work when submitting a non array res value
+                $this->assertFalse( $userObj->addRess( 1337 ) );
+                
+                $currentRes = $userObj->getRess( false );
+                $this->assertTrue( $userObj->addRess( $addRes ) );                                                
+                
+                for( $i = 0; $i < 5; $i++ )
+                {
+                    $currentRes[$i] += $addRes[$i];
+                }
+                
+                $this->assertEquals( $currentRes, $userObj->getRess( false ));  
+                $this->assertTrue( $userObj->isChanged() );
+                $this->assertFalse( $userObj->getCache( "getItemInfo", $testPlanet->getIndex() ) );              
+            }
+        }                              
+    }    
+    
     /**
      * test User::getRess()
      * - test res equal to start res w/o refresh \o/
@@ -1382,7 +1426,6 @@ class userTest extends PHPUnit_Framework_TestCase
             {
                 $userObj->setActivePlanet( $planet );
             
-                // comparing planet names with our internal saved ones
                 $testPlanets = $testUser->getPlanets();
                 $curTestPlanet = false;
                                 
@@ -1412,12 +1455,15 @@ class userTest extends PHPUnit_Framework_TestCase
                 $newRes = $userObj->getRess( true );
                 $this->assertEquals( $curTestPlanet->getRes(), $newRes );                               
                 
+                // add check that our res count changed over time (production of mines)
+                $this->assertNotEquals( $newRes, $oldRes );
+                
                 $checked++;
             }                
         }   
 
         $this->assertGreaterThan( 0, $checked );
-    }    
+    }      
     
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////
