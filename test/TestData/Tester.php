@@ -23,6 +23,7 @@ class tester
             }
             
             $setupResearch = true;
+            //echo "processing user: ".$user->getName()."\n";
             
             foreach ( $user->getPlanets() as $planetData )
             {

@@ -129,6 +129,7 @@ class userDevTest extends PHPUnit_Framework_TestCase
 		 * flotte als transport mit 10 kleinen transportern zum ziel $pos versenden
 		 */
         $type = 6; // stationieren
+        $fleetContent = array( "S1" => 100 ); // 100 große? transporter
         $fleet->create(); // no return 
         $this->test_Fleets[$uname][] = $fleet->getName();
         $this->assertTrue( $fleet->addTarget( $pos, $type, false ) );
@@ -146,8 +147,11 @@ class userDevTest extends PHPUnit_Framework_TestCase
                 }
                 
             }            
-        }
+        }      
         
+        $this->assertTrue( $fleet->addFleet( key( $fleetContent ), current( $fleetContent ), $uname ) );
+
+        // Fleet::addTransport() has do be done after calling Fleet::addFleet()
         if ( $doTransportWithRes )
         {
             for( $i = 0; $i <= 4; $i++ )
@@ -157,25 +161,26 @@ class userDevTest extends PHPUnit_Framework_TestCase
                     $res[$i] = 0;
                 }                
             }
-            $this->assertTrue( $fleet->addTransport( $uname, $res, array() ) );                        
+  
+            $this->assertTrue( $fleet->addTransport( $uname, $res ) );                        
         }
         else
         {
-            $this->assertTrue( $fleet->addTransport( $uname, array( 0, 0, 0, 0, 0 ), array() ) );
+            $this->assertTrue( $fleet->addTransport( $uname, array( 0, 0, 0, 0, 0 ) ) );
         }
-        
-        $this->assertTrue( $fleet->addFleet( "S1", 100, $uname ) );
+                
         $this->assertTrue( $fleet->addHoldTime( 0 ) );
         $this->assertGreaterThan( 0, $fleet->calcNeededTritium( $uname ) );
         $fleet->start(); // no return
         $this->assertEquals( $pos, $fleet->getCurrentTarget() );
         
         $user = Classes::User( $uname );
-        $this->assertTrue( $user->addFleet( $fleet->getName() ) );
+        $fleetid = $fleet->getName();
+        $this->assertTrue( $user->addFleet( $fleetid ) );
         unset( $user );
         unset( $fleet );
         
-        $this->_testIsFleetExistingSpecific( $uname, $pos, $mypos, array( "S1", 10 ), $type, false );
+        $this->_testIsFleetExistingSpecific( $uname, $fleetid, $pos, $mypos, $fleetContent, $type, false );
     }
     
 
@@ -410,22 +415,31 @@ class userDevTest extends PHPUnit_Framework_TestCase
     /*
 	 * test if a given fleet is existant, it is expected to do, otherwise this test will fail
 	 */
-    public function _testIsFleetExistingSpecific( $from_user, $to_pos, $from_pos, $ships, $type, $flyingback )
+    public function _testIsFleetExistingSpecific( $from_user, $fleetid, $to_pos, $from_pos, $ships, $type, $flyingback )
     {
         $user = Classes::User( $from_user );
         $fleets = $user->getFleetsList();
         
         $this->assertGreaterThan( 0, count( $fleets ), "no fleets found" );
-        
+
+        // search our fleet by $fleetid
         $fleet = false;
-        
+
         foreach ( $fleets as $ffleet )
         {
-            $fleet = $ffleet;
+            // found!, save.
+            // if fleetid is 0 take the very first fleet
+            if ( $ffleet == $fleetid || $fleetid == 0 )
+            {
+                $fleet = $ffleet;
+            }
         }
         
+        // not found
         if ( $fleet == false )
+        {
             throw new Exception( "_testIsFleetExistingSpecific() failed, no fleet found" );
+        }
         
         $fleet_obj = Classes::Fleet( $fleet );
         $that = Classes::Fleet( $fleet );
@@ -436,7 +450,7 @@ class userDevTest extends PHPUnit_Framework_TestCase
         $targets = $that->getTargetsList();
         
         $this->assertEquals( array( $to_pos ), $targets );
-        $this->assertEquals( array( "S1" => 100 ), $fleet_obj->getFleetList( $from_user ) );
+        $this->assertEquals( $ships, $fleet_obj->getFleetList( $from_user ) );
         
         if ( ! $flyingback )
         {
@@ -502,6 +516,30 @@ class userDevTest extends PHPUnit_Framework_TestCase
     
     }
 
+    protected function _buildTestHighScore()
+    {
+        $userObj = NULL;
+        
+        foreach ( $this->testData->getTestUsers() as $testUser )
+        {
+            if ( ! $testUser->isCreated() )
+            {
+                $userObj = Classes::User( $testUser->getName() );
+                continue;
+            }
+            else
+            {
+                $userObj = Classes::User( $testUser->getName() );
+            }
+
+            $userObj->doRecalcHighscores( true, true, true, true, true );
+            $testHighScore = &$this->testData->getTestHighscore();
+            $testHighScore->addUser( $userObj->getName(), $userObj->getScores() );
+        }        
+        
+        $testHighScore->buildRankList();
+    }      
+    
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -567,60 +605,8 @@ class userDevTest extends PHPUnit_Framework_TestCase
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////// TESTS START HERE //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+     
 
-    /**
-     * test our test setup
-     */
-    public function testSetup( )
-    {
-        foreach ( $this->testData->getTestUsers() as $userData )
-        {
-            $this->_testSetup( $userData );
-        }               
-    }
-
-    
-    /**
-     * subtests:
-     * - setting illegal planet names \o/
-     * - setting legal planet name \o/
-     * - getting planet names and compare them to testdata \o/
-     * - getting planet names and compare them to previous set \o/ 
-     * - test galaxy kram \o/
-     */
-    public function testGetRessOnAllFleets( )
-    {   
-        $tested = 0;
-            
-        foreach ( $this->testData->getTestUsers() as $testUser )
-        {
-            if ( ! $testUser->isCreated() )
-            {
-                $userObj = Classes::User( $testUser->getName() );
-                $this->assertFalse( $userObj->planetName() );
-                
-                continue;
-            } 
-            else
-            {
-                $userObj = Classes::User( $testUser->getName() );
-                $this->assertGreaterThan( 0, $userObj->getStatus() );
-                
-                if ( $testUser->getPlanetCount() <= 0 )
-                {
-                    return;
-                }
-            }
-            
-            $this->_testSendFleetTo( $testUser->getName(), "1:33:7", array( 1337, 4554, 3332, 5432, 1111 ) );
-
-            $tested++;          
-        }
-        
-        $this->assertGreaterThan( 0, $tested );
-    }
-    
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

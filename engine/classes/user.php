@@ -67,13 +67,34 @@ class User extends Dataset
         $this->status = $status;
     }
 
+    public function printPlanets( )
+    {
+        if ( ! $this->status )
+        {
+            return false;
+        }        
+        
+        echo "Listing Planets of user ".$this->getName().": \n";
+        
+        foreach ( $this->raw['planets'] as $index => $planet )
+        {
+            echo $index." ";
+        }
+        
+        echo "\n";
+    }
+    
     function setActivePlanet( $planet )
     {
         if ( ! $this->status )
+        {
             return false;
+        }
         
         if ( ! isset( $this->raw['planets'][$planet] ) )
+        {
             return false;
+        }
         
         if ( isset( $this->planet_info ) ) {
             if ( isset( $this->items['gebaeude'] ) )
@@ -96,7 +117,9 @@ class User extends Dataset
         $this->planet_info = &$this->raw['planets'][$planet];
         
         if ( isset( $this->cache['getPos'] ) )
+        {
             unset( $this->cache['getPos'] );
+        }
         
         $this->items['gebaeude'] = $this->planet_info['gebaeude'];
         $this->items['roboter'] = $this->planet_info['roboter'];
@@ -106,19 +129,29 @@ class User extends Dataset
         $this->items['ids'] = array();
         
         foreach ( $this->items['gebaeude'] as $id => $level )
+        {
             $this->items['ids'][$id] = & $this->items['gebaeude'][$id];
+        }
         
         foreach ( $this->items['forschung'] as $id => $level )
+        {
             $this->items['ids'][$id] = & $this->items['forschung'][$id];
+        }
         
         foreach ( $this->items['roboter'] as $id => $level )
+        {
             $this->items['ids'][$id] = & $this->items['roboter'][$id];
+        }
         
         foreach ( $this->items['schiffe'] as $id => $level )
+        {
             $this->items['ids'][$id] = & $this->items['schiffe'][$id];
+        }
         
         foreach ( $this->items['verteidigung'] as $id => $level )
+        {
             $this->items['ids'][$id] = & $this->items['verteidigung'][$id];
+        }
         
         $this->ress = $this->planet_info['ress'];
         
@@ -128,7 +161,9 @@ class User extends Dataset
     function getPlanetByPos( $pos )
     {
         if ( ! $this->status )
+        {
             return false;
+        }
         
         $return = false;
         $planets = $this->getPlanetsList();
@@ -278,7 +313,9 @@ class User extends Dataset
         global $types_message_types;
         
         if ( ! $this->status || ! isset( $this->planet_info ) )
+        {
             return false;
+        }
             
         # Alle feindlichen Flotten, die auf diesen Planeten, zurueckrufen
         $fleets = $this->getFleetsWithPlanet();
@@ -310,29 +347,41 @@ class User extends Dataset
         $this_pos = $this->getPos();
         
         if ( ! $this_pos )
+        {
             return false;
+        }
         
         $galaxy = Classes::galaxy( $this_pos[0] );
         
         if ( ! $galaxy->resetPlanet( $this_pos[1], $this_pos[2] ) )
+        {
             return false;
+        }
         
         $planets = $this->getPlanetsList();
         $active_key = array_search( $this->getActivePlanet(), $planets );
         
         unset( $this->planet_info );
         unset( $this->raw['planets'][$active_key] );
-        
+                
         $keys = array_keys( $this->raw['planets'] );
-        $this->raw['planets'] = array_values( $this->raw['planets'] );
+        $this->raw['planets'] = array_values( $this->raw['planets'] );     
         
         if ( isset( $planets[$active_key + 1] ) )
+        {
             $new_active_planet = array_search( $planets[$active_key + 1], $keys );
+        }
         else 
+        { 
             if ( isset( $planets[$active_key - 1] ) )
+            {
                 $new_active_planet = array_search( $planets[$active_key - 1], $keys );
+            }
             else
+            {
                 $new_active_planet = false;
+            }
+        }
         
         $new_planets = $this->getPlanetsList();
         
@@ -341,21 +390,29 @@ class User extends Dataset
             $active_forschung = $this->checkBuildingThing( 'forschung' );
             
             if ( ! $active_forschung )
+            {
                 continue;
+            }
             
             if ( $active_forschung[2] )
+            {
                 $this->planet_info['building']['forschung'][4] = array_search( $active_forschung[4], $keys );
+            }
         }
         
         if ( $new_active_planet !== false )
+        {
             $this->setActivePlanet( $new_active_planet );
+        }
             
         # Highscores neu berechnen
         $this->recalcHighscores( true, true, true, true, true );
         
         if ( isset( $this->cache['getPlanetsList'] ) )
+        {
             unset( $this->cache['getPlanetsList'] );
-        
+        }
+                        
         return true;
     }
 

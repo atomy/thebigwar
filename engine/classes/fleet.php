@@ -56,7 +56,7 @@
             else return false;
         }
 
-        function fleetExists($fleet)
+        public static function fleetExists($fleet)
         {
             $filename = global_setting("DB_FLEETS").'/'.urlencode($fleet);
             return (is_file($filename) && is_readable($filename));
@@ -444,47 +444,58 @@
 
             $trans = array(0, 0);
             $user_object = Classes::User($user);
+
             foreach($this->raw[1][$user][0] as $id=>$count)
             {
                 $item_info = $user_object->getItemInfo($id, 'schiffe');
                 $trans[0] += $item_info['trans'][0]*$count;
                 $trans[1] += $item_info['trans'][1]*$count;
             }
+            
             return $trans;
         }
 
-        function addTransport($user, $ress=false, $robs=false)
-        {
-            if(!$this->status || !isset($this->raw[1][$user])) return false;
-
-            list($max_ress, $max_robs) = $this->getTransportCapacity($user);
-            $max_ress -= array_sum($this->raw[1][$user][3][0]);
-            $max_robs -= array_sum($this->raw[1][$user][3][1]);
-            if($ress)
-            {
-                $ress = fit_to_max($ress, $max_ress);
-                $this->raw[1][$user][3][0][0] += $ress[0];
-                $this->raw[1][$user][3][0][1] += $ress[1];
-                $this->raw[1][$user][3][0][2] += $ress[2];
-                $this->raw[1][$user][3][0][3] += $ress[3];
-                $this->raw[1][$user][3][0][4] += $ress[4];
-            }
-
-            if($robs)
-            {
-                $robs = fit_to_max($robs, $max_robs);
-                foreach($robs as $i=>$rob)
-                {
-                    if(!isset($this->raw[1][$user][3][1][$i]))
-                        $this->raw[1][$user][3][1][$i] = $rob;
-                    else
-                        $this->raw[1][$user][3][1][$i] += $rob;
-                }
-            }
-
-            $this->changed = true;
-            return true;
+        /**
+         * Adds a given ressource or robot amount to the fleets transport
+         * @param $user - username to add fleet to
+         * @param $ress - ressource array holds the ressources to add
+         * @param $robs - robot array holds the robots to add
+         * @return bool - true on success
+         */
+    function addTransport( $user, $ress = false, $robs = false )
+    {
+        if ( ! $this->status || ! isset( $this->raw[1][$user] ) ) {
+            return false;
         }
+        
+        list( $max_ress, $max_robs ) = $this->getTransportCapacity( $user );
+        $max_ress -= array_sum( $this->raw[1][$user][3][0] );
+        $max_robs -= array_sum( $this->raw[1][$user][3][1] );
+        
+        if ( $ress ) {
+            $ress = fit_to_max( $ress, $max_ress );
+
+            $this->raw[1][$user][3][0][0] += $ress[0];
+            $this->raw[1][$user][3][0][1] += $ress[1];
+            $this->raw[1][$user][3][0][2] += $ress[2];
+            $this->raw[1][$user][3][0][3] += $ress[3];
+            $this->raw[1][$user][3][0][4] += $ress[4];
+        }
+        
+        if ( $robs ) {
+            $robs = fit_to_max( $robs, $max_robs );
+            foreach ( $robs as $i => $rob ) {
+                if ( ! isset( $this->raw[1][$user][3][1][$i] ) )
+                    $this->raw[1][$user][3][1][$i] = $rob;
+                else
+                    $this->raw[1][$user][3][1][$i] += $rob;
+            }
+        }
+        
+        $this->changed = true;
+        
+        return true;
+    }
 
         function addHandel($user, $ress=false, $robs=false)
         {
@@ -604,8 +615,7 @@
 
             $mass = 0;
             $user_obj = Classes::User($user);
-if( !$user_obj->getStatus() )
-    echo "BLERK\n";
+
             foreach($this->raw[1][$user][0] as $id=>$count)
             {
                 $item_info = $user_obj->getItemInfo($id, 'schiffe');
@@ -821,10 +831,17 @@ if( !$user_obj->getStatus() )
             $new = Classes::Fleet();
             $new->create();
             $new->setRaw($new_raw);
+            
             #Ankunftszeit regulaere Einzelflotten
-            if(($holdtime !== -1) && ($timeex < $time3)) $new->raw[7][0] = (time()+$timeex);
+            if(($holdtime !== -1) && ($timeex < $time3)) 
+            {
+                $new->raw[7][0] = (time()+$timeex);
+            }
             #Ankunftszeit Halteflotten und schnellere Sub-Verbandsflotten
-            else $new->raw[7][0] = (time()+$time3);
+            else 
+            {
+                $new->raw[7][0] = (time()+$time3);
+            }
             
             $new->createNextEvent();
 
@@ -851,7 +868,7 @@ if( !$user_obj->getStatus() )
             if(count($this->raw[1]) <= 0)
                 return true;
             $this->changed = true;
-            return true;
+                return true;
         }
 
         function setRaw($raw)

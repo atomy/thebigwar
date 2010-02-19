@@ -112,42 +112,75 @@ class userTest extends PHPUnit_Framework_TestCase
         $this->greaterThan( 0, $i );
     }
 
-    /*
+    /**    
 	 * send a fleet and test if it were created
 	 * the actual testing it derivated into a sub method
 	 */
-    public function _testSendFleetTo( $uname, $pos )
+    public function _testSendFleetTo( $uname, $pos, $res = 0 )
     {
         $fleet = Classes::Fleet();
         $user = Classes::User( $uname );
         $mypos = $user->getPosString();
-        unset( $user );
-        
-        //		echo "\nflying from: ".$mypos. " to: ".$pos."\n";
-        
+        unset( $user );       
 
         /*
 		 * flotte als transport mit 10 kleinen transportern zum ziel $pos versenden
 		 */
         $type = 6; // stationieren
+        $fleetContent = array( "S1" => 100 ); // 100 große? transporter
         $fleet->create(); // no return 
         $this->test_Fleets[$uname][] = $fleet->getName();
         $this->assertTrue( $fleet->addTarget( $pos, $type, false ) );
         $this->assertEquals( $uname, $fleet->addUser( $uname, $mypos, 1 /* default */ ) );
-        $this->assertTrue( $fleet->addTransport( $uname, array( 0, 0, 0, 0, 0 ), array() ) );
-        $this->assertTrue( $fleet->addFleet( "S1", 100, $uname ) );
+        
+        $doTransportWithRes = false;
+        
+        if ( $res != 0 ) 
+        {
+            for( $i = 0; $i <= 4; $i++ )
+            {
+                if ( isset( $res[$i] ) )
+                {
+                    $doTransportWithRes = true;
+                }
+                
+            }            
+        }      
+        
+        $this->assertTrue( $fleet->addFleet( key( $fleetContent ), current( $fleetContent ), $uname ) );
+
+        // Fleet::addTransport() has do be done after calling Fleet::addFleet()
+        if ( $doTransportWithRes )
+        {
+            for( $i = 0; $i <= 4; $i++ )
+            {
+                if ( !isset( $res[$i] ) )
+                {
+                    $res[$i] = 0;
+                }                
+            }
+  
+            $this->assertTrue( $fleet->addTransport( $uname, $res ) );                        
+        }
+        else
+        {
+            $this->assertTrue( $fleet->addTransport( $uname, array( 0, 0, 0, 0, 0 ) ) );
+        }
+                
         $this->assertTrue( $fleet->addHoldTime( 0 ) );
         $this->assertGreaterThan( 0, $fleet->calcNeededTritium( $uname ) );
         $fleet->start(); // no return
         $this->assertEquals( $pos, $fleet->getCurrentTarget() );
         
         $user = Classes::User( $uname );
-        $this->assertTrue( $user->addFleet( $fleet->getName() ) );
+        $fleetid = $fleet->getName();
+        $this->assertTrue( $user->addFleet( $fleetid ) );
         unset( $user );
         unset( $fleet );
         
-        $this->_testIsFleetExistingSpecific( $uname, $pos, $mypos, array( "S1", 10 ), $type, false );
+        $this->_testIsFleetExistingSpecific( $uname, $fleetid, $pos, $mypos, $fleetContent, $type, false );
     }
+    
 
     /**
      * returns the MAX_PLANETS global setting and tests it for plausibility
@@ -380,22 +413,31 @@ class userTest extends PHPUnit_Framework_TestCase
     /*
 	 * test if a given fleet is existant, it is expected to do, otherwise this test will fail
 	 */
-    public function _testIsFleetExistingSpecific( $from_user, $to_pos, $from_pos, $ships, $type, $flyingback )
+    public function _testIsFleetExistingSpecific( $from_user, $fleetid, $to_pos, $from_pos, $ships, $type, $flyingback )
     {
         $user = Classes::User( $from_user );
         $fleets = $user->getFleetsList();
         
         $this->assertGreaterThan( 0, count( $fleets ), "no fleets found" );
-        
+
+        // search our fleet by $fleetid
         $fleet = false;
-        
+
         foreach ( $fleets as $ffleet )
         {
-            $fleet = $ffleet;
+            // found!, save.
+            // if fleetid is 0 take the very first fleet
+            if ( $ffleet == $fleetid || $fleetid == 0 )
+            {
+                $fleet = $ffleet;
+            }
         }
         
+        // not found
         if ( $fleet == false )
+        {
             throw new Exception( "_testIsFleetExistingSpecific() failed, no fleet found" );
+        }
         
         $fleet_obj = Classes::Fleet( $fleet );
         $that = Classes::Fleet( $fleet );
@@ -406,7 +448,7 @@ class userTest extends PHPUnit_Framework_TestCase
         $targets = $that->getTargetsList();
         
         $this->assertEquals( array( $to_pos ), $targets );
-        $this->assertEquals( array( "S1" => 100 ), $fleet_obj->getFleetList( $from_user ) );
+        $this->assertEquals( $ships, $fleet_obj->getFleetList( $from_user ) );
         
         if ( ! $flyingback )
         {
@@ -494,7 +536,7 @@ class userTest extends PHPUnit_Framework_TestCase
         }        
         
         $testHighScore->buildRankList();
-    }       
+    }      
     
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -561,7 +603,6 @@ class userTest extends PHPUnit_Framework_TestCase
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////// TESTS START HERE //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
 
     /**
      * test our test setup
@@ -571,7 +612,7 @@ class userTest extends PHPUnit_Framework_TestCase
         foreach ( $this->testData->getTestUsers() as $userData )
         {
             $this->_testSetup( $userData );
-        }
+        }               
     }
 
     /**
@@ -758,95 +799,6 @@ class userTest extends PHPUnit_Framework_TestCase
             $this->assertTrue( isset( $planets[$i] ) );
             $this->assertTrue( $testusr->hasCreatedPlanetAtIndex( $i ) );
         }
-    }
-
-    /*
-     * checking if the returned planetlist is the same as our one of the created planets
-     */
-    public function testRemovePlanet( )
-    {
-        global $types_message_types;
-        
-        // get our very fist user for the fleet start pos, using active planet
-        $testusers = $this->testData->getTestUsers();
-        $testUser = $testusers[0];
-        $uname = $testUser->getName();
-        $user = Classes::User( $uname );
-        
-        $fuser = Classes::User( "fakeuser1341" );
-        
-        $this->assertFalse( $fuser->removePlanet() );
-        
-        /*
-		 * fleet zurueckrufen welche zu plani unterwegs ist - testen
-		 */
-        /*
-		$koords = $user->getPosString();
-		$i = 0;
-
-		while( $koords == $user->getPosString() && $i < 100 )
-		{
-			$i++;
-			$usr = array_rand( $this->test_PlanetCoordinates );
-			$planet = array_rand( $this->test_PlanetCoordinates[$usr] );
-			$koords = $this->test_PlanetCoordinates[$usr][$planet];
-
-			$this->assertLessThan( 100, $i );
-		}
-		*/
-        
-        // set active planet to 0 and send fleet to planet 1
-        $user->setActivePlanet( 0 );
-        $planets = $testUser->getPlanets();
-        $mypos = $user->getPosString();
-        $pos = $planets[1]->getPosString();
-        $toName = $planets[1]->getName();
-        $fromName = $planets[0]->getName();
-        $type = 6; // stationieren
-        $delPlanetIndex = 1;
-        $delPlanetPos = $mypos;
-        
-        $this->_testSendFleetTo( $uname, $pos );
-        
-        // core func, remove the planet
-        $user = Classes::User( $uname );
-        $this->assertTrue( $user->setActivePlanet( $delPlanetIndex ) );
-        $this->assertTrue( $user->removePlanet() );
-        unset( $user );
-        
-        $fleet_obj = Classes::Fleet( $this->test_Fleets[$uname][0] );
-        // check if the fleet was sent back
-        $this->_testIsFleetExistingSpecific( $uname, $mypos, $pos, array( "S1", 10 ), $type, true );
-        
-        // check if planet still exists
-        $galaxy = Classes::Galaxy( 1 );
-        $koords = explode( ":", $pos );
-        $this->assertEquals( "", $galaxy->getPlanetOwner( $koords[1], $koords[2] ) );
-        
-        $user = Classes::User( $uname );
-        $msgs = $user->getMessagesList( 3 );
-        $msg = Classes::Message( $msgs[0] );
-        
-        //echo $msg->rawText()."\n";
-        
-
-        $testMsg = new TestMessage( );
-        $testMsg->setSubject( 'Flotte zur&uuml;ckgerufen' );
-        $testMsg->setText( 'Ihre Flotte befand sich auf dem Weg zum Planeten &bdquo;' . $toName . '&ldquo; (' . $pos . ', Eigent&uuml;mer: ' . $user->getName() . '). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den R&uuml;ckweg zu Ihrem Planeten &bdquo;' . $fromName . '&ldquo; (' . $mypos . ') macht.' );
-        $testMsg->setFrom( $uname );
-        $testMsg->setType( $types_message_types[$type] );
-        $testUser->addMessage( $testMsg );
-        
-        $this->_testMessages( $uname );
-        
-        // check if we still have a link to the old planet
-        foreach ( $user->getPlanetsList() as $planet )
-        {
-            $this->assertTrue( $user->setActivePlanet( $planet ) );
-            $this->assertNotSame( $delPlanetPos, $user->getPos() );
-        }
-        
-    //maybe TODO, highscores test, something happens with research
     }
 
     public function testRegisterPlanet( )
@@ -1285,6 +1237,122 @@ class userTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan( 0, $tested );
     }    
+ 
+    /**
+     * subtests:
+     * - setting illegal planet names \o/
+     * - setting legal planet name \o/
+     * - getting planet names and compare them to testdata \o/
+     * - getting planet names and compare them to previous set \o/ 
+     * - test galaxy kram \o/
+     * - test getRessOnAllFleets return value by sending 2 fleets transporting ressources \o/
+     */
+    public function testGetRessOnAllFleets( )
+    {   
+        $tested = 0;
+            
+        foreach ( $this->testData->getTestUsers() as $testUser )
+        {
+            if ( ! $testUser->isCreated() )
+            {
+                $userObj = Classes::User( $testUser->getName() );
+                $this->assertFalse( $userObj->planetName() );
+                
+                continue;
+            } 
+            else
+            {
+                $userObj = Classes::User( $testUser->getName() );
+                $this->assertGreaterThan( 0, $userObj->getStatus() );
+                
+                if ( $testUser->getPlanetCount() <= 0 )
+                {
+                    return;
+                }
+            }
+            
+            $testRes1 = array( 1337, 4554, 3332, 5432, 1111 );       
+            $testRes2 = array( 4554, 1337, 1111, 3332, 1337 );       
+            
+            $this->_testSendFleetTo( $testUser->getName(), "1:33:7", $testRes1 );   
+            $this->_testSendFleetTo( $testUser->getName(), "1:100:2", $testRes2 );   
+                  
+            $this->assertEquals( array_sum( $testRes1 ) + array_sum( $testRes2 ), array_sum( $userObj->getRessOnAllFleets() ), "failed for user ".$testUser->getName() );
+
+            $tested++;          
+        }
+        
+        $this->assertGreaterThan( 0, $tested );
+    } 
+     
+    /*
+     * checking if the returned planetlist is the same as our one of the created planets
+     */
+    public function testRemovePlanet( )
+    {
+        global $types_message_types;
+                       
+        // get our very fist user for the fleet start pos, using active planet
+        $testusers = $this->testData->getTestUsers();
+        $testUser = $testusers[0];
+        $uname = $testUser->getName();
+        $user = Classes::User( $uname );            
+        
+        $fuser = Classes::User( "fakeuser1341" );        
+        $this->assertFalse( $fuser->removePlanet() );               
+        
+        // set active planet to 0 and send fleet to planet 1                
+        $user->setActivePlanet( 0 );
+        $planets = $testUser->getPlanets();
+        $mypos = $user->getPosString();
+        $pos = $planets[1]->getPosString();
+        $toName = $planets[1]->getName();
+        $fromName = $planets[0]->getName();
+        $type = 6; // stationieren
+        $delPlanetIndex = 1;
+        $delPlanetPos = $mypos;
+        
+        $this->_testSendFleetTo( $uname, $pos );
+        $this->assertTrue( $user->setActivePlanet( $delPlanetIndex ), "failed to set active planet to ".$delPlanetIndex." on user: ".$user->getName() );   
+        $this->assertTrue( $user->removePlanet() ); // this FUCKS stuff up
+                
+        $testUser->destroyPlanet( $delPlanetIndex );
+        unset( $user );
+ 
+        // this fleet doesnt exists anymore cause it was callback'ed
+        $fleetid = &$this->test_Fleets[$uname][0];
+        $this->assertFalse( Fleet::fleetExists( $fleetid ) );
+        
+        // check if the fleet was sent back
+        $this->_testIsFleetExistingSpecific( $uname, 0, $mypos, $pos, array( "S1" => 100 ), $type, true );
+  
+        // check if planet still exists
+        $galaxy = Classes::Galaxy( 1 );
+        $koords = explode( ":", $pos );
+        $this->assertEquals( "", $galaxy->getPlanetOwner( $koords[1], $koords[2] ) );
+        
+        $user = Classes::User( $uname );
+        $msgs = $user->getMessagesList( 3 );
+        $msg = Classes::Message( $msgs[0] ); 
+
+        $testMsg = new TestMessage( );
+        $testMsg->setSubject( 'Flotte zur&uuml;ckgerufen' );
+        $testMsg->setText( 'Ihre Flotte befand sich auf dem Weg zum Planeten &bdquo;' . $toName . '&ldquo; (' . $pos . ', Eigent&uuml;mer: ' . $user->getName() . '). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den R&uuml;ckweg zu Ihrem Planeten &bdquo;' . $fromName . '&ldquo; (' . $mypos . ') macht.' );
+        $testMsg->setFrom( $uname );
+        $testMsg->setType( $types_message_types[$type] );
+        $testUser->addMessage( $testMsg );
+        
+        $this->_testMessages( $uname );
+        
+        // check if we still have a link to the old planet
+        foreach ( $user->getPlanetsList() as $planet )
+        {
+            $this->assertTrue( $user->setActivePlanet( $planet ) );
+            $this->assertNotSame( $delPlanetPos, $user->getPos() );
+        }        
+    //maybe TODO, highscores test, something happens with research
+    } 
+      
     
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////

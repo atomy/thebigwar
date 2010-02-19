@@ -243,6 +243,42 @@ class TestUser
         
         return $sum;
     }
+    
+    public function destroyPlanet( $planetIndex = -1 )
+    {
+        return;
+        if ( $planetIndex < 0 )
+        {
+            throw new Exception( "given planetIndex is invalid" );
+        }   
+
+        $remIndex = -1;
+        // search for a testplanetobject with the given planetindex, save its index      
+        foreach ( $this->planets as $i => &$planetObj )    
+        {            
+            if ( $planetObj->getIndex() == $planetIndex )
+            {
+                $planetObj->setIsCreated( false );
+                $planetObj->setIndex( 0 );
+                $remIndex = $planetIndex;  
+                break;
+            }
+        }   
+
+        // reorder all planets, those whos index is over the removed one
+        foreach ( $this->planets as &$planetObj )    
+        {            
+            if ( $remIndex != -1 )
+            {
+                $oldIndex = $planetObj->getIndex();
+                
+                if ( $oldIndex > $remIndex )
+                {
+                    $planetObj->setIndex( $oldIndex - 1 );
+                }                
+            }     
+        }   
+    }
 }
 
 ?>

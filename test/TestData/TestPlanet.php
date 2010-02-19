@@ -207,6 +207,8 @@ class TestPlanet
      */
     public function setIndex( $index )
     {
+        //echo "setting index of planet: ".$this->getName()." index: ".$index."\n";
+
         $this->index = $index;
     }
 
