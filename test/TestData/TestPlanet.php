@@ -69,15 +69,29 @@ class TestPlanet
     {
         for ( $i = 0; $i < 5; $i ++ )
         {
-            $this->res[] = 100000000000; // 100 mrd
-        }
+            $this->res[$i] = 100000000000; // 100 mrd
+        }      
     }
 
-    public function getRes( )
-    {
+    public function getRes( $refreshRes = false )
+    {   
         return $this->res;
     }
 
+    /**
+     * sets interal ressources
+     * @param $res array
+     */
+    public function setRes( $res )
+    {
+        $this->res = $res;
+    }
+    
+    public function setEnergy( $energy )
+    {
+        $this->res[5] = $energy;
+    }    
+    
     public function subRes( $res )
     {
         foreach ( $res as $key => $value )
@@ -91,7 +105,7 @@ class TestPlanet
             
             if ( $this->res[$key] <= 0 )
             {
-                throw new Exceptioin( "subRes() failed, res with key " . $key . " became negative" );
+                throw new Exception( "subRes() failed, res with key " . $key . " became negative" );
             }
         }
     }
@@ -185,7 +199,7 @@ class TestPlanet
         }
         else
         {
-            throw new Exception( "setSystem() failed, impossible $sysindex submitted" );
+            throw new Exception( "setSystem() failed, impossible ".$sysindex." submitted" );
         }
     }
 
@@ -236,7 +250,7 @@ class TestPlanet
         }
         else
         {
-            throw new Exception( "setSystem() failed, impossible $system submitted" );
+            throw new Exception( "setSystem() failed, impossible ".$system." submitted" );
         }
     }
 

@@ -757,7 +757,7 @@ class User extends Dataset
 
     /**
      * summarize all res that are on flying ships
-     * @test on it
+     * @test implemented
      * @return 
      */
     function getRessOnAllFleets( )
@@ -788,13 +788,24 @@ class User extends Dataset
         return $fleetres;
     }
 
+    /**
+     * get ressource on active planet
+     * @test implemented
+     * @param bool $refresh - true if res should be recalculated
+     * @return array() ressources on the actual planet, 
+     *   NOTE: returns energy when $refresh was true! otherwise just the common res
+     */
     function getRess( $refresh = true )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
+        {
             return false;
+        }
         
         if ( $refresh )
+        {
             $this->refreshRess();
+        }
         
         $ress = $this->ress;
         
@@ -1857,18 +1868,20 @@ class User extends Dataset
         return true;
     }
 
-    protected function refreshRess( $time = false )
+    public function refreshRess( $time = false )
     {
-        if ( ! $this->status || ! isset( $this->planet_info ) )
+        if ( ! $this->status || ! isset( $this->planet_info ) ) {
             return false;
+        }
         
         if ( $time === false ) {
             $this->eventhandler( 0, 1, 1, 1, 0, 0 );
             $time = time();
         }
         
-        if ( $this->planet_info['last_refresh'] >= $time )
+        if ( $this->planet_info['last_refresh'] >= $time ) {
             return false;
+        }
         
         $prod = $this->getProduction( $time !== false );
         
@@ -1883,6 +1896,7 @@ class User extends Dataset
         $this->planet_info['last_refresh'] = $time;
         
         $this->changed = true;
+        
         return true;
     }
 

@@ -1353,6 +1353,78 @@ class userTest extends PHPUnit_Framework_TestCase
     //maybe TODO, highscores test, something happens with research
     } 
       
+    /**
+     * test User::getRess()
+     * - test res equal to start res w/o refresh \o/
+     * - test res equal to calculated res w/ refresh \o/
+     */
+    public function testGetRess( )
+    {                           
+        // fake, non-existing user
+        $fuser = Classes::User( "fakeuser1341" );
+        $this->assertFalse( $fuser->getRess() );
+        $checked = 0;
+        
+        foreach ( $this->testData->getTestUsers() as $testUser )
+        {
+            if ( !$testUser->isCreated() )
+            {
+                continue;
+            }
+            
+            $uname = $testUser->getName();
+            $userObj = Classes::User( $uname );
+            $planets = $userObj->getPlanetsList();
+            
+            $this->assertType( 'array', $planets, "failed getting planetList of user: ".$userObj->getName() );
+            
+            foreach ( $planets as $planet )
+            {
+                $userObj->setActivePlanet( $planet );
+            
+                // comparing planet names with our internal saved ones
+                $testPlanets = $testUser->getPlanets();
+                $curTestPlanet = false;
+                                
+                $this->assertType( 'array', $testPlanets );
+                
+                foreach ( $testPlanets as &$testPlanet )
+                {
+                    if ( $testPlanet->getIndex() == $planet )
+                    {
+                        $curTestPlanet = &$testPlanet;
+                    }
+                }
+                
+                // w/o refresh
+                $oldRes = $userObj->getRess( false );
+                $this->assertEquals( $curTestPlanet->getRes(), $oldRes );                
+
+                // sleep a bit to get some new res in
+                sleep(1);
+                
+                // w/ refresh
+                $userObj->refreshRess();
+                $prod = $userObj->getProduction();
+                $curTestPlanet->setRes( $userObj->ress );
+                $curTestPlanet->setEnergy( $prod[5] );
+                
+                $newRes = $userObj->getRess( true );
+                $this->assertEquals( $curTestPlanet->getRes(), $newRes );                
+                
+                // make sure we proceed in time and got some new res in by refreshing
+                // for everything but energy, cause we dont get it via User::getRess( false )
+                for( $i = 0; $i < 5; $i++)
+                {
+                    $this->assertNotEquals( $oldRes[$i], $newRes[$i] );
+                }
+                
+                $checked++;
+            }                
+        }   
+
+        $this->assertGreaterThan( 0, $checked );
+    }    
     
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////
