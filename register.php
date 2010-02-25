@@ -2,21 +2,16 @@
 	require_once( 'include/config_inc.php' );
 	require( TBW_ROOT.'include.php' );
 	include_once( TBW_ROOT.'include/php2egg.php' );
-
-	$databases = get_databases();
-
-	gui::html_head();
-
+	
+    startseite_html_head();
 ?>
 
-<style type="text/css">
-        dd {
-          width: 50%;
-        }
-</style>
-
-<h2><abbr title="The Big War" xml:lang="en">T-B-W</abbr> &ndash; Registrieren</h2>
+<h1 id="register">Registrierung</h1>
 <?php
+	$databases = get_databases();
+
+	$_POST['database'] = key($databases);
+
 	if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password2']) &&	isset($_POST['email']) && isset($_POST['database']) && isset($databases[$_POST['database']]))
 	{
 		define_globals($_POST['database']);
@@ -124,7 +119,7 @@
 	Die Registrierung war erfolgreich. Sie können sich nun anmelden. Die Koordinaten Ihres Hauptplaneten lauten <?=htmlentities($koords)?>.
 </p>
 <ul>
-	<li><a href="./">Zurück zur Startseite</a></li>
+	<li><a href="./">Zur&uuml;ck zur Startseite</a></li>
 </ul>
 <?php
 					gui::html_foot();
@@ -144,45 +139,40 @@
 
 ?>
 <form action="<?=htmlentities(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/register.php')?>" method="post" id="register-form">
-	<fieldset>
-		<legend>Registrieren</legend>
-		<dl>
-			<dt><label for="runde">Runde</label></dt>
-			<dd><select name="database" id="runde">
-<?php
-	foreach($databases as $id=>$info)
-	{
-?>
-				<option value="<?=utf8_htmlentities($id)?>"<?=(isset($_POST['database']) && $_POST['database'] == $id) ? ' selected="selected"' : ''?>><?=utf8_htmlentities($info[1])?></option>
-<?php
-	}
-?>
-			</select></dd>
+	<div id="registerinput">
+		<div>
+			<label for="username">Benutzername*</label>
+			<input type="text" id="username" name="username"<?=isset($_POST['username']) ? ' value="'.utf8_htmlentities($_POST['username']).'"' : ''?> maxlength="24" />
+		</div>	
 
-			<dt><label for="username">Benutzername*</label></dt>
-			<dd><input type="text" id="username" name="username"<?=isset($_POST['username']) ? ' value="'.utf8_htmlentities($_POST['username']).'"' : ''?> maxlength="24" /></dd>
+		<div>
+			<label for="password">Passwort*</label>			
+			<input type="password" id="password" name="password" />
+		</div>
 
-			<dt><label for="password">Passwort*</label></dt>
-			<dd><input type="password" id="password" name="password" /></dd>
+		<div>
+			<label for="password2">Passwort wiederholen</label>
+			<input type="password" id="password2" name="password2" />
+		</div>
 
-			<dt><label for="password2">Passwort wiederholen</label></dt>
-			<dd><input type="password" id="password2" name="password2" /></dd>
+		<div>
+			<label for="email"><span xml:lang="en">E-Mail</span>-Adresse</label>
+			<input type="text" name="email" id="email"<?=isset($_POST['email']) ? ' value="'.utf8_htmlentities($_POST['email']).'"' : ''?> />
+		</div>
 
-			<dt><label for="email"><span xml:lang="en">E-Mail</span>-Adresse</label></dt>
-			<dd><input type="text" name="email" id="email"<?=isset($_POST['email']) ? ' value="'.utf8_htmlentities($_POST['email']).'"' : ''?> /></dd>
-
-			<dt><label for="hauptplanet">Gewünschter Name des Hauptplaneten*</label></dt>
-			<dd><input type="text" id="hauptplanet" name="hauptplanet"<?=isset($_POST['hauptplanet']) ? ' value="'.utf8_htmlentities($_POST['hauptplanet']).'"' : ''?> maxlength="24" /></dd>
-		</dl>
-		<div><input type="checkbox" class="checkbox" name="nutzungsbedingungen" id="nutzungsbedingungen" /> <label for="nutzungsbedingungen">Ich habe die <a href="http://wiki.thebigwar.org/index.php/Regelwerk" target="_blank">Nutzungsbedingungen / Regeln</a> gelesen und akzeptiere sie.</label></div>
-		<ul>
-			<li><button type="submit">Registrieren</button></li>
-		</ul>
-		<i>* Erlaubte Zeichen: A-Z, a-z, 0-9 und Leerzeichen.</i></br></br>
+		<div>
+			<label for="hauptplanet">Gew&uuml;nschter Name des Hauptplaneten*</label>
+			<input type="text" id="hauptplanet" name="hauptplanet"<?=isset($_POST['hauptplanet']) ? ' value="'.utf8_htmlentities($_POST['hauptplanet']).'"' : ''?> maxlength="24" />
+		</div>
 		
-		</fieldset>
+		<div id="agb_ack">
+			<input type="checkbox" class="checkbox" name="nutzungsbedingungen" id="nutzungsbedingungen" /> <label for="nutzungsbedingungen">Ich habe die <a href="http://wiki.thebigwar.org/index.php/Regelwerk" target="_blank">Nutzungsbedingungen / Regeln</a> gelesen und akzeptiere sie.</label>
+		</div>					
+		<i>* Erlaubte Zeichen: A-Z, a-z, 0-9 und Leerzeichen.</i>	
+		<div id="reg_buttonbox"><button id="reg_button" type="submit">Registrieren</button></div>			
+	</div>
 		
 </form>
-<?php
-	gui::html_foot();
+<?php 
+    startseite_html_foot();
 ?>
