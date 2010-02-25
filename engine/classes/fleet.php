@@ -500,40 +500,6 @@
         function addHandel($user, $ress=false, $robs=false)
         {
             if(!$this->status || !isset($this->raw[1][$user])) return false;
-        /**
-         * Adds a given ressource or robot amount to the fleets transport
-         * @param $user - username to add fleet to
-         * @param $ress - ressource array holds the ressources to add
-         * @param $robs - robot array holds the robots to add
-         * @return bool - true on success
-         */
-    function addTransport( $user, $ress = false, $robs = false )
-    {
-        if ( ! $this->status || ! isset( $this->raw[1][$user] ) ) {
-            return false;
-            $this->raw[1][$user][3][0][0] += $ress[0];
-            $this->raw[1][$user][3][0][1] += $ress[1];
-            $this->raw[1][$user][3][0][2] += $ress[2];
-            $this->raw[1][$user][3][0][3] += $ress[3];
-            $this->raw[1][$user][3][0][4] += $ress[4];
-        }
-        
-        if ( $robs ) {
-            $robs = fit_to_max( $robs, $max_robs );
-            foreach ( $robs as $i => $rob ) {
-                if ( ! isset( $this->raw[1][$user][3][1][$i] ) )
-                    $this->raw[1][$user][3][1][$i] = $rob;
-                else
-                    $this->raw[1][$user][3][1][$i] += $rob;
-            }
-        }
-        
-        list( $max_ress, $max_robs ) = $this->getTransportCapacity( $user );
-        $max_ress -= array_sum( $this->raw[1][$user][3][0] );
-        $max_robs -= array_sum( $this->raw[1][$user][3][1] );
-        
-        if ( $ress ) {
-            $ress = fit_to_max( $ress, $max_ress );
 
             list($max_ress, $max_robs) = $this->getTransportCapacity($user);
             $max_ress -= array_sum($this->raw[1][$user][4][0]);
@@ -1511,7 +1477,7 @@ EOF
                             fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Planetenbesitzer Verteidigung ermitteln-Ende. Flotten-ID:  ".$this->getName()."\n");
                             fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Funktion Battle �bergabe. Flotten-ID:  ".$this->getName()."\n");
 
-                            list($winner, $angreifer2, $verteidiger2, $nachrichten_text, $verteidiger_ress, $truemmerfeld) = $this->battle($angreifer, $verteidiger);
+                            list($winner, $angreifer2, $verteidiger2, $nachrichten_text, $verteidiger_ress, $truemmerfeld) = battle($angreifer, $verteidiger);
 
                             fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Funktion Battle R�ckgabe. Flotten-ID:  ".$this->getName()."\n");
                             if(array_sum($truemmerfeld) > 0)
@@ -2897,21 +2863,11 @@ EOF
             return $event_obj->addNewFleet($this->getArrivalTime(), $this->getName());
         }
         
-        function getRandomShipID($ShipArray) {
-        	$ShipArray = array_split(array_flip($ShipArray),'isMilitaryShip');
-        	$MilitaryShips = array_flip($ShipArray[0]);
-        	$CivilShips = array_flip($ShipArray[1]);
-        	if(count($MilitaryShips)>0) {
-        		return array_rand($MilitaryShips);
-        	}
-        	return array_rand($CivilShips);
-        }
-        
         
         protected function getDataFromRaw(){}
         protected function getRawFromData(){}
-    
-	    function battle($angreifer, $verteidiger)
+    	
+        function battle($angreifer, $verteidiger)
 	    {
 	        
 	        if(count($angreifer) < 0 || count($verteidiger) < 0) return false;
