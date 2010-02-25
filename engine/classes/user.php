@@ -855,6 +855,11 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * subtracts res
+     * @param $ress array() to subtrace
+     * @param $make_scores unset spent res cache
+     */
     function subtractRess( $ress, $make_scores = true )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) ) {
