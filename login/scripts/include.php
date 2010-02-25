@@ -12,6 +12,10 @@
 	header('Cache-Control: no-cache', true);
 
 	$databases = get_databases();
+	
+	// overwrite the database to our only one
+	$_SESSION['database'] = key($databases);
+	
 	if(isset($_SESSION['database']) && isset($databases[$_SESSION['database']]))
 		define_globals($_SESSION['database']);
 

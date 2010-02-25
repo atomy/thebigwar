@@ -24,7 +24,7 @@ Neuigkeiten:
 
 <div id="loginbox">
 
-<form method="post" action="http://tbwalpha.jackinpoint.net/login/index.php" id="login-form">
+<form method="post" action="<?php echo GLOBAL_GAMEURL; ?>login/index.php" id="login-form">
 
 <div id="inputbox">
 
