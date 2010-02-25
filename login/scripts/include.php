@@ -15,6 +15,7 @@
 	
 	// overwrite the database to our only one
 	$_SESSION['database'] = key($databases);
+	$_REQUEST['database'] = key($databases);
 	
 	if(isset($_SESSION['database']) && isset($databases[$_SESSION['database']]))
 		define_globals($_SESSION['database']);

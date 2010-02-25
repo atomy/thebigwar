@@ -2,7 +2,9 @@
     require_once( '../include/config_inc.php' );
     require_once( TBW_ROOT.'engine/include.php' );
 
-    define_globals( $_REQUEST['database'] );
+    $databases = get_databases();
+
+    define_globals( key($databases) );
     
     # if there's no demo account, create one
     if ( !User::userExists( GLOBAL_DEMOACCNAME ) )

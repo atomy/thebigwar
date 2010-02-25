@@ -45,12 +45,12 @@ Passwort:
 </div> <!-- login_button/ -->
 
 </form>
-
+ 
 </div> <!-- loginbox/ -->
 
 <div id="login_links">
-<a id="login_links_pass" href="http://www.thebigwar.org/passwd.php">Passwort vergessen?</a>
-<a id="login_links_guest" href="http://www.thebigwar.org/login/guest.php?database=Universum1">Probezugang</a>
+<a id="login_links_pass" href="<?php echo GLOBAL_GAMEURL; ?>passwd.php">Passwort vergessen?</a>
+<a id="login_links_guest" href="<?php echo GLOBAL_GAMEURL; ?>login/guest.php?database=Universum1">Probezugang</a>
 </div> <!-- login_links/ -->
 
 <div id="votebox">
