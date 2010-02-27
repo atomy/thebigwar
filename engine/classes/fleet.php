@@ -1,4 +1,14 @@
 <?php
+
+if ( ! defined( TBW_ROOT ) && file_exists( '../include/config_inc.php' ) )
+{
+    require_once ( '../include/config_inc.php' );
+}
+else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' ) )
+{
+    require_once ( '../../include/config_inc.php' );
+}
+
 	class Fleet extends Dataset
     {
         protected $datatype = 'fleet';
@@ -1333,24 +1343,25 @@
                                 if(!$message->create()) continue;
                                 $message->subject('Abbau auf '.$next_target_nt);
                                 $message->html(true);
-                                $message->text(sprintf(<<<EOF
-<p>Ihre Flotte erreicht das Truemmerfeld auf {$next_target_nt} und belaedt die %s Tonnen Sammlerkapazitaet mit folgenden Rohstoffen: %s Carbon, %s Aluminium, %s Wolfram und %s Radium.</p>
+                                
+                                $messageText =
+"<p>Ihre Flotte erreicht das Truemmerfeld auf {$next_target_nt} und belaedt die {$trans_total} Tonnen Sammlerkapazitaet mit folgenden Rohstoffen: $rtrans[0] Carbon, $rtrans[1] Aluminium, $rtrans[2] Wolfram und $rtrans[3] Radium.</p>
 <h3>Verbleibende Rohstoffe im Truemmerfeld</h3>
-<dl class="ress truemmerfeld-verbleibend">
-    <dt class="c-carbon">Carbon</dt>
-    <dd class="c-carbon">%s</dd>
+<dl class=\"ress truemmerfeld-verbleibend\">
+    <dt class=\"c-carbon\">Carbon</dt>
+    <dd class=\"c-carbon\">$tr_verbl[0]</dd>
 
-    <dt class="c-aluminium">Aluminium</dt>
-    <dd class="c-aluminium">%s</dd>
+    <dt class=\"c-aluminium\">Aluminium</dt>
+    <dd class=\"c-aluminium\">$tr_verbl[1]</dd>
 
-    <dt class="c-wolfram">Wolfram</dt>
-    <dd class="c-wolfram">%s</dd>
+    <dt class=\"c-wolfram\">Wolfram</dt>
+    <dd class=\"c-wolfram\">$tr_verbl[2]</dd>
 
-    <dt class="c-radium">Radium</dt>
-    <dd class="c-radium">%s</dd>
-</dl>
-EOF
-                                    , ths($trans_total), ths($rtrans[0]), ths($rtrans[1]), ths($rtrans[2]), ths($rtrans[3]), ths($tr_verbl[0]), ths($tr_verbl[1]), ths($tr_verbl[2]), ths($tr_verbl[3])));
+    <dt class=\"c-radium\">Radium</dt>
+    <dd class=\"c-radium\">$tr_verbl[3]</dd>
+</dl>";
+                                                                
+                                $message->text( $messageText );
                                 $message->addUser($username, 4);
                             }
                     fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Sammeln Ende. Flotten-ID:  ".$this->getName()."\n");
