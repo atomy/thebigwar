@@ -3787,22 +3787,5 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
     		default:
     			return false;
     	}
-    }
-
-    function array_split($input, $callback=null) {
-	    $callback = isset($callback) ? $callback : create_function('$x', 'return $x == true;');
-	   
-	    $true = array();
-	    $false = array();
-	    foreach ($input as $key => $value) {
-	        if (call_user_func($callback, $key)) {
-	            $true[$key] = $value;
-	        }
-	        else {
-	            $false[$key] = $value;
-	        }
-	    }
-	   
-	    return array($true, $false);
-	}
+    } 
 ?>
