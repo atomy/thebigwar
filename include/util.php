@@ -6,8 +6,11 @@ if ( ! defined( TBW_ROOT ) );
 }
 
 function IsGameOperator( $name )
-{
-    if ( strtolower( $name ) == "stoffel" || strtolower( $name ) == "atomy" )
+{       
+    $userObj = Classes::User($name);
+    
+    // all members of the "go"-alliance are gameoperators!
+    if ( $userObj->getStatus() && strtolower( $userObj->allianceTag() ) == "go" )
     {
         return true;
     }
