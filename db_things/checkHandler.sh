@@ -2,7 +2,7 @@
 # no restart file to prevent eventhandler starts by crontab - KEEP IN SYNC WITH tbw.svn.deploy.sh
 NORESTARTSFILE="$HOME/EVENTHANDLER.KEEPDEAD"
 
-cmdexec="./eventhandler --daemon --no-jabber"
+cmdexec="./eventhandler.php --daemon --no-jabber"
 pidfile="../database.global/eventhandler.pid"
 
 if [ -e ${NORESTARTSFILE} ] ;
