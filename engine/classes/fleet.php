@@ -2890,7 +2890,17 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
         
         protected function getDataFromRaw(){}
         protected function getRawFromData(){}
-    }    
+        
+    	function getRandomShipID($ShipArray) {
+			$ShipArray = array_split($ShipArray,'isMilitaryShip');
+			$MilitaryShips = $ShipArray[0];
+			$CivilShips = $ShipArray[1];
+			if(count($MilitaryShips)>0) {
+				return array_rand($MilitaryShips);
+			}
+			return array_rand($CivilShips);
+		}
+          
         function battle($angreifer, $verteidiger)
 	    {
 	        
@@ -3706,6 +3716,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
 	
 	        return array($winner, $angreifer, $verteidiger, $nachrichten_text, $verteidiger_ress, $truemmerfeld);
 	    }
+    }
 
     function array_sum_r($array)
     {
@@ -3731,5 +3742,22 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
     		default:
     			return false;
     	}
-    }	
+    }
+
+    function array_split($input, $callback=null) {
+	    $callback = isset($callback) ? $callback : create_function('$x', 'return $x == true;');
+	   
+	    $true = array();
+	    $false = array();
+	    foreach ($input as $key => $value) {
+	        if (call_user_func($callback, $key)) {
+	            $true[$key] = $value;
+	        }
+	        else {
+	            $false[$key] = $value;
+	        }
+	    }
+	   
+	    return array($true, $false);
+	}
 ?>
