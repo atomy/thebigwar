@@ -30,4 +30,22 @@ function getIPCKey( )
     
     return ftok( TEMPDIR . KEYFILE, IPCPROJCHAR );
 }
+
+function array_split($input, $callback=null) {
+	    $callback = isset($callback) ? $callback : create_function('$x', 'return $x == true;');
+	   
+	    $true = array();
+	    $false = array();
+	    
+	    foreach ($input as $key => $value) {
+	        if (call_user_func($callback, $value)) {
+	            $true[$key] = $value;
+	        }
+	        else {
+	            $false[$key] = $value;
+	        }
+	    }
+	   
+	    return array($true, $false);
+}
 ?>
