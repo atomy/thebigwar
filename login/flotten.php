@@ -1,7 +1,14 @@
 <?php
 if(isset($_GET['action'])) define('ignore_action', true);
 
-require_once( '../include/config_inc.php' );
+if ( !defined(TBW_ROOT) )
+{
+    if ( file_exists('../include/config_inc.php') )
+        require_once( '../include/config_inc.php' );
+    else if ( file_exists('../../include/config_inc.php') )
+        require_once( '../../include/config_inc.php' );
+}
+
 require( TBW_ROOT.'login/scripts/include.php' );
 
 if(!defined('ajax')) login_gui::html_head();
