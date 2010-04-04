@@ -3,7 +3,7 @@
 
 ini_set( 'include_path', ini_get( 'include_path' ).':../include:../engine:../engine/classes:../loghandler:' );
 
-require_once ( 'config_inc.php' );
+require_once ( '../include/config_inc.php' );
 require_once ( TBW_ROOT.'engine/classes/sendLogs.php' );
 require_once ( TBW_ROOT.'loghandler/LogHandler.php' );
 
