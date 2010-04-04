@@ -73,7 +73,7 @@
 	<phingcall target="phpdoc" />
 	<phingcall target="pdepend" />
 	<phingcall target="phpcs" />
-	<phingcall target="eventhandler" />
+<!--	<phingcall target="eventhandler" /> -->
 	<phingcall target="phpunit" />
 	<phingcall target="killeventhandler" />
   </target>
