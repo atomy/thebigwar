@@ -34,7 +34,7 @@
 
   <!-- daemonise the eventhandler  -->
   <target name="eventhandler">
-  	<exec command="./eventhandler.php --daemon" spawn="true" dir="./db_things/"/>
+  	<exec command="./eventhandler.php --daemon" checkreturn="true" logoutput="true" spawn="true" dir="./db_things/"/>
   </target>
 
   <target name="killeventhandler">
