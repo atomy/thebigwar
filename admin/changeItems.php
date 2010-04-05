@@ -10,10 +10,6 @@
 	require_once( TBW_ROOT.'admin/include.php' );
 	require_once( TBW_ROOT.'admin/javascript/javascript.php' );
 	
-	/*if(!$admin_array['permissions'][18]) {
-		die('No access.');
-	}*/
-
 	admin_gui::html_head();
 ?>
 	<fieldset><legend id="action-19">Geb&auml;ude/ Forschung ersetzten [+/-]</legend>
