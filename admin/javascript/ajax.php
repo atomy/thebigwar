@@ -9,6 +9,11 @@
 
 	__autoload('User');
 	
+	if( !isset($admin_array['permissions'][18]) || !$admin_array['permissions'][18] )
+	{
+		die("No Access");
+	}
+	
 	header('Content-type: text/xml;charset=UTF-8');
 	echo '<xmlresponse>';
 	switch($_GET['action']) {
