@@ -157,7 +157,7 @@
 
 	# Namen der Nachrichtensorten
 	$message_type_names = array (
-		1 => 'Kämpfe',
+		1 => 'KÃ¤mpfe',
 		2 => 'Spionage',
 		3 => 'Transport',
 		4 => 'Sammeln',
