@@ -291,7 +291,7 @@ class TestUser
     }
 
     /**
-     * returns testPlanet objects as long we have ones
+     * returns testPlanet objects of created test planets as long we have ones
      */
     public function getNextTestPlanet( )
     {

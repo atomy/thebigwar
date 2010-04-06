@@ -40,6 +40,25 @@ class Highscores
         return $this->status;
     }
 
+    /**
+     * checks if a user exists under the given username, returns false if not
+     *
+     */     
+    function userExists( $username ) 
+    {
+        if ( ! $this->status )
+            return false;
+                	
+        $exists_query = sqlite_query( $this->connection, "SELECT username FROM highscores_users WHERE username='" . sqlite_escape_string( $username ) . "' LIMIT 1;" );
+        
+        if( sqlite_num_rows( $exists_query ) > 0 )
+        {
+        	return true;
+        }
+        
+        return false;    
+    }
+    
     function updateUser( $username, $alliance = false, $scores = false )
     {
         if ( ! $this->status )
@@ -47,9 +66,7 @@ class Highscores
             
         //print "updateUser() for user: ".$username." with scores: ".$scores."\n";
         
-
-        $exists_query = sqlite_query( $this->connection, "SELECT username FROM highscores_users WHERE username='" . sqlite_escape_string( $username ) . "' LIMIT 1;" );
-        $exists = ( sqlite_num_rows( $exists_query ) > 0 );
+        $exists = $this->userExists($username);
         
         if ( $scores !== false )
             $scores = (float) $scores;

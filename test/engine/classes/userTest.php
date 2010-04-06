@@ -127,7 +127,7 @@ class userTest extends PHPUnit_Framework_TestCase
 		 * flotte als transport mit 10 kleinen transportern zum ziel $pos versenden
 		 */
         $type = 6; // stationieren
-        $fleetContent = array( "S1" => 100 ); // 100 große? transporter
+        $fleetContent = array( "S1" => 100 ); // 100 groï¿½e? transporter
         $fleet->create(); // no return 
         $this->test_Fleets[$uname][] = $fleet->getName();
         $this->assertTrue( $fleet->addTarget( $pos, $type, false ) );
@@ -614,32 +614,7 @@ class userTest extends PHPUnit_Framework_TestCase
             $this->_testSetup( $userData );
         }               
     }
-
-    /**
-     * check new user creation
-     */
-    public function testCreate( )
-    {
-        $usa = $this->testData->getUnusedUser();
-        
-        if ( $usa === false )
-        {
-            throw new Exception( "testCreate() failed, no remaining users for testing" );
-        }
-        
-        // new user
-        $newuser = Classes::User( $usa->getName() );
-        
-        // already exists
-        $dupuser = Classes::User( $usa->getName() );
-        
-        $this->assertTrue( $newuser->create(), "couldnt create user" );
-        
-        $usa->setIsCreated( true );
-        
-        $this->assertFalse( $dupuser->create(), "could create user which already exist" );
-    }
-
+ 
     public function testUserExists( )
     {
         foreach ( $this->testData->getTestUsers() as $user )

@@ -501,6 +501,12 @@ function getFreeKoords( )
     return $koords;
 }
 
+/**
+ * TODO, WTF is this?! used for naming the css class ?!
+ * @param $galaxy
+ * @param $system
+ * @param $planet
+ */
 function getPlanetClass( $galaxy, $system, $planet )
 {
     $type = ( ( ( floor( $system / 100 ) + 1 ) * ( floor( ( $system % 100 ) / 10 ) + 1 ) * ( ( $system % 10 ) + 1 ) ) % $planet ) * $planet + ( $system % ( ( $galaxy + 1 ) * $planet ) );

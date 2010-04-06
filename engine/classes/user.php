@@ -17,6 +17,10 @@ class User extends Dataset
         parent::__construct( $name, $write );
     }
 
+    /**
+     * create this user obj on the database
+     * tests added
+     */
     function create( )
     {
         if ( file_exists( $this->filename ) )
@@ -34,6 +38,11 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * checks if the user data file exists in the file system and is readeable,
+     * returns false if it does not
+     * tests added     
+     */        
     public static function userExists( $user )
     {
         if ( ! $user )
@@ -44,6 +53,10 @@ class User extends Dataset
         return ( is_file( $filename ) && is_readable( $filename ) );
     }
 
+    /**
+     * checks if given planet exists     
+     * tests added
+     */     
     function planetExists( $planet )
     {
         if ( ! $this->status )
@@ -52,21 +65,38 @@ class User extends Dataset
         return isset( $this->raw['planets'][$planet] );
     }
 
+    /**
+     * retrieve status
+     * tests not added, returning private member var only
+     */     
     function getStatus( )
     {
         return $this->status;
     }
 
+    /**
+     * retrieve filename
+     * tests not added, returning private member var only
+     */       
     function getFilename( )
     {
         return $this->filename;
     }
 
+    /**
+     * set status
+     * tests added
+     */       
     function setStatus( $status )
     {
         $this->status = $status;
     }
 
+    /**
+     * DEBUG function
+     * prints out all planets the user has
+     * tests not added (debug func)
+     */  
     public function printPlanets( )
     {
         if ( ! $this->status )
@@ -84,6 +114,10 @@ class User extends Dataset
         echo "\n";
     }
     
+    /**
+     * sets the active planet and copies the new values over
+     * tests added
+     */     
     function setActivePlanet( $planet )
     {
         if ( ! $this->status )
@@ -158,6 +192,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * returns the planets index at the given $pos
+     * tests added
+     */        
     function getPlanetByPos( $pos )
     {
         if ( ! $this->status )
@@ -189,6 +227,10 @@ class User extends Dataset
         return $return;
     }
 
+    /**
+     * returns the index of the active planet
+     * tests added
+     */     
     function getActivePlanet( )
     {
         if ( ! $this->status )
@@ -197,9 +239,10 @@ class User extends Dataset
         return $this->active_planet;
     }
 
-    /*
-		 * @testing added - checking return value
-		 */
+    /**
+     * get cached planets list or create one of our current raw data
+     * tests added
+     */     
     function getPlanetsList( )
     {
         if ( ! $this->status )
@@ -211,6 +254,10 @@ class User extends Dataset
         return $this->cache['getPlanetsList'];
     }
 
+    /**
+     * get the total fields of the current planet
+     * tests not added (method just returning private member values)
+     */     
     function getTotalFields( )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -219,6 +266,10 @@ class User extends Dataset
         return $this->planet_info['size'][1];
     }
 
+    /**
+     * get the used fields of the current planet
+     * tests not added (method just returning private member values)
+     */     
     function getUsedFields( )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -227,6 +278,10 @@ class User extends Dataset
         return $this->planet_info['size'][0];
     }
 
+    /**
+     * change the used fields value according to $value
+     * tests added
+     */
     function changeUsedFields( $value )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -238,6 +293,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * returns remaining fields on the active planet
+     * tests added
+     */    
     function getRemainingFields( )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -246,6 +305,10 @@ class User extends Dataset
         return ( $this->planet_info['size'][1] - $this->planet_info['size'][0] );
     }
 
+    /**
+     * returns basic fields on the active planet
+     * tests added
+     */        
     function getBasicFields( )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -254,6 +317,10 @@ class User extends Dataset
         return ( $this->planet_info['size'][1] / ( $this->getItemLevel( 'F9', 'forschung' ) + 1 ) );
     }
 
+    /**
+     * sets fields according to $size
+     * tests added
+     */      
     function setFields( $size )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -265,6 +332,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * returns fields count
+     * tests added
+     */     
     function getFields( )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -273,6 +344,10 @@ class User extends Dataset
         return $this->planet_info['size'][1];
     }
 
+    /**
+     * returns pos in form of an array { 1, 13, 37 } for 1:13:37
+     * tests added
+     */
     function getPos( )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -286,6 +361,10 @@ class User extends Dataset
         return $pos;
     }
 
+    /**
+     * returns pos string in form of 1:13:37
+     * tests not added, returning private member value only
+     */     
     function getPosString( )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -294,6 +373,10 @@ class User extends Dataset
         return $this->planet_info['pos'];
     }
 
+    /**
+     * returns the class of a planet
+     * tests added
+     */     
     function getPlanetClass( )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -305,9 +388,10 @@ class User extends Dataset
         return getPlanetClass( $pos[0], $pos[1], $pos[2] );
     }
 
-    /*
-         * @testing added
-         */
+   /**
+    * kill a planet!
+    * tests added
+    */
     function removePlanet( )
     {
         global $types_message_types;
@@ -489,7 +573,7 @@ class User extends Dataset
 
     /**
      * move planet up in the users planets list, this sets the planets index
-     * @test in progress
+     * @test implemented
      * @param $planet
      * @return unknown_type
      */
@@ -859,6 +943,7 @@ class User extends Dataset
      * subtracts res
      * @param $ress array() to subtrace
      * @param $make_scores unset spent res cache
+     * TODO, add tests
      */
     function subtractRess( $ress, $make_scores = true )
     {
@@ -919,6 +1004,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */     
     function checkRess( $ress )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) ) {
@@ -951,6 +1040,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */     
     function isOwnPlanet( $pos )
     {
         if ( ! $this->status )
@@ -970,6 +1063,10 @@ class User extends Dataset
         return $return;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */      
     function getFleetsList( )
     {
         if ( ! $this->status )
@@ -989,6 +1086,10 @@ class User extends Dataset
             return array();
     }
 
+    /**
+     * TODO, add tests
+     *
+     */      
     function addFleet( $fleet )
     {
         if ( $this->status != 1 )
@@ -1004,6 +1105,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */      
     function unsetFleet( $fleet )
     {
         if ( $this->status != 1 )
@@ -1021,6 +1126,10 @@ class User extends Dataset
         return $key;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function unsetVerbFleet( $fleet )
     {
         if ( $this->status != 1 )
@@ -1036,6 +1145,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function checkOwnFleetWithPlanet( )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -1049,6 +1162,10 @@ class User extends Dataset
         return false;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getFleetsWithPlanet( )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -1064,6 +1181,10 @@ class User extends Dataset
         return $fleets;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getFleetsForUmode( )
     {
         if ( ! $this->status )
@@ -1086,6 +1207,10 @@ class User extends Dataset
             return false;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getMaxParallelFleets( )
     {
         if ( ! $this->status )
@@ -1104,6 +1229,10 @@ class User extends Dataset
         return floor( pow( $werft * $this->getItemLevel( 'F0', 'forschung' ), .7 ) );
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getCurrentParallelFleets( )
     {
         if ( ! $this->status )
@@ -1123,6 +1252,10 @@ class User extends Dataset
         return $fleets;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getRemainingParallelFleets( )
     {
         if ( ! $this->status )
@@ -1131,6 +1264,10 @@ class User extends Dataset
         return $this->getMaxParallelFleets() - $this->getCurrentParallelFleets();
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function checkMessage( $message_id, $type )
     {
         if ( ! $this->status )
@@ -1139,6 +1276,10 @@ class User extends Dataset
         return ( isset( $this->raw['messages'] ) && isset( $this->raw['messages'][$type] ) && isset( $this->raw['messages'][$type][$message_id] ) );
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function checkMessageStatus( $message_id, $type )
     {
         if ( ! $this->status ) {
@@ -1151,6 +1292,10 @@ class User extends Dataset
             return false;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function findMessageType( $message_id )
     {
         if ( ! $this->status ) {
@@ -1165,6 +1310,10 @@ class User extends Dataset
         return false;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function setMessageStatus( $message_id, $type, $status )
     {
         if ( ! $this->status )
@@ -1179,6 +1328,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getMessagesList( $type )
     {
         if ( ! $this->status ) {
@@ -1206,6 +1359,10 @@ class User extends Dataset
         }
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getMessageCategoriesList( )
     {
         if ( ! $this->status )
@@ -1223,6 +1380,10 @@ class User extends Dataset
         return $this->cache['getMessageCategoriesList'];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function addMessage( $message_id, $type )
     {
         if ( ! $this->status )
@@ -1239,6 +1400,10 @@ class User extends Dataset
             unset( $this->cache['getMessagesList'][$type] );
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function removeMessage( $message_id, $type, $edit_message = true )
     {
         if ( ! $this->status )
@@ -1260,6 +1425,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function checkPassword( $password )
     {
         if ( ! $this->status )
@@ -1280,6 +1449,10 @@ class User extends Dataset
             return false;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function setPassword( $password )
     {
         if ( ! $this->status )
@@ -1294,6 +1467,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getPasswordSum( )
     {
         if ( ! $this->status )
@@ -1301,6 +1478,10 @@ class User extends Dataset
         return $this->raw['planet'];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function checkSetting( $setting )
     {
         if ( ! $this->status )
@@ -1312,6 +1493,10 @@ class User extends Dataset
             return $this->settings[$setting];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function setSetting( $setting, $value )
     {
         if ( ! $this->status )
@@ -1325,6 +1510,10 @@ class User extends Dataset
         }
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getUserDescription( $parsed = true )
     {
         if ( ! $this->status )
@@ -1344,6 +1533,10 @@ class User extends Dataset
             return $this->raw['description'];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function setUserDescription( $description )
     {
         if ( ! $this->status )
@@ -1363,6 +1556,10 @@ class User extends Dataset
             return 2;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function lastRequest( $last_request = false, $last_planet = false )
     {
         if ( ! $this->status )
@@ -1396,6 +1593,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function registerAction( )
     {
         if ( ! $this->status )
@@ -1406,6 +1607,10 @@ class User extends Dataset
         $this->raw['last_active'] = time();
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getLastActivity( )
     {
         if ( ! $this->status ) {
@@ -1419,6 +1624,10 @@ class User extends Dataset
         return $this->raw['last_active'];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getRegistrationTime( )
     {
         if ( ! $this->status )
@@ -1429,6 +1638,10 @@ class User extends Dataset
         return $this->raw['registration'];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     /**
      * @param $time - unix time stamp for registration time
      */
@@ -1441,6 +1654,10 @@ class User extends Dataset
         $this->write( true, false );
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getItemsList( $type = false )
     {
         if ( ! $this->status )
@@ -1450,6 +1667,10 @@ class User extends Dataset
         return $items_instance->getItemsList( $type );
     }
     
+    /**
+     * TODO, add tests
+     *
+     */       
     public function getCache( $cache = -1, $subcache = -1 )
     {        
         if( $cache == -1 )
@@ -1471,6 +1692,10 @@ class User extends Dataset
         }
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getItemInfo( $id, $type = false, $run_eventhandler = true, $calc_scores = false )
     {
         if ( ! $this->status ) {
@@ -1759,6 +1984,10 @@ class User extends Dataset
         return $this->cache['getItemInfo'][$this_planet][$id];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getItemLevel( $id, $type = false, $run_eventhandler = true )
     {
         if ( ! $this->status )
@@ -1774,6 +2003,10 @@ class User extends Dataset
         return $this->items[$type][$id];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function changeItemLevel( $id, $value = 1, $type = false, $time = false, &$actions = false )
     {
         if ( ! $this->status )
@@ -1905,6 +2138,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     public function refreshRess( $time = false )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) ) {
@@ -1937,6 +2174,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function checkProductionFactor( $gebaeude )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -1948,6 +2189,10 @@ class User extends Dataset
             return 1;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function setProductionFactor( $gebaeude, $factor )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -1974,6 +2219,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getProduction( $run_eventhandler = true )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -2032,11 +2281,19 @@ class User extends Dataset
         return $this->cache['getProduction'][$planet];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function gameLocked( )
     {
         return database_locked();
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function userLocked( $check_unlocked = true )
     {
         if ( ! $this->status )
@@ -2047,6 +2304,10 @@ class User extends Dataset
         return ( isset( $this->raw['locked'] ) && $this->raw['locked'] );
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function lockedUntil( )
     {
         if ( ! $this->status )
@@ -2059,6 +2320,10 @@ class User extends Dataset
         return $this->raw['lock_time'];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function lockUser( $lock_time = false, $check_unlocked = true )
     {
         if ( ! $this->status )
@@ -2087,6 +2352,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function umode( $set = -1 )
     {
         if ( ! $this->status )
@@ -2241,6 +2510,10 @@ class User extends Dataset
         return ( isset( $this->raw['umode'] ) && $this->raw['umode'] );
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function permissionToUmode( )
     {
         if ( ! $this->status )
@@ -2257,6 +2530,10 @@ class User extends Dataset
         return ( ( time() - $this->raw['umode_time'] ) > $min_days * 86400 );
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getUmodeReturnTime( )
     {
         if ( ! $this->status )
@@ -2268,11 +2545,19 @@ class User extends Dataset
             return time() + 2 * 86400;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function permissionToAct( )
     {
         return ! ( database_locked() || $this->userLocked() || $this->umode() );
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     protected function getDataFromRaw( )
     {
         $settings = array( 'skin' => false, 'schrift' => true, 'sonden' => 1, 'ress_refresh' => 0, 'fastbuild' => false, 'shortcuts' => false, 'tooltips' => true, 'ipcheck' => true, 'noads' => false, 'show_extern' => true, 'notify' => true, 'email' => true, 'ajax' => true, 'receive' => array( 1 => array( true, true ), 2 => array( true, false ), 3 => array( true, false ), 4 => array( true, true ), 5 => array( true, false ) ), 'show_building' => array( 'gebaeude' => 1, 'forschung' => 1, 'roboter' => 0, 'schiffe' => 0, 'verteidigung' => 0 ), 'prod_show_days' => 1, 'messenger_receive' => array( 'messages' => array( 1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true, 7 => true ), 'building' => array( 'gebaeude' => 1, 'forschung' => 1, 'roboter' => 3, 'schiffe' => 3, 'verteidigung' => 3 ) ) );
@@ -2298,6 +2583,10 @@ class User extends Dataset
         $this->realEventhandler();
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     protected function getRawFromData( )
     {
         if ( $this->recalc_highscores[0] || $this->recalc_highscores[1] || $this->recalc_highscores[2] || $this->recalc_highscores[3] || $this->recalc_highscores[4] ) {
@@ -2318,6 +2607,10 @@ class User extends Dataset
         }
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     /**
      * checks the active planet info for currently building stuff 
      * and returns the building elements if exists
@@ -2375,6 +2668,10 @@ class User extends Dataset
         }
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function removeBuildingThing( $type, $cancel = true )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -2436,9 +2733,17 @@ class User extends Dataset
         }
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function eventhandler( $check_id = false, $check_gebaeude = true, $check_forschung = true, $check_roboter = true, $check_schiffe = true, $check_verteidigung = true )
     {/* Dummy function */}
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function realEventhandler( )
     {
         if ( ! $this->raw )
@@ -2577,6 +2882,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function isVerbuendet( $user )
     {
         if ( ! $this->status )
@@ -2590,6 +2899,10 @@ class User extends Dataset
         return in_array( $user, $this->raw['verbuendete'] );
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function existsVerbuendet( $user )
     {
         if ( ! $this->status )
@@ -2598,6 +2911,10 @@ class User extends Dataset
         return ( $user == $this->getName() || ( isset( $this->raw['verbuendete'] ) && in_array( $user, $this->raw['verbuendete'] ) ) || ( isset( $this->raw['verbuendete_bewerbungen'] ) && in_array( $user, $this->raw['verbuendete_bewerbungen'] ) ) || ( isset( $this->raw['verbuendete_anfragen'] ) && in_array( $user, $this->raw['verbuendete_anfragen'] ) ) );
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function renameVerbuendet( $old_name, $new_name )
     {
         if ( ! $this->status )
@@ -2622,6 +2939,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getVerbuendetList( )
     {
         if ( ! $this->status )
@@ -2633,6 +2954,10 @@ class User extends Dataset
             return $this->raw['verbuendete'];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getVerbuendetApplicationList( )
     {
         if ( ! $this->status )
@@ -2644,6 +2969,10 @@ class User extends Dataset
             return $this->raw['verbuendete_bewerbungen'];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getVerbuendetRequestList( )
     {
         if ( ! $this->status )
@@ -2655,6 +2984,10 @@ class User extends Dataset
             return $this->raw['verbuendete_anfragen'];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function _addVerbuendetRequest( $user )
     {
         if ( ! $this->status )
@@ -2670,6 +3003,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function _removeVerbuendetRequest( $user )
     {
         if ( ! $this->status )
@@ -2682,6 +3019,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function _removeVerbuendetApplication( $user )
     {
         if ( ! $this->status )
@@ -2696,6 +3037,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function _addVerbuendet( $user )
     {
         if ( ! $this->status )
@@ -2711,6 +3056,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function _removeVerbuendet( $user )
     {
         if ( ! $this->status )
@@ -2723,6 +3072,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function applyVerbuendet( $user, $text = '' )
     {
         if ( ! $this->status )
@@ -2755,6 +3108,10 @@ class User extends Dataset
             return false;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function acceptVerbuendetApplication( $user )
     {
         if ( ! $this->status )
@@ -2783,6 +3140,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function rejectVerbuendetApplication( $user )
     {
         if ( ! $this->status )
@@ -2808,6 +3169,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function quitVerbuendet( $user )
     {
         if ( ! $this->status )
@@ -2836,6 +3201,10 @@ class User extends Dataset
             return false;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function verbuendetNewsletter( $subject, $text )
     {
         if ( ! $this->status )
@@ -2859,6 +3228,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function cancelVerbuendetApplication( $user )
     {
         if ( ! $this->status )
@@ -2885,6 +3258,10 @@ class User extends Dataset
             return false;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function allianceTag( $tag = '', $check = true )
     {
         if ( ! $this->status )
@@ -2948,11 +3325,19 @@ class User extends Dataset
         }
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getAllianceTag( )
     {
         return $this->raw['alliance'];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function cancelAllianceApplication( $message = true )
     {
         if ( ! $this->status )
@@ -2981,6 +3366,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function allianceApplication( $alliance = false, $text = false )
     {
         if ( ! $this->status )
@@ -3028,6 +3417,10 @@ class User extends Dataset
         }
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function quitAlliance( )
     {
         if ( $this->status != 1 )
@@ -3057,6 +3450,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function checkPlanetCount( )
     {
         if ( ! $this->status )
@@ -3068,6 +3465,10 @@ class User extends Dataset
             return false;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function buildGebaeude( $id, $rueckbau = false )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -3117,6 +3518,10 @@ class User extends Dataset
         return false;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function buildForschung( $id, $global )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) ) {
@@ -3189,6 +3594,10 @@ class User extends Dataset
         return false;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function buildRoboter( $id, $anzahl )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -3265,6 +3674,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function buildSchiffe( $id, $anzahl )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -3341,6 +3754,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function buildVerteidigung( $id, $anzahl )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -3417,6 +3834,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function recalcHighscores( $recalc_gebaeude = false, $recalc_forschung = false, $recalc_roboter = false, $recalc_schiffe = false, $recalc_verteidigung = false )
     {
         if ( ! $this->status )
@@ -3432,6 +3853,10 @@ class User extends Dataset
         return 2;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function doRecalcHighscores( $recalc_gebaeude = false, $recalc_forschung = false, $recalc_roboter = false, $recalc_schiffe = false, $recalc_verteidigung = false )
     {
         if ( $recalc_gebaeude || $recalc_forschung || $recalc_roboter || $recalc_schiffe || $recalc_verteidigung ) {
@@ -3556,6 +3981,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function maySeeKoords( $user )
     {
         if ( ! $this->status )
@@ -3578,6 +4007,10 @@ class User extends Dataset
         }
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function rename( $new_name )
     {
         # Ueberpruefen
@@ -3657,6 +4090,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function lastMailSent( $time = false )
     {
         if ( ! $this->status )
@@ -3673,6 +4110,10 @@ class User extends Dataset
         return $this->raw['last_mail'];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function addForeignFleet( $fleet )
     {
         if ( $this->status != 1 )
@@ -3689,6 +4130,10 @@ class User extends Dataset
     
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function unsetForeignFleet( $fleet )
     {
         if ( $this->status != 1 )
@@ -3704,6 +4149,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getForeignFleetsArray( )
     {
         if ( ! $this->status )
@@ -3723,6 +4172,10 @@ class User extends Dataset
             return array();
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getForeignFleetsWithPlanet( )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
@@ -3737,6 +4190,10 @@ class User extends Dataset
         return $fleets;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getForeignFleet( $flotte )
     {
         if ( ! $this->status )
@@ -3745,6 +4202,10 @@ class User extends Dataset
         return array_keys( $this->raw[1] );
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function subForeignFleet( $id, $count )
     {
         if ( $this->status != 1 )
@@ -3760,6 +4221,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getForeignUser( $fleet )
     
     {
@@ -3769,6 +4234,10 @@ class User extends Dataset
         return ( $this->raw[1] );
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function resolveFleetPasswd( $passwd )
     {
         if ( ! $this->status )
@@ -3789,6 +4258,10 @@ class User extends Dataset
         return $fleet_id;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getFleetPasswd( $fleet_id )
     {
         if ( ! $this->status )
@@ -3799,6 +4272,10 @@ class User extends Dataset
         return $idx;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function changeFleetPasswd( $fleet_id, $passwd )
     {
         if ( ! $this->status )
@@ -3820,6 +4297,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function _printRaw( )
     {
         echo "<pre>";
@@ -3827,12 +4308,20 @@ class User extends Dataset
         echo "</pre>";
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function resolveName( $name )
     {
         $instance = Classes::User( $name );
         return $instance->getName();
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getNotificationType( )
     {
         if ( ! $this->status )
@@ -3843,6 +4332,10 @@ class User extends Dataset
         return $this->raw['im_notification'];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function checkNewNotificationType( $uin, $protocol )
     {
         if ( ! $this->status )
@@ -3853,6 +4346,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function doSetNotificationType( $uin, $protocol )
     {
         if ( ! $this->status )
@@ -3870,6 +4367,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function disableNotification( )
     {
         if ( ! $this->status )
@@ -3881,6 +4382,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function addPosShortcut( $pos )
     { # Fuegt ein Koordinatenlesezeichen hinzu
         if ( ! $this->status )
@@ -3896,6 +4401,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getPosShortcutsList( )
     { # Gibt die Liste der Koordinatenlesezeichen zurueck
         if ( ! $this->status )
@@ -3906,6 +4415,10 @@ class User extends Dataset
         return $this->raw['pos_shortcuts'];
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function removePosShortcut( $pos )
     { # Entfernt ein Koordinatenlesezeichen wieder
         if ( ! $this->status )
@@ -3921,6 +4434,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function movePosShortcutUp( $pos )
     { # Veraendert die Reihenfolge der Lesezeichen
         if ( ! $this->status )
@@ -3944,6 +4461,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function movePosShortcutDown( $pos )
     { # Veraendert die Reihenfolge der Lesezeichen
         if ( ! $this->status )
@@ -3967,6 +4488,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function getPasswordSendID( )
     { # Liefert eine ID zurueck, die zum Senden des Passworts benutzt werden kann
         if ( $this->status != 1 )
@@ -3978,6 +4503,10 @@ class User extends Dataset
         return $send_id;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function checkPasswordSendID( $id )
     { # Ueberprueft, ob eine vom Benutzer eingegebene ID der letzten durch getPasswordSendID zurueckgelieferten ID entspricht
         if ( ! $this->status )
@@ -3986,6 +4515,10 @@ class User extends Dataset
         return ( isset( $this->raw['email_passwd'] ) && $this->raw['email_passwd'] && $this->raw['email_passwd'] == $id );
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function refreshMessengerBuildingNotifications( $type = false )
     {
         if ( ! $this->status || ! $this->planet_info )
@@ -4075,6 +4608,10 @@ class User extends Dataset
         return true;
     }
 
+    /**
+     * TODO, add tests
+     *
+     */       
     function clearCache( )
     {
         if ( isset( $user->cache ) )
@@ -4085,12 +4622,20 @@ class User extends Dataset
 
 }
 
+    /**
+     * TODO, add tests
+     *
+     */   
 function getUsersCount( )
 {
     $highscores = Classes::Highscores();
     return $highscores->getCount( 'users' );
 }
 
+    /**
+     * TODO, add tests
+     *
+     */   
 function sortEventhandlerActions( $a, $b )
 {
     if ( $a[0] < $b[0] )
