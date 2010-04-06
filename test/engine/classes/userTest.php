@@ -1440,6 +1440,211 @@ class userTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan( 0, $checked );
     }      
     
+    /**
+     * tests User::changeUsedFields( $fields )
+     * change fields and test if they got changed
+     */
+	public function testChangeUsedFields( )
+	{
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );
+            		
+        $this->assertNotEquals(false, $userObj->getUsedFields());
+    
+		$curFields = $userObj->getUsedFields();
+		$this->assertTrue($userObj->changeUsedFields(13));
+		$curFields += 13;
+		$this->assertEquals($curFields,$userObj->getUsedFields());
+		$curFields += -12;
+		$this->assertTrue($userObj->changeUsedFields(-12));
+		$this->assertEquals($curFields,$userObj->getUsedFields());	
+		$this->assertTrue($userObj->isChanged());	
+	}
+	
+    /**
+     * tests User::getRemainingFields( )
+     * check return value
+     */	
+	public function testGetRemainingFields( )
+	{
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );
+        		
+        $this->assertNotEquals(false, $userObj->getTotalFields());
+        $this->assertNotEquals(false, $userObj->getUsedFields());
+        
+		$remainingFields = $userObj->getTotalFields() - $userObj->getUsedFields();		
+		
+		$this->assertEquals($remainingFields, $userObj->getRemainingFields());
+	}
+	
+    /**
+     * tests User::getBasicFields( )
+     * check return value
+     */	
+	public function testGetBasicFields( )
+	{
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );
+        		
+        $this->assertNotEquals(false, $userObj->getTotalFields());
+        $this->assertNotEquals(false, $userObj->getItemLevel( 'F9', 'forschung' ));
+                
+		$totFields = $userObj->getTotalFields();
+		$fieldResearch = $userObj->getItemLevel( 'F9', 'forschung' ) + 1;
+		
+		$this->assertEquals($totFields / $fieldResearch, $userObj->getBasicFields());
+	}	
+	
+    /**
+     * tests User::setFields( $fields )
+     * check return value
+     */	
+	public function testSetFields( )
+	{
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );
+        
+        $this->assertTrue($userObj->setFields( 133 ));
+        $this->assertEquals(133,$userObj->getTotalFields());
+        $this->assertTrue($userObj->isChanged());
+	}		
+	
+	/**
+	 * tests User::getFields()
+	 * check if clone func does the same	 
+	 */	 
+	public function testGetFields( )
+	{
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );
+        		
+		$totFields = $userObj->getTotalFields();
+		$activeFields = $userObj->getFields();
+		
+        $this->assertNotEquals(false, $totFields);
+        $this->assertGreaterThan(0, $totFields);
+        $this->assertNotEquals(false, $activeFields);
+        $this->assertGreaterThan(0, $activeFields);               
+        			
+		$this->assertEquals($activeFields, $totFields);
+	}
+	
+	/**
+	 * tests User::getPos()
+	 * check if the returning array is correct based of the string pos 
+	 */	 	
+	public function testGetPos( )
+	{	
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );
+        
+        // construct our own array for those coordinates
+		$posString = $userObj->getPosString();
+		$this->assertNotEquals(false, $posString);		
+		$posArray = explode(":", $posString, 3);
+		
+		// check if our own pos match the returning one
+		$arrPos = $userObj->getPos();
+		$this->assertEquals($posArray, $arrPos);
+	}
+	
+	/**
+	 * tests User::getPlanetClass()
+	 * get a test planet of the testuser we use and do a call to Galaxy::getPlanetClass() with the coords of that testplanet,
+	 * those should match the one we get via User::getPlanetClass() (we've to set the activeplanet accordingly before!)	 
+	 */	 	
+	public function testGetPlanetClass( )
+	{	
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );
+        $testPlanet = &$testUser->getNextTestPlanet();
+       	$testPlanetPos = $testPlanet->getPosString();
+       	$tpPos = explode( ":", $testPlanetPos, 3 );
+       	
+       	// change current planet according to our testing planet
+        $this->assertTrue($userObj->setActivePlanet( $testPlanet->getIndex() ));
+        
+        $userPlanetClass = $userObj->getPlanetClass();
+        
+        for($i = 0; $i < 3; $i++)
+        {
+        	$this->assertGreaterThan(0, $tpPos[$i]);
+        }
+        
+        $testPlanetClass = getPlanetClass( $tpPos[0], $tpPos[1], $tpPos[2] );
+        
+       	__autoload( 'Galaxy' );
+       	
+       	$this->assertNotEquals(false, $userPlanetClass);
+       	$this->assertEquals($testPlanetClass, $userPlanetClass);
+	}	
+	
+	/**
+	 * tests User::create()
+	 * check the user got created in the database
+	 */	 	
+    public function testCreate( )
+    {
+        $usa = $this->testData->getUnusedUser();
+        
+        if ( $usa === false )
+        {
+            throw new Exception( "testCreate() failed, no remaining users for testing" );
+        }
+        
+        // new user
+        $newuser = Classes::User( $usa->getName() );
+        
+        // already exists
+        $dupuser = Classes::User( $usa->getName() );
+        
+        $this->assertTrue( $newuser->create(), "couldnt create user" );
+        
+        $usa->setIsCreated( true );
+        
+        $this->assertFalse( $dupuser->create(), "could create user which already exist" );
+        
+        // check if user has been created in highscores
+        $highscores = Classes::Highscores();
+        $this->assertTrue($highscores->userExists($usa->getName()));
+        
+        $this->assertTrue( User::userExists($usa->getName()));
+    }	
+    
+    /**
+     * tests User::userExists()
+     * test if this user exists in the database     
+     */
+    public function testUserExists2( )
+    {
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );  
+
+        // this one exists, there should be a file and User::testUserExists() should say the same
+        $filename = global_setting( "DB_PLAYERS" ) . '/' . strtolower( urlencode( $testUser->getName() ) );
+        $this->assertTrue(is_readable($filename));
+        $this->assertTrue(User::userExists($testUser->getName()));
+        
+        $filename = global_setting( "DB_PLAYERS" ) . '/' . strtolower( urlencode( "THIS_USER_DOESNT_EXISTS" ) );
+        $this->assertFalse(is_file($filename));
+        $this->assertFalse(User::userExists("THIS_USER_DOESNT_EXISTS"));
+        
+    }
+
+    /**
+     * tests User::setStatus( $status )
+     * test if this status is set
+     */
+    public function testSetStatus( )
+    {
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );  
+
+        $userObj->setStatus(3);
+        $this->assertEquals(3, $userObj->getStatus());        
+    }    
+    
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
