@@ -47,12 +47,17 @@
     $ges_prod = $me->getProduction();
     $ges_prod[5] = round($ges_prod[5]*$ges_prod[6]);
     $gebaeude = $me->getItemsList('gebaeude');
+
     foreach($gebaeude as $id)
     {
         $item_info = $me->getItemInfo($id, 'gebaeude');
         
         if($item_info['level'] <= 0 || !$item_info['has_prod'])
+        {
+        	//echo "no prod on ".$id." -- level is: ".$item_info['level']." prod is: ".$item_info['prod'][0]."\n";
+        	//print_r($item_info['prod']);
             continue; # Es wird nichts produziert, also nicht anzeigen
+        }
         $prod = $me->checkProductionFactor($id);
 ?>
             <tr>

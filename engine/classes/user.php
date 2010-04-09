@@ -1766,13 +1766,16 @@ class User extends Dataset
                     $max_rob_limit = floor( $this->getBasicFields() / 2 * ( ( 0.01 + $this->getItemLevel( 'B9', 'gebaeude' ) ) / 10 ) );
                     #$max_rob_limit = 1000;
                     
-
+                    $info['has_prod'] = false;
+                    
                     if ( isset( $info['prod'] ) ) {
-                        $info['has_prod'] = true;
-                        
+                        /*
+                         * look if this item is relevant in our resource usage overview,
+                         * whenever it influences one of our res it has production
+                         */
                         for ( $i = 0; $i <= 5; $i ++ ) {
-                            if ( $info['prod'][$i] <= 0 ) {
-                                $info['has_prod'] = false;
+                            if ( $info['prod'][$i] != 0 ) {
+                                $info['has_prod'] = true;
                                 break;
                             }
                         }
