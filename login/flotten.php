@@ -426,20 +426,21 @@ Anfängerschutz.)</p>
   		                            }
   		                             
 
-  		                           # Geschwindigkeitsfaktor
-                                   # durch 100 da er in vollen prozent kommt
-                                   if ( isset( $_POST['speed'] ) )
-                                   {
-                                        $actSpeed = $_POST['speed'];
-                                        $_POST['speed'] = $actSpeed / 100;
-                                    }
-
-                                    // check ob er in range ist
-                                    if(!isset($_POST['speed']) || $_POST['speed'] < 0.01 || $_POST['speed'] > 1)
-                                    {
-                                         $_POST['speed'] = 1;
-                                    }
-
+  		                            # Geschwindigkeitsfaktor
+					    # durch 100 da er in vollen prozent kommt
+					    if ( isset( $_POST['speed'] ) && $_POST['speed'] <= 100 && $_POST['speed'] > 1 )
+					    {
+					    	$actSpeed = $_POST['speed'];
+						$newSpeed = $actSpeed / 100;
+						echo "speed korrigiert von ".$actSpeed." auf ".$newSpeed."\n";
+						$_POST['speed'] = $newSpeed;
+					    }
+				
+					    // check ob er in range ist
+  		                            if(!isset($_POST['speed']) || $_POST['speed'] < 0.01 || $_POST['speed'] > 1)
+					    {
+  		                            	$_POST['speed'] = 1;
+					    }
 
   		                            $fleet_obj->addTarget($_POST['galaxie'].':'.$_POST['system'].':'.$_POST['planet'], $_POST['auftrag'], false);
   		                            if($_POST['auftrag'] != 6)
@@ -840,7 +841,7 @@ if(isset($_POST['saveflug']))
 	vert_slider = new Y.Slider({
     	axis: 'x', // vertical Slider
     	value: 100, // initial value
-    	min: 1,
+    	min: 2,
     	max: 100,
     	railSize: '11em', // range the thumb can move through
     	thumbImage: '/images/thumb-classic-x.png'
