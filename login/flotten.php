@@ -432,7 +432,7 @@ Anfängerschutz.)</p>
 					    {
 					    	$actSpeed = $_POST['speed'];
 						$newSpeed = $actSpeed / 100;
-						echo "speed korrigiert von ".$actSpeed." auf ".$newSpeed."\n";
+						// echo "speed korrigiert von ".$actSpeed." auf ".$newSpeed."\n";
 						$_POST['speed'] = $newSpeed;
 					    }
 				
