@@ -939,6 +939,11 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
 
             return $this->raw[1][$user][1];
         }
+        
+        function getFleetContent()
+        {
+        	return $this->raw[1];
+        }
 
         function isATarget($target)
         {
@@ -2249,7 +2254,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                 $message_text .= "\n<p class=\"besiedeln\">";
                                 $message_text .= "\n\t<a href=\"flotten.php?action=besiedeln&amp;action_galaxy=".htmlentities(urlencode($target[0]))."&amp;action_system=".htmlentities(urlencode($target[1]))."&amp;action_planet=".htmlentities(urlencode($target[2]))."\" title=\"Schicken Sie ein Besiedelungsschiff zu diesem Planeten\">Besiedeln</a>";
                                 $message_text .= "\n</p>";
-
+ 
                                 $message = Classes::Message();
 
                                 if($message->create())
@@ -2311,7 +2316,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                 if($diff > 5)
                                     $diff = 5;
 
-                                $message_text = "<h3>Spionagebericht des Planeten \xe2\x80\x9e".utf8_htmlentities($target_galaxy->getPlanetName($target[1], $target[2]))."\xe2\x80\x9c (<a href=\"flotten.php?action_galaxy=".htmlentities(urlencode($target[0]))."&amp;action_system=".htmlentities(urlencode($target[1]))."&amp;action_planet=".htmlentities(urlencode($target[2]))."\" title=\"Koordinaten ins Flottenmenü übernehmen\">".utf8_htmlentities($next_target_nt)."</a>, Eigent\xc3\xbcmer: ".utf8_htmlentities($target_owner).")</h3>\n";
+                                $message_text = "<h3>Spionagebericht des Planeten \xe2\x80\x9e".utf8_htmlentities($target_galaxy->getPlanetName($target[1], $target[2]))."\xe2\x80\x9c (<a href=\"flotten.php?action_galaxy=".htmlentities(urlencode($target[0]))."&amp;action_system=".htmlentities(urlencode($target[1]))."&amp;action_planet=".htmlentities(urlencode($target[2]))."\" title=\"Koordinaten ins FlottenmenÃ¼ Ã¼bernehmen\">".utf8_htmlentities($next_target_nt)."</a>, Eigent\xc3\xbcmer: ".utf8_htmlentities($target_owner).")</h3>\n";
                                 $message_text .= "<div id=\"spionage-planet\">\n";
                                 $message_text .= "\t<h4>Planet</h4>\n";
                                 $message_text .= "\t<dl class=\"planet_".$target_galaxy->getPlanetClass($target[1], $target[2])."\">\n";
@@ -3035,7 +3040,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
 					$this_ges_staerke += $staerke;
 					$this_ges_schild += $schild;
 
-					# KK Überprüfung: Nur wenn KK und kein anderer Typ außer KK und Spios da sind ist es ein KK Kampf
+					# KK ï¿½berprï¿½fung: Nur wenn KK und kein anderer Typ auï¿½er KK und Spios da sind ist es ein KK Kampf
 						 if($id != "S7" && $id != "S5" )
 								$kk_kampf = 2;
 						 elseif($id == "S7" && $kk_kampf != 2)
@@ -3203,7 +3208,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
 				$runde_anderer = 'angreifer';
 
 				$nachrichten_text .= "\t<p class=\"erstschlag verteidiger\">\n";
-				$nachrichten_text .= "\t\tNur auf die schnelle Ankunft achtend m\xc3\xbcssen die Kampfkapseln nun die Situation checken.\n";
+				$nachrichten_text .= "\t\tNur auf die schnelle Ankunft achtend mÃ¼ssen die Kampfkapseln nun die Situation checken.\n";
 				$nachrichten_text .= "\t\tDadurch hat ".$verteidiger_nominativ." den Erstschlag\n";
 				$nachrichten_text .= "\t</p>\n";
 			}
@@ -3213,7 +3218,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
 				$runde_anderer = 'verteidiger';
 
 				$nachrichten_text .= "<p class=\"erstschlag angreifer\">\n";
-				$nachrichten_text .= "\tDie Summe der Kampftechniken ".$angreifer_genitiv." ist gr&ouml;&szlig;er als die ".$verteidiger_genitiv." und erm\xc3\xb6glichen es ".$angreifer_dativ.", den Erstschlag auszuf\xc3\xbchren.\n";
+				$nachrichten_text .= "\tDie Summe der Kampftechniken ".$angreifer_genitiv." ist gr&ouml;&szlig;er als die ".$verteidiger_genitiv." und ermÃ¶glichen es ".$angreifer_dativ.", den Erstschlag auszuf\xc3\xbchren.\n";
 				$nachrichten_text .= "</p>\n";
 			}
 			else
@@ -3241,7 +3246,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
 				$runde_anderer = 'verteidiger';
 			}
 
-			#Variablen zur Zwischenspeicherung des Überhangs bei den beschädigten Schiffen
+			#Variablen zur Zwischenspeicherung des ï¿½berhangs bei den beschï¿½digten Schiffen
 			$floordiffgerundet = array();
 			$floordiffungerundet = array();
 
@@ -3333,9 +3338,9 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
 					$this_shield = $item_info['def']*$d[$att_user][$att_id];
 
 					$schild_f = pow(0.95, ${'users_'.$runde_anderer}[$att_user]->getItemLevel('F10', 'forschung'));
-					#echo("Angriffsstärke Angreifer vor Forschung Schildtechnik: ".$staerke."\n");
+					#echo("Angriffsstï¿½rke Angreifer vor Forschung Schildtechnik: ".$staerke."\n");
 					$aff_staerke = $one_staerke*$schild_f;
-					#echo("Angriffsstärke Angreifer nach Forschung Schildtechnik: ".$aff_staerke."\n");
+					#echo("Angriffsstï¿½rke Angreifer nach Forschung Schildtechnik: ".$aff_staerke."\n");
 			
 					if($this_shield > $aff_staerke) #
 					{

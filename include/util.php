@@ -1,7 +1,6 @@
 <?php
 
 if (! defined ( TBW_ROOT ))
-	;
 {
 	require_once ('config_inc.php');
 }
@@ -21,7 +20,7 @@ function IsGameOperator($name) {
  * @return int returns ipc key used for queues
  */
 function getIPCKey() {
-	if (! file_exists ( TEMPDIR . KEYFILE )) {
+	if (! file_exists ( TEMPDIR . KEYFILE )) { 
 		if (! touch ( TEMPDIR . KEYFILE )) {
 			throw new Exception ( __FUNCTION__ . " Unable to generate keyfile." );
 		}
@@ -95,4 +94,126 @@ function msgCategoryToText($cat)
 	
 	return $message_type_names[$cat];
 }
+
+/**
+ * converts the given $fleetType to the according string
+ * @param $fleetType
+ */
+function fleetType2String($fleetType)
+{
+	switch( $fleetType )
+	{
+		case 1:
+			return "Besiedeln";
+			break;
+		case 2:
+			return "Sammeln";
+			break;
+		case 3:
+			return "Angriff";
+			break;
+		case 4:
+			return "Transport";
+			break;
+		case 5:
+			return "Spionage";
+			break;
+		case 6:
+			return "Stationieren";
+			break;															
+		default:
+			return "Unknown";
+			break;
+	}
+}
+
+/**
+ * converts given fleetID to the according string
+ * @param $fleetID
+ */
+function fleetID2String($fleetID)
+{
+	switch( $fleetID )
+	{
+		case "S0":
+			 return "Kleiner Transporter";
+		break;
+		
+		case "S1":
+			 return "Grosser Transporter";
+		break;
+		case "S2":
+			 return "Transcube";
+		break;
+
+		case "S3":
+			 return "Sammler";
+		break;
+
+		case "S4":
+			 return "unknown";
+		break;
+
+		case "S5":
+			 return "Spionagesonde";
+		break;
+
+		case "S6":
+			 return "Besiedlungsschiff";
+		break;
+
+		case "S7":
+			 return "Kampfkapsel";
+		break;		
+		
+		case "S8":
+			 return "Leichter Jäger";
+		break;	
+
+		case "S9":
+			 return "Schwerer Jäger";
+		break;	
+
+		case "S10":
+			 return "Leichte Fregatte";
+		break;	
+
+		case "S11":
+			 return "Schwere Fregatte";
+		break;	
+
+		case "S12":
+			 return "Leichter Kreuzer";
+		break;	
+
+		case "S13":
+			 return "Schwerer Kreuzer";
+		break;	
+
+		case "S14":
+			 return "Schlachtschiff";
+		break;	
+
+		case "S15":
+			 return "Zerstörer";
+		break;	
+
+		case "S16":
+			 return "Warcube";
+		break;			
+		
+		default:
+			return "unknown";
+		break;
+	}
+}
+                                                    if($id =='S0') $id = 'Kleiner Transporter';
+                                                    if($id =='S1') $id = 'Grosser Transporter';
+                                                    if($id =='S2') $id = '';
+                                                    if($id =='S3') $id = '';
+                                                    if($id =='S5') $id = '';
+                                                    if($id =='S6') $id = '';
+                                                    if($id =='S7') $id = '';
+                                                    if($id =='S8') $id = '';
+                                                    if($id =='S9') $id = '';
 ?>
