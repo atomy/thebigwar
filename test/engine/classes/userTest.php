@@ -1713,6 +1713,177 @@ class userTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($scoresBefore, $scoresNow);  
     }      
     
+    /**
+     * tests User::checkRess( $ress )
+     * tests for:
+     * - $ress is enforced to be an array
+     * - for every single res type, if its above we should get a false
+     * - if all res are under the users amount we should get a true
+     */
+    public function testCheckRess( )
+    {
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );  
+
+        $this->assertFalse($userObj->checkRess("meh"));
+        $this->assertFalse($userObj->checkRess(1337));
+        
+        $this->assertType("array", $userObj->getRess());
+        $curRes = $userObj->getRess();
+        
+        $testRes = $curRes; // testing with current res amount
+        $this->assertTrue($userObj->checkRess($testRes));
+        
+        // res type 0 is above 1 what we have, cant pay
+        $testRes = $curRes;
+        $testRes[0] += 1;
+        $this->assertFalse($userObj->checkRess($testRes));        
+        
+        // TEST, for all res above 1, i cant pay
+        for($i = 0; $i < 5; $i++)
+        {
+            $testRes = $curRes;
+            $testRes[$i] += 1;
+            $this->assertFalse($userObj->checkRess($testRes));
+        }   
+
+        // TEST, for all res under 1, i can pay cause i will have 1 of each res remaining!
+        for($i = 0; $i < 5; $i++)
+        {
+            $testRes = $curRes;
+            $testRes[$i] -= 1;
+            $this->assertTrue($userObj->checkRess($testRes));
+        }         
+    }    
+    
+    /**
+     * tests User::isOwnPlanet( $pos )
+     * tests for:
+     * - $pos can be an array or a string
+     * - loop through all my planets, save their coords, and ask isOwnPlanet for all those coords - should be true!
+     * - check some coords where i dont have any planet - should be false!
+     */
+    public function testIsOwnPlanet( )
+    {        
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );
+        $userObj->setActivePlanet(0);
+
+        $myPlanetPos = array();
+        $myPlanetStringPos = array();
+        $planets = $userObj->getPlanetsList();
+        $i = 0;
+       
+        // get all planet coords
+        foreach($planets as $planet)
+        {            
+            $userObj->setActivePlanet($planet);
+            $myPlanetPos[$i] = $userObj->getPos();
+            $myPlanetStringPos[$i] = $userObj->getPosString();
+            $i++;
+        }               
+
+        // add fake position
+        $myPlanetFakePos = array(1, 33, 7);
+        $myPlanetFakeStringPos = "1:33:7";
+        
+        // save current planet, this needs to be tested if its getting restored!
+        $activePlanet = $userObj->getActivePlanet();
+        
+        // all of the previous gathered planets should be mine!
+        $i = 0;
+        while(isset($myPlanetPos[$i]))
+        {
+            $this->assertTrue($userObj->isOwnPlanet($myPlanetPos[$i]));
+            $this->assertTrue($userObj->isOwnPlanet($myPlanetStringPos[$i]));
+            $i++;
+        }
+        
+        // test the fake position
+        $this->assertFalse($userObj->isOwnPlanet($myPlanetFakePos));
+        $this->assertFalse($userObj->isOwnPlanet($myPlanetFakeStringPos));
+        
+        // check if we are back to the planet we started with
+        $this->assertEquals($activePlanet, $userObj->getActivePlanet()); 
+    }    
+    
+    /**
+     * tests User::getFleetsList()
+     * tests for:
+     * - deletion of non-existant fleets (rest of the func is just about returning private members vars)
+     * - returning of type array, should be always empty
+     * - create a real fleet and check for existance
+     */
+    public function testGetFleetsList( )
+    {        
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );             
+        
+        // i should get an empty array back
+        $this->assertType("array", $userObj->getFleetsList());
+        $this->assertEquals(array(), $userObj->getFleetsList());
+        
+        // add fake fleet, will be deleted on calling getFleetsList()
+        $this->assertTrue($userObj->addFleet("bullshit"));
+        $this->assertEquals(array(), $userObj->getFleetsList());
+        
+        // lets create a real fleet, those should be also in our fleet list then!
+        $fleetObj = Classes::Fleet("mew");
+        $this->assertTrue($fleetObj->create());        
+        $this->assertTrue($userObj->addFleet("mew"));
+        $this->assertEquals(array(1 => "mew"), $userObj->getFleetsList());
+    }    
+    
+    /**
+     * tests User::addFleet()
+     * tests for:
+     * - add duplicated fleets
+     * - check for changed state
+     * - check for sort - skipped, sorting those fleets makes no sense ?
+     */
+    public function testAddFleet( )
+    {        
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );             
+        
+        // lets create a fleets and add them
+        $fleetObj = Classes::Fleet("mew");
+        $this->assertTrue($fleetObj->create());        
+        $this->assertTrue($userObj->addFleet("mew"));
+        $this->assertEquals(2, $userObj->addFleet("mew")); // it returns 2 if the fleet already exists
+        $this->assertEquals(array(0 => "mew"), $userObj->getFleetsList());
+        $this->assertTrue($userObj->isChanged());
+    }      
+  
+    
+    /**
+     * tests User::unsetFleet()
+     * tests for:
+     * - if fleet is removed from the list
+     * - changed flag
+     */
+    public function testUnsetFleet( )
+    {        
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );             
+        
+        $fleetObj = Classes::Fleet("mew");
+        $this->assertTrue($fleetObj->create());        
+        $this->assertTrue($userObj->addFleet("mew"));
+        $this->assertEquals(array(0 => "mew"), $userObj->getFleetsList());
+        
+        // fake fleet removed, returns true though
+        $userObj->setChanged(false); // reset changed status to false, previous Users::addFleet() call would otherwise break our test
+        $this->assertFalse($userObj->isChanged());
+        $this->assertTrue($userObj->unsetFleet("doesntexistslol"));
+        $this->assertFalse($userObj->isChanged());
+        
+        // remove our previous added fleet        
+        $this->assertEquals(0, $userObj->unsetFleet("mew")); // returns fleet id which got removed
+        $this->assertTrue($userObj->isChanged());
+        $this->assertEquals(array(), $userObj->getFleetsList());
+    }      
+    
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

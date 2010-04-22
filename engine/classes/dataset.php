@@ -165,6 +165,14 @@ abstract class Dataset
         return $this->changed;
     }
     
+    /**
+     * sets changed status
+     */
+    public function setChanged($changed = true)
+    {
+        $this->changed = $changed;
+    }    
+    
     abstract protected function getDataFromRaw( );
 
     abstract protected function getRawFromData( );

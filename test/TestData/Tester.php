@@ -412,7 +412,16 @@ class tester
      */
     protected function setUp_addPlanet( $uname, &$planet )
     {
-        $koords = getFreeKoords();
+        // 1:33:7 is blacklisted for testing purposes, dont spawn a planet there!
+        $i = 0;
+        $koords = "1:33:7";
+        while( $koords == "1:33:7" )
+        {
+            if($i >= 100)
+                throw new Exception( 'setUp_MainPlanet() failed, unable to find non blacklisted coords' );
+            $koords = getFreeKoords();
+            $i++;         
+        }
         
         if ( ! User::userExists( $uname ) )
             throw new Exception( 'setUp_MainPlanet() failed, $user is invalid' );

@@ -1005,8 +1005,8 @@ class User extends Dataset
     }
 
     /**
-     * TODO, add tests
-     *
+     * checks if the user can pay the given res, returns false if he cant
+     * tests added 
      */     
     function checkRess( $ress )
     {
@@ -1041,8 +1041,8 @@ class User extends Dataset
     }
 
     /**
-     * TODO, add tests
-     *
+     * check if the user owns a planet at the given coords
+     * tests added
      */     
     function isOwnPlanet( $pos )
     {
@@ -1052,6 +1052,8 @@ class User extends Dataset
         $planets = $this->getPlanetsList();
         $active_planet = $this->getActivePlanet();
         $return = false;
+        
+        // loop through all of my planets and see if there's a planet with that position
         foreach ( $planets as $planet ) {
             $this->setActivePlanet( $planet );
             if ( ( is_array( $pos ) && $pos == $this->getPos() ) || ( ! is_array( $pos ) && $pos == $this->getPosString() ) ) {
@@ -1059,13 +1061,17 @@ class User extends Dataset
                 break;
             }
         }
+        
+        // switch back to the old planet
         $this->setActivePlanet( $active_planet );
+        
         return $return;
     }
 
     /**
-     * TODO, add tests
-     *
+     * returns the users fleets,
+     * deletes any non-existant fleets  
+     * tests added   
      */      
     function getFleetsList( )
     {
@@ -1076,6 +1082,7 @@ class User extends Dataset
             foreach ( $this->raw['flotten'] as $i => $flotte ) {
                 __autoload( 'Fleet' );
                 if ( ! Fleet::fleetExists( $flotte ) ) {
+                    //echo "OH HAI, deleted fleet: ".$flotte."\n";
                     unset( $this->raw['flotten'][$i] );
                     $this->changed = true;
                 }
@@ -1086,9 +1093,9 @@ class User extends Dataset
             return array();
     }
 
-    /**
-     * TODO, add tests
-     *
+    /**    
+     * links given fleet to the user
+     * tests added 
      */      
     function addFleet( $fleet )
     {
@@ -1100,14 +1107,14 @@ class User extends Dataset
         elseif ( in_array( $fleet, $this->raw['flotten'] ) )
             return 2;
         $this->raw['flotten'][] = $fleet;
-        natcasesort( $this->raw['flotten'] );
+        natcasesort( $this->raw['flotten'] ); // why do u sort them?!
         $this->changed = true;
         return true;
     }
 
     /**
-     * TODO, add tests
-     *
+     * unlinks the given fleetid from the user     
+	 * tests added
      */      
     function unsetFleet( $fleet )
     {
