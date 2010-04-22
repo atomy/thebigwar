@@ -941,9 +941,9 @@ class User extends Dataset
 
     /**
      * subtracts res
-     * @param $ress array() to subtrace
-     * @param $make_scores unset spent res cache
-     * TODO, add tests
+     * @param $ress array() - res to subtract
+     * @param $make_scores boolean - add spend res to scores
+     * tests added
      */
     function subtractRess( $ress, $make_scores = true )
     {

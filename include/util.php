@@ -207,13 +207,19 @@ function fleetID2String($fleetID)
 		break;
 	}
 }
-                                                    if($id =='S0') $id = 'Kleiner Transporter';
-                                                    if($id =='S1') $id = 'Grosser Transporter';
-                                                    if($id =='S2') $id = '';
-                                                    if($id =='S3') $id = '';
-                                                    if($id =='S5') $id = '';
-                                                    if($id =='S6') $id = '';
-                                                    if($id =='S7') $id = '';
-                                                    if($id =='S8') $id = '';
-                                                    if($id =='S9') $id = '';
+
+/**
+ * subtracts 2nd array from 1st one and returns result
+ * @param $arr1
+ * @param $arr2 
+ */
+function array4Sub($arr1, $arr2)
+{
+    for($i=0; $i < 5; $i++)
+    {
+        $arr1[$i] -= $arr2[$i];
+    }    
+    return $arr1;
+}
+
 ?>

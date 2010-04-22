@@ -80,7 +80,7 @@ foreach ( $targetInfo as $targetCoord => $targetArray )
     {
         echo " [flying back] ";
     }
-    echo "[" . strtolower( fleetType2String( $targetArray[0] ) ) . "]";
+    echo " [" . strtolower( fleetType2String( $targetArray[0] ) ) . "] ";
     echo "\n";
 }
 
