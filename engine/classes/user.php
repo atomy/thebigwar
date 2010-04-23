@@ -1134,8 +1134,8 @@ class User extends Dataset
     }
 
     /**
-     * TODO, add tests
-     *
+     * unset the given fleet by unsetting its password, really ugly way to do that
+     * tests added    
      */       
     function unsetVerbFleet( $fleet )
     {
@@ -1153,16 +1153,19 @@ class User extends Dataset
     }
 
     /**
-     * TODO, add tests
-     *
+     * checks if fleets are flying to/from my active planet
+     * tests added
      */       
     function checkOwnFleetWithPlanet( )
     {
         if ( ! $this->status || ! isset( $this->planet_info ) )
+        {
             return false;
-        
+        }
+
         foreach ( $this->getFleetsList() as $flotte ) {
             $fl = Classes::Fleet( $flotte );
+            
             if ( in_array( $this->getName(), $fl->getUsersList() ) && ( $fl->from( $this->getName() ) == $this->getPosString() || $fl->isATarget( $this->getPosString() ) ) )
                 return true;
         }
@@ -1170,8 +1173,8 @@ class User extends Dataset
     }
 
     /**
-     * TODO, add tests
-     *
+     * returns all fleets flying to my active planet
+     * tests added    
      */       
     function getFleetsWithPlanet( )
     {

@@ -1882,6 +1882,113 @@ class userTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $userObj->unsetFleet("mew")); // returns fleet id which got removed
         $this->assertTrue($userObj->isChanged());
         $this->assertEquals(array(), $userObj->getFleetsList());
+    }     
+
+    /**
+     * tests User::unsetVerbFleet()
+     * tests for:
+     * - removing non-existant fleets should return true
+     * - add fleet and return it afterwards, shouldnt exists anymore 
+     */
+    public function testUnsetVerbFleet( )
+    {        
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );
+        
+        $this->assertTrue($userObj->changeFleetPasswd("fleet123", "pw123"));
+        $this->assertEquals("pw123", $userObj->getFleetPasswd("fleet123"));
+        
+        // unsetting non-existant fleet is true
+        $userObj->setChanged(false);
+        $this->assertFalse($userObj->isChanged());
+        $this->assertTrue($userObj->unsetVerbFleet("abcdef"));
+        $this->assertTrue($userObj->isChanged());
+        
+        // fleet pw should still exists
+        $userObj->setChanged(false);
+        $this->assertEquals("pw123", $userObj->getFleetPasswd("fleet123"));
+        
+        // unsetting pw we created
+        $this->assertFalse($userObj->isChanged());
+        $this->assertTrue($userObj->unsetVerbFleet("fleet123"));
+        $this->assertTrue($userObj->isChanged());
+        
+        // fleet pw should now be gone
+        $this->assertNull($userObj->getFleetPasswd("fleet123"));
+    }      
+    
+    /**
+     * tests User::checkOwnFleetWithPlanet()
+     * tests for:
+     * - creating a fleet flying into nowhere, this should trigger a true
+     * - checking when no fleets are flying at all, should return me a false!
+     * - checking when we change the planet to a planet where no fleets are set, false!
+     */
+    public function testCheckOwnFleetWithPlanet( )
+    {        
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );
+        
+        $userObj->setActivePlanet(0);
+        
+        // there shouldnt be any fleets right now
+        $this->assertFalse($userObj->checkOwnFleetWithPlanet());
+        
+        $fleetObj = Classes::Fleet();
+        $this->assertTrue($fleetObj->create());
+          		                         
+        // statio fleet
+  		$this->assertTrue($fleetObj->addTarget("1:33:7", 6, false));  		
+  		$this->assertTrue($userObj->addFleet($fleetObj->getName()));
+        $this->assertEquals($userObj->getName(), $fleetObj->addUser($userObj->getName(), $userObj->getPosString(), 1));
+        
+        // now we should have a fleet flying from our planet
+        $this->assertTrue($userObj->checkOwnFleetWithPlanet());   
+
+        // to this planet there shouldnt be any fleets flying, so we want a false here
+        $userObj->setActivePlanet(1);
+        $this->assertFalse($userObj->checkOwnFleetWithPlanet()); 
+    } 
+
+    /**
+     * tests User::getFleetsWithPlanet()
+     * tests for:
+     * - no fleets are flying at all, should return an empty array!
+     * - set some fleets, should return them within an array
+     * - change planet to one where no fleets were sent, should return empty array again
+     */
+    public function testGetFleetsWithPlanet( )
+    {        
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );
+        
+        $userObj->setActivePlanet(0);
+        
+        // there shouldnt be any fleets right now
+        $this->assertEquals(array(), $userObj->getFleetsWithPlanet());
+        $testFleetIDs = array();
+        
+        // loop me some fleets to test and save their ids for testing
+        for($i = 0; $i < 2; $i++)
+        {
+            $fleetObj = Classes::Fleet();
+            $this->assertTrue($fleetObj->create());
+          		                         
+            // statio fleet into nowhere
+  		    $this->assertTrue($fleetObj->addTarget("1:33:7", 6, false));  		
+  		    $this->assertTrue($userObj->addFleet($fleetObj->getName()));
+            $this->assertEquals($userObj->getName(), $fleetObj->addUser($userObj->getName(), $userObj->getPosString(), 1));
+            $testFleetIDs[] = $fleetObj->getName();
+        }
+        
+        // now we should have some fleets flying from our planet
+        $this->assertGreaterThanOrEqual(0, array_search($testFleetIDs[0], $userObj->getFleetsWithPlanet(), true));
+        $this->assertGreaterThanOrEqual(0, array_search($testFleetIDs[1], $userObj->getFleetsWithPlanet(), true));
+        $this->assertEquals(count($testFleetIDs), count($userObj->getFleetsWithPlanet()));   
+
+        // to this planet there shouldnt be any fleets flying, so we want an empty array
+        $userObj->setActivePlanet(1);
+        $this->assertEquals(array(), $userObj->getFleetsWithPlanet());
     }      
     
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

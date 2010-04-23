@@ -607,16 +607,15 @@ class userDevTest extends PHPUnit_Framework_TestCase
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * tests User::???()
+     * tests User::?()
      * tests for:
      * - 
-    public function testUnsetFleet( )
+     */
+    public function testGetFleetsWithPlanet( )
     {        
 		$testUser = &$this->testData->getNextTestUser();	
-        $userObj = Classes::User( $testUser->getName() );             
-        
-        $fleetObj = Classes::Fleet("mew");
-
+        $userObj = Classes::User( $testUser->getName() );
+    
     }  
 	
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
