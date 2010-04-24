@@ -1971,7 +1971,8 @@ class userTest extends PHPUnit_Framework_TestCase
         // loop me some fleets to test and save their ids for testing
         for($i = 0; $i < 2; $i++)
         {
-            $fleetObj = Classes::Fleet();
+            $flID = "fleet".$i;
+            $fleetObj = Classes::Fleet($flID);
             $this->assertTrue($fleetObj->create());
           		                         
             // statio fleet into nowhere

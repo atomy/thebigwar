@@ -3579,7 +3579,13 @@ class User extends Dataset
         $this->setActivePlanet( $active_planet );
         $item_info = $this->getItemInfo( $id, 'forschung' );
         
-        if ( $item_info && $item_info['buildable'] && $this->checkRess( $item_info['ress'] ) ) {
+        // check for enough ressources to build that
+        if ( !$this->checkRess( $item_info['ress'] ) )
+        {
+            return false;
+        }
+        
+        if ( $item_info && $item_info['buildable'] ) {
             $build_array = array( $id, time() + $item_info['time_' . ( $global ? 'global' : 'local' )], $global, $item_info['ress'] );
             if ( $global ) {
                 $build_array[] = $this->getActivePlanet();

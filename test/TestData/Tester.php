@@ -146,7 +146,7 @@ class tester
                 
                 if ( $ret === false )
                 {
-                    print "user " . $user->getName() . " " . $userObj->getName() . " is going to buy global research " . $id . " for " . $item_info['ress'][0] . " " . $item_info['ress'][1] . " " . $item_info['ress'][2] . " " . $item_info['ress'][3] . " " . $item_info['ress'][4] . "\n";
+                    print "user " . $user->getName() . " " . $userObj->getName() . " tried to build global research " . $id . " for " . $item_info['ress'][0] . " " . $item_info['ress'][1] . " " . $item_info['ress'][2] . " " . $item_info['ress'][3] . " " . $item_info['ress'][4] . "\n";
                     throw new Exception( "setUp_RandomBuildingResearch() failed, failed setting up global research" );
                 }
                 else
@@ -320,11 +320,11 @@ class tester
             case 'verteidigung':
                 $minlvl = 0;
                 $maxlvl = 9999;
-                break;
+                break; 
             
             case 'forschung':
-                $minlvl = 15;
-                $maxlvl = 20;
+                $minlvl = 15; // we need them such high cause of dependencies
+                $maxlvl = 20; // find an overwrite for some researches down in code
                 break;
             
             default:
@@ -346,8 +346,15 @@ class tester
             throw new Exception( 'setUp_RandomItemClass() couldnt get ItemsList of class: ' . $class . ' from user ' . $user->getName() );
         
         foreach ( $itemList as $item )
-        {
-            $randomLevel = rand( $minlvl, $maxlvl );
+        {            
+            if ( $item == "F8" || $item == "F9" || $item == "F11" || $item == "F10" || $item == "F7" )
+            {
+                $randomLevel = rand( 5, 5 ); // overwrite for f8 and f9, those are really expensive and could lead to test failure if they go really high
+            }
+            else
+            {
+                $randomLevel = rand( $minlvl, $maxlvl );
+            }
             $randomItemLevels[$item] = $randomLevel;
             //if($class == 'forschung')
             //echo "changing lvl of ".$item." from ".$user->getItemLevel($item, 'forschung')." to ".$randomLevel."\n";
