@@ -1185,32 +1185,57 @@ class User extends Dataset
         foreach ( $this->getFleetsList() as $flotte ) {
             $fl = Classes::Fleet( $flotte );
             
-            if ( in_array( $this->getName(), $fl->getUsersList() ) && ( $fl->from( $this->getName() ) == $this->getPosString() || $fl->isATarget( $this->getPosString() ) ) )
-                $fleets[] = $flotte;
+            if ( in_array( $this->getName(), $fl->getUsersList() ) )
+            {
+                if ( $fl->from( $this->getName() ) == $this->getPosString() )
+                {
+                    //echo "match1 for ".$flotte." active planet: ".$this->getActivePlanet()."\n";
+                    $fleets[] = $flotte;
+                }
+                else if ( $fl->isATarget( $this->getPosString() ) )
+                {
+                    //echo "match2 for ".$flotte." active planet: ".$this->getActivePlanet()."\n";
+                    $fleets[] = $flotte;
+                }
+               // else
+                //{
+               //     echo "no match for ".$flotte." active planet: ".$this->getActivePlanet()."\n";
+                //}
+            }
+                
         }
         return $fleets;
     }
 
     /**
-     * TODO, add tests
-     *
+     * returns an array filled with fleet ids which prevent me from going into u-mode
+     * tests added
      */       
     function getFleetsForUmode( )
     {
         if ( ! $this->status )
+        {
             return false;
+        }
         
+        // hold all umode-fleets in that array
         $fleets = array();
+        
+        // loop through all my fleets
         foreach ( $this->getFleetsList() as $flotte ) {
             $fl = Classes::Fleet( $flotte );
             $name = $fl->getUsersList();
             $name1 = array();
             $name1[] = $this->getName();
             $back = $fl->isFlyingBack();
+            
+            // this is my fleet and its not flying back, add it
             if ( $name == $name1 && $back == false ) {
                 $fleets[] = $flotte;
             }
         }
+        
+        // we got more than 0 fleet, return our array
         if ( count( $fleets ) > 0 )
             return $fleets;
         else
@@ -1218,6 +1243,7 @@ class User extends Dataset
     }
 
     /**
+     * returns
      * TODO, add tests
      *
      */       

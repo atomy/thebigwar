@@ -566,21 +566,12 @@ class userTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown( )
     {
-
+        
     }
 
     protected function cleanUp( )
-    {
-        
+    { 
         Classes::resetInstances();
-        /*
-		foreach( $this->testData->getTestUsers() as $user )
-		{
-			user_control::removeUser( $user->getName() );
-		}
-
-		Classes::resetInstances();
-		*/
         
         $this->_tearDown_DeleteDir( global_setting( "DB_PLAYERS" ) );
         $this->_tearDown_DeleteDir( global_setting( "DB_FLEETS" ) );
@@ -595,10 +586,7 @@ class userTest extends PHPUnit_Framework_TestCase
      */
     public static function main( )
     {
-        require_once 'PHPUnit/TextUI/TestRunner.php';
-        
-    //$suite  = new PHPUnit_Framework_TestSuite('userDevTest');
-    //$result = PHPUnit_TextUI_TestRunner::run($suite);
+        require_once 'PHPUnit/TextUI/TestRunner.php';        
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1960,9 +1948,8 @@ class userTest extends PHPUnit_Framework_TestCase
     public function testGetFleetsWithPlanet( )
     {        
 		$testUser = &$this->testData->getNextTestUser();	
-        $userObj = Classes::User( $testUser->getName() );
-        
-        $userObj->setActivePlanet(0);
+
+        $this->assertTrue($userObj->setActivePlanet(5));
         
         // there shouldnt be any fleets right now
         $this->assertEquals(array(), $userObj->getFleetsWithPlanet());
@@ -1988,8 +1975,60 @@ class userTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(count($testFleetIDs), count($userObj->getFleetsWithPlanet()));   
 
         // to this planet there shouldnt be any fleets flying, so we want an empty array
-        $userObj->setActivePlanet(1);
+        $this->assertTrue($userObj->setActivePlanet(6));
+
         $this->assertEquals(array(), $userObj->getFleetsWithPlanet());
+    }      
+    
+    /**
+     * tests User::getFleetsForUmode()
+     * tests for:
+     * - no fleets, should return false
+     * - add at least 2 fleets, flying into somewhere, it should get returned
+     * - add a fleet which is flying back, should return false
+     */
+    public function testGetFleetsForUmode( )
+    {        
+		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );
+    
+        $userObj->setActivePlanet(0);
+        
+        // no fleets, should return false
+        $this->assertFalse($userObj->getFleetsForUmode());
+        
+        // create new fleet0
+        $fleetObj1 = Classes::Fleet("fl1336");
+        $this->assertTrue($fleetObj1->create());
+
+        // statio fleet flying back
+  		$this->assertTrue($fleetObj1->addTarget("1:33:7", 6, true));  		
+  		$this->assertTrue($userObj->addFleet($fleetObj1->getName()));
+        $this->assertEquals($userObj->getName(), $fleetObj1->addUser($userObj->getName(), $userObj->getPosString(), 1));           
+        
+        // fleet flying back, there shouldnt be any umode fleets now
+        $this->assertFalse($userObj->getFleetsForUmode());              
+        
+        // create new fleet1
+        $fleetObj1 = Classes::Fleet("fl1337");
+        $this->assertTrue($fleetObj1->create());
+
+        // statio fleet
+  		$this->assertTrue($fleetObj1->addTarget("1:33:7", 6, false));  		
+  		$this->assertTrue($userObj->addFleet($fleetObj1->getName()));
+        $this->assertEquals($userObj->getName(), $fleetObj1->addUser($userObj->getName(), $userObj->getPosString(), 1));       
+
+        // create new fleet2
+        $fleetObj2 = Classes::Fleet("fl1338");
+        $this->assertTrue($fleetObj2->create());
+
+        // statio fleet
+  		$this->assertTrue($fleetObj2->addTarget("1:33:8", 6, false));  		
+  		$this->assertTrue($userObj->addFleet($fleetObj2->getName()));
+        $this->assertEquals($userObj->getName(), $fleetObj2->addUser($userObj->getName(), $userObj->getPosString(), 1));          
+        
+        // active fleets, should return both fleet ids
+        $this->assertEquals(array( "fl1337", "fl1338"), $userObj->getFleetsForUmode());                    
     }      
     
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

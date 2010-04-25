@@ -323,8 +323,8 @@ class tester
                 break; 
             
             case 'forschung':
-                $minlvl = 15; // we need them such high cause of dependencies
-                $maxlvl = 20; // find an overwrite for some researches down in code
+                $minlvl = 12; // we need them such high cause of dependencies
+                $maxlvl = 12; // find an overwrite for some researches down in code
                 break;
             
             default:

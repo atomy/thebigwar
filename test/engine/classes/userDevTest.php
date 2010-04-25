@@ -611,11 +611,13 @@ class userDevTest extends PHPUnit_Framework_TestCase
      * tests for:
      * - 
      */
-    public function testGetFleetsWithPlanet2( )
+    public function testGetFleetsForUmode( )
     {        
-		$testUser = &$this->testData->getNextTestUser();	
-        $userObj = Classes::User( $testUser->getName() );
+        $userObj = Classes::User( "helmut" );
     
+        print_r($userObj->getPlanetsList());
+        $userObj->setActivePlanet(0);       
+        print_r($userObj->getPlanetsList());        
     }  
         
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
