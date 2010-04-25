@@ -1917,7 +1917,7 @@ class userTest extends PHPUnit_Framework_TestCase
 		$testUser = &$this->testData->getNextTestUser();	
         $userObj = Classes::User( $testUser->getName() );
         
-        $userObj->setActivePlanet(0);
+        $this->assertTrue($userObj->setActivePlanet(0));
         
         // there shouldnt be any fleets right now
         $this->assertFalse($userObj->checkOwnFleetWithPlanet());
@@ -1934,7 +1934,7 @@ class userTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($userObj->checkOwnFleetWithPlanet());   
 
         // to this planet there shouldnt be any fleets flying, so we want a false here
-        $userObj->setActivePlanet(1);
+        $this->assertTrue($userObj->setActivePlanet(1));
         $this->assertFalse($userObj->checkOwnFleetWithPlanet()); 
     } 
 
@@ -1948,6 +1948,7 @@ class userTest extends PHPUnit_Framework_TestCase
     public function testGetFleetsWithPlanet( )
     {        
 		$testUser = &$this->testData->getNextTestUser();	
+        $userObj = Classes::User( $testUser->getName() );
 
         $this->assertTrue($userObj->setActivePlanet(5));
         
