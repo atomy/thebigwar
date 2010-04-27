@@ -49,11 +49,13 @@ class Logfile
 	 * @access protected
 	 * @return void
 	 */
-	function __construct( $path )
+	function __construct( $relpath )
 	{
 		$this->isOpen = false;
 		$this->filePath = '';
 		$this->fileStream = '';
+		$path = TBW_ROOT . $relpath;
+		//echo "path is: ".$path."\n";
 
 		/*
  		* check if file is reachable, create if not already exists 

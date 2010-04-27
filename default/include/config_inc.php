@@ -26,14 +26,16 @@
     define( "LOG_EVENTH_GENERAL", 1 );
     define( "LOG_EVENTH_FLEET", 2 );
     define( "LOG_USER_FLEET", 3 );
+    define( "LOG_USER_ITEMCHANGE", 4 );    
     
     /**
      * defines for logfiles, filenames for the above types
      */
-	define( "LOGDIR", "./logs/" );
+	define( "LOGDIR", "logs/" );
 	define( "LOGFILE_EVENTH_GENERAL", "eventhandler.general.log" );
 	define( "LOGFILE_EVENTH_FLEET", "eventhandler.fleet.log" );
 	define( "LOGFILE_USER_FLEET", "user.fleet.log" );
+	define( "LOGFILE_USER_ITEMCHANGE", "user.itemchange.log" );
 	
 	/**
 	 * keep given days of logfiles
@@ -45,6 +47,11 @@
 	define( "KEYFILE", "ipcKey" );
 	define( "IPCPROJCHAR", "T" );
 	define( "IPC_MSG_INTERVAL", 2 );
+	
+	define( "MYSQL_LOGDB_HOST", "localhost" );
+	define( "MYSQL_LOGDB_USER", "tbw" );
+	define( "MYSQL_LOGDB_PASS", "tbwpass" );
+	define( "MYSQL_LOGDB_DB", "tbw" );
 
     date_default_timezone_set("Europe/Berlin");
 ?>

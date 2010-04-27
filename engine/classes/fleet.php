@@ -9,6 +9,8 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
     require_once ( '../../include/config_inc.php' );
 }
 
+require_once( TBW_ROOT.'loghandler/logger.php' );
+
 	class Fleet extends Dataset
     {
         protected $datatype = 'fleet';
@@ -51,11 +53,9 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
 
             $status = ( unlink( $this->filename) );
 
-            $filename = s_root.'/logs/fleet.log';
-            $fo = fopen($filename, "a");
-            fwrite($fo, "destroy() -- fleet ".$this->filename." deleted.\n");
-            fclose($fo);
-
+            $log = new Logger();
+            $log->logIt( LOG_USER_FLEET, "destroy() -- fleet ".$this->filename." deleted." );
+            
             if( $status )
             {
                 $this->status = 0;
@@ -740,13 +740,11 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
             if(isset($this->raw[1][$user]['startzeit'])) 
                 $timeex =(time()-$this->raw[1][$user]['startzeit']);
 
-            $filename = s_root.'/logs/fleet.log';
-            $fo = fopen($filename, "a");
-            fwrite($fo, "\nCallback-User  ".$user."\nFrom  ".$from."\nTo  ".$to."\nRueckflugzeit  ".$time3."\nVerflogene Zeit  ".$timeex);
-            fclose($fo);
+            $log = new Logger();
+            $log->logIt( LOG_USER_FLEET, "\nCallback-User  ".$user."\nFrom  ".$from."\nTo  ".$to."\nRueckflugzeit  ".$time3."\nVerflogene Zeit  ".$timeex );
 
-                    if($immediately) $progress = 0;
-                    else
+            if($immediately) $progress = 0;
+            else
                     {
                         $progress = (time()-$this->raw[2])/$time3;
                         if($progress > 1) $progress = 1;
@@ -839,11 +837,9 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
 
                 unlink($this->filename);
                             
-                $filename = s_root.'/logs/fleet.log';
-                            $fo = fopen($filename, "a");
-                            fwrite($fo, "callBack() -- fleet ".$this->filename." deleted.");
-                fclose($fo);
-
+                $log = new Logger();
+                $log->logIt( LOG_USER_FLEET, "callBack() -- fleet ".$this->filename." deleted." );
+                
                 $this->status = false;
                 $this->changed = false;
             }
@@ -1031,14 +1027,17 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
         {
             if(!$this->status || $this->started()) return false;
             if(count($this->raw[1]) <= 0 || count($this->raw[0]) <= 0) return false;
-            $filename = s_root.'/logs/fleet.log';
-            $fo = fopen($filename, "a");
-
+            
             $keys = array_keys($this->raw[1]);
             $user = array_shift($keys);
-            if(array_sum($this->raw[1][$user][0]) <= 0) return false;
-            fwrite($fo, date('Y-m-d, H:i:s')." start() -- Fleet Start. User: ".$user."  Fleet-ID: ".$this->getName()."\n");
-
+            
+            $log = new Logger();
+            $log->logIt( LOG_USER_FLEET, "start() -- Fleet Start. User: ".$user."  Fleet-ID: ".$this->getName());
+                        
+            if(array_sum($this->raw[1][$user][0]) <= 0)
+            {
+                return false;
+            }
 
             # Geschwindigkeitsfaktoren der anderen Teilnehmer abstimmen
             $koords = array_keys($this->raw[0]);
@@ -1141,14 +1140,13 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
             global $types_message_types;
             
             // Logs for arriveAtNextTarget() - mostly fleet stuff
-            $filename = s_root.'/logs/fleet.log';        
-            $fo = fopen($filename, "a");
-            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Arrive at Next Target. Flotten-ID: ".$this->getName()."\n");
-    
+            $log = new Logger();
+            $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Arrive at Next Target. Flotten-ID: ".$this->getName() );
+
             if($this->status != 1) 
                 return false;
             
-            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Arrive at Next Target nach Status. Flotten-ID:  ".$this->getName()."\n");
+            $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Arrive at Next Target nach Status. Flotten-ID:  ".$this->getName() );
 
             $keys = array_keys($this->raw[0]);
             $next_target = $next_target_nt = array_shift($keys);
@@ -1163,11 +1161,11 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
             $back = $this->raw[0][$next_target][1];
 
             $besiedeln = false;
-            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Arrive at Next Target Zuordungen End. Flotten-ID:  ".$this->getName()." User:".$first_user."\n");
+            $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Arrive at Next Target Zuordungen End. Flotten-ID:  ".$this->getName()." User:".$first_user);
 
             if($type == 1 && !$back)
             {
-                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Besiedeln. Flotten-ID:  ".$this->getName()."\n");
+                $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Besiedeln. Flotten-ID:  ".$this->getName() );               
 
                 # Besiedeln
                 $target = explode(':', $next_target_nt);
@@ -1177,7 +1175,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                 if($target_owner)
                 {
                     # Planet ist bereits besiedelt
-                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Planet schon besiedelt. Planetenbesitzer: ".$target_owner." Flotten-ID:  ".$this->getName()."\n");
+                    $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Planet schon besiedelt. Planetenbesitzer: ".$target_owner." Flotten-ID:  ".$this->getName() );
 
                     $message = Classes::Message();
                     if($message->create())
@@ -1196,7 +1194,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                     $start_user = Classes::User($first_user);
                     if(!$start_user->checkPlanetCount())
                     {
-                        fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Planetenlimit erreicht. Flotten-ID:  ".$this->getName()."\n");
+                        $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Planetenlimit erreicht. Flotten-ID:  ".$this->getName() ); 
 
                         # Planetenlimit erreicht
                         $message = Classes::Message();
@@ -1214,14 +1212,14 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                     else
                     {
                         $besiedeln = true;
-                        fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Besiedlen = true. Flotten-ID:  ".$this->getName()."\n");
+                        $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Besiedlen = true. Flotten-ID:  ".$this->getName() );    
                     }
                 }
             }
 
             if($type != 6 && !$back && !$besiedeln)
             {
-                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Nicht stationieren, Flotte fliegt weiter. Flotten-ID:  ".$this->getName()."\n");
+                $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Nicht stationieren, Flotte fliegt weiter. Flotten-ID:  ".$this->getName() );
 
                 # Nicht stationieren: Flotte fliegt weiter
                 $further = true;
@@ -1256,8 +1254,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                 {
                     # Angriff und Transport nur bei besiedelten Planeten
                     # moeglich.
-                    
-                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Angriff und Transport nur bei besiedleten Planeten. Flotten-ID:  ".$this->getName()."\n");
+                    $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Angriff und Transport nur bei besiedleten Planeten. Flotten-ID:  ".$this->getName());
 
                     $message_obj = Classes::Message();
                     if($message_obj->create())
@@ -1273,7 +1270,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                     switch($type)
                     {
                         case 2: # Sammeln
-                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Sammeln. Flotten-ID:  ".$this->getName()."\n");
+                            $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Sammeln. Flotten-ID:  ".$this->getName());
 
                             $ress_max = truemmerfeld::get($target[0], $target[1], $target[2]);
                             $ress_max_total = array_sum($ress_max);
@@ -1379,11 +1376,11 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                 $message->text( $messageText );
                                 $message->addUser($username, 4);
                             }
-                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Sammeln Ende. Flotten-ID:  ".$this->getName()."\n");
+                            $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Sammeln Ende. Flotten-ID:  ".$this->getName());
 
                             break;
                         case 3: # Angriff
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Flotten-ID:  ".$this->getName()."\n");
+                            $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Flotten-ID:  ".$this->getName());
 
                             $angreifer = array();
                             $urangreifer = array();
@@ -1393,36 +1390,50 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                             #Angreiferpart                        
                             #Gemeinsame Flotten in ein Userarray bringen
                             $countangreifer = count($this->raw[1]);
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Count:  ".$countangreifer."\n");
+                            
+                            $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreifer Count:  ".$countangreifer);
 
                             if($countangreifer > 1)
                             {
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreiferflotten in ein Raw bringen-Anfang. Flotten-ID:  ".$this->getName()."\n");
+                                $log->logIt( LOG_USER_FLEET, "arriveAtNextTarget() -- Case Angriff. Angreiferflotten in ein Raw bringen-Anfang. Flotten-ID:  ".$this->getName());
         
                                 foreach($this->raw[1] as $user1=>$info)
                                 {
-                                    fwrite($fo, date('Y-m-d, H:i:s')."  User:  ".$user1."\n");
+                                    $log->logIt( LOG_USER_FLEET, "  User:  ".$user1);
                                     $urangreifer[$user1] = $info[0];
-                                    $exp = explode("/", $user1);                                
+                                    $exp = explode("/", $user1);    
+                                                                
                                     foreach($this->raw[1][$user1][0] as $id=>$anzahl)
                                     {
-                                        fwrite($fo, "\nAngriff-Schiffe  ".$id."  Anzahl  ".$anzahl);
-                                        if($exp[0] == $user1) continue;
-                                        if(isset($this->raw[1][$exp[0]])) $this->addFleet($id, $anzahl, $exp[0]);
-                                        if($exp[0] !== $user1) unset($this->raw[1][$user1]);
+                                        $log->logIt( LOG_USER_FLEET, "\nAngriff-Schiffe  ".$id."  Anzahl  ".$anzahl);
+
+                                        if($exp[0] == $user1) 
+                                        {
+                                            continue;
+                                        }
+                                        
+                                        if(isset($this->raw[1][$exp[0]])) 
+                                        {
+                                            $this->addFleet($id, $anzahl, $exp[0]);
+                                        }
+                                        
+                                        if($exp[0] !== $user1) 
+                                        {
+                                            unset($this->raw[1][$user1]);
+                                        }
                                     }
                                 }
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreiferflotten in ein Raw bringen-Ende. Flotten-ID:  ".$this->getName()."\n");
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Angreiferflotten in ein Raw bringen-Ende. Flotten-ID:  ".$this->getName());
                             }
 
                             #Ende gemeinsame Flotten in ein Userarray bringen
                             foreach($this->raw[1] as $username=>$info)
                             {
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Angreifer Raw Einzeluser User:  ".$username."\n");
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Angreifer Raw Einzeluser User:  ".$username);
                                 $urangreifer[$username] = $info[0];
-
-                                    $angreifer[$username] = $info[0];
+                                $angreifer[$username] = $info[0];
                             }
+                            
                             $target1 = $this->getTargetsList();
                             
                             #Verteidigerpart
@@ -1434,11 +1445,12 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                             $foreign_users = $target_user->getForeignFleetsArray();
                             $countforeign = count($foreign_users);
         
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Fremdverteidiger Count:  ".$countforeign."\n");
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Fremdverteidiger Count:  ".$countforeign);
                 
                             if($countforeign > 0)
                             {
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Fremdverteidigerflotten in ein Raw bringen-Anfang. Flotten-ID:  ".$this->getName()."\n");
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Fremdverteidigerflotten in ein Raw bringen-Anfang. Flotten-ID:  ".$this->getName());
+
                                 foreach($foreign_users as $fleets1)
                                 {
                                     $that = Classes::Fleet($fleets1);
@@ -1455,7 +1467,8 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                             $exp = explode("/", $username1);                                
                                             foreach($that->raw[1][$username1][0] as $id=>$anzahl)
                                             {
-                                                fwrite($fo, "\n arriveAtNextTarget() -- Angriff-Schiffe  ".$id."  Anzahl  ".$anzahl);
+                                                $log->logIt( LOG_USER_FLEET, "\n arriveAtNextTarget() -- Angriff-Schiffe  ".$id."  Anzahl  ".$anzahl);
+                                                
                                                 if($exp[0] == $target_owner)
                                                 {
                                                     $p = 0;
@@ -1481,10 +1494,10 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                         }
                                     }
                                 }
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Fremdverteidigerflotten in ein Raw bringen-Ende. Flotten-ID:  ".$this->getName()."\n");
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Fremdverteidigerflotten in ein Raw bringen-Ende. Flotten-ID:  ".$this->getName());
                             }
                             #Verteidiger Planetenbesitzer
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Planetenbesitzer Verteidigung ermitteln-Anfang. Flotten-ID:  ".$this->getName()."\n");
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Planetenbesitzer Verteidigung ermitteln-Anfang. Flotten-ID:  ".$this->getName());
 
                             foreach($target_user->getItemsList('schiffe') as $item)
                             {
@@ -1493,6 +1506,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                 $verteidiger[$target_owner][$item] = $level;
                                 $urverteidiger[$target_owner][$item] = $level;
                             }
+                            
                             foreach($target_user->getItemsList('verteidigung') as $item)
                             {
                                 $level = $target_user->getItemLevel($item, 'verteidigung');
@@ -1500,12 +1514,13 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                 $verteidiger[$target_owner][$item] = $level;
                                 $urverteidiger[$target_owner][$item] = $level;
                             }
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Planetenbesitzer Verteidigung ermitteln-Ende. Flotten-ID:  ".$this->getName()."\n");
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Funktion Battle �bergabe. Flotten-ID:  ".$this->getName()."\n");
+                            
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Planetenbesitzer Verteidigung ermitteln-Ende. Flotten-ID:  ".$this->getName());
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Funktion Battle Übergabe. Flotten-ID:  ".$this->getName());
 
                             list($winner, $angreifer2, $verteidiger2, $nachrichten_text, $verteidiger_ress, $truemmerfeld) = $this->battle($angreifer, $verteidiger);
-
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Funktion Battle R�ckgabe. Flotten-ID:  ".$this->getName()."\n");
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Funktion Battle R�ckgabe. Flotten-ID:  ".$this->getName());
+                            
                             if(array_sum($truemmerfeld) > 0)
                             {
                                 truemmerfeld::add($target[0], $target[1], $target[2], $truemmerfeld[0], $truemmerfeld[1], $truemmerfeld[2], $truemmerfeld[3]);
@@ -1513,28 +1528,30 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                 $nachrichten_text .= "\tFolgende Tr\xc3\xbcmmer zerst\xc3\xb6rter Schiffe sind durch dem Kampf in die Umlaufbahn des Planeten gelangt: ".ths($truemmerfeld[0])."&nbsp;Carbon, ".ths($truemmerfeld[1])."&nbsp;Aluminium, ".ths($truemmerfeld[2])."&nbsp;Wolfram und ".ths($truemmerfeld[3])."&nbsp;Radium.\n";
                                 $nachrichten_text .= "</p>\n";
                             }
+                            
                             $count = (count($angreifer2));
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Angreifer Count:  ".$count);
 
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Count:  ".$count."\n");
                             if($count > 0)
                             {
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Urflotte Angreifer wieder einsetzen-Anfang. Flotten-ID:  ".$this->getName()."\n");
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Urflotte Angreifer wieder einsetzen-Anfang. Flotten-ID:  ".$this->getName());
+
                                 #Urflotten wieder einsetzen
                                 $this->raw[1] = $urfleet;
                                 #Kampfflotte IDs und Anzahl holen
                                 $angreifer3 = array();
                                 foreach($this->raw[1] as $username3=>$info)
                                 {
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Urflotte Angreifer3. User:  ".$username3."\n");
+                                    $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Urflotte Angreifer3. User:  ".$username3);            
 
                                     $angreifer3[$username3] = $info[0];
                                 }
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Urflotte Angreifer wieder einsetzen-Ende. Flotten-ID:  ".$this->getName()."\n");
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Urflotte Angreifer wieder einsetzen-Ende. Flotten-ID:  ".$this->getName());
 
                                 #Flottenverluste uebertragen
                                 foreach($angreifer2 as $username2=>$ida2)
                                 {
-                                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Flottenverluste �bertragen-Anfang. Flotten-ID:  ".$this->getName()."  User:  ".$username2."\n");
+                                    $log->logIt( LOG_USER_FLEET," arriveAtNextTarget() -- Case Angriff. Angreifer Flottenverluste Übertragen-Anfang. Flotten-ID:  ".$this->getName()."  User:  ".$username2);
 
                                     $gesamt3 = 0;
                                     foreach($ida2 as $id2=>$anzahl2)
@@ -1543,7 +1560,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
 
                                         #Anzahl Einheiten Angreifer2 zaehlen
                                         $countid2[$id2] = $anzahl2;
-                                        fwrite($fo, " arriveAtNextTarget() -- Nach Kampf-Flotten-ID  ".$id2."\nAnzahl  ".$anzahl2."\nUsername  ".$username2);
+                                        $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Nach Kampf-Flotten-ID  ".$id2."\nAnzahl  ".$anzahl2."\nUsername  ".$username2);
                                         #Anzahl Einheiten Angreifer3 und Diff vorbereiten;
                                         $gesamtid2 = 0;
                                         $gesamtangreifer3[$username2][$id2] = $gesamtid2;
@@ -1581,7 +1598,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                             $diff = $gesamtangreifer3[$username2][$id3]-$countid2[$id3];
                                             if($diff > 0)
                                             {
-                                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Angreifer Zufallsschleife Anfang. User:  ".$username2."  ID:  ".$id3."\n");
+                                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Angreifer Zufallsschleife Anfang. User:  ".$username2."  ID:  ".$id3);
 
                                                 #Diff einzeln bei den Users abzaehlen
                                                 $i = 0;
@@ -1657,12 +1674,11 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                                     {
                                                         $x = array_search ($userabzug, $usernamearray[$username2][$id3]);
                                                         unset($usernamearray[$username2][$id3][$x]);    
-                                                        fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Angreifer Zufallsschleife. User aus Zufallsraw l�schen User:  ".$userabzug."  ID:  ".$id3."\n");
+                                                        $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Angreifer Zufallsschleife. User aus Zufallsraw löschen User:  ".$userabzug."  ID:  ".$id3);
                                                     }
 
                                                 }
-
-                                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Angreifer Zufallsschleife Ende. User:  ".$username2."  ID:  ".$id3."  Flotten abgezogen:  ".$i."\n");
+                                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Angreifer Zufallsschleife Ende. User:  ".$username2."  ID:  ".$id3."  Flotten abgezogen:  ");
                                             }    
                                     }
                                     #Angreifer 3 ohne gef�llte Id-Raws l�schen
@@ -1677,7 +1693,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                         if($checkcount == 0)
                                         {
                                             unset($angreifer3[$deleteusername]);
-                                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Angreifer nicht mehr vorhanden , deshalb L�schung. User:  ".$deleteusername."\n");
+                                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Angreifer nicht mehr vorhanden , deshalb L�schung. User:  ".$deleteusername);
                                         }
                                         #Falls der richtige Username nicht mehr in Angreifer 3, Userraw mit naechstem Imploded User fuellen
                                         if(!isset($angreifer3[$exp1[0]]))
@@ -1687,11 +1703,11 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                         }
 
                                     }
-
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Flottenverluste �bertragen-Ende. Flotten-ID:  ".$this->getName()."\n");
+                                    $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Angreifer Flottenverluste Übertragen-Ende. Flotten-ID:  ".$this->getName());
                                 }
                                 $angreifer2 = $angreifer3;
                             }
+                            
                             # Nachrichten aufteilen
                             $angreifer_keys = array_keys($angreifer);
                             $verteidiger_keys = array_keys($verteidiger);
@@ -1704,7 +1720,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                             # Rohstoffe stehlen
                             if($winner == 1)
                             {
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Rohstoffe stehlen. Flotten-ID:  ".$this->getName()."\n");
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Angreifer Rohstoffe stehlen. Flotten-ID:  ".$this->getName());
 
                                 # Angreifer haben gewonnen
 
@@ -1799,51 +1815,53 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                     }
                                 }
                             }
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Rohstoffe stehlen-Ende. Flotten-ID:  ".$this->getName()."\n");
+                            
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Angreifer Rohstoffe stehlen-Ende. Flotten-ID:  ".$this->getName());
                             $angreifer_keys = array_keys($urangreifer);
                             #if(count($angreifer_keys ) == 0) fwrite($fo, date('Y-m-d, H:i:s')."  Case Angriff. Angreifer Keys == 0! Flotten-ID:  ".$this->getName()."\n");
                             #if(count($angreifer_keys ) > 0) fwrite($fo, date('Y-m-d, H:i:s')."  Case Angriff. Angreifer Keys  > 0 Flotten-ID:  ".$this->getName()."\n");
 
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Gesamtanfang.\n");
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Gesamtanfang.");
 
                             foreach($angreifer_keys as $username)
                             {
                                 $exp = explode("/", $username);
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Anfang. User:  ".$username."\n");
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Anfang. User:  ".$username);
+
                                 if(!isset($angreifer2[$username]))
                                 {
                                     
                                     #Flotten des Sub-Angreifers wurden zerstoert
-                                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Sub-Angreifer Raw loeschen. User: ".$username."\n");
+                                    $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Sub-Angreifer Raw loeschen. User: ".$username);
+
                                     unset($this->raw[1][$username]);
                                     $agcount = count($this->raw[1]);
                                     if(!isset($this->raw[1][$username]) && !isset($this->raw[1][$exp[0]]))
                                     {
                                         $user_obj = Classes::User($exp[0]);
                                         $user_obj->unsetFleet($this->getName());
-                                        fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Sub-Angreifer aus User-Raw loeschen. User: ".$username."\n");
+                                        $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Sub-Angreifer aus User-Raw loeschen. User: ".$username);
                                     }
                                     if($agcount == 0)
                                     {
                                         $further = false;
                                         #$user_obj = Classes::User($exp[0]);
                                         #$user_obj->unsetFleet($this->getName());
-                                        fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Flotte Further False. Flotten-ID:  ".$this->getName()."  User: ".$username."\n");
+                                        $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Angreifer Flotte Further False. Flotten-ID:  ".$this->getName()."  User: ".$username);
                                     }
                                 }
-
-                                else            
-                                $this->raw[1][$username][0] = $angreifer2[$username];
-
+                                else
+                                {            
+                                    $this->raw[1][$username][0] = $angreifer2[$username];
+                                }
                         
-                                $user_obj = Classes::User($exp[0]);
-                                
+                                $user_obj = Classes::User($exp[0]);                                
                                 $user_obj->recalcHighscores(false, false, false, true, false);
                                 
                                 $user_obj->unsetVerbFleet($this->getName());
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Ende. User:  ".$username."\n");    
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Ende. User:  ".$username);  
                             }
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Gesamtende.\n");
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Angreifer Flotte oder Flottenteile loeschen-Gesamtende.");
 
                             $messagevertaufbau = false;
 
@@ -1852,7 +1870,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                         
                             foreach($verteidiger_keys as $username)
                             {
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Verteidiger Flotte Anzahl �bertragen in Urverteidiger-Anfang. Flotten-ID:  ".$this->getName()."\n");
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Verteidiger Flotte Anzahl übertragen in Urverteidiger-Anfang. Flotten-ID:  ".$this->getName());
 
                                 #Einheiten vor dem Kampf holen
                                 #$count ist die Anzahl der zusammengefassen Usereinheiten vor dem Kampf
@@ -1899,7 +1917,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                                 if($exp[0] == $username) $urusernamearray[$username][] = $usernameur;
                                             }
                                             #Diff einzeln bei den Users abzaehlen
-                                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Verteidiger-Zufallsschleife Anfang. ID: ".$id." User:  ".$username."\n");
+                                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Verteidiger-Zufallsschleife Anfang. ID: ".$id." User:  ".$username);
     
                                             $i = 0;
                                             while($i < $diff)
@@ -1976,16 +1994,20 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                                     unset($urverteidiger[$uruserabzug][$id]);
                                                 }
                                             }
-                                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Verteidiger Zufallsschleife Ende. ID: ".$id." User:  ".$username." Flotten abgezogen ".$i."\n");
+                                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Verteidiger Zufallsschleife Ende. ID: ".$id." User:  ".$username." Flotten abgezogen ".$i);
                                         }
 
                                     }    
                                 }
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff. Verteidiger Flotte Anzahl �bertragen in Urverteidiger-Ende. Flotten-ID:  ".$this->getName()."\n");
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff. Verteidiger Flotte Anzahl �bertragen in Urverteidiger-Ende. Flotten-ID:  ".$this->getName());
 
                             }
+                            
                             if($messagevertaufbau == true)
-                            $messages[$target_owner] .= "\n<p class=\"verteidigung-wiederverwertung\">Es konnten 75% der Verteidigungsanlagen wiederhergestellt werden.</p>\n";
+                            {
+                                $messages[$target_owner] .= "\n<p class=\"verteidigung-wiederverwertung\">Es konnten 75% der Verteidigungsanlagen wiederhergestellt werden.</p>\n";
+                            }
+                            
                             $user_obj = Classes::User($username);
                             $user_obj->recalcHighscores(false, false, false, true, true);
 
@@ -1993,7 +2015,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                             $exist = array();
                             foreach($urverteidiger as $username=>$info)
                             {
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Urverteidiger in Urfleet einordnen Anfang. User:  ".$username."\n");
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Urverteidiger in Urfleet einordnen Anfang. User:  ".$username);
                                 $fleet = $urverteidiger[$username][1];
                                 unset($urverteidiger[$username][1]);
                                 $urfleetverteidiger[$fleet][$username][0] = $urverteidiger[$username];
@@ -2006,25 +2028,24 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                 
                                 if($countur == true)
                                 {
-                                    fwrite($fo, "\n".time()." arriveAtNextTarget() -- Urverteidiger existiert noch, daher keine Loeschung. Flotten-ID:  ".$this->getName()."\n");
-                                
+                                    $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Urverteidiger existiert noch, daher keine Loeschung. Flotten-ID:  ".$this->getName());
                                     $exist[] = $username;
                                 }
                                 #else fwrite($fo, "\n".time()."  Urverteidiger existiert nicht mehr, daher Loeschung. User:  ".$username);
 
                             
                                 $that->changed = true;
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Urverteidiger in Urfleet einordnen Ende. User:  ".$username."\n");
-
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Urverteidiger in Urfleet einordnen Ende. User:  ".$username);
                             }
+                            
                             #Fleets, die nicht in Exist sind, loeschen
                             $foreign_users = $target_user->getForeignFleetsArray();
                             foreach($foreign_users as $fleet1)
                             {
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Urfleetverteidiger loeschen Anfang. Flotten-ID:  ".$fleet1."\n");
-
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Urfleetverteidiger loeschen Anfang. Flotten-ID:  ".$fleet1);
                                 $that = Classes::Fleet($fleet1);
                                 $target = $that->getTargetsList();
+                                
                                 if($target[0] == $target1[0])
                                 {    
                                     $countraw = 0;
@@ -2032,9 +2053,9 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                     {
                                         if(!in_array($username, $exist))
                                         {
-                                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Verteidigerfleet, einzelnes Userraw loeschen. ID:  ".$fleet1."  Username:  ".$username."\n");
-
+                                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Verteidigerfleet, einzelnes Userraw loeschen. ID:  ".$fleet1."  Username:  ".$username);
                                             unset($that->raw[1][$username]);
+                                            
                                             if(count($that->raw[1]) > 0)
                                             {
                                                     $i = 0;
@@ -2047,7 +2068,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                                             {
                                                                 $that->raw[1][$exp[0]] = $that->raw[1][$username1];
                                                                 unset($that->raw[1][$username1]);
-                                                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Verteidigerfleet, noch ein Userraw vorhanden. Userarray tauschen. ID:  ".$fleet1."  Username:  ".$username1."\n");
+                                                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Verteidigerfleet, noch ein Userraw vorhanden. Userarray tauschen. ID:  ".$fleet1."  Username:  ".$username1);
                                                             }
                                                             $i++;
                                                         }
@@ -2056,32 +2077,30 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
 
                                             if(count($that->raw[1]) < 1)
                                             {
-                                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Verteidigerfleet, kein Userraw mehr vorhanden. Fleet loeschen. ID:  ".$fleet1."  Username:  ".$username."\n");
+                                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Verteidigerfleet, kein Userraw mehr vorhanden. Fleet loeschen. ID:  ".$fleet1."  Username:  ".$username);
                                                 $that->destroy();
                                             }
                                             $that->changed = true;
                                         }
                                     }
                                 }
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Urfleetverteidiger loeschen Ende. Flotten-ID:  ".$fleet1."\n");
-        
+                                
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Urfleetverteidiger loeschen Ende. Flotten-ID:  ".$fleet1);      
                             }    
-                            fwrite($fo, "\n\n\n\n\n");
                             
-                                #if($messagevertaufbau == true)
-                                #$messages[$target_owner] .= "\n<p class=\"verteidigung-wiederverwertung\">Es konnten 75% der Verteidigungsanlagen wiederhergestellt werden.</p>\n";
-                                #$user_obj = Classes::User($username);
-                                #$user_obj->recalcHighscores(false, false, false, true, true);
+                            #if($messagevertaufbau == true)
+                            #$messages[$target_owner] .= "\n<p class=\"verteidigung-wiederverwertung\">Es konnten 75% der Verteidigungsanlagen wiederhergestellt werden.</p>\n";
+                            #$user_obj = Classes::User($username);
+                            #$user_obj->recalcHighscores(false, false, false, true, true);
                             
                             # Nachrichten zustellen
                             foreach($messages as $username=>$text)
                             {
-
                                 $exp = explode("/", $username);
+                                
                                 if($exp[0] == $username)
                                 {
-                                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Nachrichten versenden. Anfang. User:  ".$username."\n");
-                                    
+                                    $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Nachrichten versenden. Anfang. User:  ".$username);                                    
                                     #echo("Fleet.php Message versenden :".date('Y-m-d, H:i:s')."\n");
                                     $message = Classes::Message();
                                     if(!$message->create()) continue;
@@ -2091,25 +2110,27 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                     $message->text($text);
                                     $message->subject("Kampf auf ".$next_target_nt);
                                     $message->addUser($exp[0], 1);
-                                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Nachrichten versenden. Ende. User:  ".$username."\n");
+                                    $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Nachrichten versenden. Ende. User:  ".$username);
                                 }                        
                             }
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Case Angriff Ende.\n");
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Case Angriff Ende.");
 
                             break;
 
                         case 4: # Transport
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Transport. Flotten-ID:  ".$this->getName()."\n");
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Transport. Flotten-ID:  ".$this->getName());
+                            
                             if(!isset($this->raw[6][1]))
                                 $message_text = array(
                                 $target_owner => "Ein Transport erreicht Ihren Planeten \xe2\x80\x9e".$target_user->planetName()."\xe2\x80\x9c (".$next_target_nt."). Folgende Spieler liefern Güter ab:\n"
                                 );
                             else
-                            $message_text = array(
-                            $target_owner => "Ein Transport erreicht Ihren Planeten \xe2\x80\x9e".$target_user->planetName()."\xe2\x80\x9c (".$next_target_nt."). Die Flotte hat das Transportgut an Board behalten.\n",
-                            $first_user => "Ein Transport erreicht den Planeten \xe2\x80\x9e".$target_user->planetName()."\xe2\x80\x9c (".$next_target_nt."). Die Flotte hat das Transportgut an Board behalten.\n"
-                            );
-
+                            {
+                                $message_text = array(
+                                    $target_owner => "Ein Transport erreicht Ihren Planeten \xe2\x80\x9e".$target_user->planetName()."\xe2\x80\x9c (".$next_target_nt."). Die Flotte hat das Transportgut an Board behalten.\n",
+                                    $first_user => "Ein Transport erreicht den Planeten \xe2\x80\x9e".$target_user->planetName()."\xe2\x80\x9c (".$next_target_nt."). Die Flotte hat das Transportgut an Board behalten.\n"
+                                );
+                            }
 
                             if(!isset($this->raw[6][0])) $this->raw[6][0] = 0;
                                            if($this->raw[6][0] !== -1 && !isset($this->raw[6][1]))
@@ -2208,7 +2229,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                             }
                             foreach($message_text as $username=>$text)
                             {
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Message Transport Anfang. User:  ".$username."\n");
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Message Transport Anfang. User:  ".$username);
 
                                 $message_obj = Classes::Message();
                                 if($message_obj->create())
@@ -2229,17 +2250,17 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                     $message_obj->text($text);
                                     $message_obj->addUser($username, $types_message_types[$type]);
                                 }
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Message Transport Ende. User:  ".$username."\n");                    
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Message Transport Ende. User:  ".$username);                    
                             }    
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Transport Ende. Flotten-ID:  ".$this->getName()."\n");
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Transport Ende. Flotten-ID:  ".$this->getName());
 
                             break;
                         case 5: # Spionage
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- CASE SPIONAGE. Fleet ID: ".$this->getName()."\n");
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- CASE SPIONAGE. Fleet ID: ".$this->getName());
 
                             if(!$target_owner)
                             {
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- CASE SPIONAGE. Unbesiedelter Planet.\n");
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- CASE SPIONAGE. Unbesiedelter Planet.");
 
                                 # Zielplanet ist nicht besiedelt
                                 $message_text = "<h3>Spionagebericht des Planeten ".utf8_htmlentities($next_target_nt)."</h3>\n";
@@ -2262,17 +2283,20 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                     $message->html(true);
                                     $message->text($message_text);
                                     $message->subject('Spionage des Planeten '.$next_target_nt);
+                                    
                                     foreach(array_keys($this->raw[1]) as $username)
+                                    {
                                         $message->addUser($username, $types_message_types[$type]);
+                                    }
                                 }
                             }
                             else
                             {
                                 # Zielplanet ist besiedelt
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- CASE SPIONAGE. Besiedelter Planet.\n");
-
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- CASE SPIONAGE. Besiedelter Planet.");
                                 $users = array_keys($this->raw[1]);
                                 $verbuendet = true;
+                                
                                 foreach($users as $username)
                                 {
                                     if(!$target_user->isVerbuendet($username))
@@ -2281,10 +2305,11 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                         break;
                                     }
                                 }
+                                
                                 if(!$verbuendet)
                                 {
                                     # Spionagetechnikdifferenz ausrechnen
-                                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- CASE SPIONAGE. Spionagetechnik Anfang.\n");
+                                    $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- CASE SPIONAGE. Spionagetechnik Anfang.");
 
                                     $owner_level = $target_user->getItemLevel('F1', 'forschung');
                                     $others_level = 0;
@@ -2307,7 +2332,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
 
                                     if($owner_level == 0) $diff = 5;
                                     else $diff = floor(pow($others_level/$owner_level, 2));
-                                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- CASE SPIONAGE. Spionagetechnik Ende.\n");
+                                    $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- CASE SPIONAGE. Spionagetechnik Ende.");
 
                                 }
                                 else # Spionierter Planet liefert alle Daten aus, wenn alle Spionierenden verbuendet sind
@@ -2329,8 +2354,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                 switch($diff)
                                 {
                                     case 5: # Roboter und Fremdflotte zeigen
-                                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- CASE SPIONAGE. Roboter und Fremdflotte.\n");
-
+                                        $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- CASE SPIONAGE. Roboter und Fremdflotte.");
                                         $next = &$message_text2[];
                                         $next = "\n<div id=\"spionage-fremdschiffe\">";
                                         $next .= "\n\t<h4>Fremdflotte</h4>";
@@ -2401,23 +2425,25 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                         unset($next);
                                     case 4: # Forschung zeigen
 
-                                    fwrite($fo, date('Y-m-d, H:i:s')."  CASE SPIONAGE. Forschung.\n");
+                                        $log->logIt( LOG_USER_FLEET, "  CASE SPIONAGE. Forschung.");
 
                                         $next = &$message_text2[];
                                         $next = "\n<div id=\"spionage-forschung\">";
                                         $next .= "\n\t<h4>Forschung</h4>";
                                         $next .= "\n\t<ul>";
+                                        
                                         foreach($target_user->getItemsList('forschung') as $id)
                                         {
                                             if($target_user->getItemLevel($id, 'forschung') <= 0) continue;
                                             $item_info = $target_user->getItemInfo($id, 'forschung');
                                             $next .= "\n\t\t<li>".$item_info['name']." <span class=\"stufe\">(Level&nbsp;".ths($item_info['level']).")</span>";
                                         }
+                                        
                                         $next .= "\n\t</ul>";
                                         $next .= "\n</div>";
                                         unset($next);
                                     case 3: # Schiffe und Verteidigungsanlagen anzeigen
-                                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- CASE SPIONAGE. Schiffe und Verteidigung.\n");
+                                        $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- CASE SPIONAGE. Schiffe und Verteidigung");
 
                                         $next = &$message_text2[];
                                         $next = "\n<div id=\"spionage-schiffe\">";
@@ -2449,7 +2475,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                         unset($next);
 
                                     case 2: # Gebaeude anzeigen
-                                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- CASE SPIONAGE. Geb�ude.\n");
+                                        $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- CASE SPIONAGE. Gebäude.");
 
                                         $next = &$message_text2[];
                                         $next = "\n<div id=\"spionage-gebaeude\">";
@@ -2465,7 +2491,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                         $next .= "\n</div>";
                                         unset($next);
                                     case 1: # Rohstoffe anzeigen
-                                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- CASE SPIONAGE. Rohstoffe.\n");
+                                        $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- CASE SPIONAGE. Rohstoffe.");
 
                                         $next = &$message_text2[];
                                         $next = "\n<div id=\"spionage-rohstoffe\">";
@@ -2478,7 +2504,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                 $message = Classes::Message();
                                 if($message->create())
                                 {
-                                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- CASE SPIONAGE. Message Spion.\n");
+                                    $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- CASE SPIONAGE. Message Spion.");
                                     $message->html(true);
                                     $message->subject('Spionage des Planeten '.$next_target_nt);
                                     $message->text($message_text);
@@ -2491,7 +2517,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                                 $message = Classes::Message();
                                 if($message->create())
                                 {
-                                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- CASE SPIONAGE. Message Opfer.\n");
+                                    $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- CASE SPIONAGE. Message Opfer.");
 
                                     $message->subject('Fremde Flotte auf dem Planeten '.$next_target_nt);
                                     $first_user = array_shift($users);
@@ -2507,22 +2533,22 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                     }
                 }
                 # Weiterfliegen
-                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Weiterfliegen Anfang. Flotten-ID:  ".$this->getName()."\n");
+                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Weiterfliegen Anfang. Flotten-ID:  ".$this->getName()."");
                 $users = array_keys($this->raw[1]);
                 if($further)
                 {
-                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Weiterfliegen mit further = true. Flotten-ID:  ".$this->getName()."\n");
-
-                                #In die Halteschleife schicken
+                    $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Weiterfliegen mit further = true. Flotten-ID:  ".$this->getName());
+                    
+                    #In die Halteschleife schicken
                     #echo("\nRaw6 ".$this->raw[6][0]."\n");
                     if(isset($this->raw[6][0]) && $this->raw[6][0] > 0)
                     {
-                        fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Weiterfliegen in Halteschleife. Flotten-ID:  ".$this->getName()."\n");
-
+                        $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Weiterfliegen in Halteschleife. Flotten-ID:  ".$this->getName());
                         $owner_obj = Classes::User($target_owner);
                         $foreign_fleet = $owner_obj->getForeignFleetsArray();
                         $foreigncount = 0;
                         $usersonhold = array();
+                        
                         #Fremdflotten durch Zielabgleich aussortieren, nur Flotten am Ziel werden gez�hlt
                         foreach($foreign_fleet as $fleet1)
                         {
@@ -2532,7 +2558,6 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                             if($target[0] == $target1[0])
                             {
                                 $foreigncount += count($fleet1);
-
                             
                                 foreach($that->raw[1] as $usernameonhold=>$info)
                                 {
@@ -2548,7 +2573,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                         #var_dump($permitjoin);
                         if($permitjoin == true)
                         {
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Erlaubnis Eindocken in vorhandene Halteflotte. Flotten-ID:  ".$this->getName()."\n");
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Erlaubnis Eindocken in vorhandene Halteflotte. Flotten-ID:  ".$this->getName());
 
                             $time = $this->getHoldTime();
                             $that = Classes::Fleet($fleetid);
@@ -2559,34 +2584,33 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                             foreach($this->raw[1][$users[0]][0] as $id=>$anzahl)
                             {                                        
                                 $that->addFleet($id, $anzahl, $adduser);
-                                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Eindocken von Flotte. Flotten-ID:  ".$this->getName()." in Flotte: ".$that->getName()."\n");    
+                                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Eindocken von Flotte. Flotten-ID:  ".$this->getName()." in Flotte: ".$that->getName());    
                             }
                             $further = false;;
                         }                                            
     
                         if($foreigncount <= 4)
                         {
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Eindocken in Halteschleife am Plani. Flotten-ID:  ".$this->getName()." \n");    
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Eindocken in Halteschleife am Plani. Flotten-ID:  ".$this->getName());    
 
                             $keys = array_keys($this->raw[0]);
                             $to = $to_t = array_shift($keys);
                             $target_user_obj = Classes::User($target_owner);
-
                             $target_user_obj->addForeignFleet($this->getName());
-
-                                    $first_user = array_shift($users);
-                               $holdtime = $this->getHoldTime();
+                            $first_user = array_shift($users);
+                            $holdtime = $this->getHoldTime();
                             $duration = $this->getNextDuration();
                             $holdtime1 = ((time() + $holdtime)-$duration);
                             $this->raw[2] = $holdtime1;
                             $newholdtime = -1;
+                            
                             unset($this->raw[6][0]);
-                                                 $this->raw[6][0] = $newholdtime;
+                            
+                            $this->raw[6][0] = $newholdtime;
                             $this->createNextEvent();
-
                             
                             #Tritiumverbrauch anpassen
-                                                 #$this->raw[1][$username][3][2] -= $this->getTritium($username, $this->raw[1][$username][1], $next_target_nt);
+                            #$this->raw[1][$username][3][2] -= $this->getTritium($username, $this->raw[1][$username][1], $next_target_nt);
                             #Flugerfahrung anpassen
                             $this->raw[1][$first_user][5] -= $this->getTritium($first_user, $this->raw[1][$first_user][1], $next_target_nt);
                         }
@@ -2594,27 +2618,40 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                     }
                     else
                     {
-                        fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Weiterfliegen ohne Halteschleife. Flotten-ID:  ".$this->getName()."\n");
-    
-                        
+                        $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Weiterfliegen ohne Halteschleife. Flotten-ID:  ".$this->getName());
+                            
                         $first_user = array_shift($users);
                         $this->raw[3][$next_target] = array_shift($this->raw[0]);
                         $this->raw[2] = time();
-                        if(isset($this->raw[6][0]) && $this->raw[6][0] == -1) $target_user->unsetForeignFleet($this->getName());
-                        if(isset($this->raw[6][0]) && $this->raw[6][0] == -1) $this->raw[6][0] = 0;
+                        
+                        if(isset($this->raw[6][0]) && $this->raw[6][0] == -1)
+                        {
+                            $target_user->unsetForeignFleet($this->getName());
+                        }
+                        
+                        if(isset($this->raw[6][0]) && $this->raw[6][0] == -1) 
+                        {
+                            $this->raw[6][0] = 0;
+                        }
                         
                         $this->raw[7][0] = $this->getNextArrival();
                         $this->createNextEvent();        
-                    
-                    
-                                       # Vom Target entfernen
+                                        
+                        # Vom Target entfernen
                         if($target_user && $target_owner != $first_user)
-                        $target_user->unsetFleet($this->getName());
+                        {
+                            $target_user->unsetFleet($this->getName());
+                        }
+                        
                         $this->changed = true;
                     }        
                     # Flugerfahrung
                     $last_targets = array_keys($this->raw[3]);
-                    if(count($last_targets) <= 0) $last_target = false;
+                    
+                    if(count($last_targets) <= 0) 
+                    {
+                        $last_target = false;
+                    }
                     else
                     {
                         $last_target = array_pop($last_targets);
@@ -2637,7 +2674,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
 
                         if($new_fleet->create() && $further == true)
                         {
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Neue Flotte.\n");
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Neue Flotte.");
 
                             $that = Classes::Fleet();
                             $that->raw[1][$exp[0]] = $this->raw[1][$user];
@@ -2650,24 +2687,24 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                             $new_fleet->raw[7][0] = round($new_fleet->getNextArrival());
                             $user_obj->addFleet($new_fleet->getName());
                             $new_fleet->createNextEvent();
-                            fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Neue Flotte. ID: ".$new_fleet->getName()."\n");
+                            $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Neue Flotte. ID: ".$new_fleet->getName());
 
                         }
                         unset($this->raw[1][$user]);
                     }
-                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Ende Neue Flotte oder Ende Weiterflug.\n");
+                    $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Ende Neue Flotte oder Ende Weiterflug.");
 
             
                 }
                 if(!$further)
                 {
                     $this->destroy();
-                    fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Flotte Further = false. Destroy. L�sche Flotten-ID:  ".$this->getName()."\n");
+                    $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Flotte Further = false. Destroy. Lösche Flotten-ID:  ".$this->getName());
                 }
             }
             else
             {
-                fwrite($fo, date('Y-m-d, H:i:s')." arriveAtNextTarget() -- Stationieren.\n");
+                $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- Stationieren.");
     
                 # Stationieren
                 $target = explode(':', $next_target_nt);
@@ -2683,15 +2720,25 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                 if($besiedeln || $owner == $first_user)
                 {
                     # Ueberschuessiges Tritium
-                     if(!isset($this->raw[1][$first_user][3][2])) $this->raw[1][$first_user][3][2] = $this->getTritium($first_user, $this->raw[1][$first_user][1], $next_target_nt);
-                    else $this->raw[1][$first_user][3][2] += $this->getTritium($first_user, $this->raw[1][$first_user][1], $next_target_nt);
-                            }
+                    if(!isset($this->raw[1][$first_user][3][2])) 
+                    {
+                        $this->raw[1][$first_user][3][2] = $this->getTritium($first_user, $this->raw[1][$first_user][1], $next_target_nt);
+                    }
+                    else 
+                    {
+                        $this->raw[1][$first_user][3][2] += $this->getTritium($first_user, $this->raw[1][$first_user][1], $next_target_nt);
+                    }
+                }
 
                 if($besiedeln)
                 {
                     $user_obj = Classes::User($first_user);
+                    
                     if($user_obj->registerPlanet($next_target_nt) === false)
+                    {
                         return false;
+                    }
+                    
                     if(isset($this->raw[1][$first_user][0]['S6']))
                     {
                         $this->raw[1][$first_user][0]['S6']--;
@@ -2705,10 +2752,8 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                         $besiedelung_ress[3] *= .4;
                         $user_obj->addRess($besiedelung_ress);
                     }
-                    $owner = $first_user;
-                    
+                    $owner = $first_user;                    
                 }
-
 
                 if( !$owner )
                 {
@@ -2723,9 +2768,9 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                     return false;
 
                 $planet_index = $owner_obj->getPlanetByPos($next_target_nt);
+                
                 if($planet_index === false)
                 {
-                    echo "FFFFFFFFFFFFFFFFFF";
                     return false;
                 }
 
@@ -2736,15 +2781,22 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                 $schiffe_own = array();
                 $schiffe_other = array();
 
-                # Flugerfahrung
-                
-                    $last_targets = array_keys($this->raw[3]);
-                    if(count($last_targets) <= 0) $last_target = false;
-                    else
+                # Flugerfahrung                
+                $last_targets = array_keys($this->raw[3]);
+                if(count($last_targets) <= 0) 
+                {
+                    $last_target = false;
+                }
+                else
+                {
+                    $last_target = array_pop($last_targets);
+                    
+                    if(substr($last_target, -1) == 'T') 
                     {
-                        $last_target = array_pop($last_targets);
-                        if(substr($last_target, -1) == 'T') $last_target = substr($last_target, 0, -1);
+                        $last_target = substr($last_target, 0, -1);
                     }
+                }
+                
                 foreach($this->raw[1] as $username=>$move_info)
                 {
 
@@ -2771,9 +2823,10 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                         }
 
                         if($username != $first_user)
+                        {
                             $this->raw[1][$username][3][2] += $this->getTritium($username, $this->raw[1][$username][1], $next_target_nt);
-
-                                  }
+                        }
+                    }
                     else
                     {
                         if(!$besiedeln)
@@ -2790,41 +2843,60 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                     }
 
                     # Flugerfahrung
-                    if($besiedeln) $this->raw[1][$first_user][0]['S6'] = 1;
+                    if($besiedeln) 
+                    {
+                        $this->raw[1][$first_user][0]['S6'] = 1;
+                    }
+                    
                     $this_last_target = (($last_target === false) ? $this->raw[1][$username][1] : $last_target);
                     $this->raw[1][$username][5] += $this->getTritium($username, $this_last_target, $next_target);
-                    if($besiedeln) $this->raw[1][$first_user][0]['S6']--;
+                    
+                    if($besiedeln) 
+                    {
+                        $this->raw[1][$first_user][0]['S6']--;
+                    }
 
                     $user_obj = Classes::User($username);
                     $user_obj->addScores(5,$this->raw[1][$username][5]/1000*2);
                     $user_obj->addScores(5,$this->raw[1][$first_user][3][2]*-0.001);
 
-
                     #Behebung der bestehenden -1 Eintr�ge vom Flugerfahrungsbug
-                    if($user_obj->raw['punkte'][5] < 0) $user_obj->raw['punkte'][5] = ($user_obj->raw['punkte'][5] *-1);
-                }
-            
+                    if($user_obj->raw['punkte'][5] < 0) 
+                    {
+                        $user_obj->raw['punkte'][5] = ($user_obj->raw['punkte'][5] *-1);
+                    }
+                }            
                 
                 if($besiedeln)
                 {
                     $message_text = "Ihre Flotte erreicht den Planeten ".$next_target_nt." und beginnt mit seiner Besiedelung.";
+
                     if(isset($besiedelung_ress))
+                    {
                         $message_text .= " Durch den Abbau eines Besiedelungsschiffs konnten folgende Rohstoffe wiederhergestellt werden: ".ths($besiedelung_ress[0], true)." Carbon, ".ths($besiedelung_ress[1], true)." Aluminium, ".ths($besiedelung_ress[2], true)." Wolfram, ".ths($besiedelung_ress[3], true)." Radium.";
+                    }
+                    
                     $message_text .= "\n";
                 }
                 else
+                {                                    
                     $message_text = "Eine Flotte erreicht den Planeten \xe2\x80\x9e".$owner_obj->planetName()."\xe2\x80\x9c (".$owner_obj->getPosString().", Eigent\xc3\xbcmer: ".$owner_obj->getName().").\n";
+                }
+                
                 if(array_sum($schiffe_own) > 0)
                 {
                     $message_text .= "Die Flotte besteht aus folgenden Schiffen: ".makeItemsString($schiffe_own, false)."\n";
+                    
                     foreach($schiffe_own as $id=>$anzahl)
+                    {
                         $owner_obj->changeItemLevel($id, $anzahl);
-                        
-                        
+                    }                                               
                 }
+                
                 if(array_sum_r($schiffe_other) > 0)
                 {
                     $message_text .= "Folgende Schiffe werden fremdstationiert:\n";
+                    
                     foreach($schiffe_other as $user=>$schiffe)
                     {
                         $message_text .= $user.": ".makeItemsString($schiffe, false)."\n";
@@ -2833,7 +2905,8 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
                 }
 
                 $message_text .= "\nFolgende G\xc3\xbcter werden abgeliefert:\n";
-                $message_text .= ths($ress[0], true).' Carbon, '.ths($ress[1], true).' Aluminium, '.ths($ress[2], true).' Wolfram, '.ths($ress[3], true).' Radium, '.ths($ress[4], true)." Tritium.";
+                $message_tet .= ths($ress[0], true).' Carbon, '.ths($ress[1], true).' Aluminium, '.ths($ress[2], true).' Wolfram, '.ths($ress[3], true).' Radium, '.ths($ress[4], true)." Tritium.";
+                
                 if(array_sum($robs) > 0)
                     $message_text .= "\n".makeItemsString($robs, false)."\n";
                 foreach($robs as $id=>$anzahl)
@@ -2893,7 +2966,7 @@ else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' )
         protected function getDataFromRaw(){}
         protected function getRawFromData(){}
           
-    function battle($angreifer, $verteidiger)
+        function battle($angreifer, $verteidiger)
 		{
 			
 			if(count($angreifer) < 0 || count($verteidiger) < 0) return false;

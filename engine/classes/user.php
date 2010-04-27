@@ -1,5 +1,7 @@
 <?php
 
+require_once( TBW_ROOT.'loghandler/dbLogger.php' );
+
 class User extends Dataset
 {
 
@@ -2038,7 +2040,8 @@ class User extends Dataset
         if ( $type === false )
             $type = 'ids';
         if ( ! isset( $this->items[$type] ) || ! isset( $this->items[$type][$id] ) )
-            return 0;
+            return 0;           
+        
         return $this->items[$type][$id];
     }
 
@@ -2173,6 +2176,10 @@ class User extends Dataset
         }
         
         $this->changed = true;
+        
+        // log what we've changed
+        $logger = new DBLogger();        
+        $logger->logUserAction( __METHOD__ . " -- on item: ".$id." (type: ".$type.") by value: ".$value );
         
         return true;
     }

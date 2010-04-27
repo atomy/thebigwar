@@ -12,7 +12,6 @@ require_once( TBW_ROOT.'loghandler/logfile.php' );
  * 
  * @package 
  * @version $id$
- * @copyright 1997-2005 The PHP Group
  * @author atomy <atomy@jackinpoint.net>
  * @license GPL
  */
@@ -96,7 +95,40 @@ class Logger
 			$logF->logIt( $text );
 		}
 	}
+	
+	/**
+	 * logs the given text to the given usernames log file
+	 * @param unknown_type $userName
+	 * @param unknown_type $text
+	 */
+	public function logUser( $userName, $text ) 
+	{
+		// check if we have a log for this type
+		if ( !isset( $this->logFiles[$userName] ) )
+		{
+			if ( ! $this->setupUserLog( $userName ) )
+			{
+				throw new Exception( __METHOD__." setting up logfiles for user: $userName failed" );
+			}
+		}	    
+	}
 
+	/**
+	 * sets up a log file for the given username
+	 * @param string $userName
+	 */
+	public function setupUserLog( $userName = false )
+	{
+		if ( $userName === false )
+		{
+			throw new Exception( __METHOD__." no userName given" );
+		}	    
+		
+		$this->setLogFile( "userlog".$userName, LOGDIR . $userName );
+		
+		return true;
+	}
+	
 	/**
 	 * setupLog 
 	 * setup given log type 
@@ -104,9 +136,9 @@ class Logger
 	 * @access public
 	 * @return bool true on success, false otherwise
 	 */
-	public function setupLog( $type = 0 )
+	public function setupLog( $type = false )
 	{
-		if ( $type == 0 )
+		if ( $type === false )
 		{
 			throw new Exception( __METHOD__." no type given" );
 		}
@@ -132,6 +164,11 @@ class Logger
 				return true;
 			break; 
 
+			case LOG_USER_ITEMCHANGE:
+				$this->setLogFile( $type, LOGDIR . LOGFILE_USER_ITEMCHANGE );
+				return true;
+			break; 			
+			
 			default:
 				throw new Exception( __METHOD__." logtype $type not defined" );
 			break;

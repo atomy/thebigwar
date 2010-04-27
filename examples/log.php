@@ -8,12 +8,12 @@
  */
 
 require_once( '../include/config_inc.php' );
-require_once( TBW_ROOT.'engine/classes/logger.php' );
+require_once( TBW_ROOT.'loghandler/logger.php' );
 
 /*
  * create logger object and send log entry of type LOG_USER to it
  */
 $meh = new Logger();
-$meh->logIt( LOG_USER, "hooraaay" );
+$meh->logIt( LOG_USER_FLEET, "sample user.fleet log-entry" );
 
 ?>
