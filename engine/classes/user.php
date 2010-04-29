@@ -2179,7 +2179,7 @@ class User extends Dataset
         
         // log what we've changed
         $logger = new DBLogger();        
-        $logger->logUserAction( __METHOD__ . " -- on item: ".$id." (type: ".$type.") by value: ".$value );
+        $logger->logUserAction( $this->getName(), __METHOD__ . " -- on item: ".$id." (type: ".$type.") by value: ".$value );
         
         return true;
     }

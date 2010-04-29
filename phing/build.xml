@@ -30,6 +30,7 @@
     <phingcall target="setupTestUni"/>
     <exec command="mkdir tools" dir="." />
     <exec command="mkdir tmp" dir="." />
+    <exec command="touch NOSQLLOG" dir="." />
   </target>
 
   <!-- daemonise the eventhandler  -->
@@ -76,6 +77,11 @@
 <!--	<phingcall target="eventhandler" /> -->
 	<phingcall target="phpunit" />
 	<phingcall target="killeventhandler" />
+	<phingcall target="tidyup" />
+  </target>
+
+  <target name="tidyup">
+    <exec command="rm -Rf NOSQLLOG" dir="." />
   </target>
 
   <target name="test">
