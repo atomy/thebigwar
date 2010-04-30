@@ -3,6 +3,8 @@
 require_once '../include/config_inc.php';
 require_once TBW_ROOT.'include/DBHelper.php';
 require_once TBW_ROOT.'ticketsystem/Ticket.php';
+require_once TBW_ROOT.'ticketsystem/TicketConstants.php';
+
 
 class TicketManager
 {
@@ -148,5 +150,3 @@ class TicketManager
 
 // Singleton instanziieren
 //$ticketManager = TicketManager::getInstance();
-
- ?>

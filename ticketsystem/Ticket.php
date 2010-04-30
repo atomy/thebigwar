@@ -4,12 +4,8 @@ require_once '../include/config_inc.php';
 require_once TBW_ROOT.'include/DBHelper.php';
 require_once TBW_ROOT.'ticketsystem/TicketMessage.php';
 require_once TBW_ROOT.'ticketsystem/DBOject.php';
+require_once TBW_ROOT.'ticketsystem/TicketConstants.php';
 
-
-// valid ticket status, keep in sync with TicketManager::isValidStatus()
-define('TICKET_STATUS_NEW', 1);
-define('TICKET_STATUS_RESOLVED', 2);
-define('TICKET_STATUS_CLOSED', 3);
 
 class Ticket extends DBObject
 {   
@@ -32,6 +28,18 @@ class Ticket extends DBObject
     private $status;  
     
     /**
+     * subject of the ticket
+     * @var unknown_type
+     */
+    private $subject;
+    
+    /**
+     * time created of the ticket
+     * @var unknown_type
+     */
+    private $time_created;
+    
+    /**
      * constructor, creates ticket obj with the given parameters
      * @param $reporter
      * @param $text
@@ -41,6 +49,7 @@ class Ticket extends DBObject
         $this->id = -1;
         $this->reporter = "";
         $this->messages = "";
+        $this->subject = "";
         $this->status = -1;
         $this->loaded = false;     
 
@@ -66,22 +75,47 @@ class Ticket extends DBObject
             $result->close();
             
             if (isset($row['reporter']))
-                $this->ticketid = $row['reporter'];
+                $this->reporter = $row['reporter'];
             else
                 throw new Exception("ERROR reporter not set");
                 
             if (isset($row['status']))
-                $this->username = $row['status'];
+                $this->status = $row['status'];
             else
                 throw new Exception("ERROR status not set");   
+                
+            if (isset($row['subject']))
+                $this->subject = $row['subject'];
+            else
+                throw new Exception("ERROR subject not set");
+
+            if (isset($row['time_created']))
+                $this->time_created = $row['time_created'];
+            else
+                throw new Exception("ERROR time_created not set");                
+                
+
+            // load messages from db
+            $qry = "SELECT id FROM `ticketmessages` WHERE `ticketid` = '".$id."'";
+            $result = $dbLink->query($qry);
+            if (!$result) 
+            {
+                echo "ERROR looking up TicketMessages!".$dbLink->error."\n";
+            }
+            
+            for($row = $result->fetch_array(MYSQLI_ASSOC); $row; $row = $result->fetch_array(MYSQLI_ASSOC))
+            {
+                $this->messages[] = $row['id'];
+            }
+            $result->close();                
 
             $this->loaded = true;
         }
     }
     
-    public function create( $reporter = false, $text = false )
+    public function create( $reporter = false, $text = false, $subject = false )
     {
-        if ( $reporter == false || $text == false )
+        if ( $reporter == false || $text == false || $subject == false )
         {
             die("__METHOD__ missing argument");
         }    
@@ -90,14 +124,16 @@ class Ticket extends DBObject
         $this->id = -1;
         $this->reporter = $reporter;
         $this->text = $text;
+        $this->subject = $subject;
         
         $dbhelper = DBHelper::getInstance();
         $dbLink = &$dbhelper->getLink();
         
         $reporter = mysqli_real_escape_string($dbLink, $reporter);
         $text = mysqli_real_escape_string($dbLink, $text);
-        
-        $result = $dbLink->query("INSERT INTO `tickets` ('reporter', 'status') VALUES ('".$reporter."', TICKET_STATUS_NEW)");
+        $subject = mysqli_real_escape_string($dbLink, $subject);
+                
+        $result = $dbLink->query("INSERT INTO `tickets` ('reporter', 'status', 'subject') VALUES ('".$reporter."', TICKET_STATUS_NEW, '".$subject."')");
         
         // add the new ticket to the database
         if ($result === false) 
@@ -105,9 +141,12 @@ class Ticket extends DBObject
             echo "ERROR adding Ticket!\n";
         }       
         
-        $this->id = $dbLink->insert_id;  
+        $this->id = $dbLink->insert_id; 
+        $this->time_created = time(); 
         $this->loaded = true;        
-        $this->addMessage( $reporter, $text );    
+        $this->addMessage( $reporter, $text );   
+
+        return $this->id;
     }
     
     /**
@@ -127,6 +166,59 @@ class Ticket extends DBObject
         
         $reporter = mysqli_real_escape_string($dbLink, $reporter);
 
-        new TicketMessage( $this->id, $username, $message );        
+        $tMsg = new TicketMessage( $this->id, $username, $message );
+        $this->messages[] = $tMsg->getId();        
     }
+    
+	/**
+     * @return the $reporter
+     */
+    public function getReporter( )
+    {
+        return $this->reporter;
+    }
+
+	/**
+     * @return the $messages
+     */
+    public function getMessages( )
+    {
+        return $this->messages;
+    }
+
+	/**
+     * @return the $status
+     */
+    public function getStatus( )
+    {
+        return $this->status;
+    }
+
+	/**
+     * @return the $subject
+     */
+    public function getSubject( )
+    {
+        return $this->subject;
+    }
+    
+    public function getTimeCreated()
+    {
+        return $this->time_created;
+    }
+    
+    /**
+     * get the first message of a ticket
+     */
+    public function getFirstMessageObj()
+    {
+        $tMsg = new TicketMessage($this->messages[0]);
+        
+        if($tMsg->isValid())
+        {
+            throw new Exception("__METHOD__ unable to get ticket");
+        }
+        
+        return $tMsg;
+    }    
 }

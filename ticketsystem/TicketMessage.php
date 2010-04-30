@@ -3,6 +3,7 @@
 require_once '../include/config_inc.php';
 require_once TBW_ROOT.'include/DBHelper.php';
 require_once TBW_ROOT.'ticketsystem/DBOject.php';
+require_once TBW_ROOT.'ticketsystem/TicketConstants.php';
 
 /**
  * creates a object to seperate each message on a ticket
@@ -21,6 +22,12 @@ class TicketMessage extends DBObject
      * @var unknown_type
      */
     private $username;
+    
+    /**
+     * time that message was created
+     * @var unknown_type
+     */
+    private $time_created;
     
     /**
      * message content
@@ -73,12 +80,23 @@ class TicketMessage extends DBObject
             if (isset($row['message']))
                 $this->text = $row['message'];
             else
-                throw new Exception("ERROR message not set");       
+                throw new Exception("ERROR message not set");     
 
+            if (isset($row['time_created']))
+                $this->time_created = $row['time_created'];
+            else
+                throw new Exception("ERROR time_created not set");                
+                
             $this->loaded = true;
         }
     }   
     
+    /**
+     * creates a new ticket with the given parameters and saves it to database
+     * @param $ticketid
+     * @param $username
+     * @param $text
+     */
     public function create( $ticketid = false, $username = false, $text = false )
     {
         if ( $ticketid == false || $username == false || $text == false || !is_numeric($ticketid) )
@@ -103,6 +121,40 @@ class TicketMessage extends DBObject
             throw new Exception("ERROR adding TicketMessage!");
         }      
 
+        $this->time_created = time();
+        $this->id = $dbLink->insert_id; 
         $this->loaded = true;
+    }
+    
+    /**
+     * @return the $id
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+	/**
+     * @return the $username
+     */
+    public function getUsername( )
+    {
+        return $this->username;
+    }
+
+	/**
+     * @return the $time_created
+     */
+    public function getTimeCreated( )
+    {
+        return $this->time_created;
+    }
+
+	/**
+     * @return the $text
+     */
+    public function getText( )
+    {
+        return $this->text;
     }
 }
