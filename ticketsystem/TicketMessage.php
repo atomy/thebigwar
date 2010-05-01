@@ -2,7 +2,7 @@
 
 require_once '../include/config_inc.php';
 require_once TBW_ROOT.'include/DBHelper.php';
-require_once TBW_ROOT.'ticketsystem/DBOject.php';
+require_once TBW_ROOT.'ticketsystem/DBObject.php';
 require_once TBW_ROOT.'ticketsystem/TicketConstants.php';
 
 /**
@@ -44,20 +44,22 @@ class TicketMessage extends DBObject
         $this->id = -1;
         $this->ticketid = -1;
         $this->username = "";
-        $this->loaded = false;
+        $this->setLoaded(false);
         
-        if ( $id >= 0 )
+        if ( $id >= 0 && $id !== false )
         {
             if (!is_numeric($id))
             {
                 throw new Exception("__METHOD__ given $id is not a number");
             }
+            $this->id = $id;
             
             $dbhelper = DBHelper::getInstance();
             $dbLink = &$dbhelper->getLink();
         
             // load ticket from db
             $qry = "SELECT * FROM `ticketmessages` WHERE `id` = '".$id."'";
+            echo "execing qry: ".$qry."\n";
             $result = $dbLink->query($qry);
             if (!$result) 
             {
@@ -81,13 +83,13 @@ class TicketMessage extends DBObject
                 $this->text = $row['message'];
             else
                 throw new Exception("ERROR message not set");     
-
+ 
             if (isset($row['time_created']))
                 $this->time_created = $row['time_created'];
             else
                 throw new Exception("ERROR time_created not set");                
                 
-            $this->loaded = true;
+            $this->setLoaded(true);
         }
     }   
     
@@ -101,7 +103,7 @@ class TicketMessage extends DBObject
     {
         if ( $ticketid == false || $username == false || $text == false || !is_numeric($ticketid) )
         {
-            throw new Exception("__METHOD__ missing argument");
+            throw new Exception(__METHOD__." missing argument");
         }
         
         $this->ticketid = $ticketid;
@@ -115,7 +117,7 @@ class TicketMessage extends DBObject
         $text = mysqli_real_escape_string($dbLink, $text);
         
         // add the new ticket to the database
-        $query = "INSERT INTO `ticketmessages` ('ticketid', 'message', 'username') VALUES ('".$ticketid."','".$text."','".$username."')";
+        $query = "INSERT INTO `ticketmessages` (ticketid, message, username) VALUES ('".$ticketid."','".$text."','".$username."')";
         if (!$dbLink->query($query))
         {
             throw new Exception("ERROR adding TicketMessage!");

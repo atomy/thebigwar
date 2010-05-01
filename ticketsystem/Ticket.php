@@ -3,7 +3,7 @@
 require_once '../include/config_inc.php';
 require_once TBW_ROOT.'include/DBHelper.php';
 require_once TBW_ROOT.'ticketsystem/TicketMessage.php';
-require_once TBW_ROOT.'ticketsystem/DBOject.php';
+require_once TBW_ROOT.'ticketsystem/DBObject.php';
 require_once TBW_ROOT.'ticketsystem/TicketConstants.php';
 
 
@@ -51,14 +51,15 @@ class Ticket extends DBObject
         $this->messages = "";
         $this->subject = "";
         $this->status = -1;
-        $this->loaded = false;     
+        $this->setLoaded(false);    
 
-        if ( $id >= 0 )
+        if ( $id >= 0 && $id !== false )
         {
             if (!is_numeric($id))
             {
-                throw new Exception("__METHOD__ given $id is not a number");
+                throw new Exception(__METHOD__." given $id is not a number");
             }
+            $this->id = $id;
             
             $dbhelper = DBHelper::getInstance();
             $dbLink = &$dbhelper->getLink();
@@ -109,7 +110,8 @@ class Ticket extends DBObject
             }
             $result->close();                
 
-            $this->loaded = true;
+            $this->setLoaded(true);
+            echo "dbg: finished loading ticket: ".$this->id."\n";
         }
     }
     
@@ -117,7 +119,7 @@ class Ticket extends DBObject
     {
         if ( $reporter == false || $text == false || $subject == false )
         {
-            die("__METHOD__ missing argument");
+            die(__METHOD__." missing argument");
         }    
             
         // we dont have the id yet, its auto-generated, catch it when execing the db query
@@ -133,12 +135,14 @@ class Ticket extends DBObject
         $text = mysqli_real_escape_string($dbLink, $text);
         $subject = mysqli_real_escape_string($dbLink, $subject);
                 
-        $result = $dbLink->query("INSERT INTO `tickets` ('reporter', 'status', 'subject') VALUES ('".$reporter."', TICKET_STATUS_NEW, '".$subject."')");
+        $qry = "INSERT INTO `tickets` (reporter, status, subject) VALUES ('".$reporter."', ".TICKET_STATUS_NEW.", '".$subject."')";
+        echo "execing: ".$qry."\n";
+        $result = $dbLink->query($qry);
         
         // add the new ticket to the database
         if ($result === false) 
         {
-            echo "ERROR adding Ticket!\n";
+            throw new Exception( __METHOD__." ERROR adding Ticket!");
         }       
         
         $this->id = $dbLink->insert_id; 
@@ -158,7 +162,7 @@ class Ticket extends DBObject
     {
         if ( $username == false || $message == false || $this->id < 0 )
         {
-            die("__METHOD__ missing argument");
+            die(__METHOD__." missing argument");
         }   
         
         $dbhelper = DBHelper::getInstance();
@@ -166,7 +170,8 @@ class Ticket extends DBObject
         
         $reporter = mysqli_real_escape_string($dbLink, $reporter);
 
-        $tMsg = new TicketMessage( $this->id, $username, $message );
+        $tMsg = new TicketMessage();
+        $tMsg->create( $this->id, $username, $message );
         $this->messages[] = $tMsg->getId();        
     }
     
@@ -216,7 +221,7 @@ class Ticket extends DBObject
         
         if($tMsg->isValid())
         {
-            throw new Exception("__METHOD__ unable to get ticket");
+            throw new Exception(__METHOD__." unable to get ticket");
         }
         
         return $tMsg;

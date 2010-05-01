@@ -32,7 +32,7 @@ class TicketManager
     {
         if ( $reporter == false || $text == false )
         {
-            throw new Exception("__METHOD__ missing argument");
+            throw new Exception(__METHOD__." missing argument");
         }
 
         new Ticket( $reporter, $text );
@@ -46,7 +46,7 @@ class TicketManager
     {
         if ( $ticketID == false || $status == false || !$this->isValidStatus( $status ) )
         {
-            throw new Exception("__METHOD__ missing argument");
+            throw new Exception(__METHOD__." missing argument");
         }        
         $ticketObj = &$this->getTicketByID( $ticketID );
         $ticketObj->setStatus( $status );
@@ -61,7 +61,7 @@ class TicketManager
     {
         if ( $ticketID == false || $userName == false || $text == false )
         {
-            throw new Exception("__METHOD__ missing argument");
+            throw new Exception(__METHOD__." missing argument");
         }  
         
         new TicketMessage( $ticketID, $userName, $text );
@@ -77,17 +77,17 @@ class TicketManager
     {
         if ( $status == false || $num == false )
         {
-            throw new Exception("__METHOD__ missing argument");
+            throw new Exception(__METHOD__." missing argument");
         }  
                 
         if (!$this->isValidStatus($status))
         {
-            throw new Exception("__METHOD__ invalid status given");   
+            throw new Exception(__METHOD__." invalid status given");   
         }
         
         if ($num > 100)
         {
-            throw new Exception("__METHOD__ too much tickets requested");   
+            throw new Exception(__METHOD__." too much tickets requested");   
         }
         
         $dbhelper = DBHelper::getInstance();
@@ -107,7 +107,7 @@ class TicketManager
         {
             if (!isset($row['id']))
             {
-                throw new Exception("__METHOD__ ticket w/o any id");   
+                throw new Exception(__METHOD__." ticket w/o any id");   
             } 
             $ticketIDs[] = $row['id'];
         }
