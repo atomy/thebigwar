@@ -1,13 +1,17 @@
 <?php
 
-if ( is_file( '../../../include/config_inc.php' ) )
+if ( is_file( '../include/config_inc.php' ) )
 {
-    require_once '../../../include/config_inc.php';
+   	require_once( '../include/config_inc.php' );
 }
-else 
-    if ( is_file( '../include/config_inc.php' ) )
-    {
-        require_once '../include/config_inc.php';
+else if ( is_file( '../../include/config_inc.php' ) )
+{
+   	require_once( '../../include/config_inc.php' );
+}
+else
+{
+	require_once( 'include/config_inc.php' );
+}
     }
     else 
     {
@@ -17,7 +21,7 @@ else
 class DBLogger
 {
     private $db;
-
+    
     // needed for testruns, we dont want to log them
     private $dummyRun;
     
@@ -29,8 +33,8 @@ class DBLogger
 	}
 	else
 	{
-            $this->db = new mysqli(MYSQL_LOGDB_HOST, MYSQL_LOGDB_USER, MYSQL_LOGDB_PASS, MYSQL_LOGDB_DB);
-	}
+        $this->db = new mysqli(MYSQL_LOGDB_HOST, MYSQL_LOGDB_USER, MYSQL_LOGDB_PASS, MYSQL_LOGDB_DB);
+    }
     }
     
 
