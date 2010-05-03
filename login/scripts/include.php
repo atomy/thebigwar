@@ -204,7 +204,7 @@
 
 	class login_gui
 	{
-		function html_head()
+		function html_head( $showActivePlanet = true )
 		{
 			global $me;
 			global $skins;
@@ -388,7 +388,8 @@
 				<li id="navigation-rules" xml:lang="en"><a href="http://wiki.thebigwar.org/index.php/Regelwerk" target="_blank"><abbr title="Regeln">Regeln</abbr></a></li>
 				<li id="navigation-faq" xml:lang="en"><a href="http://wiki.thebigwar.org/index.php/FAQ" target="_blank"><abbr title="Frequently Asked Questions">FAQ</abbr></a></li>
 				<li id="navigation-wiki" xml:lang="en"><a href="http://wiki.thebigwar.org/" target="_blank"><abbr title="TBW-Wiki">Wiki</abbr></a></li>
-				<li id="navigation-chat" xml:lang="en"><a href="http://<?=htmlentities(get_default_hostname().h_root)?>/chat.php" target="blank"><abbr title="Support / Chat (IRC)">Support / Chat</abbr></a></li>
+				<li id="navigation-chat" xml:lang="en"><a href="http://<?=htmlentities(get_default_hostname().h_root)?>/chat.php" target="blank"><abbr title="Chat (IRC)">Chat</abbr></a></li>
+				<li<?=($_SERVER['PHP_SELF'] == h_root.'/login/ticketsystem.php') ? ' class="active"' : ''?> id="navigation-ticketsystem"><a href="<?=htmlentities('http://'.$_SERVER['HTTP_HOST'].h_root)?>/login/ticketsystem.php?<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()).'&showMyTickets=1')?>">Ticketsystem</a></li>				
 				<li id="navigation-bug" xml:lang="en"><a href="https://mantis.jackinpoint.net/main_page.php" target="_blank"><abbr title="Fehler melden">Fehler melden</abbr></a></li>
 			</ul>
 			
@@ -502,9 +503,13 @@
 
 <?php
   		            }
+  		            
+  		            if($showActivePlanet)
+  		            {
 ?>
 				<h1>Planet <em><?=utf8_htmlentities($me->planetName())?></em> <span class="koords">(<?=utf8_htmlentities($me->getPosString())?>)</span></h1>
 <?php
+  		            }
 			if($me->checkSetting('notify'))
 			{
 				global $message_type_names;

@@ -86,7 +86,7 @@ class Ticket extends DBObject
                 throw new Exception("ERROR status not set");   
                 
             if (isset($row['subject']))
-                $this->subject = $row['subject'];
+                $this->subject = base64_decode($row['subject']);
             else
                 throw new Exception("ERROR subject not set");
 
@@ -132,8 +132,8 @@ class Ticket extends DBObject
         $dbLink = &$dbhelper->getLink();
         
         $reporter = mysqli_real_escape_string($dbLink, $reporter);
-        $text = mysqli_real_escape_string($dbLink, $text);
-        $subject = mysqli_real_escape_string($dbLink, $subject);
+        $text = base64_encode($text);
+        $subject = base64_encode($subject);
                 
         $qry = "INSERT INTO `tickets` (reporter, status, subject) VALUES ('".$reporter."', ".TICKET_STATUS_NEW.", '".$subject."')";
         echo "execing: ".$qry."\n";
@@ -168,10 +168,11 @@ class Ticket extends DBObject
         $dbhelper = DBHelper::getInstance();
         $dbLink = &$dbhelper->getLink();
         
-        $reporter = mysqli_real_escape_string($dbLink, $reporter);
+        $dbMessage = mysqli_real_escape_string($dbLink, $message);
+        $message = false;
 
         $tMsg = new TicketMessage();
-        $tMsg->create( $this->id, $username, $message );
+        $tMsg->create( $this->id, $username, $dbMessage );
         $this->messages[] = $tMsg->getId();        
     }
     
