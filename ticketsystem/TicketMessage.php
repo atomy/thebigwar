@@ -41,7 +41,7 @@ class TicketMessage extends DBObject
      */
     public function __construct( $id = false )
     {
-        $this->id = -1;
+        $this->setId(-1);
         $this->ticketid = -1;
         $this->username = "";
         $this->setLoaded(false);
@@ -52,18 +52,18 @@ class TicketMessage extends DBObject
             {
                 throw new Exception("__METHOD__ given $id is not a number");
             }
-            $this->id = $id;
+            $this->setId($id);
             
             $dbhelper = DBHelper::getInstance();
             $dbLink = &$dbhelper->getLink();
         
             // load ticket from db
             $qry = "SELECT * FROM `ticketmessages` WHERE `id` = '".$id."'";
-            echo "execing qry: ".$qry."\n";
+            //echo "execing qry: ".$qry."\n";
             $result = $dbLink->query($qry);
             if (!$result) 
             {
-                echo "ERROR looking up TicketMessage!".$dbLink->error."\n";
+                throw new Exception(__METHOD__." ERROR looking up TicketMessage!".$dbLink->error);
             }
             
             $row = $result->fetch_array(MYSQLI_ASSOC);
@@ -126,18 +126,10 @@ class TicketMessage extends DBObject
         }      
 
         $this->time_created = time();
-        $this->id = $dbLink->insert_id; 
+        $this->setId($dbLink->insert_id); 
         $this->loaded = true;
     }
-    
-    /**
-     * @return the $id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-    
+        
 	/**
      * @return the $username
      */

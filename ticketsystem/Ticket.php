@@ -46,7 +46,7 @@ class Ticket extends DBObject
      */
     public function __construct( $id = false )    
     {
-        $this->id = -1;
+        $this->setId(-1);
         $this->reporter = "";
         $this->messages = "";
         $this->subject = "";
@@ -59,7 +59,7 @@ class Ticket extends DBObject
             {
                 throw new Exception(__METHOD__." given $id is not a number");
             }
-            $this->id = $id;
+            $this->setId($id);
             
             $dbhelper = DBHelper::getInstance();
             $dbLink = &$dbhelper->getLink();
@@ -69,7 +69,7 @@ class Ticket extends DBObject
             $result = $dbLink->query($qry);
             if (!$result) 
             {
-                echo "ERROR looking up Ticket!".$dbLink->error."\n";
+                throw new Exception(__METHOD__." ERROR looking up Ticket!".$dbLink->error);
             }
             
             $row = $result->fetch_array(MYSQLI_ASSOC);
@@ -101,7 +101,7 @@ class Ticket extends DBObject
             $result = $dbLink->query($qry);
             if (!$result) 
             {
-                echo "ERROR looking up TicketMessages!".$dbLink->error."\n";
+                throw new Exception(__METHOD__." ERROR looking up TicketMessages!");
             }
             
             for($row = $result->fetch_array(MYSQLI_ASSOC); $row; $row = $result->fetch_array(MYSQLI_ASSOC))
@@ -111,7 +111,7 @@ class Ticket extends DBObject
             $result->close();                
 
             $this->setLoaded(true);
-            echo "dbg: finished loading ticket: ".$this->id."\n";
+            //echo "dbg: finished loading ticket: ".$this->getId()."\n";
         }
     }
     
@@ -119,11 +119,11 @@ class Ticket extends DBObject
     {
         if ( $reporter == false || $text == false || $subject == false )
         {
-            die(__METHOD__." missing argument");
+            throw new Exception(__METHOD__." missing argument");
         }    
             
         // we dont have the id yet, its auto-generated, catch it when execing the db query
-        $this->id = -1;
+        $this->setId(-1);
         $this->reporter = $reporter;
         $this->text = $text;
         $this->subject = $subject;
@@ -136,7 +136,7 @@ class Ticket extends DBObject
         $subject = base64_encode($subject);
                 
         $qry = "INSERT INTO `tickets` (reporter, status, subject) VALUES ('".$reporter."', ".TICKET_STATUS_NEW.", '".$subject."')";
-        echo "execing: ".$qry."\n";
+        //echo "execing: ".$qry."\n";
         $result = $dbLink->query($qry);
         
         // add the new ticket to the database
@@ -145,12 +145,12 @@ class Ticket extends DBObject
             throw new Exception( __METHOD__." ERROR adding Ticket!");
         }       
         
-        $this->id = $dbLink->insert_id; 
+        $this->setId($dbLink->insert_id); 
         $this->time_created = time(); 
         $this->loaded = true;        
         $this->addMessage( $reporter, $text );   
 
-        return $this->id;
+        return $this->getId();
     }
     
     /**
@@ -160,9 +160,13 @@ class Ticket extends DBObject
      */
     public function addMessage( $username = false, $message = false )
     {
-        if ( $username == false || $message == false || $this->id < 0 )
+        if ($username == false || $message == false)
         {
-            die(__METHOD__." missing argument");
+            throw new Exception( __METHOD__. " missing argument");
+        }
+        else if ($this->getId() < 0)
+        {
+            throw new Exception( __METHOD__. " invalid ticketid: ".$this->getId());
         }   
         
         $dbhelper = DBHelper::getInstance();
@@ -172,8 +176,10 @@ class Ticket extends DBObject
         $message = false;
 
         $tMsg = new TicketMessage();
-        $tMsg->create( $this->id, $username, $dbMessage );
-        $this->messages[] = $tMsg->getId();        
+        $tMsg->create( $this->getId(), $username, $dbMessage );
+        $this->messages[] = $tMsg->getId();  
+
+        return true;
     }
     
 	/**
@@ -227,4 +233,49 @@ class Ticket extends DBObject
         
         return $tMsg;
     }    
+    
+    /**
+     * returns the current tickets status in a readable string
+     */
+    public function getStatusString()
+    {
+        switch ($this->status)
+        {
+            case TICKET_STATUS_NEW:
+                return "Neu";
+            break;
+            
+            case TICKET_STATUS_RESOLVED:
+                return "Erledigt";
+            break;
+
+            case TICKET_STATUS_CLOSED:
+                return "Geschlossen";
+            break;
+
+            case TICKET_STATUS_ANSWERED:
+                return "Beantwortet";
+            break;
+            
+            case TICKET_STATUS_WAITING:
+                return "Wartend";
+            break;                        
+
+            default:
+                return "";
+        }
+    }
+    
+    /**
+     * returns last activity of the given ticket
+     */
+    public function getLastActivity()
+    {
+        $lastId = end($this->messages);
+
+        $lastMsg = new TicketMessage($lastId);
+        $lastActive = $lastMsg->getTimeCreated();
+                        
+        return $lastActive; 
+    }
 }

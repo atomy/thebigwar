@@ -24,12 +24,12 @@ class DBObject
             return true;
         else if ( !$this->loaded )
         {
-            echo "obj with id: ".$this->id." is invalid cause of not being loaded\n";            
+            //echo "obj with id: ".$this->id." is invalid cause of not being loaded\n";            
             return false;
         }
         else
         {            
-            echo "obj with id: ".$this->id." is invalid cause of neg. id\n";
+            //echo "obj with id: ".$this->id." is invalid cause of neg. id\n";
             return false;
         }
     }
