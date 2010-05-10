@@ -510,7 +510,7 @@
 		}
 	}
 
-	function get_admin_list()
+	function get_admin_list() 
 	{
 		# Gibt eine Liste aller Administratoren zurueck
 		$admins = array();

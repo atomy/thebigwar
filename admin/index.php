@@ -484,7 +484,9 @@
             <?php if(isset($admin_array['permissions'][18]) && $admin_array['permissions'][18]){?><a href="<?php echo $RELPATH; ?>index.php#action-18">Items<br>ersetzen</a>
 			<?php } else {?>Items<br>ersetzen<?php }?>
       </td>
-	  <td style="width: 200px;" align="center" nowrap="nowrap" valign="middle">
+       <td style="width: 200px;" align="center" nowrap="nowrap" valign="middle">
+            <?php if(isset($admin_array['permissions'][19]) && $admin_array['permissions'][19]){?><a href="<?php echo $RELPATH; ?>index.php#action-19">Ticketsystem</a>
+			<?php } else {?>Ticketsystem<?php }?>
       </td>
 	   <td style="width: 200px;" align="center" nowrap="nowrap" valign="middle">
       </td>
@@ -935,6 +937,19 @@
 
 <?php
 	}
+
+		if(isset($admin_array['permissions'][19]) && $admin_array['permissions'][19])
+	{
+
+?>
+
+<fieldset><legend id="action-19">Ticketsystem</legend>
+<h2><a href="<?php echo h_root; ?>/admin/tickets.php">Ticketsystem</a></h2>
+	<p><a href="#top">Zurück zum Menü</a></p>
+</fieldset>
+
+<?php
+	}	
 
 	admin_gui::html_foot();
 ?>

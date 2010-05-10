@@ -86,7 +86,7 @@ class Ticket extends DBObject
                 throw new Exception("ERROR status not set");   
                 
             if (isset($row['subject']))
-                $this->subject = base64_decode($row['subject']);
+                $this->subject = $row['subject'];
             else
                 throw new Exception("ERROR subject not set");
 
@@ -131,12 +131,11 @@ class Ticket extends DBObject
         $dbhelper = DBHelper::getInstance();
         $dbLink = &$dbhelper->getLink();
         
-        $reporter = mysqli_real_escape_string($dbLink, $reporter);
-        $text = base64_encode($text);
-        $subject = base64_encode($subject);
+        $dbReporter = mysqli_real_escape_string($dbLink, $reporter);
+        $dbSubject = mysqli_real_escape_string($dbLink, $subject);
+        unset($subject);
                 
-        $qry = "INSERT INTO `tickets` (reporter, status, subject) VALUES ('".$reporter."', ".TICKET_STATUS_NEW.", '".$subject."')";
-        //echo "execing: ".$qry."\n";
+        $qry = "INSERT INTO `tickets` (reporter, status, subject) VALUES ('".$dbReporter."', ".TICKET_STATUS_NEW.", '".$dbSubject."')";
         $result = $dbLink->query($qry);
         
         // add the new ticket to the database
@@ -148,7 +147,7 @@ class Ticket extends DBObject
         $this->setId($dbLink->insert_id); 
         $this->time_created = time(); 
         $this->loaded = true;        
-        $this->addMessage( $reporter, $text );   
+        $this->addMessage($reporter, $text);   
 
         return $this->getId();
     }
@@ -170,13 +169,10 @@ class Ticket extends DBObject
         }   
         
         $dbhelper = DBHelper::getInstance();
-        $dbLink = &$dbhelper->getLink();
-        
-        $dbMessage = mysqli_real_escape_string($dbLink, $message);
-        $message = false;
+        $dbLink = &$dbhelper->getLink();      
 
         $tMsg = new TicketMessage();
-        $tMsg->create( $this->getId(), $username, $dbMessage );
+        $tMsg->create( $this->getId(), $username, $message );
         $this->messages[] = $tMsg->getId();  
 
         return true;

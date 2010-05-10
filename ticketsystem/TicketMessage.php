@@ -80,7 +80,7 @@ class TicketMessage extends DBObject
                 throw new Exception("ERROR username not set");   
 
             if (isset($row['message']))
-                $this->text = base64_decode($row['message']);
+                $this->text = $row['message'];
             else
                 throw new Exception("ERROR message not set");     
  
@@ -114,10 +114,10 @@ class TicketMessage extends DBObject
         $dbLink = &$dbhelper->getLink();
         
         $dbUsername = mysqli_real_escape_string($dbLink, $username);
-        $dbText = base64_encode($text);
-        $text = false;
-        $username = false;
-        
+        $dbText = mysqli_real_escape_string($dbLink, $text);
+        unset($text);
+        unset($username);
+               
         // add the new ticket to the database
         $query = "INSERT INTO `ticketmessages` (ticketid, message, username) VALUES ('".$ticketid."','".$dbText."','".$dbUsername."')";
         if (!$dbLink->query($query))

@@ -1,5 +1,11 @@
 <?php
 
+ini_set( 'include_path', ini_get( 'include_path' ).':../include:../engine:../engine/classes:../loghandler:' );
+
+require_once( '../include/config_inc.php' );
+require_once( TBW_ROOT.'admin/include/cadmin.php' ); 
+
+
 // get the relative path after root 
 // e.g. http://tbw.localhost/tbw/admin/index.php gets /tbw/admin/
 // needed for cookies path
@@ -90,6 +96,7 @@ require_once( TBW_ROOT.'engine/include.php' );
 	}
 
 	$databases = get_databases();
+	
 	if(isset($_SESSION['database']) && isset($databases[$_SESSION['database']]))
 	{
 		define_globals($_SESSION['database']);
@@ -162,8 +169,10 @@ require_once( TBW_ROOT.'engine/include.php' );
 			die();
 		}
 	}
-
+ 
 	$admin_array = &$admins[$_SESSION['admin_username']];
+	$adminObj = new CAdmin($admin_array, $_SESSION['admin_username']);
+	
 	$_SESSION['last_admin_access'] = time();
 
 	class admin_gui

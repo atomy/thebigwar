@@ -140,7 +140,7 @@ class TicketManager
         
         // load ticketids from db
         $qry = "SELECT * FROM `tickets` WHERE `reporter` = '".$username."'";
-        echo "qry: ".$qry."\n";
+        //echo "qry: ".$qry."\n";
         $result = $dbLink->query($qry);
 
         if (!$result) 

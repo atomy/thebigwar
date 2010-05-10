@@ -58,63 +58,31 @@ login_gui::html_head( false );
 	margin-bottom: 20px;
 }
 
-#ticketoptions {
-	
-}
-
-#ticketlist {
-	
-}
-
 #ticketHeadline {
 	text-align: center;
 	font-size: 1.3em;
 	width: 100%;
 }
 
-#ticketEntryA {
+#ticketTableEntryA {
 	background-color: #778899;
 }
 
-#ticketEntryB {
+#ticketTableEntryB {
 	background-color: #7788AA;
 }
 
-#ticketReporter {
-	width: 20%;
+#ticketTableSubject {
+	width: 60%;
 }
 
-#ticketSubject {
-	width: 100%;
-}
-
-#ticketCreatedTime {
+#ticketTableCreatedTime {
 	width: 20%;
 	text-align: center;
 }
 
-#ticketMessage {
-	
-}
-
-#ticketMessageEntry {
-	
-}
-
-#ticketMessageEntryText {
-	
-}
-
-#ticketMessageEntryUser {
-	
-}
-
-#ticketMessageEntryTime {
-	
-}
-
-#ticketBody {
-	padding-left: 10px;
+#ticketTableStatus {
+	width: 15%;
 }
 
 #ticketTable {
@@ -144,6 +112,47 @@ login_gui::html_head( false );
 	margin: 20px;
 	margin-left: 40%;
 }
+
+#ticketDetail {
+	border: 0.2em solid #AAAAAA;
+	margin: 20px;
+	height: 320px;
+}
+
+#ticketDetailSideBar {
+	margin: 5px;
+	width: 20%;
+	min-height: 100px;
+	border-right: 0.3em solid #778899;
+}
+
+#ticketDetailMain {
+	margin: 5px;
+	width: 75%;
+	float: right;
+	text-align: left;
+}
+
+#ticketDetailSubject {
+	
+}
+
+#ticketDetailReporter {
+	width: 100%;
+	text-align: center;
+	font-size: 1.2em;
+  	font-weight: bold;	
+}
+
+#ticketDetailCreatedTime {
+	
+}
+
+#ticketError {
+	font-size: 1.5em;
+	color: #FFB266;
+}
+
 </style>
 
 <script type="text/javascript">
@@ -154,35 +163,73 @@ login_gui::html_head( false );
 </script>
 
 <?php
+// TODO, maximale anzahl offener tickets begrenzen
+// TODO, permissions and shit
 // create a new ticket with the given parameters
 if ( isset( $_REQUEST['newTicket'] ) && isset( $_REQUEST['subject'] ) && isset( $_REQUEST['text'] ) )
 {
-    if ( strlen( $_REQUEST['subject'] ) > 64 )
+    if ( strlen( $_REQUEST['subject'] ) > MAX_SUBJECT_LEN )
     {
-        echo "Betreff ist zu lang!\n";
+        ?>
+        <div id="ticketError">Fehler: Betreff ist zu lang!</div> 
+        <?
         return;
     }
     
-    if ( strlen( $_REQUEST['text'] ) > 3000 )
+    if ( strlen( $_REQUEST['text'] ) > MAX_MESSAGE_LEN )
     {
-        echo "Text ist zu lang!\n";
+        ?>
+        <div id="ticketError">Fehler: Text ist zu lang!</div> 
+        <?
         return;
-    }
+    }    
+    
+    $pText = mb_convert_encoding($_REQUEST['text'], 'UTF-8', 'UTF-8');
+    unset($_REQUEST['text']);
+    $pText = strip_tags($pText);
+    $pText = nl2br($pText);
+    $pText = wordwrap($pText, MAX_MESSAGE_TEXTTILLWRAP, "<br />", true);    
+    $lineCount = substr_count($pText, "<br />"); 
+    
+    if ( $lineCount >= MAX_MESSAGE_LINES )
+    {
+        ?>
+        <div id="ticketError">Fehler: Text ist zu lang!</div> 
+        <?
+        return;
+    }    
+    
+    $pSubject = mb_convert_encoding($_REQUEST['subject'], 'UTF-8', 'UTF-8');
+    unset($_REQUEST['subject']);
+    $pSubject = strip_tags($pSubject);   
     
     $tObj = new Ticket();
-    $pText = $_REQUEST['text'];
-    $pSubject = $_REQUEST['subject'];
-    
     // extern $me
     $tId = $tObj->create( $me->getName(), $pText, $pSubject );
+    ?>
+    
+    <div id="addMsg">
+    <?
     if ( $tId >= 0 )
     {
-        echo "Ticket erfolgreich erstellt! (" . $tId . ")"; // TODO, more sexier success message
+        ?>
+        <div id="addMsgSuccess">
+        Ticket hinzugef&uuml;gt<br />
+        </div>  
+        <a href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&showMyTickets=1' )?>">Zurück zur Ticketübersicht</a>
+    	<a href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tId )?>">Zum erstellten Ticket #<?=$tId?></a> 
+    	<?
     }
     else
     {
-        echo "Fehler beim Erstellen des Tickets!\n";
-    }
+        ?>
+        <div id="ticketError">Fehler beim Erstellen des Tickets!</div> 
+        <a href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&showMyTickets=1' )?>">Zurück zur Ticketübersicht</a>      
+        <?        
+    }    
+    ?>   
+    </div> <!-- /addMsg -->    
+    <?
 }
 // display form for submitting new tickets
 else if ( isset( $_REQUEST['newTicketForm'] ) )
@@ -211,17 +258,22 @@ else if ( isset( $_REQUEST['ticketid'] ) && is_numeric( $_REQUEST['ticketid'] ) 
     {
         throw new Exception( __METHOD__ . " ERROR unable to get ticket from database\n" );
     }
+    
+    $msgIDs = $tObj->getMessages();
+    $msgObj = new TicketMessage( $msgIDs[0] );
     ?>
     <h1>Ticket #<?=$tObj->getId()?></h1>
-    <div id="ticketHeader">    
-    	<div id="ticketSubject">Betreff: <?=htmlspecialchars( $tObj->getSubject() )?></div>
-    	<div id="ticketCreatedTime">erstellt: <?=$tObj->getTimeCreated()?></div>;    
-    </div> <!-- ticketHeader -->
+    <div id="ticketDetail">    
+    	<div id="ticketDetailSubject"><h2><?=$tObj->getSubject()?></h2></div>    	
+    	<div id="ticketDetailMain"><?=$msgObj->getText()?></div> 
+    	<div id="ticketDetailSideBar">
+    		<div id="ticketDetailReporter"><?=$tObj->getReporter()?></div>
+    		<div id="ticketDetailCreatedTime"><?=$tObj->getTimeCreated()?></div>
+    	</div> 
+    </div> <!-- ticketDetail -->
     
-    <div id="ticketBody"> <!-- ticketBody -->
     <?    
-    $msgIDs = $tObj->getMessages();
-    
+
     $i = 1;
     // loop through all linked messageIDs and create their objects for output
     while ( isset( $msgIDs[$i] ) )
@@ -230,13 +282,16 @@ else if ( isset( $_REQUEST['ticketid'] ) && is_numeric( $_REQUEST['ticketid'] ) 
         if ( ! $msgObj->isValid() )
         {
             break;
-        }
-        
-        echo "<div id=\"ticketMessageEntry\">";
-        echo "<div id=\"ticketMessageEntryText\">" . htmlspecialchars( $msgObj->getText() ) . "</div>";
-        echo "<div id=\"ticketMessageEntryUser\">" . htmlspecialchars( $msgObj->getUsername() ) . "</div>";
-        echo "<div id=\"ticketMessageEntryTime\">" . $msgObj->getTimeCreated() . "</div>";
-        echo "</div>"; // ticketMessageEntry
+        }        
+    ?>
+    	<div id="ticketDetail">     	
+    		<div id="ticketDetailMain"><?=$msgObj->getText()?></div> 
+    		<div id="ticketDetailSideBar">
+    			<div id="ticketDetailReporter"><?=$msgObj->getUsername()?></div>
+    			<div id="ticketDetailCreatedTime"><?=$msgObj->getTimeCreated()?></div>
+    		</div> 
+    	</div> <!-- ticketDetail -->
+  <?          
         $i ++;
     }
     ?>
@@ -251,7 +306,6 @@ else if ( isset( $_REQUEST['ticketid'] ) && is_numeric( $_REQUEST['ticketid'] ) 
 		value="Nachricht absenden" />	
 	<input type="hidden" name="ticketid" value="<?=$_REQUEST['ticketid']?>" />
 	</form>	
-	</div> <!-- ticketBody -->
     <?
 }
 // show all tickets which belong to me
@@ -284,11 +338,11 @@ else if ( isset( $_REQUEST['showMyTickets'] ) )
     foreach ( $tickets as $ticketId )
     {
         $tObj = new Ticket( $ticketId );
-        // TODO, output through htmlentities()
+
         // alternate background colors
-        $cssID = "ticketEntryA";
+        $cssID = "ticketTableEntryA";
         if ( $i % 2 )
-            $cssID = "ticketEntryB";
+            $cssID = "ticketTableEntryB";
         
         if ( $i % 2 )
         {
@@ -309,9 +363,9 @@ else if ( isset( $_REQUEST['showMyTickets'] ) )
             <?php
         }
         ?>
-    	<td id="ticketStatus"><?=$tObj->getStatusString()?></td>
-		<td id="ticketSubject"><?=$tObj->getSubject()?></td>
-		<td id="ticketCreatedTime"><?=$tObj->getLastActivity()?></td>
+    	<td id="ticketTableStatus"><?=$tObj->getStatusString()?></td>
+		<td id="ticketTableSubject"><?=$tObj->getSubject()?></td>
+		<td id="ticketTableCreatedTime"><?=$tObj->getLastActivity()?></td>
 		</tr>
         <?
         $i ++;
@@ -322,6 +376,7 @@ else if ( isset( $_REQUEST['showMyTickets'] ) )
     {
         ?>
    		<tr id="ticketEntryA">
+   			<td id="ticketStatus"></td>
 			<td id="ticketSubject">Keine Tickets vorhanden.</td>
 			<td id="ticketCreatedTime"></td>
 		</tr>
@@ -336,8 +391,9 @@ else if ( isset( $_REQUEST['showMyTickets'] ) )
 <form
 	action="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>"
 	method="post"><input id="newticketButton" type="submit"
-	value="Neue Anfrage erstellen" /> <input type="hidden"
-	name="newTicketForm" value="1" /></form>
+	value="Neue Anfrage erstellen"> 
+	<input type="hidden" name="newTicketForm" value="1" />
+</form>
 <?php
 
 }
@@ -345,10 +401,12 @@ else if ( isset( $_REQUEST['showMyTickets'] ) )
  * add new message to given ticket id
  */
 else if ( isset($_REQUEST['text']) && isset($_REQUEST['ticketid']) && is_numeric( $_REQUEST['ticketid'] ) )
-{
-    if ( strlen( $_REQUEST['text'] ) > 3000 )
+{   
+    if ( strlen( $_REQUEST['text'] ) > MAX_MESSAGE_LEN )
     {
-        echo "Text ist zu lang!\n";
+        ?>
+        <div id="ticketError">Fehler: Text ist zu lang!</div> 
+        <?
         return;
     }
 
@@ -357,15 +415,24 @@ else if ( isset($_REQUEST['text']) && isset($_REQUEST['ticketid']) && is_numeric
     {
         throw new Exception( __METHOD__ . " ERROR unable to get ticket from database\n" );
     }    
+
+    $pText = mb_convert_encoding($_REQUEST['text'], 'UTF-8', 'UTF-8');   
+    unset($_REQUEST['text']);
+    $pText = strip_tags($pText);
+    $pText = nl2br($pText);
+    $pText = wordwrap($pText, MAX_MESSAGE_TEXTTILLWRAP, "<br />", true);
+    $lineCount = substr_count($pText, "<br />");   
+
+    echo "LC: ".$lineCount."\n";
     
-    $tObj = new Ticket($_REQUEST['ticketid']);
-    
-    if (!$tObj->isValid())
+    if ( $lineCount >= MAX_MESSAGE_LINES )
     {
-        echo "Fehler beim Laden des Tickets\n";
-    }
-    $pText = $_REQUEST['text'];
-    
+        ?>
+        <div id="ticketError">Fehler: Text ist zu lang!</div> 
+        <?
+        return;
+    }       
+
     // extern $me
     //echo $me->getName()." -- ".$pText."\n";
     ?>
@@ -381,7 +448,9 @@ else if ( isset($_REQUEST['text']) && isset($_REQUEST['ticketid']) && is_numeric
     }
     else
     {
-        echo "Fehler beim Hinzufügen der Nachricht\n";
+        ?>
+        <div id="ticketError">Fehler beim Hinzufügen der Nachricht!</div> 
+        <?        
     }    
     ?>
     <a href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&showMyTickets=1' )?>">Zurück zur Ticketübersicht</a>
@@ -417,11 +486,11 @@ else
     foreach ( $tickets as $ticketId )
     {
         $tObj = new Ticket( $ticketId );
-        // TODO, output through htmlentities()
+        
         // alternate background colors
-        $cssID = "ticketEntryA";
+        $cssID = "ticketTableEntryA";
         if ( $i % 2 )
-            $cssID = "ticketEntryB";
+            $cssID = "ticketTableEntryB";
         
         if ( $i % 2 )
         {
@@ -441,11 +510,12 @@ else
 			onmouseout="style.backgroundColor='#7788AA'">
     <?php
         }
-        
-        echo "<td id=\"ticketReporter\">" . $tObj->getReporter() . "</td>";
-        echo "<td id=\"ticketSubject\">" . $tObj->getSubject() . "</td>";
-        echo "<td id=\"ticketCreatedTime\">" . $tObj->getTimeCreated() . "</td>";
-        echo "</tr>";
+    ?>
+        <td id="ticketTableReporter"><?=$tObj->getReporter()?></td>
+        <td id="ticketTableSubject"><?=$tObj->getSubject()?></td>
+        <td id="ticketTableCreatedTime"><?=$tObj->getTimeCreated()?></td>
+        </tr>
+        <?
         $i ++;
     }
     ?>
@@ -455,13 +525,9 @@ else
 </div>
 <!-- /ticketlist -->
 
-<form
-	action="<?php
-    print $_SERVER['PHP_SELF'];
-    ?>"
-	method="post"><input id="newticketButton" type="submit"
-	value="Neue Anfrage erstellen" /> <input type="hidden"
-	name="newTicketForm" value="1" /></form>
+<form action="<?=$_SERVER['PHP_SELF']?>" method="post"><input id="newticketButton" type="submit" value="Neue Anfrage erstellen" /> 
+	<input type="hidden" name="newTicketForm" value="1" />
+</form>
 
 <?php
 }
