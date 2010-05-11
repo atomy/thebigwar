@@ -33,7 +33,13 @@ class TicketMessage extends DBObject
      * message content
      * @var unknown_type
      */
-    private $text;    
+    private $text;
+
+    /**
+     * is this written by a gameoperator?
+     * @var unknown_type
+     */
+    private $gameoperator;
     
     /**
      * constructor, if id is given lookup object data on database
@@ -45,6 +51,7 @@ class TicketMessage extends DBObject
         $this->ticketid = -1;
         $this->username = "";
         $this->setLoaded(false);
+        $this->gameoperator;
         
         if ( $id >= 0 && $id !== false )
         {
@@ -82,7 +89,12 @@ class TicketMessage extends DBObject
             if (isset($row['message']))
                 $this->text = $row['message'];
             else
-                throw new Exception("ERROR message not set");     
+                throw new Exception("ERROR message not set");  
+                                
+            if (isset($row['gameoperator']))
+                $this->gameoperator = $row['gameoperator'];
+            else
+                throw new Exception("ERROR gameoperator not set");                    
  
             if (isset($row['time_created']))
                 $this->time_created = $row['time_created'];
@@ -99,7 +111,7 @@ class TicketMessage extends DBObject
      * @param $username
      * @param $text
      */
-    public function create( $ticketid = false, $username = false, $text = false )
+    public function create( $ticketid = false, $username = false, $text = false, $gameoperator = false )
     {
         if ( $ticketid == false || $username == false || $text == false || !is_numeric($ticketid) )
         {
@@ -119,7 +131,7 @@ class TicketMessage extends DBObject
         unset($username);
                
         // add the new ticket to the database
-        $query = "INSERT INTO `ticketmessages` (ticketid, message, username) VALUES ('".$ticketid."','".$dbText."','".$dbUsername."')";
+        $query = "INSERT INTO `ticketmessages` (ticketid, message, username, gameoperator) VALUES ('".$ticketid."','".$dbText."','".$dbUsername."','".$gameoperator."')";
         if (!$dbLink->query($query))
         {
             throw new Exception("ERROR adding TicketMessage!");
@@ -152,5 +164,10 @@ class TicketMessage extends DBObject
     public function getText( )
     {
         return $this->text;
+    }
+    
+    public function isGameoperator()
+    {
+        return $this->gameoperator;
     }
 }

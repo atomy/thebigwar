@@ -1153,11 +1153,11 @@ if ( $adminObj->can( ADMIN_TICKETSYSTEM ) )
 {
     
     ?>
-
+ 
 <fieldset><legend id="action-19">Ticketsystem</legend>
 <h2><a href="<?php
     echo h_root;
-    ?>/admin/tickets.php">Ticketsystem</a></h2>
+    ?>/admin/ticketsystem.php">Ticketsystem</a></h2>
 <p><a href="#top">Zurück zum Menü</a></p>
 </fieldset>
 

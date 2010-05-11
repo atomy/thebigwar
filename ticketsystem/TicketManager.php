@@ -75,7 +75,7 @@ class TicketManager
      */
     public function getNumTicketsByStatus( $status = false, $num = false )
     {
-        if ( $status == false || $num == false )
+        if ( $status === false || $num == false )
         {
             throw new Exception(__METHOD__." missing argument");
         }  
@@ -177,22 +177,27 @@ class TicketManager
      */
     public function isValidStatus( $status )
     {
-        switch($status)
+        if ( isset($GLOBALS['TICKETSTATUS'][$status]) )
         {
-            case TICKET_STATUS_NEW:
-                return true;              
-                
-            case TICKET_STATUS_RESOLVED:
-                return true;
-             
-            case TICKET_STATUS_CLOSED:
-                return true;
-                
-            default:
-                return false;           
+            return true;
         }
+        return false;
+    }
+    
+    public function getTicketNumByStatus( $status = false )
+    {
+        if ( $status === false )
+        {
+            throw new Exception(__METHOD__." missing argument");
+        }
+        
+        $dbhelper = DBHelper::getInstance();
+        $dbLink = &$dbhelper->getLink();
+        
+        // load ticketids from db
+        $qry = "SELECT * FROM `tickets` WHERE `status` = '".$status."'";        
+        $result = $dbLink->query($qry);
+        
+        return mysqli_num_rows($result);    
     }
 }
-
-// Singleton instanziieren
-//$ticketManager = TicketManager::getInstance();

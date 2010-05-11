@@ -157,7 +157,7 @@ class Ticket extends DBObject
      * @param unknown_type $username
      * @param unknown_type $message
      */
-    public function addMessage( $username = false, $message = false )
+    public function addMessage( $username = false, $message = false, $gameoperator = false )
     {
         if ($username == false || $message == false)
         {
@@ -172,8 +172,17 @@ class Ticket extends DBObject
         $dbLink = &$dbhelper->getLink();      
 
         $tMsg = new TicketMessage();
-        $tMsg->create( $this->getId(), $username, $message );
+        $tMsg->create( $this->getId(), $username, $message, $gameoperator );
         $this->messages[] = $tMsg->getId();  
+        
+        if ( $gameoperator == true )
+        {
+            $this->setStatus(TICKET_STATUS_ANSWERED);
+        }
+        else
+        {
+            $this->setStatus(TICKET_STATUS_WAITING);
+        }
 
         return true;
     }
@@ -201,6 +210,35 @@ class Ticket extends DBObject
     {
         return $this->status;
     }
+    
+	/**
+     * sets the $status
+     */
+    public function setStatus( $status )
+    {        
+        $dbhelper = DBHelper::getInstance();
+        $dbLink = &$dbhelper->getLink();  
+
+        // vom GO beantwortet, benachrichtige den User (reporter)
+        if ( $this->getStatus() == TICKET_STATUS_WAITING && $status == TICKET_STATUS_ANSWERED )
+        {
+            // TODO
+        }
+        // neue Nachricht vom User benachrichtige den go (go-ally)
+        else if ( $this->getStatus() == TICKET_STATUS_ANSWERED && $status == TICKET_STATUS_WAITING )
+        {
+            // TODO
+        }
+        
+        // status change
+        $this->status = $status;        
+        $qry = "UPDATE `tickets` SET status = '".$this->status."' WHERE id = '".$this->getId()."'";
+
+        if ( $dbLink->query($qry) === false )
+        {
+            throw new Exception(__METHOD__." unable execute sql query");
+        }
+    } 
 
 	/**
      * @return the $subject
@@ -235,31 +273,7 @@ class Ticket extends DBObject
      */
     public function getStatusString()
     {
-        switch ($this->status)
-        {
-            case TICKET_STATUS_NEW:
-                return "Neu";
-            break;
-            
-            case TICKET_STATUS_RESOLVED:
-                return "Erledigt";
-            break;
-
-            case TICKET_STATUS_CLOSED:
-                return "Geschlossen";
-            break;
-
-            case TICKET_STATUS_ANSWERED:
-                return "Beantwortet";
-            break;
-            
-            case TICKET_STATUS_WAITING:
-                return "Wartend";
-            break;                        
-
-            default:
-                return "";
-        }
+        return $GLOBALS['TICKETSTATUS_DESC'][$this->status];
     }
     
     /**
