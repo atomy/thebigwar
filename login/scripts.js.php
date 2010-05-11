@@ -7,6 +7,12 @@
 	header('Cache-control: max-age=152800');
 	header('Expires: '.strftime('%a, %d %b %Y %T %Z', time()+152800));
 ?>
+
+function goTo(theUrl)
+{
+	document.location.href = theUrl;
+}
+  
 function set_time_globals(server_time)
 {
 	window.local_time_obj = new Date();
