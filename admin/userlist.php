@@ -2,8 +2,14 @@
     require_once( '../include/config_inc.php' );
     require_once( TBW_ROOT.'admin/include.php' );
 
-    if(!$admin_array['permissions'][0])
-        die('No access.');
+   	/**
+	 * check for access to that page
+	 * @extern $adminObj
+	 */
+	if( !isset($adminObj) || !$adminObj->can(ADMIN_LISTUSERS))
+	{
+		die('No access.');
+	}
 
     admin_gui::html_head();
 

@@ -4,8 +4,9 @@
 
 	/**
 	 * check for access to that page
+	 * @extern $adminObj
 	 */
-	if(!$admin_array['permissions'][13])
+	if( !isset($adminObj) || !$adminObj->can(ADMIN_MANAGEADMINS))
 	{
 		die('No access.');
 	}
@@ -63,29 +64,6 @@
 			<tr>
 				<th rowspan="2" title="Name des Administrators">Name</th>
 				<th rowspan="2" title="Passwort">Passwort</th>
-				<th colspan="8" title="Benutzeraktionen">Benutzeraktionen</th>
-				<th rowspan="2" title="Anfängerschutz ein-/ausschalten">Noob-<br>schutz</th>
-				<th rowspan="2" xml:lang="en" title="Changelog bearbeiten">Change-<br>log</th>
-				<th rowspan="2" title="Pranger bearbeiten">Pranger</th>
-				<th rowspan="2" title="Nachricht versenden">Nachricht</th>
-				<th rowspan="2" title="Log-Dateien ansehen"><span xml:lang="en">Logs</span></th>
-				<th rowspan="2" title="Adminstratoren verwalten"><span xml:lang="en">Admins</span></th>
-				<th rowspan="2" title="Wartungsarbeiten ein-/ausschalten">Wartung</th>
-				<th rowspan="2" title="Spiel sperren/entsperren">Spiel<br>sperren</th>
-				<th rowspan="2" title="Flottensperre einstellen">Flotten-<br>sperre</th>
-				<th rowspan="2" title="News bearbeiten"><span xml:lang="en">News</span></th>
-				<th rowspan="2" title="Gebäude/Forschung editieren"><span xml:lang="en">EditAccount</span></th>
-				<th rowspan="2" title="Ticketsystem"><span xml:lang="en">Ticket</span></th>
-			</tr>
-			<tr>
-				<th title="Die Benutzerliste einsehen">Liste</th>
-				<th title="Als Geist als ein Benutzer anmelden">Geist</th>
-				<th title="Beim Benutzer die Werbung ein-auschalten">Werbung</th>
-				<th title="Flottenhänger beim Benutzer korrigieren">Flotten-<br>hänger</th>
-				<th title="Das Passwort eines Benutzers ändern">Pass</th>
-				<th title="Einen Benutzer löschen">Löschen</th>
-				<th title="Einen Benutzer sperren/entsperren">Sperren</th>
-				<th title="Einen Benutzer umbenennen">Rename</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -93,12 +71,6 @@
 				<td><input type="text" size="14" name="new_admin[0]" /></td>
 				<td><input type="text" size="14" name="new_admin[1]" /></td>
 <?php
-				for($j=0; $j<=19; $j++)
-				{
-?>
-				<td><input type="checkbox" name="new_admin[<?=htmlentities($j+2)?>]" value="1" /></td>
-<?php
-				}
 ?>
 			</tr>
 		</tbody>
@@ -122,6 +94,8 @@
 			}
 
 		case 'edit':
+         // old code
+		    /*
 			if(isset($_POST['admin_array']))
 			{
 				$old_admins = array_keys($admins);
@@ -173,16 +147,15 @@
 					$new_admins[$_SESSION['admin_username']]['permissions'][11] = '1';
 				}
 				write_admin_list($new_admins);
-				$admins = $new_admins;
+				$admins = $new_admins;				
 			}
+			*/
 ?>
 <form action="usermanagement.php?action=edit" method="post">
 	<table border="1">
 		<thead>
 			<tr> 
 				<th rowspan="2" title="Name des Administrators">Name</th>
-				<th rowspan="2" title="Passwort">Passwort</th>
-				<th colspan="8" title="Benutzeraktionen">Benutzeraktionen</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -192,14 +165,8 @@
 			{
 ?>
 			<tr>
-				<td><input type="text" name="admin_array[<?=htmlentities($i)?>][0]" value="<?=utf8_htmlentities($name)?>" /></td>
+				<td><input type="text" name="admin_array[<?=htmlentities($i)?>][0]" value="<?=utf8_htmlentities($name)?>" readonly /></td>			
 <?php
-				for($j=0; $j<=19; $j++)
-				{
-?>
-				<td><input type="checkbox" name="admin_array[<?=htmlentities($i)?>][<?=htmlentities($j+1)?>]" value="1"<?=isset($settings['permissions'][$j]) && $settings['permissions'][$j] ? ' checked="checked"' : ''?><?=($j==11 && $name==$_SESSION['admin_username'])? ' disabled="disabled"' : ''?> /></td>
-<?php
-				}
 
 				if($name == $_SESSION['admin_username'])
 				{
@@ -220,11 +187,6 @@
 			}
 ?>
 		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="22"><button type="submit">Speichern</button></td>
-			</tr>
-		</tfoot>
 	</table>
 </form>
 <?php

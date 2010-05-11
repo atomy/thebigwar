@@ -2,8 +2,14 @@
     require_once( '../include/config_inc.php' );
     require( TBW_ROOT.'admin/include.php' );
 
-    if(!$admin_array['permissions'][10])
-        die('No access.');
+    /**
+	 * check for access to that page
+	 * @extern $adminObj
+	 */
+	if( !isset($adminObj) || !$adminObj->can(ADMIN_EDITPRANGER))
+	{
+		die('No access.');
+	}
 
     
     if(isset($_GET['delete']))

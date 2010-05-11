@@ -8,8 +8,8 @@ require (TBW_ROOT . 'admin/include.php');
 
 // TODO, add new permissions flag, using the "log" permission for now
 // check access for "Listing Messages"
-if (! isset ( $admin_array ['permissions'] [10] ) || ! $admin_array ['permissions'] [10])
-	die ( 'No access.' );
+// if (! isset ( $admin_array ['permissions'] [10] ) || ! $admin_array ['permissions'] [10])
+	die ( 'No access.' ); // disabling for all, not working atm
 
 admin_gui::html_head ();
 

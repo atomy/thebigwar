@@ -2,9 +2,6 @@
 	require_once( '../include/config_inc.php' );
 	require_once( TBW_ROOT.'admin/include.php' );
 	
-	/*if(!$admin_array['permissions'][18]) {
-		die('No access.');
-	}*/
 ?>
 	<script type="text/javascript">
 		var root = '<?php echo h_root; ?>';

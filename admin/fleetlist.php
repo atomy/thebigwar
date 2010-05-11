@@ -3,7 +3,7 @@
 	require( TBW_ROOT.'admin/include.php' );
 	
 	// TODO, fleet list access
-	if(!$admin_array['permissions'][0])
+	//if(!$admin_array['permissions'][0]) // disabled for all
 		die('No access.');
 
 	admin_gui::html_head();

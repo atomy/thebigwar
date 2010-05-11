@@ -9,7 +9,7 @@
 
 	__autoload('User');
 	
-	if( !isset($admin_array['permissions'][18]) || !$admin_array['permissions'][18] )
+	if( $adminObj->can( ADMIN_EDITITEMS ) )
 	{
 		die("No Access");
 	}

@@ -23,11 +23,14 @@ hr,table,tfoot,thead,tbody,tr,td,th { border:.1em solid #679;  vertical-align:mi
 fieldset { padding:.5em; margin:.5em; border:.2em solid #679; }
 legend { font-weight:bold; }
 
-#editAdminName { font-size: 1.3em; font-weight: bold; }
-
+#editAdminHeadLine span { font-size: 1.3em; font-weight: bold; }
+#editAdminHeadLine { font-size: 1.5em; }
 #permTable { border: none; margin: 10px; }
 #permTable td { padding: 5px 10px 5px 10px; }
 #enabled { text-color: green; background-color: green; }
 #disabled { text-color: red; background-color: red; }
 #revokedPerm { color: red; font-weight:bold; }
 #grantedPerm { color: green; font-weight:bold; }
+#editPermissions { /* border-right: solid 2px #667799; */ padding: 20px; width: 35%; }
+#editPermissionsHeadline { width: 100%; text-align: center; font-size: 1.5em; }
+#submit_button { margin-left: 40%; }
