@@ -34,7 +34,14 @@ if ( isset($_REQUEST['status'] ))
 // display ticket details for the given ticketid
 else if ( isset( $_REQUEST['ticketid'] ) && is_numeric( $_REQUEST['ticketid'] ) && !isset($_REQUEST['text']) )
 {
-    TicketHelper::showTicketDetails($_REQUEST['ticketid']);
+    TicketHelper::showTicketDetails($_REQUEST['ticketid'], true);
+}
+/*
+ * mark ticket as resolved
+ */
+else if ( isset($_REQUEST['resolve']) && isset($_REQUEST['ticketid']) && is_numeric( $_REQUEST['ticketid'] ) )
+{
+    TicketHelper::resolveTicket( $_REQUEST['ticketid'] );
 }
 /*
  * add new message to given ticket id

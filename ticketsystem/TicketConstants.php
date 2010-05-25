@@ -4,6 +4,7 @@ define('MAX_MESSAGE_LEN', 1600);
 define('MAX_SUBJECT_LEN', 64); 
 define('MAX_MESSAGE_LINES', 20); 
 define('MAX_MESSAGE_TEXTTILLWRAP', 70);
+define('MAX_NEW_TICKETS', 5);
 
 // valid ticket status, keep in sync with TicketManager::isValidStatus()
 $TICKETSTATUS = array(

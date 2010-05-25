@@ -222,4 +222,17 @@ function array4Sub($arr1, $arr2)
     return $arr1;
 }
 
+/**
+ * returns true if name is restricted for use
+ * @param $name
+ */
+function isBlacklistedName($name)
+{
+    if(strtolower($name) == "ticketsystem")
+    {
+        return true;
+    }
+    return false;
+}
+
 ?>

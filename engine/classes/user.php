@@ -25,7 +25,7 @@ class User extends Dataset
      */
     function create( )
     {
-        if ( file_exists( $this->filename ) )
+        if ( file_exists( $this->filename ) || isBlacklistedName($this->filename) )
             return false;
         
         $this->raw = array( 'username' => $this->name, 'planets' => array(), 'forschung' => array(), 'password' => 'x', 'punkte' => array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ), 'registration' => time(), 'messages' => array(), 'description' => '', 'description_parsed' => '', 'flotten' => array(), 'alliance' => false );

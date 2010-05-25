@@ -220,14 +220,9 @@ class Ticket extends DBObject
         $dbLink = &$dbhelper->getLink();  
 
         // vom GO beantwortet, benachrichtige den User (reporter)
-        if ( $this->getStatus() == TICKET_STATUS_WAITING && $status == TICKET_STATUS_ANSWERED )
+        if ( $status == TICKET_STATUS_ANSWERED )
         {
-            // TODO
-        }
-        // neue Nachricht vom User benachrichtige den go (go-ally)
-        else if ( $this->getStatus() == TICKET_STATUS_ANSWERED && $status == TICKET_STATUS_WAITING )
-        {
-            // TODO
+            $this->notifyReporter();
         }
         
         // status change
@@ -238,6 +233,8 @@ class Ticket extends DBObject
         {
             throw new Exception(__METHOD__." unable execute sql query");
         }
+        
+        return true;
     } 
 
 	/**
@@ -287,5 +284,34 @@ class Ticket extends DBObject
         $lastActive = $lastMsg->getTimeCreated();
                         
         return $lastActive; 
+    }
+    
+    /**
+	 * sends a note to the reporter of the ticket that his ticket has been updated
+     */
+    public function notifyReporter()
+    {
+        $message = new Message();
+        if (!$message->create())
+        {
+            return false;
+        }        
+            
+        $message->from( "TicketSystem" );     
+        $message->to( $this->getReporter() );             
+        $message->subject( "Antwort auf Ticket #".$this->getId() );
+                
+        $subJ = $this->getSubject();
+        $tID = $this->getId();
+        
+        $msgText = "Deinem Ticket mit dem Betreff \"".$subJ."\" wurde eine neue Nachricht hinzugefügt.<br/><br/>";
+        $msgText .= "<a href=\"ticketsystem.php?ticketid=".$tID."\">Klicke hier um zum Ticket zu gelangen</a>";        
+                
+        $message->text( $msgText );        
+        $message->html( true );
+        
+        $message->addUser( $this->getReporter(), 6 );                
+
+        unset( $message );       
     }
 }

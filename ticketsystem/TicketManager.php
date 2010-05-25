@@ -163,6 +163,51 @@ class TicketManager
     }
     
     /**
+     * get the given number of tickets from database where reporter is username and status is status
+     * @param $status
+     * @param $num
+     * @return array() ticket-ids
+     */
+    function getNumMyTicketsByStatus( $username = false, $num = false, $status = false)
+    {
+        if ( $username == false || $num == false || $status == false )
+        {
+            throw new Exception(__METHOD__." missing argument");
+        }  
+        
+        if ($num > 100)
+        {
+            throw new Exception(__METHOD__." too much tickets requested");   
+        }
+        
+        $dbhelper = DBHelper::getInstance();
+        $dbLink = &$dbhelper->getLink();
+        $username = mysqli_real_escape_string($dbLink, $username);
+        
+        // load ticketids from db
+        $qry = "SELECT * FROM `tickets` WHERE `reporter` = '".$username."' AND `status` = '".$status."'";
+        $result = $dbLink->query($qry);
+
+        if (!$result) 
+        {
+            echo "ERROR looking up tickets!".$dbLink->error."\n";
+        }
+            
+        $ticketIDs = array();
+        for( $row = $result->fetch_array(MYSQLI_ASSOC); $row; $row = $result->fetch_array(MYSQLI_ASSOC))
+        {
+            if (!isset($row['id']))
+            {
+                throw new Exception(__METHOD__." ticket w/o any id");   
+            } 
+            $ticketIDs[] = $row['id'];
+        }
+        $result->close();
+        
+        return $ticketIDs;
+    }    
+    
+    /**
      * returns ticket object for the given ticket-id
      * @param unknown_type $id
      */
@@ -200,4 +245,21 @@ class TicketManager
         
         return mysqli_num_rows($result);    
     }
+    
+    public function getTicketNumByStatusForUser( $status = false, $username = false )
+    {
+        if ( $status === false || $username === false )
+        {
+            throw new Exception(__METHOD__." missing argument");
+        }
+        
+        $dbhelper = DBHelper::getInstance();
+        $dbLink = &$dbhelper->getLink();
+        
+        // load ticketids from db
+        $qry = "SELECT * FROM `tickets` WHERE `status` = '".$status."' AND `reporter` = '".$username."'";        
+        $result = $dbLink->query($qry);
+        
+        return mysqli_num_rows($result);    
+    }    
 }
