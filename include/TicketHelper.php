@@ -35,7 +35,7 @@ class TicketHelper
         
         $tManager = ticketManager::getInstance();
         
-        if ($tManager->getTicketNumByStatusForUser( $username ) >= MAX_NEW_TICKETS)
+        if ($tManager->getTicketNumByStatusForUser( TICKET_STATUS_NEW, $username ) >= MAX_NEW_TICKETS)
         {
             ?>
 <div id="ticketError">Fehler: Du hast die maximale Anzahl von offenen Tickets ereicht!</div>
@@ -75,8 +75,8 @@ class TicketHelper
         <div id="addMsgSuccess">Ticket hinzugef&uuml;gt<br />
 </div>
 <a
-	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&showMyTickets=1' )?>">ZurÃ¼ck
-zur TicketÃ¼bersicht</a> <a
+	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück
+zur Ticketübersicht</a> <a
 	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tId )?>">Zum erstellten Ticket #<?=$tId?></a> 
     	<?
         }
@@ -85,8 +85,8 @@ zur TicketÃ¼bersicht</a> <a
             ?>
         <div id="ticketError">Fehler beim Erstellen des Tickets!</div>
 <a
-	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&showMyTickets=1' )?>">ZurÃ¼ck
-zur TicketÃ¼bersicht</a>      
+	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück
+zur Ticketübersicht</a>      
         <?
         }
         ?>   
@@ -199,8 +199,8 @@ if ( $showGoOptions )
 }
 ?>
 <input type="hidden" name="ticketid" value="<?=$ticketid?>" /></form>
-<a href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&showMyTickets=1' )?>">ZurÃ¼ck
-zur TicketÃ¼bersicht</a>
+<a href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück
+zur Ticketübersicht</a>
 <?
     }
 
@@ -342,14 +342,14 @@ zur TicketÃ¼bersicht</a>
         else
         {
             ?>
-        <div id="ticketError">Fehler beim HinzufÃ¼gen der Nachricht!</div> 
+        <div id="ticketError">Fehler beim Hinzufügen der Nachricht!</div> 
         <?
         }
         ?>
     <a
-	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&showMyTickets=1' )?>">ZurÃ¼ck
-zur TicketÃ¼bersicht</a> <a
-	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tObj->getId() )?>">ZurÃ¼ck zu Ticket #<?=$tObj->getId()?></a>
+	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück
+zur Ticketübersicht</a> <a
+	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tObj->getId() )?>">Zurück zu Ticket #<?=$tObj->getId()?></a>
 
 </div>
 <!-- /addMsg -->
@@ -390,7 +390,7 @@ foreach( $GLOBALS['TICKETSTATUS'] as $statusID => $statusName)
     else
     {
         ?>
-    	<a href="ticketsystem.php?status=<?=$statusID?>"><?=$GLOBALS['TICKETSTATUS_DESC'][$statusID]?> (<?=$ticketManager->getTicketNumByStatus($statusID)?>)</a>
+    	<font size="1"><a href="ticketsystem.php?status=<?=$statusID?>"><?=$GLOBALS['TICKETSTATUS_DESC'][$statusID]?> (<?=$ticketManager->getTicketNumByStatus($statusID)?>)</a></font>
         <?        
     }    
 }
@@ -491,12 +491,32 @@ foreach( $GLOBALS['TICKETSTATUS'] as $statusID => $statusName)
         }
         ?>
     <a
-	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&showMyTickets=1' )?>">ZurÃ¼ck
-zur TicketÃ¼bersicht</a> <a
-	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tObj->getId() )?>">ZurÃ¼ck zu Ticket #<?=$tObj->getId()?></a>
+	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück
+zur Ticketübersicht</a> <a
+	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tObj->getId() )?>">Zurück zu Ticket #<?=$tObj->getId()?></a>
 
 </div>
 <!-- /addMsg -->
 <?        
+    }
+
+    /**
+     * check if the user can view the given ticket, he can when:
+     * - he has reported the ticket
+     */
+    public static function canUserViewTicket( $userName, $ticketId )
+    {
+        $tObj = new Ticket( $_REQUEST['ticketid'] );
+        if ( ! $tObj->isValid() )
+        {
+	    return false;
+        }        
+
+	if ( $userName == $tObj->getReporter() )
+        {
+	    return true;
+        }
+
+        return false;
     }
 }

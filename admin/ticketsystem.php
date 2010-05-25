@@ -27,6 +27,9 @@ admin_gui::html_head();
 <link rel="stylesheet" href="/css/ticketsystem.css" type="text/css" />
 <?
 
+/*
+ * show tickets with the given status
+ */
 if ( isset($_REQUEST['status'] ))
 {
     TicketHelper::showTicketsWithStatus($_REQUEST['status']);

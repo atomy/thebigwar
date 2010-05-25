@@ -28,24 +28,30 @@ else if ( isset( $_REQUEST['newTicketForm'] ) )
 // display ticket details for the given ticketid
 else if ( isset( $_REQUEST['ticketid'] ) && is_numeric( $_REQUEST['ticketid'] ) && !isset($_REQUEST['text']) )
 {
+    // check for permissions
+    if ( !TicketHelper::canUserViewTicket( $me->getName(), $_REQUEST['ticketid'] ) )
+    {
+        die( "No Access." );
+    }
     TicketHelper::showTicketDetails($_REQUEST['ticketid']);
-}
-// show all tickets which belong to me
-else if ( isset( $_REQUEST['showMyTickets'] ) )
-{
-    TicketHelper::showMyTickets( $me->getName() );
 }
 /*
  * add new message to given ticket id
  */
 else if ( isset($_REQUEST['text']) && isset($_REQUEST['ticketid']) && is_numeric( $_REQUEST['ticketid'] ) )
 {   
+    // check for permissions
+    if ( !TicketHelper::canUserViewTicket( $me->getName(), $_REQUEST['ticketid'] ) )
+    {
+        die( "No Access." );
+    }
+
     TicketHelper::addMessageToTicket($me->getName(), $_REQUEST['ticketid'], $_REQUEST['text']);
 }
-// show all tickets with the given status // TODO, permissions
-else
+// show all tickets which belong to me
+else 
 {
-    TicketHelper::showTicketsWithStatus();
+    TicketHelper::showMyTickets( $me->getName() );
 }
 ?>
 	

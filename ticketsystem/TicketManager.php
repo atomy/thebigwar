@@ -139,8 +139,9 @@ class TicketManager
         $username = mysqli_real_escape_string($dbLink, $username);
         
         // load ticketids from db
-        $qry = "SELECT * FROM `tickets` WHERE `reporter` = '".$username."'";
-        //echo "qry: ".$qry."\n";
+        $qry = "SELECT tickets.id, MAX( ticketmessages.time_created ) AS last_active FROM `tickets` LEFT JOIN `ticketmessages` ON tickets.id = ticketmessages.ticketid WHERE tickets.reporter = '".$username."' GROUP BY tickets.id ORDER BY last_active DESC";
+
+	//echo "qry: ".$qry."\n";
         $result = $dbLink->query($qry);
 
         if (!$result) 
