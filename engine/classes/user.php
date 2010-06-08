@@ -1245,8 +1245,9 @@ class User extends Dataset
     }
 
     /**
-     * returns
-     * TODO, add tests
+     * returns maximal amount of flying fleets possible,
+     * determined by research f0 and shipyards
+     * tests, implemented
      *
      */       
     function getMaxParallelFleets( )
@@ -1268,6 +1269,7 @@ class User extends Dataset
     }
 
     /**
+     * 
      * TODO, add tests
      *
      */       

@@ -578,11 +578,6 @@
 <?php
     }
 ?>
-
-<ul class="nachrichten-neu-link">
-    <li><a href="nachrichten.php?to=Stoffel&<?=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="n" tabindex="1.3">Nachricht an <kbd>G</kbd>O (Stoffel)</a></li>
-</ul>
-
 <dl class="nachrichten-kategorien">
     <dt class="c-kaempfe <?=$ncount[1][2]?>"><a href="nachrichten.php?type=1&amp;<?=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="ä" tabindex="2">K<kbd>ä</kbd>mpfe</a></dt>
     <dd class="c-kaempfe <?=$ncount[1][2]?>"><?=utf8_htmlentities($ncount[1][0])?> <span class="gesamt">(<?=utf8_htmlentities($ncount[1][1])?>)</span></dd>

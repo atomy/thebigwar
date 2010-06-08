@@ -111,9 +111,12 @@ require_once( TBW_ROOT.'loghandler/logger.php' );
         }
 
 
+        /**
+         * WTF?
+         */
         function getNeededSlots()
-                  {
-                      if(!$this->status) return false;
+        {
+               if(!$this->status) return false;
           
                       $slots = 0;
                       foreach($this->raw[0] as $k=>$v)
