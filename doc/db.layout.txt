@@ -1,0 +1,20 @@
+example:
+_TABLE_
+[field]
+[field]
+
+
+_ticketmessages_
+[id] - int
+[ticketid] - int
+[message] - string(2048)
+[username] - string(32)
+[gameoperator] - bool
+[time_created] - timestamp(current)
+
+_tickets_
+[id] - int
+[reporter] - string(32)
+[status] - tinyint
+[subject] - string(128)
+[time_created] - timestamp(current)
