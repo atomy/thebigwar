@@ -170,4 +170,19 @@ class TicketMessage extends DBObject
     {
         return $this->gameoperator;
     }
+    
+    /**
+     * renames the reporter of the ticket
+     */
+    public function renameUser($newname)
+    {        
+        $dbhelper = DBHelper::getInstance();
+        $dbLink = &$dbhelper->getLink();             
+        $qry = "UPDATE `ticketmessages` SET username = '".$newname."' WHERE id = '".$this->getId()."'";
+
+        if ( $dbLink->query($qry) === false )        
+            throw new Exception(__METHOD__." unable execute sql query");  
+                       
+        return true;
+    }    
 }

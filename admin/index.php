@@ -2,6 +2,7 @@
 // XDEBUG_SESSION_START
 // XDEBUG_SESSION_STOP
 require_once ( '../include/config_inc.php' );
+require ( TBW_ROOT.'include/TicketHelper.php');
 require ( TBW_ROOT . 'admin/include.php' );
 
 // load class user
@@ -124,7 +125,10 @@ if ( $adminObj->can( ADMIN_RENAMEUSERS ) && isset( $_POST['rename_old'] ) && iss
     $_POST['rename_new'] = substr( trim( $_POST['rename_new'] ), 0, 20 );
     
     $that_user = Classes::User( $_POST['rename_old'] );
-    $that_user->rename( $_POST['rename_new'] ) && protocol( "6", $_POST['rename_old'], $_POST['rename_new'] );
+    $ret = $that_user->rename( $_POST['rename_new'] ) && protocol( "6", $_POST['rename_old'], $_POST['rename_new'] );
+    
+    if ( $ret )
+        TicketHelper::userRenamed($_POST['rename_old'], $_POST['rename_new']);
 }
 
 /*

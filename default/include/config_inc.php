@@ -18,6 +18,7 @@
     $bb2egg['botport'] = ""; 
     $bb2egg['pass'] = "";
     $bb2egg['channel_tbw'] = "#tbw";
+    $bb2egg['channel_tbwsupport'] = "#tbw-support";
 
     /**
      * those are defines for the supported log types, 

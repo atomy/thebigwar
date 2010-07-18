@@ -4,6 +4,7 @@ require_once '../include/config_inc.php';
 require_once TBW_ROOT.'include/DBHelper.php';
 require_once TBW_ROOT.'ticketsystem/Ticket.php';
 require_once TBW_ROOT.'ticketsystem/TicketConstants.php';
+include_once( TBW_ROOT.'include/php2egg.php' );
 
 
 class TicketManager
@@ -27,15 +28,20 @@ class TicketManager
      * adds a new ticket to the database
      * @param $reporter
      * @param $text
+     * returns ticketid
      */
-    public function newTicket( $reporter = false, $text = false )
+    public function newTicket( $reporter = false, $text = false, $subject = false )
     {
-        if ( $reporter == false || $text == false )
+        if ( $reporter == false || $text == false || $subject == false )
         {
             throw new Exception(__METHOD__." missing argument");
         }
 
-        new Ticket( $reporter, $text );
+        $tObj = new Ticket();
+        $tId = $tObj->create( $reporter, $text, $subject );
+        $url = 'http://'.$_SERVER['HTTP_HOST'].'/admin/ticketsystem.php?ticketid='.urlencode($tId);
+        phpbb2egg("\00304Neues Ticket #".$tId." von '".$reporter."' mit Betreff '".$subject."' -- $url", "tbwsupport" );
+        return $tId;
     }
     
     /**
@@ -117,22 +123,15 @@ class TicketManager
     }
     
     /**
-     * get the given number of tickets from database where reporter is username
+     * get tickets from database where reporter is username
      * @param $status
      * @param $num
      * @return array() ticket-ids
      */
-    function getNumMyTickets( $username = false, $num = false)
+    function getMyTickets( $username = false )
     {
-        if ( $username == false || $num == false )
-        {
+        if ( $username == false )
             throw new Exception(__METHOD__." missing argument");
-        }  
-        
-        if ($num > 100)
-        {
-            throw new Exception(__METHOD__." too much tickets requested");   
-        }
         
         $dbhelper = DBHelper::getInstance();
         $dbLink = &$dbhelper->getLink();
@@ -140,14 +139,10 @@ class TicketManager
         
         // load ticketids from db
         $qry = "SELECT tickets.id, MAX( ticketmessages.time_created ) AS last_active FROM `tickets` LEFT JOIN `ticketmessages` ON tickets.id = ticketmessages.ticketid WHERE tickets.reporter = '".$username."' GROUP BY tickets.id ORDER BY last_active DESC";
-
-	//echo "qry: ".$qry."\n";
         $result = $dbLink->query($qry);
 
         if (!$result) 
-        {
             echo "ERROR looking up tickets!".$dbLink->error."\n";
-        }
             
         $ticketIDs = array();
         for( $row = $result->fetch_array(MYSQLI_ASSOC); $row; $row = $result->fetch_array(MYSQLI_ASSOC))
@@ -162,6 +157,41 @@ class TicketManager
         
         return $ticketIDs;
     }
+    
+    /**
+     * get ticketmessages from database where username is username
+     * @param $status
+     * @param $num
+     * @return array() ticket-ids
+     */
+    function getMyTicketMessages( $username = false )
+    {
+        if ( $username == false )
+            throw new Exception(__METHOD__." missing argument");
+        
+        $dbhelper = DBHelper::getInstance();
+        $dbLink = &$dbhelper->getLink();
+        $username = mysqli_real_escape_string($dbLink, $username);
+        
+        // load ticketids from db
+        $qry = "SELECT id FROM `ticketmessages` WHERE username = '".$username."'";
+        $result = $dbLink->query($qry);
+
+        if (!$result) 
+            echo "ERROR looking up ticketmessages!".$dbLink->error."\n";
+            
+        $ticketIDs = array();
+        for( $row = $result->fetch_array(MYSQLI_ASSOC); $row; $row = $result->fetch_array(MYSQLI_ASSOC))
+        {
+            if (!isset($row['id']))
+                throw new Exception(__METHOD__." ticketmessage w/o any id");
+                  
+            $ticketIDs[] = $row['id'];
+        }
+        $result->close();
+        
+        return $ticketIDs;
+    }    
     
     /**
      * get the given number of tickets from database where reporter is username and status is status
@@ -262,5 +292,37 @@ class TicketManager
         $result = $dbLink->query($qry);
         
         return mysqli_num_rows($result);    
-    }    
+    }
+    
+    /**
+     * renames all tickets and ticketmessages for the given username
+     * @param $oldname
+     * @param $newname
+     */
+    public function renameUser( $oldname = false, $newname = false )
+    {
+        if ( $oldname === false || $newname === false )
+            throw new Exception(__METHOD__." missing argument");  
+            
+        $ticketIDs = array();
+        $ticketIDs = $this->getMyTickets($oldname);
+        if ( count($ticketIDs) > 0 )
+        {
+            foreach( $ticketIDs as $tId )
+            {
+                $ticketObj = new Ticket($tId);
+                $ticketObj->renameReporter($newname);
+            }
+        }
+        
+        $ticketIDs = $this->getMyTicketMessages($oldname);        
+        if ( count($ticketIDs) > 0 )
+        {
+            foreach( $ticketIDs as $tId )
+            {
+                $ticketObj = new TicketMessage($tId);
+                $ticketObj->renameUser($newname);
+            }
+        }
+    }
 }

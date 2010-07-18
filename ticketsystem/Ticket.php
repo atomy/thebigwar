@@ -314,4 +314,19 @@ class Ticket extends DBObject
 
         unset( $message );       
     }
+    
+    /**
+     * renames the reporter of the ticket
+     */
+    public function renameReporter($newname)
+    {        
+        $dbhelper = DBHelper::getInstance();
+        $dbLink = &$dbhelper->getLink();             
+        $qry = "UPDATE `tickets` SET reporter = '".$newname."' WHERE id = '".$this->getId()."'";
+
+        if ( $dbLink->query($qry) === false )        
+            throw new Exception(__METHOD__." unable execute sql query");  
+                       
+        return true;
+    }
 }
