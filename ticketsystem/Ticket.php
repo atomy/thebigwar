@@ -115,6 +115,13 @@ class Ticket extends DBObject
         }
     }
     
+    /**
+     * create ticket with the given parameters
+     * @param $reporter
+     * @param $text
+     * @param $subject
+     * @return unknown_type
+     */
     public function create( $reporter = false, $text = false, $subject = false )
     {
         if ( $reporter == false || $text == false || $subject == false )
