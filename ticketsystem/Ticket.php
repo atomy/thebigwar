@@ -179,7 +179,7 @@ class Ticket extends DBObject
         {
             $this->setStatus(TICKET_STATUS_ANSWERED);
         }
-        else
+        else if ( $this->getStatus() == TICKET_STATUS_ANSWERED || $this->getStatus() == TICKET_STATUS_RESOLVED )
         {
             $this->setStatus(TICKET_STATUS_WAITING);
         }

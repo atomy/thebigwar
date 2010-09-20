@@ -19,7 +19,7 @@ class TicketHelper
     {
         if ( strlen( $subject ) > MAX_SUBJECT_LEN )
         {
-            ?>
+?>
 <div id="ticketError">Fehler: Betreff ist zu lang!</div>
 <?
             return;
