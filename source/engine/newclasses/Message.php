@@ -107,7 +107,7 @@ class Message extends IDatabaseItem
      * @param  szMessageText
      * @return mixed
      */
-    public function __construct($iID, $userID = -1, $iFromUserID = -1, $iToUserID = -1, $szSubject = "", $szMessageText = "", $iType = -1, $bAchieved = false, $time = -1)
+    public function __construct($iID, $userID = -1, $iFromUserID = -1, $iToUserID = -1, $szSubject = "", $szMessageText = "", $iType = -1, $bAchieved = false, $time = -1, $bRead = false)
     {
     	// id of <0 means this will be a new message saved to db later
     	if ( $iID < 0 )
@@ -129,6 +129,7 @@ class Message extends IDatabaseItem
     	$this->m_iType = $iType;    
     	$this->m_iUserID = $userID;	
     	$this->m_bArchieved = $bAchieved;
+        $this->m_bRead = $bRead;
     	//echo "construct: ".$userID."<br>";
     }
     
@@ -145,14 +146,15 @@ class Message extends IDatabaseItem
     	{
     		$dbHelper = DBHelper::getInstance();
     		$sql = "INSERT INTO `tbw_messages` ( userid, subject, text, time, toUser, fromUser, msgType, msgRead, isArchieved ) VALUES ( '".$this->m_iUserID."', '".$this->m_szSubject."', '".$this->m_szText."', '".$this->m_iTime."', '".$this->m_iToUserID."', '".$this->m_iFromUserID."', '".$this->m_iType."', '".$this->m_bRead."', '".$this->m_bArchieved."' );";
-    		//echo $sql."<br>";
-    		return $dbHelper->doQuery($sql);
+                $result = $dbHelper->DoQuery($sql);
+                $this->m_iID = $dbHelper->GetInsertID();
+                return $result;
     	}
     	else
     	{
     		$dbHelper = DBHelper::getInstance();
     		$sql = "UPDATE `tbw_messages` SET msgRead = '".$this->m_bRead."', msgType = '".$this->m_iType."', isArchieved = '".$this->m_bArchieved."' WHERE id = '".$this->m_iID."';";
-    		return $dbHelper->doQuery($sql);
+    		return $dbHelper->DoQuery($sql);
     	}
     }
     
