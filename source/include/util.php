@@ -235,4 +235,17 @@ function isBlacklistedName($name)
     return false;
 }
 
-?>
+function IsValidMessageType($type)
+{
+	if ( is_numeric($type) && $type >= 0 && $type < MSGTYPE_MAX )
+		return true;
+		
+	return false;
+}
+
+function GetNameOfMessageType($type)
+{
+	global $g_MSGTYPE_NAMES;
+	
+	return $g_MSGTYPE_NAMES[$type];
+}

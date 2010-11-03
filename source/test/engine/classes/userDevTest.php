@@ -607,17 +607,18 @@ class userDevTest extends PHPUnit_Framework_TestCase
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * tests User::getCurrentParallelFleets()
+     * tests User::?()
      * tests for:
-     * - check amount of currently flying fleets
+     * - 
      */
-    public function testGetCurrentParallelFleets( )
+    public function testGetFleetsForUmode( )
     {        
-        $testUser = &$this->testData->getNextTestUser();
-        $userObj = Classes::User( $testUser->getName() );
-        
-        $this->assertEquals( 0, $userObj->getCurrentParallelFleets() );
-    }
+        $userObj = Classes::User( "helmut" );
+    
+        print_r($userObj->getPlanetsList());
+        $userObj->setActivePlanet(0);       
+        print_r($userObj->getPlanetsList());        
+    }  
         
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////

@@ -190,10 +190,10 @@ class CAdmin
         }
         
         if ( is_numeric( $id ) )
-        {                  
+        {                   
             foreach( $this->permissions as $permObj )
             {            
-                if ( is_object($permObj) && $permObj->getId() == $id )
+                if ( $permObj->getId() == $id )
                 {
                     return $permObj;
                 }

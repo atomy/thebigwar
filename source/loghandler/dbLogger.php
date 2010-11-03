@@ -8,10 +8,6 @@ else if ( is_file( '../../include/config_inc.php' ) )
 {
    	require_once( '../../include/config_inc.php' );
 }
-else if ( is_file( '../../../include/config_inc.php' ) )
-{
-   	require_once( '../../../include/config_inc.php' );
-}
 else
 {
   	require_once( 'include/config_inc.php' );
@@ -45,6 +41,7 @@ class DBLogger
         $uname = $this->db->real_escape_string($username);
         $logmsg = $this->db->real_escape_string($msg);
         $username = $msg = false;
+           echo "LOG()\n";
            
         $sql = "INSERT INTO 
         	userlog(username, logmsg) 

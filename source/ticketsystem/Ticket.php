@@ -115,13 +115,6 @@ class Ticket extends DBObject
         }
     }
     
-    /**
-     * create ticket with the given parameters
-     * @param $reporter
-     * @param $text
-     * @param $subject
-     * @return unknown_type
-     */
     public function create( $reporter = false, $text = false, $subject = false )
     {
         if ( $reporter == false || $text == false || $subject == false )
@@ -186,7 +179,7 @@ class Ticket extends DBObject
         {
             $this->setStatus(TICKET_STATUS_ANSWERED);
         }
-        else if ( $this->getStatus() == TICKET_STATUS_ANSWERED || $this->getStatus() == TICKET_STATUS_RESOLVED )
+        else
         {
             $this->setStatus(TICKET_STATUS_WAITING);
         }
