@@ -5,10 +5,10 @@ class DBHelper
     // Singleton stuff begin    
     static private $instance = null;
  
-    static public function getInstance($test = false)
+    static public function getInstance()
     {
         if (null === self::$instance) {
-            self::$instance = new self($test);
+            self::$instance = new self();
         }
         return self::$instance;
     }
@@ -22,12 +22,9 @@ class DBHelper
      */
     private $db;
     
-    private function __construct($test = false)
+    private function __construct()
     {
-	if($test)
-	    $this->db = new mysqli(MYSQL_TESTDB_HOST, MYSQL_TESTDB_USER, MYSQL_TESTDB_PASS, MYSQL_TESTDB_DB);	    
-	else
-	    $this->db = new mysqli(MYSQL_LOGDB_HOST, MYSQL_LOGDB_USER, MYSQL_LOGDB_PASS, MYSQL_LOGDB_DB);
+        $this->db = new mysqli(MYSQL_LOGDB_HOST, MYSQL_LOGDB_USER, MYSQL_LOGDB_PASS, MYSQL_LOGDB_DB);
         
         if ( mysqli_connect_errno() )
         {
@@ -56,6 +53,7 @@ class DBHelper
 	    throw new Exception("DBHelper::doQuery database connection not available!");
 
     	$result = $dbLink->query($szSQL);
+	//echo "exec query: ".$szSQL."\n";
     	
     	if ( !$result )
     	    throw new Exception("DBHelper::doQuery query failed!: ".$this->db->error);
