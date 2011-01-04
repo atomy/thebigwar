@@ -3046,13 +3046,13 @@ require_once( TBW_ROOT.'loghandler/logger.php' );
 			# Kampferfahrung
 			$angreifer_erfahrung = 0;
 			foreach($users_angreifer as $user) {
-				$angreifer_erfahrung += $user->getScores('kampferfahrung');
+				$angreifer_erfahrung += $user->getScores(6);
 			}
 			$angreifer_erstschlag_erfahrung = $angreifer_erfahrung / count($users_angreifer);
 			
 			$verteidiger_erfahrung = 0;
 			foreach($users_verteidiger as $user) {
-				$verteidiger_erfahrung += $user->getScores('kampferfahrung');
+				$verteidiger_erfahrung += $user->getScores(6);
 			}
 			$verteidiger_erstschlag_erfahrung = $verteidiger_erfahrung / count($users_verteidiger);
 			
@@ -3791,7 +3791,7 @@ require_once( TBW_ROOT.'loghandler/logger.php' );
 			foreach($angreifergesamt as $user=>$info)
 			{
 				$user_obj = Classes::User($user);
-				$user_obj->addScores('kampferfahrung', $angreifer_new_erfahrung);
+				$user_obj->addScores(6, $angreifer_new_erfahrung);
 			}
 
 			#Kampferfahrung Verteidiger Punkteverteilung nach verbliebenen Einheiten
@@ -3813,7 +3813,7 @@ require_once( TBW_ROOT.'loghandler/logger.php' );
 			foreach($verteidigergesamt as $user=>$info)
 			{
 				$user_obj = Classes::User($user);
-				$user_obj->addScores('kampferfahrung', $verteidiger_new_erfahrung);
+				$user_obj->addScores(6, $verteidiger_new_erfahrung);
 			}
 				
 			$nachrichten_text .= "<ul class=\"kampferfahrung\">\n";
