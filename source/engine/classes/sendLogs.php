@@ -1,4 +1,4 @@
-<?
+<?php
 
 if ( ! defined( "TBW_ROOT" ) ) {
     require_once ( '../../include/config_inc.php' );
