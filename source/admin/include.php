@@ -1,10 +1,9 @@
 <?php
 
-ini_set( 'include_path', ini_get( 'include_path' ).':../include:../engine:../engine/classes:../loghandler:' );
+$root = $_SERVER['DOCUMENT_ROOT'];
 
-require_once( '../include/config_inc.php' );
+require_once( $root.'/include/config_inc.php' );
 require_once( TBW_ROOT.'admin/include/cadmin.php' ); 
-
 
 // get the relative path after root 
 // e.g. http://tbw.localhost/tbw/admin/index.php gets /tbw/admin/

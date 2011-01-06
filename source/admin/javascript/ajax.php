@@ -9,10 +9,8 @@
 
 	__autoload('User');
 	
-	if( $adminObj->can( ADMIN_EDITITEMS ) )
-	{
+	if( !$adminObj->can( ADMIN_EDITITEMS ) )
 		die("No Access");
-	}
 	
 	header('Content-type: text/xml;charset=UTF-8');
 	echo '<xmlresponse>';
