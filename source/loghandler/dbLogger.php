@@ -1,17 +1,11 @@
 <?php
 
 if ( is_file( '../include/config_inc.php' ) )
-{
    	require_once( '../include/config_inc.php' );
-}
 else if ( is_file( '../../include/config_inc.php' ) )
-{
    	require_once( '../../include/config_inc.php' );
-}
 else
-{
-  	require_once( 'include/config_inc.php' );
-}
+  	require_once( TBW_ROOT.'include/config_inc.php' );
 
 class DBLogger
 {
