@@ -39,7 +39,9 @@ cd ~/
 cp -R htdocs htdocs.bak
 
 echo "Killing Eventhandler, should be restarted later by cronjob."
-kill `cat htdocs/database.global/eventhandler.pid`
+if [ -f htdocs/database.global/eventhandler.pid ] ; then
+        kill `cat htdocs/database.global/eventhandler.pid`
+fi
 killall -q "/usr/bin/php"
 
 # export the given revision
