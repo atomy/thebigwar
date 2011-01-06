@@ -28,11 +28,10 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $message = "test ing";
         $type = 0;
         $achieved = false;
-        $time = 1337;
         $bRead = true;
     
-        $msgObj = new Message($msgID, $userID, $fromUserID, $toUserID, $subject, $message, $type, $achieved, $time, $bRead);
-        $this->assertEquals($msgObj->GetTime(),$time);
+        $msgObj = new Message($msgID, $userID, $fromUserID, $toUserID, $subject, $message, $type);
+        $this->assertEquals($msgObj->GetTime(),-1);
         
         $msgObj = new Message(-1, $userID);
         $this->assertEquals($msgObj->GetTime(),time());
@@ -46,10 +45,12 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $subject = "test1234";
         $message = "test ing";
         $type = 1;
-        $achieved = 1;
+        $archieved = 1;
         $bRead = 1;
     
-        $msgObj = new Message(-1, $userID, $fromUserID, $toUserID, $subject, $message, $type, $achieved, 0 /*$time*/, $bRead);
+        $msgObj = new Message(-1, $userID, $fromUserID, $toUserID, $subject, $message, $type, $achieved, 0 /*$time*/);
+        $msgObj->SetIsRead($bRead);
+        $msgObj->SetArchieved($archieved);
         
         $msgObj->SaveToDatabase();
         $time = time();
@@ -66,7 +67,7 @@ class MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($tMsg->GetType(), $type);
         $this->assertEquals($tMsg->GetUserID(), $userID);
         $this->assertEquals($tMsg->GetIsRead(), $bRead);
-        $this->assertEquals($tMsg->GetIsArchieved(), $achieved);
+        $this->assertEquals($tMsg->GetIsArchieved(), $archieved);
         $this->assertEquals($tMsg->GetIsRead(), $bRead);
     }
     

@@ -94,7 +94,7 @@ class Message extends IDatabaseItem
      */
     private $m_iUserID = null;
 
-    private $m_bArchieved = false;
+    private $m_bArchieved = false;    
     
     /**
      * Short description of method Message
@@ -107,7 +107,7 @@ class Message extends IDatabaseItem
      * @param  szMessageText
      * @return mixed
      */
-    public function __construct($iID, $userID = -1, $iFromUserID = -1, $iToUserID = -1, $szSubject = "", $szMessageText = "", $iType = -1, $bAchieved = false, $time = -1, $bRead = false)
+    public function __construct($iID, $userID = -1, $iFromUserID = -1, $iToUserID = -1, $szSubject = "", $szMessageText = "", $iType = -1)
     {
     	// id of <0 means this will be a new message saved to db later
     	if ( $iID < 0 )
@@ -118,7 +118,7 @@ class Message extends IDatabaseItem
     	else
     	{
     		$this->m_bNewMessage = false;
-    		$this->m_iTime = $time;
+    		$this->m_iTime = -1;
     	}
  
     	$this->m_szText = $szMessageText;
@@ -128,8 +128,6 @@ class Message extends IDatabaseItem
     	$this->m_szSubject = $szSubject;
     	$this->m_iType = $iType;    
     	$this->m_iUserID = $userID;	
-    	$this->m_bArchieved = $bAchieved;
-        $this->m_bRead = $bRead;
     	//echo "construct: ".$userID."<br>";
     }
     
@@ -183,6 +181,11 @@ class Message extends IDatabaseItem
    	else
             throw new Exception("Message::LoadFromDatabase() cant load from db with an invalid id!");   		
     }    
+    
+    public function SetIsRead($bRead)
+    {
+        $this->m_bRead = $bRead;
+    }
     
     public function SetToUserID( $toUserID )
     {

@@ -59,13 +59,13 @@ class MessageHelper
 	 */
 	public static function SanitizeTextMessage( &$szMessage )
 	{
-		$dbHelper = DBHelper::getInstance();
+	    $dbHelper = DBHelper::getInstance();
 		
-		$pszMessage = mb_convert_encoding( $szMessage, 'UTF-8', 'UTF-8' );
-        $pszMessage = strip_tags( $pszMessage );
-        $pszMessage = nl2br( $pszMessage );
+	    $pszMessage = mb_convert_encoding( $szMessage, 'UTF-8', 'UTF-8' );
+	    $pszMessage = strip_tags( $pszMessage );	    	
+            $pszMessage = nl2br( $pszMessage );
         
-        return $dbHelper->EscapeString($pszMessage);
+            return $dbHelper->EscapeString($pszMessage);
 	}
 	
 	/*

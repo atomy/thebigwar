@@ -4,17 +4,17 @@ require_once TBW_ROOT.'engine/include.php';
 
 class SetupUsers
 {
-    public static Setup()
+    public static function Setup()
     {
         $databases = get_databases();
-        defin_globals(key($databases));
+        define_globals(key($databases));
         
-        if (!User::userExists("hans"))
-            throw new Exception("SetupUsers::Setup() user already exists!");
+        if (User::userExists("hans"))
+            user_control::removeUser("hans");
         
         $newUserObj = Classes::User("hans");
         
-        if($newUserObj->create())
+        if(!$newUserObj->create())
             throw new Exception("SetupUsers::Setup() error creating user!");
         
         __autoload('Galaxy');
@@ -33,29 +33,34 @@ class SetupUsers
             throw new Exception("SetupUsers::Setup() couldnt register main planet!");
         }
         
-        $newUserObj->setActivePlaneT($index);
+        $newUserObj->setActivePlanet($index);
         $newUserObj->addRess(array(2000000, 1000000, 750000, 500000, 200000));
         $newUserObj->setPassword($newUserObj->getName());
         
         # give him a good start, some awesome buildings and research
         for( $i=0; $i<=6; $i++ )
         {
-            $user_obj->changeItemLevel( 'B'.$i, '20', 'gebaeude' );
+            $newUserObj->changeItemLevel( 'B'.$i, '20', 'gebaeude' );
         }
 
         for( $i=8; $i<=10; $i++ )
         {
-            $user_obj->changeItemLevel( 'B'.$i, '30', 'gebaeude' );
+            $newUserObj->changeItemLevel( 'B'.$i, '30', 'gebaeude' );
         }    
            
         for( $i=0; $i<=7; $i++ )
         {
-           $user_obj->changeItemLevel( 'F'.$i, '20', 'forschung' );
+           $newUserObj->changeItemLevel( 'F'.$i, '20', 'forschung' );
         }
            
         for( $i=8; $i<=11; $i++ )
         {
-           $user_obj->changeItemLevel( 'F'.$i, '2', 'forschung' );
+           $newUserObj->changeItemLevel( 'F'.$i, '2', 'forschung' );
+        }
+        
+        for( $i=0; $i<=16; $i++ )
+        {
+           $newUserObj->changeItemLevel( 'S'.$i, '1000', 'schiffe' );
         }        
     }    
 }

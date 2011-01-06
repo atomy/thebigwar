@@ -2504,7 +2504,7 @@ require_once( TBW_ROOT.'loghandler/logger.php' );
                                         unset($next);
                                 }
                                 $message_text .= implode('', array_reverse($message_text2));
-                                $message = Classes::Message();
+                                $message = Classes::Message(); //TODO
                                 if($message->create())
                                 {
                                     $log->logIt( LOG_USER_FLEET, " arriveAtNextTarget() -- CASE SPIONAGE. Message Spion.");
