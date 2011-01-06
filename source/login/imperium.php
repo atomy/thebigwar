@@ -35,7 +35,7 @@
 	<li class="c-rohstoffe<?php echo ($action == 'ress') ? ' active' : ''?>"><a href="imperium.php?<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?php echo ($action == 'ress') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Rohstoffe</a></li>
 	<li class="c-roboter<?php echo ($action == 'roboter') ? ' active' : ''?>"><a href="imperium.php?action=roboter&amp;<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?php echo ($action == 'roboter') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Roboter</a></li>
 	<li class="c-flotte<?php echo ($action == 'flotte') ? ' active' : ''?>"><a href="imperium.php?action=flotte&amp;<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?php echo ($action == 'flotten') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Flotten</a></li>
-	<li class="c-gebaeude<?php echo ($action == 'gebaeude') ? ' active' : ''?>"><a href="imperium.php?action=gebaeude&amp;<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?php echo ($action == 'gebaeude') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Geb&auml;ude</a></li>
+	<li class="c-gebaeude<?php echo ($action == 'gebaeude') ? ' active' : ''?>"><a href="imperium.php?action=gebaeude&amp;<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?php echo ($action == 'gebaeude') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Gebäude</a></li>
 </ul>
 <?php
 	switch( $action )
@@ -45,11 +45,11 @@
 		$imperium = true;
 ?>
 
-<h3 id="stationierte-flotten">Geb&auml;ude&uuml;bersicht</h3>
+<h3 id="stationierte-flotten">Gebäudeübersicht</h3>
 <table class="imperium-tabelle imperium-gebaeude-uebersicht">
 	<thead>
 		<tr>
-			<th class="c-gebaeude">Geb&auml;ude</th>
+			<th class="c-gebaeude">Gebäude</th>
 <?php
 			$planets = $me->getPlanetsList();
 			

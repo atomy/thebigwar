@@ -73,7 +73,7 @@ möglichen offenen Tickets ereicht!</div>
 ?>
   <div id="addMsgSuccess">Ticket hinzugefügt<br />
   </div>
-  <a href="ticketsystem.php?<?php echo htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück zur Ticket&uuml;bersicht</a> 
+  <a href="ticketsystem.php?<?php echo htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück zur Ticketübersicht</a> 
   <a href="ticketsystem.php?<?php echo htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tId )?>">Zu erstelltem Ticket #<?php echo $tId?></a> 
 <?php
         }
@@ -190,8 +190,8 @@ möglichen offenen Tickets ereicht!</div>
         ?>
 <input type="hidden" name="ticketid" value="<?php echo $ticketid?>" /></form>
 <a
-	href="ticketsystem.php?<?php echo htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zur&uuml;ck
-zur Ticket&uuml;bersicht</a>
+	href="ticketsystem.php?<?php echo htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück
+zur Ticketübersicht</a>
 <?php
     }
 
@@ -328,14 +328,14 @@ zur Ticket&uuml;bersicht</a>
         if ( $tObj->addMessage( $username, $pText, $gameoperator ) )
         {
             ?>
-        <div id="addMsgSuccess">Nachricht hinzugef&uuml;gt<br />
+        <div id="addMsgSuccess">Nachricht hinzugefügt<br />
 </div>        
     	<?php
         }
         else
         {
             ?>
-        <div id="ticketError">Fehler beim Hinzuf&uuml;gen der Nachricht!</div> 
+        <div id="ticketError">Fehler beim Hinzufügen der Nachricht!</div> 
         <?php
         }
         // announce new messages to irc
@@ -347,9 +347,9 @@ zur Ticket&uuml;bersicht</a>
             
         ?>
     <a
-	href="ticketsystem.php?<?php echo htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zur&uuml;ck
-zur Ticket&uuml;bersicht</a> <a
-	href="ticketsystem.php?<?php echo htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tObj->getId() )?>">Zur&uuml;ck zu Ticket #<?php echo $tObj->getId()?></a>
+	href="ticketsystem.php?<?php echo htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück
+zur Ticketübersicht</a> <a
+	href="ticketsystem.php?<?php echo htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tObj->getId() )?>">Zurück zu Ticket #<?php echo $tObj->getId()?></a>
 
 </div>
 <!-- /addMsg -->
@@ -495,9 +495,9 @@ zur Ticket&uuml;bersicht</a> <a
         phpbb2egg("\00304Ticket #".$tObj->getId()." von '".$tObj->getReporter()."' mit Betreff '".$tObj->getSubject()."' wurde als erledigt markiert. -- $url", "tbwsupport" );   
         ?>
     <a
-	href="ticketsystem.php?<?php echo htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zur&uuml;ck
-zur Ticket&uuml;bersicht</a> <a
-	href="ticketsystem.php?<?php echo htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tObj->getId() )?>">Zur&uuml;ck zu Ticket #<?php echo $tObj->getId()?></a>
+	href="ticketsystem.php?<?php echo htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück
+zur Ticketübersicht</a> <a
+	href="ticketsystem.php?<?php echo htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tObj->getId() )?>">Zurück zu Ticket #<?php echo $tObj->getId()?></a>
 
 </div>
 <!-- /addMsg -->

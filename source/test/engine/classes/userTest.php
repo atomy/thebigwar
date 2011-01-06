@@ -1253,8 +1253,8 @@ class userTest extends PHPUnit_Framework_TestCase
         $msg = Classes::Message( $msgs[0] ); 
 
         $testMsg = new TestMessage( );
-        $testMsg->setSubject( 'Flotte zur&uuml;ckgerufen' );
-        $testMsg->setText( 'Ihre Flotte befand sich auf dem Weg zum Planeten &bdquo;' . $toName . '&ldquo; (' . $pos . ', Eigent&uuml;mer: ' . $user->getName() . '). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den R&uuml;ckweg zu Ihrem Planeten &bdquo;' . $fromName . '&ldquo; (' . $mypos . ') macht.' );
+        $testMsg->setSubject( 'Flotte zurückgerufen' );
+        $testMsg->setText( 'Ihre Flotte befand sich auf dem Weg zum Planeten &bdquo;' . $toName . '&ldquo; (' . $pos . ', Eigentümer: ' . $user->getName() . '). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den Rückweg zu Ihrem Planeten &bdquo;' . $fromName . '&ldquo; (' . $mypos . ') macht.' );
         $testMsg->setFrom( $uname );
         $testMsg->setType( $types_message_types[$type] );
         $testUser->addMessage( $testMsg );

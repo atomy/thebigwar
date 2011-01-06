@@ -68,7 +68,7 @@
 			<th class="c-spieler">Spieler</th>
 			<th class="c-allianz">Allianz</th>
 			<th class="c-punktzahl">Punktzahl</th>
-			<th class="c-lastactive">Letzte Aktivit&auml;t</th>
+			<th class="c-lastactive">Letzte Aktivität</th>
 		</tr>
 	</thead>
 <?php

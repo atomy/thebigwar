@@ -491,7 +491,7 @@
   		            {
 			     if($l !== true) $locked_until = $l;
  ?>
-  		            <p id="gesperrt-hinweis" class="flotten"><strong>Es herrscht eine Flottensperre f&uuml;r feindliche Fl&uuml;ge:</strong><?php if($locked_until){?> <span id="restbauzeit-sperre">bis <?php echo date('Y-m-d, H:i:s', $locked_until)?>, Serverzeit</span><?php }?></p>
+  		            <p id="gesperrt-hinweis" class="flotten"><strong>Es herrscht eine Flottensperre für feindliche Flüge:</strong><?php if($locked_until){?> <span id="restbauzeit-sperre">bis <?php echo date('Y-m-d, H:i:s', $locked_until)?>, Serverzeit</span><?php }?></p>
 <?php
   		            }
   		            if($locked_until)

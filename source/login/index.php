@@ -415,7 +415,7 @@
 			else
 			{
 ?>
-			<dd class="c-gebaeudebau gelangweilt"><a href="gebaeude.php?planet=<?php echo htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilter Geb&auml;udebau auf Planet: &bdquo;<?php echo utf8_htmlentities($me->planetName())?>&ldquo; (<?php echo utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
+			<dd class="c-gebaeudebau gelangweilt"><a href="gebaeude.php?planet=<?php echo htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilter Gebäudebau auf Planet: &bdquo;<?php echo utf8_htmlentities($me->planetName())?>&ldquo; (<?php echo utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
 <?php
 			}
 		}

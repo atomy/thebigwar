@@ -84,7 +84,7 @@
 		<a href="http://forum.thebigwar.org/" target="_blank">Forum</a>
 		</div>
 		<div>
-		<a href="ueber_tbw.php">&Uuml;ber TBW</a>
+		<a href="ueber_tbw.php">Über TBW</a>
 		</div>
 		<div>
 		<a href="register.php">Jetzt registrieren!</a>

@@ -422,9 +422,9 @@ class User extends Dataset
                 
                 if ( $message->create() ) {
                     $message->addUser( $user, $types_message_types[$type] );
-                    $message->subject( "Flotte zur&uuml;ckgerufen" );
+                    $message->subject( "Flotte zurückgerufen" );
                     $message->from( $this->getName() );
-                    $message->text( 'Ihre Flotte befand sich auf dem Weg zum Planeten &bdquo;' . $this->planetName() . '&ldquo; (' . $this->getPosString() . ', Eigent&uuml;mer: ' . utf8_htmlentities( $this->getName() ) . '). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den R&uuml;ckweg zu Ihrem Planeten &bdquo;' . $this_galaxy->getPlanetName( $pos[1], $pos[2] ) . '&ldquo; (' . $pos_string . ') macht.' );
+                    $message->text( 'Ihre Flotte befand sich auf dem Weg zum Planeten &bdquo;' . $this->planetName() . '&ldquo; (' . $this->getPosString() . ', Eigentümer: ' . utf8_htmlentities( $this->getName() ) . '). Soeben wurde jener Planet verlassen, weshalb Ihre Flotte sich auf den Rückweg zu Ihrem Planeten &bdquo;' . $this_galaxy->getPlanetName( $pos[1], $pos[2] ) . '&ldquo; (' . $pos_string . ') macht.' );
                 }
             }
         }

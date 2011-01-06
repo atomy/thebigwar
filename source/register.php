@@ -119,7 +119,7 @@
 	Die Registrierung war erfolgreich. Sie können sich nun anmelden. Die Koordinaten Ihres Hauptplaneten lauten <?php echo htmlentities($koords)?>.
 </p>
 <ul>
-	<li><a href="./">Zur&uuml;ck zur Startseite</a></li>
+	<li><a href="./">Zurück zur Startseite</a></li>
 </ul>
 <?php
 					gui::html_foot();
@@ -161,7 +161,7 @@
 		</div>
 
 		<div>
-			<label for="hauptplanet">Gew&uuml;nschter Name des Hauptplaneten*</label>
+			<label for="hauptplanet">Gewünschter Name des Hauptplaneten*</label>
 			<input type="text" id="hauptplanet" name="hauptplanet"<?php echo isset($_POST['hauptplanet']) ? ' value="'.utf8_htmlentities($_POST['hauptplanet']).'"' : ''?> maxlength="24" />
 		</div>
 		

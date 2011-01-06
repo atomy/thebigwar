@@ -12,7 +12,7 @@
 	
 	admin_gui::html_head();
 ?>
-	<fieldset><legend id="action-19">Geb&auml;ude/ Forschung ersetzten [+/-]</legend>
+	<fieldset><legend id="action-19">Gebäude/ Forschung ersetzten [+/-]</legend>
 	<form action="index.php" method="post">
 		<table cellpadding="2" cellspacing="2">
 			<thead>

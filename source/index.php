@@ -14,7 +14,7 @@ Neuigkeiten:
 </div>
 <iframe name="newsframe" id="newsframe" scrolling="no" frameborder="0" src="http://forum.thebigwar.org/ext/smallnews.php" >
   <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen:
-  Sie k&ouml;nnen die eingebettete Seite &uuml;ber den folgenden Verweis
+  Sie können die eingebettete Seite über den folgenden Verweis
   aufrufen: <a href="http://forum.thebigwar.org/ext/news.php">News</a></p>
 </iframe>
 

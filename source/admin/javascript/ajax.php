@@ -29,7 +29,7 @@
 					}
 					echo '</items>';
 				} else {
-					echo '<info>Der Planet '.$planet.' geh&ouml;rt nicht zu '.$user.'</info>';
+					echo '<info>Der Planet '.$planet.' gehört nicht zu '.$user.'</info>';
 				}
 			} else {
 				echo '<info>Es gibt keinen Spieler mit dem Namen '.$user.'</info>';
@@ -49,7 +49,7 @@
 						echo '<info>Fehler</info>';
 					}
 				} else {
-					echo '<info>Der Planet '.$planet.' geh&ouml;rt nicht zu '.$user.'</info>';
+					echo '<info>Der Planet '.$planet.' gehört nicht zu '.$user.'</info>';
 				}
 			} else {
 				echo '<info>Es gibt keinen Spieler mit dem Namen '.$user.'</info>';

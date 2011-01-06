@@ -369,7 +369,7 @@ der GO's im Adminbereich geloggt.<br>
 			<td style="width: 200px;" align="center" nowrap="nowrap"
 				valign="middle">
 				<a href="<?php echo $RELPATH?>index.php#passwort-aendern">
-				Adminpasswort<br/>&auml;ndern</a>
+				Adminpasswort<br/>ändern</a>
 			</td>
 			<td style="width: 200px;" align="center" nowrap="nowrap"
 				valign="middle">
@@ -415,13 +415,13 @@ if ( $adminObj->can( ADMIN_SETUSERSPASS ) )
 				href="<?php
     echo $RELPATH;
     ?>index.php#action-2">Das Passwort eines<br>
-			Benutzers &auml;ndern</a>
+			Benutzers ändern</a>
 			<?php
 }
 else
 {
     ?><s>Das Passwort eines<br>
-			Beutzers &auml;ndern</s><?php
+			Beutzers ändern</s><?php
 }
 ?>
       </td>
@@ -455,13 +455,13 @@ if ( $adminObj->can( ADMIN_DELETEUSERS ) )
 				href="<?php
     echo $RELPATH;
     ?>index.php#action-5">Einen Benutzer<br>
-			l&ouml;schen</a>
+			löschen</a>
 			<?php
 }
 else
 {
     ?><s>Einen Benutzer<br>
-			l&ouml;schen</s><?php
+			löschen</s><?php
 }
 ?>
 	  </td>
@@ -548,13 +548,13 @@ if ( $adminObj->can( ADMIN_SETNOOBPROTECT ) )
     ?><a
 				href="<?php
     echo $RELPATH;
-    ?>index.php#action-8">Anf&auml;ngerschutz<br>
+    ?>index.php#action-8">Anfängerschutz<br>
 			ein-/ausschalten</a>
 			<?php
 }
 else
 {
-    ?><s>Anf&auml;ngerschutz<br>
+    ?><s>Anfängerschutz<br>
 			ein-/ausschalten</s><?php
 }
 ?>

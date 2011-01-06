@@ -69,7 +69,7 @@
     {
 ?>
 <p class="error">
-    Nicht verf&uuml;gbar im Demo-Account.
+    Nicht verfügbar im Demo-Account.
 </p>
 <?php        
     }
@@ -85,7 +85,7 @@
     {
 ?>
 <p class="error">
-            Der Name des Planeten enth&auml;lt ung&uuml;ltige Zeichen.
+            Der Name des Planeten enthält ungültige Zeichen.
 </p>
 <?php
     }

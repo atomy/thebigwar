@@ -12,11 +12,11 @@
 <div id="screenshots">
 <h1>Screenshots</h1>
 
-<div class="screenbox"><div class="screentext">Flottenmen&uuml;</div><div class="screenies">
+<div class="screenbox"><div class="screentext">Flottenmenü</div><div class="screenies">
 <a href="../images/screenshots/screenshot_01.png" rel="lightbox[screenshot]"><img src="../images/screenshots/preview_01.png" alt="Screenshot 1" /></a>
 </div></div>
 
-<div class="screenbox"><div class="screentext">Account&uuml;bersicht</div><div class="screenies">
+<div class="screenbox"><div class="screentext">Accountübersicht</div><div class="screenies">
 <a href="../images/screenshots/screenshot_02.png" rel="lightbox[screenshot]"><img src="../images/screenshots/preview_02.png" alt="Screenshot 2" /></a>
 </div></div>
 
@@ -28,7 +28,7 @@
 <a href="../images/screenshots/screenshot_07.png" rel="lightbox[screenshot]"><img src="../images/screenshots/preview_07.png" alt="Screenshot 7" /></a>
 </div></div>
 
-<div class="screenbox"><div class="screentext">Forschungsmen&uuml;</div><div class="screenies">
+<div class="screenbox"><div class="screentext">Forschungsmenü</div><div class="screenies">
 <a href="../images/screenshots/screenshot_08.png" rel="lightbox[screenshot]"><img src="../images/screenshots/preview_08.png" alt="Screenshot 8" /></a>
 </div></div>
 
@@ -36,7 +36,7 @@
 <a href="../images/screenshots/screenshot_09.png" rel="lightbox[screenshot]"><img src="../images/screenshots/preview_09.png" alt="Screenshot 9" /></a>
 </div></div>
 
-<div class="screenbox"><div class="screentext">Planetenmen&uuml;</div><div class="screenies">
+<div class="screenbox"><div class="screentext">Planetenmenü</div><div class="screenies">
 <a href="../images/screenshots/screenshot_10.png" rel="lightbox[screenshot]"><img src="../images/screenshots/preview_10.png" alt="Screenshot 10" /></a>
 </div></div>
 

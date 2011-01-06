@@ -9,7 +9,7 @@
 <h1>Impressum</h1>
 <fieldset><legend>Betreiber</legend>
 <ul>
-		<li><h4>Die Betreiber sind &uuml;ber folgende Mail-Adressen erreichbar:</h4></li>
+		<li><h4>Die Betreiber sind über folgende Mail-Adressen erreichbar:</h4></li>
 		<li><a href="mailto:atomy@thebigwar.org">atomy@thebigwar.org</a></li>
 		<li><a href="mailto:xsawa@thebigwar.org">xsawa@thebigwar.org</a></li>
 </ul>

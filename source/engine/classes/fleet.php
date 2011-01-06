@@ -3290,7 +3290,7 @@ require_once( TBW_ROOT.'loghandler/logger.php' );
 				$runde_anderer = 'verteidiger';
 
 				$nachrichten_text .= "<p class=\"erstschlag angreifer\">\n";
-				$nachrichten_text .= "\tDie Summe der Kampftechniken ".$angreifer_genitiv." ist gr&ouml;&szlig;er als die ".$verteidiger_genitiv." und ermöglichen es ".$angreifer_dativ.", den Erstschlag auszuf\xc3\xbchren.\n";
+				$nachrichten_text .= "\tDie Summe der Kampftechniken ".$angreifer_genitiv." ist grö&szlig;er als die ".$verteidiger_genitiv." und ermöglichen es ".$angreifer_dativ.", den Erstschlag auszuf\xc3\xbchren.\n";
 				$nachrichten_text .= "</p>\n";
 			}
 			else

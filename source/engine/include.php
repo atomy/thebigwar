@@ -163,7 +163,7 @@
 		4 => 'Sammeln',
 		5 => 'Besiedelung',
 		6 => 'Benutzernachrichten',
-		7 => 'Verb&uuml;ndete',
+		7 => 'Verbündete',
 		8 => 'Postausgang'
 	);
 
