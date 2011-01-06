@@ -335,10 +335,8 @@ class tester
         $randomItemLevels = array();
         $user = Classes::User( $testUser->getName() );
         
-        if ( $user->setActivePlanet( $planet ) === false )
-        {
-            throw new Exception( 'setUp_RandomItemClass() failed, couldnt setactiveplanet to ' . $planet . '\n' );
-        }
+        if ( $user->setActivePlanet( $planet ) === false )        
+            throw new Exception( 'setUp_RandomItemClass() failed, couldnt setactiveplanet to ' . $planet . '\n' );        
         
         $itemList = $user->getItemsList( $class );
         

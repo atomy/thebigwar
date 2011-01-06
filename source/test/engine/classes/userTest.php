@@ -2032,6 +2032,36 @@ class userTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array( "fl1337", "fl1338"), $userObj->getFleetsForUmode());                    
     }      
     
+    /**
+     * tests User::getMaxParallelFleets()
+     * tests for:
+     * - amount of shipyards
+     * - research f0 level
+     * - ^amount of max ships calculated of the 2s above^
+     */
+    // // public function testGetMaxParallelFleets( )
+    // // {        
+        // // $testUser = &$this->testData->getNextTestUser();
+        // // $userObj = Classes::User( $testUser->getName() );
+        // // $yards = 0;
+        // // $f0Research = 0;
+        
+        // // foreach( $testUser->getPlanets() as $testPlanet )
+        // // {
+            // // $testItems = &$testPlanet->getItems();
+            
+            // // if ( isset( $testItems['B10'] ) && $testItems['B10']->getLevel() > 0 )
+                // // $yards++;
+            
+            // // // not all planets have this set afair
+            // // if ( isset($testItems['F0']) )
+                // // $f0Research = $testItems['F0']->getLevel();              
+        // // }        
+               
+        // // $maxFleetNo = floor( pow( ( $yards * $f0Research ), 0.7 ) );        
+        // // $this->assertEquals( $maxFleetNo, $userObj->getMaxParallelFleets() );
+    // // }    
+    
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// TESTS END HERE //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
