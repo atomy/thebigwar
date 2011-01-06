@@ -368,7 +368,7 @@ der GO's im Adminbereich geloggt.<br>
 
 			<td style="width: 200px;" align="center" nowrap="nowrap"
 				valign="middle">
-				<a href="<?php=$RELPATH?>index.php#passwort-aendern">
+				<a href="<?php echo$RELPATH?>index.php#passwort-aendern">
 				Adminpasswort<br/>&auml;ndern</a>
 			</td>
 			<td style="width: 200px;" align="center" nowrap="nowrap"
@@ -377,7 +377,7 @@ der GO's im Adminbereich geloggt.<br>
 if ( $adminObj->can( ADMIN_LISTUSERS ) )
 {
     ?>
-    <a href="<?php=$RELPATH?>index.php#action-0">Benutzerliste<br>einsehen</a>
+    <a href="<?php echo$RELPATH?>index.php#action-0">Benutzerliste<br>einsehen</a>
 	<?php
 }
 else

@@ -128,7 +128,7 @@ function ths(old_count)
 	var max_i = (count.length-first_letters)/3;
 	for(var i=0; i < max_i; i++)
 		new_count.push(count.substr(i*3+first_letters, 3));
-	new_count = new_count.join("<?php=utf8_jsentities(global_setting("THS_UTF8"))?>");
+	new_count = new_count.join("<?php echoutf8_jsentities(global_setting("THS_UTF8"))?>");
 	if(minus)
 		new_count = "\u2212"+new_count;
 	return new_count;
@@ -397,7 +397,7 @@ function popup_message(message, classn, calling_node)
 function fast_action(node, action_type, galaxy, system, planet)
 {
 	var xmlhttp = new XMLHttpRequest();
-	var request_url = '<?php=h_root?>/login/scripts/ajax.php?action='+encodeURIComponent(action_type)+'&action_galaxy='+encodeURIComponent(galaxy)+'&action_system='+encodeURIComponent(system)+'&action_planet='+encodeURIComponent(planet)+'&'+encodeURIComponent(session_cookie)+'='+encodeURIComponent(session_id)+'&database='+encodeURIComponent(database_id);
+	var request_url = '<?php echoh_root?>/login/scripts/ajax.php?action='+encodeURIComponent(action_type)+'&action_galaxy='+encodeURIComponent(galaxy)+'&action_system='+encodeURIComponent(system)+'&action_planet='+encodeURIComponent(planet)+'&'+encodeURIComponent(session_cookie)+'='+encodeURIComponent(session_id)+'&database='+encodeURIComponent(database_id);
 	xmlhttp.open('GET', request_url, false);
 	xmlhttp.send(null);
 
@@ -526,7 +526,7 @@ function users_list_select(node, move_cursor)
 
 function do_make_users_list(node)
 {
-	if(node.value.length < <?php=global_setting("LIST_MIN_CHARS")?>)
+	if(node.value.length < <?php echoglobal_setting("LIST_MIN_CHARS")?>)
 	{
 		if(users_list)
 		{
@@ -611,7 +611,7 @@ function do_make_users_list(node)
 	l.style.width = node.offsetWidth+'px';
 
 	var xmlhttp = new XMLHttpRequest();
-	var request_url = '<?php=h_root?>/login/scripts/ajax.php?action=userlist&query='+encodeURIComponent(node.value)+'&'+encodeURIComponent(session_cookie)+'='+encodeURIComponent(session_id)+'&database='+encodeURIComponent(database_id);
+	var request_url = '<?php echoh_root?>/login/scripts/ajax.php?action=userlist&query='+encodeURIComponent(node.value)+'&'+encodeURIComponent(session_cookie)+'='+encodeURIComponent(session_id)+'&database='+encodeURIComponent(database_id);
 	xmlhttp.open('GET', request_url, true);
 
 	xmlhttp.onreadystatechange = function() {
@@ -708,7 +708,7 @@ function alliances_list_select(node, move_cursor)
 
 function do_make_alliances_list(node)
 {
-	if(node.value.length < <?php=global_setting("LIST_MIN_CHARS")?>)
+	if(node.value.length < <?php echoglobal_setting("LIST_MIN_CHARS")?>)
 	{
 		if(alliances_list)
 		{
@@ -793,7 +793,7 @@ function do_make_alliances_list(node)
 	l.style.width = node.offsetWidth+'px';
 
 	var xmlhttp = new XMLHttpRequest();
-	var request_url = '<?php=h_root?>/login/scripts/ajax.php?action=alliancelist&query='+encodeURIComponent(node.value)+'&'+encodeURIComponent(session_cookie)+'='+encodeURIComponent(session_id)+'&database='+encodeURIComponent(database_id);
+	var request_url = '<?php echoh_root?>/login/scripts/ajax.php?action=alliancelist&query='+encodeURIComponent(node.value)+'&'+encodeURIComponent(session_cookie)+'='+encodeURIComponent(session_id)+'&database='+encodeURIComponent(database_id);
 	xmlhttp.open('GET', request_url, true);
 
 	xmlhttp.onreadystatechange = function() {
@@ -845,7 +845,7 @@ function preload_systems(systems)
 		systems.push(pr_system);
 	}
 
-	request_url = '<?php=h_root?>/login/scripts/ajax.php?action=universe&'+encodeURIComponent(session_cookie)+'='+encodeURIComponent(session_id)+'&database='+encodeURIComponent(database_id);
+	request_url = '<?php echoh_root?>/login/scripts/ajax.php?action=universe&'+encodeURIComponent(session_cookie)+'='+encodeURIComponent(session_id)+'&database='+encodeURIComponent(database_id);
 	var c = 0;
 	for(var i=0; i < systems.length; i++)
 	{

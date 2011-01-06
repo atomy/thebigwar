@@ -33,7 +33,7 @@
 	$editAdmin = new CAdmin($admin_array, $_REQUEST['username']);
 
 	?>
-	<div id="editAdminHeadLine">Bearbeite Admin: <span><?php=$editAdmin->getName()?></span></div>
+	<div id="editAdminHeadLine">Bearbeite Admin: <span><?php echo$editAdmin->getName()?></span></div>
 	<?php
 		
 	if ( isset($_REQUEST['action']) && $_REQUEST['action'] == "setPermissions" )
@@ -48,14 +48,14 @@
 	        {
 	            $editAdmin->grant($permObj->getId())
 	            ?>
-	            <li id="grantedPerm">GRANTED <?php=$permObj->getName()?></li>
+	            <li id="grantedPerm">GRANTED <?php echo$permObj->getName()?></li>
 	            <?php
 	        }
 	        else if ( !isset($_REQUEST[$permObj->getName()]) && $editAdmin->can($permObj->getId()))
 	        {
 	            $editAdmin->revoke($permObj->getId())
 	            ?>
-	            <li id="revokedPerm">REVOKED <?php=$permObj->getName()?></li>
+	            <li id="revokedPerm">REVOKED <?php echo$permObj->getName()?></li>
 	            <?php	           
 	        }
 	    }	    
@@ -70,7 +70,7 @@
 	    }
 	    ?>
 	    <a href="index.php">Zurück zum Adminmenü</a>&nbsp;&nbsp;&nbsp;
-	    <a href="<?php=$_SERVER['PHP_SELF']?>?username=<?php=$editAdmin->getName()?>">Zurück zum Admin</a>
+	    <a href="<?php echo$_SERVER['PHP_SELF']?>?username=<?php echo$editAdmin->getName()?>">Zurück zum Admin</a>
 	    <?php
 	}
 	else 
@@ -78,7 +78,7 @@
 	?>
 	<div id="editPermissions">
 	<div id="editPermissionsHeadline">Zugriffsrechte</div>
-	<form action="<?php=$_SERVER['PHP_SELF']?>" method="post">	
+	<form action="<?php echo$_SERVER['PHP_SELF']?>" method="post">	
 	<table id="permTable">
 	<?php
 	
@@ -87,18 +87,18 @@
 	    $editAdmin->getMyPermissionWithID($permObj->getId()) ? $hasFlag = true : $hasFlag = false;	    
 	    ?>
 	    <tr>
-	    <td><?php=$permObj->getDescription()?></td>
+	    <td><?php echo$permObj->getDescription()?></td>
 	    <?php
 	    if ($hasFlag)
 	    {
 	        ?>
-	        <td id="enabled"><input type="checkbox" name="<?php=$permObj->getName()?>" value="1" checked="checked" /></td>
+	        <td id="enabled"><input type="checkbox" name="<?php echo$permObj->getName()?>" value="1" checked="checked" /></td>
 	        <?php
 	    }
 	    else
 	    {
 	        ?>
-	        <td id="disabled"><input type="checkbox" name="<?php=$permObj->getName()?>" /></td>
+	        <td id="disabled"><input type="checkbox" name="<?php echo$permObj->getName()?>" /></td>
 	        <?php
 	    }
 	    ?>	    
@@ -107,7 +107,7 @@
 	}
 	?>
 	</table>
-	<input type="hidden" name="username" value="<?php=$editAdmin->getName()?>"/>
+	<input type="hidden" name="username" value="<?php echo$editAdmin->getName()?>"/>
 	<input type="hidden" name="action" value="setPermissions" />
 	<input id="submit_button" type="submit" value="Speichern" />
 	</form>	

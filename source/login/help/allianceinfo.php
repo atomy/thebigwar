@@ -28,22 +28,22 @@
 			$members = $alliance->getMembersCount();
 			$average = floor($overall/$members);
 ?>
-<h2>Allianzinfo <em class="alliancename"><?php=utf8_htmlentities($alliance->getName())?></em></h2>
+<h2>Allianzinfo <em class="alliancename"><?php echoutf8_htmlentities($alliance->getName())?></em></h2>
 <dl class="allianceinfo">
 	<dt class="c-allianztag">Allianz<span xml:lang="en">tag</span></dt>
-	<dd class="c-allianztag"><?php=utf8_htmlentities($alliance->getName())?></dd>
+	<dd class="c-allianztag"><?php echoutf8_htmlentities($alliance->getName())?></dd>
 
 	<dt class="c-name">Name</dt>
-	<dd class="c-name"><?php=utf8_htmlentities($alliance->name())?></dd>
+	<dd class="c-name"><?php echoutf8_htmlentities($alliance->name())?></dd>
 
 	<dt class="c-mitglieder">Mitglieder</dt>
-	<dd class="c-mitglieder"><?php=htmlentities($members)?></dd>
+	<dd class="c-mitglieder"><?php echohtmlentities($members)?></dd>
 
 	<dt class="c-punkteschnitt">Punkteschnitt</dt>
-	<dd class="c-punkteschnitt"><?php=ths($average)?> <span class="platz">(Platz <?php=ths($alliance->getRankAverage())?> von <?php=ths(getAlliancesCount())?>)</span></dd>
+	<dd class="c-punkteschnitt"><?php echoths($average)?> <span class="platz">(Platz <?php echoths($alliance->getRankAverage())?> von <?php echoths(getAlliancesCount())?>)</span></dd>
 
 	<dt class="c-gesamtpunkte">Gesamtpunkte</dt>
-	<dd class="c-gesamtpunkte"><?php=ths($overall)?> <span class="platz">(Platz <?php=ths($alliance->getRankTotal())?> von <?php=ths(getAlliancesCount())?>)</span></dd>
+	<dd class="c-gesamtpunkte"><?php echoths($overall)?> <span class="platz">(Platz <?php echoths($alliance->getRankTotal())?> von <?php echoths(getAlliancesCount())?>)</span></dd>
 </dl>
 <h3 id="allianzbeschreibung">Allianzbeschreibung</h3>
 <div class="allianz-externes">
@@ -58,7 +58,7 @@
 				{
 ?>
 <ul class="allianz-bewerben">
-	<li><a href="../allianz.php?action=apply&amp;for=<?php=htmlentities(urlencode($alliance->getName()))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>">Bei dieser Allianz bewerben</a></li>
+	<li><a href="../allianz.php?action=apply&amp;for=<?php echohtmlentities(urlencode($alliance->getName()))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>">Bei dieser Allianz bewerben</a></li>
 </ul>
 <?php
 				}

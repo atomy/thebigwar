@@ -97,14 +97,14 @@
         {
             $me->setActivePlanet($fastbuild_prev);
 ?>
-    <li class="c-voriger"><a href="gebaeude.php?planet=<?php=htmlentities(urlencode($fastbuild_prev))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Voriger unbeschäftigter Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>) [U]" tabindex="1" accesskey="u" rel="prev">&larr;</a></li>
+    <li class="c-voriger"><a href="gebaeude.php?planet=<?php echohtmlentities(urlencode($fastbuild_prev))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Voriger unbeschäftigter Planet: &bdquo;<?php echoutf8_htmlentities($me->planetName())?>&ldquo; (<?php echoutf8_htmlentities($me->getPosString())?>) [U]" tabindex="1" accesskey="u" rel="prev">&larr;</a></li>
 <?php
         }
         if($fastbuild_next !== false)
         {
             $me->setActivePlanet($fastbuild_next);
 ?>
-    <li class="c-naechster"><a href="gebaeude.php?planet=<?php=htmlentities(urlencode($fastbuild_next))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Nächster unbeschäftigter Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>) [Q]" tabindex="2" accesskey="q" rel="next">&rarr;</a></li>
+    <li class="c-naechster"><a href="gebaeude.php?planet=<?php echohtmlentities(urlencode($fastbuild_next))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Nächster unbeschäftigter Planet: &bdquo;<?php echoutf8_htmlentities($me->planetName())?>&ldquo; (<?php echoutf8_htmlentities($me->getPosString())?>) [Q]" tabindex="2" accesskey="q" rel="next">&rarr;</a></li>
 <?php
         }
         $me->setActivePlanet($active_planet);
@@ -123,8 +123,8 @@
         if(!$geb['deps-okay'] && $geb['level'] <= 0) # Abhaengigkeiten nicht erfuellt
             continue;
 ?>
-<div class="item gebaeude" id="item-<?php=htmlentities($id)?>">
-    <h3><a href="help/description.php?id=<?php=htmlentities(urlencode($id))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php=utf8_htmlentities($geb['name'])?></a> <span class="stufe">(Stufe&nbsp;<?php=ths($geb['level'])?>)</span></h3>
+<div class="item gebaeude" id="item-<?php echohtmlentities($id)?>">
+    <h3><a href="help/description.php?id=<?php echohtmlentities(urlencode($id))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php echoutf8_htmlentities($geb['name'])?></a> <span class="stufe">(Stufe&nbsp;<?php echoths($geb['level'])?>)</span></h3>
 <?php
         if($me->permissionToAct() && ($geb['buildable'] || $geb['debuildable']) && !($building = $me->checkBuildingThing('gebaeude')) && ($id != 'B8' || !$me->checkBuildingThing('forschung')) && ($id != 'B9' || !$me->checkBuildingThing('roboter')) && ($id != 'B10' || (!$me->checkBuildingThing('schiffe') && !$me->checkBuildingThing('verteidigung'))))
         {
@@ -135,7 +135,7 @@
             {
                 $enough_ress = $me->checkRess($geb['ress']);
 ?>
-        <li class="item-ausbau<?php=$enough_ress ? '' : ' no-ress'?>"><?php=$enough_ress ? '<a href="gebaeude.php?ausbau='.htmlentities(urlencode($id)).'&amp;'.htmlentities(urlencode(session_name()).'='.urlencode(session_id())).'" tabindex="'.($tabindex++).'">' : ''?>Ausbau auf Stufe&nbsp;<?php=ths($geb['level']+1)?><?php=$enough_ress ? '</a>' : ''?></li>
+        <li class="item-ausbau<?php echo$enough_ress ? '' : ' no-ress'?>"><?php echo$enough_ress ? '<a href="gebaeude.php?ausbau='.htmlentities(urlencode($id)).'&amp;'.htmlentities(urlencode(session_name()).'='.urlencode(session_id())).'" tabindex="'.($tabindex++).'">' : ''?>Ausbau auf Stufe&nbsp;<?php echoths($geb['level']+1)?><?php echo$enough_ress ? '</a>' : ''?></li>
 <?php
             }
             if($geb['debuildable'])
@@ -147,7 +147,7 @@
                 $ress[3] /= 2;
                 $enough_ress = $me->checkRess($ress);
 ?>
-        <li class="item-rueckbau<?php=$enough_ress ? '' : ' no-ress'?>"><?php=$enough_ress ? '<a href="gebaeude.php?abbau='.htmlentities(urlencode($id)).'&amp;'.htmlentities(urlencode(session_name()).'='.urlencode(session_id())).'">' : ''?>Rückbau auf Stufe&nbsp;<?php=ths($geb['level']-1)?><?php=$enough_ress ? '</a>' : ''?></li>
+        <li class="item-rueckbau<?php echo$enough_ress ? '' : ' no-ress'?>"><?php echo$enough_ress ? '<a href="gebaeude.php?abbau='.htmlentities(urlencode($id)).'&amp;'.htmlentities(urlencode(session_name()).'='.urlencode(session_id())).'">' : ''?>Rückbau auf Stufe&nbsp;<?php echoths($geb['level']-1)?><?php echo$enough_ress ? '</a>' : ''?></li>
 <?php
             }
 ?>
@@ -157,9 +157,9 @@
         elseif($building && $building[0] == $id)
         {
 ?>
-    <div class="restbauzeit" id="restbauzeit-<?php=htmlentities($building[0])?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $building[1])?> (Serverzeit), <a href="gebaeude.php?cancel=<?php=htmlentities(urlencode($building[0]))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" class="abbrechen">Abbrechen</a></div>
+    <div class="restbauzeit" id="restbauzeit-<?php echohtmlentities($building[0])?>">Fertigstellung: <?php echodate('H:i:s, Y-m-d', $building[1])?> (Serverzeit), <a href="gebaeude.php?cancel=<?php echohtmlentities(urlencode($building[0]))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" class="abbrechen">Abbrechen</a></div>
     <script type="text/javascript">
-        init_countdown('<?php=$building[0]?>', <?php=$building[1]?>);
+        init_countdown('<?php echo$building[0]?>', <?php echo$building[1]?>);
     </script>
 <?php
         }
@@ -167,11 +167,11 @@
     <dl>
         <dt class="item-kosten">Kosten</dt>
         <dd class="item-kosten">
-            <?php=format_ress($geb['ress'], 3)?>
+            <?php echoformat_ress($geb['ress'], 3)?>
         </dd>
 
         <dt class="item-bauzeit">Bauzeit</dt>
-        <dd class="item-bauzeit"><?php=format_btime($geb['time'])?></dd>
+        <dd class="item-bauzeit"><?php echoformat_btime($geb['time'])?></dd>
     </dl>
 </div>
 <?php
@@ -189,14 +189,14 @@
         {
             $me->setActivePlanet($fastbuild_prev);
 ?>
-    <li class="c-voriger2"><a href="gebaeude.php?planet=<?php=htmlentities(urlencode($fastbuild_prev))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Voriger unbeschäftigter Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>) [U]" rel="prev">&larr;</a></li>
+    <li class="c-voriger2"><a href="gebaeude.php?planet=<?php echohtmlentities(urlencode($fastbuild_prev))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Voriger unbeschäftigter Planet: &bdquo;<?php echoutf8_htmlentities($me->planetName())?>&ldquo; (<?php echoutf8_htmlentities($me->getPosString())?>) [U]" rel="prev">&larr;</a></li>
 <?php
         }
         if($fastbuild_next !== false)
         {
             $me->setActivePlanet($fastbuild_next);
 ?>
-    <li class="c-naechster2"><a href="gebaeude.php?planet=<?php=htmlentities(urlencode($fastbuild_next))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Nächster unbeschäftigter Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>) [Q]" rel="next">&rarr;</a></li>
+    <li class="c-naechster2"><a href="gebaeude.php?planet=<?php echohtmlentities(urlencode($fastbuild_next))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Nächster unbeschäftigter Planet: &bdquo;<?php echoutf8_htmlentities($me->planetName())?>&ldquo; (<?php echoutf8_htmlentities($me->getPosString())?>) [Q]" rel="next">&rarr;</a></li>
 <?php
         }
         $me->setActivePlanet($active_planet);

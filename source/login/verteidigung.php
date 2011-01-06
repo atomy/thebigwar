@@ -112,14 +112,14 @@
         {
             $me->setActivePlanet($fastbuild_prev);
 ?>
-    <li class="c-voriger"><a href="verteidigung.php?planet=<?php=htmlentities(urlencode($fastbuild_prev))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Voriger unbeschäftigter Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>) [U]" tabindex="1" accesskey="u" rel="prev">&larr;</a></li>
+    <li class="c-voriger"><a href="verteidigung.php?planet=<?php echohtmlentities(urlencode($fastbuild_prev))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Voriger unbeschäftigter Planet: &bdquo;<?php echoutf8_htmlentities($me->planetName())?>&ldquo; (<?php echoutf8_htmlentities($me->getPosString())?>) [U]" tabindex="1" accesskey="u" rel="prev">&larr;</a></li>
 <?php
         }
         if($fastbuild_next !== false)
         {
             $me->setActivePlanet($fastbuild_next);
 ?>
-    <li class="c-naechster"><a href="verteidigung.php?planet=<?php=htmlentities(urlencode($fastbuild_next))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Nächster unbeschäftigter Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>) [Q]" tabindex="2" accesskey="q" rel="next">&rarr;</a></li>
+    <li class="c-naechster"><a href="verteidigung.php?planet=<?php echohtmlentities(urlencode($fastbuild_next))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Nächster unbeschäftigter Planet: &bdquo;<?php echoutf8_htmlentities($me->planetName())?>&ldquo; (<?php echoutf8_htmlentities($me->getPosString())?>) [Q]" tabindex="2" accesskey="q" rel="next">&rarr;</a></li>
 <?php
         }
         $me->setActivePlanet($active_planet);
@@ -129,7 +129,7 @@
     }
 ?>
 
-<form action="verteidigung.php?<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post">
+<form action="verteidigung.php?<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post">
 <?php
     $tabindex = 1;
     $verteidigung = $me->getItemsList('verteidigung');
@@ -141,14 +141,14 @@
         if(!$item_info['buildable'] && $item_info['level'] <= 0)
             continue;
 ?>
-    <div class="item verteidigung" id="item-<?php=htmlentities($id)?>">
-        <h3><a href="help/description.php?id=<?php=htmlentities(urlencode($id))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php=utf8_htmlentities($item_info['name'])?></a> <span class="anzahl">(<?php=utf8_htmlentities($item_info['level'])?>)</span></h3>
+    <div class="item verteidigung" id="item-<?php echohtmlentities($id)?>">
+        <h3><a href="help/description.php?id=<?php echohtmlentities(urlencode($id))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php echoutf8_htmlentities($item_info['name'])?></a> <span class="anzahl">(<?php echoutf8_htmlentities($item_info['level'])?>)</span></h3>
 <?php
         if($me->permissionToAct() && $building_possible && $item_info['buildable'])
         {
 ?>
         <ul>
-            <li class="item-bau"><input type="text" name="verteidigung[<?php=utf8_htmlentities($id)?>]" value="0" tabindex="<?php=$tabindex++?>" /></li>
+            <li class="item-bau"><input type="text" name="verteidigung[<?php echoutf8_htmlentities($id)?>]" value="0" tabindex="<?php echo$tabindex++?>" /></li>
         </ul>
 <?php
         }
@@ -156,11 +156,11 @@
         <dl>
             <dt class="item-kosten">Kosten</dt>
             <dd class="item-kosten">
-                <?php=format_ress($item_info['ress'], 4)?>
+                <?php echoformat_ress($item_info['ress'], 4)?>
             </dd>
 
             <dt class="item-bauzeit">Bauzeit</dt>
-            <dd class="item-bauzeit"><?php=format_btime($item_info['time'])?></dd>
+            <dd class="item-bauzeit"><?php echoformat_btime($item_info['time'])?></dd>
         </dl>
     </div>
 <?php
@@ -169,7 +169,7 @@
     if($tabindex > 1)
     {
 ?>
-    <div><button type="submit" tabindex="<?php=$tabindex++?>" accesskey="u">In A<kbd>u</kbd>ftrag geben</button></div>
+    <div><button type="submit" tabindex="<?php echo$tabindex++?>" accesskey="u">In A<kbd>u</kbd>ftrag geben</button></div>
 <?php
     }
 ?>
@@ -192,7 +192,7 @@
         if($first_building[2] <= 0) array_shift($building_verteidigung);
         $first_info = $me->getItemInfo($first[0]);
 ?>
-    <li class="<?php=utf8_htmlentities($first[0])?> active<?php=(count($building_verteidigung) <= 0) ? ' last' : ''?>" title="Fertigstellung: <?php=date('H:i:s, Y-m-d', (int)$first[1])?> (Serverzeit)"><strong><?php=utf8_htmlentities($first_info['name'])?> <span class="restbauzeit" id="restbauzeit-<?php=$i++?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', (int)$first[0])?> (Serverzeit)</span></strong></li>
+    <li class="<?php echoutf8_htmlentities($first[0])?> active<?php echo(count($building_verteidigung) <= 0) ? ' last' : ''?>" title="Fertigstellung: <?php echodate('H:i:s, Y-m-d', (int)$first[1])?> (Serverzeit)"><strong><?php echoutf8_htmlentities($first_info['name'])?> <span class="restbauzeit" id="restbauzeit-<?php echo$i++?>">Fertigstellung: <?php echodate('H:i:s, Y-m-d', (int)$first[0])?> (Serverzeit)</span></strong></li>
 <?php
         if(count($building_verteidigung) > 0)
         {
@@ -203,24 +203,24 @@
                 $finishing_time = $bau[1]+$bau[2]*$bau[3];
                 $item_info = $me->getItemInfo($bau[0]);
 ?>
-    <li class="<?php=utf8_htmlentities($bau[0])?><?php=($key == $last) ? ' last' : ''?>" title="Fertigstellung: <?php=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)"><?php=utf8_htmlentities($item_info['name'])?> &times; <?php=$bau[2]?><?php if($key == $last){?> <span class="restbauzeit" id="restbauzeit-<?php=$i++?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span><?php }?></li>
+    <li class="<?php echoutf8_htmlentities($bau[0])?><?php echo($key == $last) ? ' last' : ''?>" title="Fertigstellung: <?php echodate('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)"><?php echoutf8_htmlentities($item_info['name'])?> &times; <?php echo$bau[2]?><?php if($key == $last){?> <span class="restbauzeit" id="restbauzeit-<?php echo$i++?>">Fertigstellung: <?php echodate('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span><?php }?></li>
 <?php
             }
         }
 ?>
 </ol>
 <script type="text/javascript">
-    init_countdown('0', <?php=$first[1]?>, false);
+    init_countdown('0', <?php echo$first[1]?>, false);
 <?php
         if(count($building_verteidigung) > 0)
         {
 ?>
-    init_countdown('<?php=$i-1?>', <?php=$finishing_time?>, false);
+    init_countdown('<?php echo$i-1?>', <?php echo$finishing_time?>, false);
 <?php
         }
 ?>
 </script>
-<form action="<?php=htmlentities(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/login/verteidigung.php?'.urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="alle-abbrechen">
+<form action="<?php echohtmlentities(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/login/verteidigung.php?'.urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="alle-abbrechen">
     <p>Geben Sie hier Ihr Passwort ein, um alle im Bau befindlichen Verteidigungsanlagen <strong>ohne Kostenrückerstattung</strong> abzubrechen.</p>
     <div><input type="password" name="cancel-all-verteidigung" /><input type="submit" value="Alle abbrechen" /></div>
 </form>

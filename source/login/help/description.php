@@ -24,7 +24,7 @@
 
 ?>
 <div class="desc">
-    <h2><?php=utf8_htmlentities($item->getInfo('name'))?><?php if($lvl >= 0){?> <span class="stufe">(Stufe&nbsp;<?php=utf8_htmlentities($lvl)?>)</span><?php }?></h2>
+    <h2><?php echoutf8_htmlentities($item->getInfo('name'))?><?php if($lvl >= 0){?> <span class="stufe">(Stufe&nbsp;<?php echoutf8_htmlentities($lvl)?>)</span><?php }?></h2>
 <?php
         $desc = $item->getInfo('caption');
 
@@ -52,7 +52,7 @@
 <dl class="item-info">
     <dt class="item-kosten">Kosten</dt>
     <dd class="item-kosten">
-        <?php=format_ress($item_info['ress'], 3)?>
+        <?php echoformat_ress($item_info['ress'], 3)?>
     </dd>
 
 <?php
@@ -60,17 +60,17 @@
             {
 ?>
     <dt class="item-bauzeit-lokal">Bauzeit lokal</dt>
-    <dd class="item-bauzeit-lokal"><?php=format_btime($item_info['time_local'])?></dd>
+    <dd class="item-bauzeit-lokal"><?php echoformat_btime($item_info['time_local'])?></dd>
 
     <dt class="item-bauzeit-global">Bauzeit global</dt>
-    <dd class="item-bauzeit-global"><?php=format_btime($item_info['time_global'])?></dd>
+    <dd class="item-bauzeit-global"><?php echoformat_btime($item_info['time_global'])?></dd>
 <?php
             }
             else
             {
 ?>
     <dt class="item-bauzeit">Bauzeit</dt>
-    <dd class="item-bauzeit"><?php=format_btime($item_info['time'])?></dd>
+    <dd class="item-bauzeit"><?php echoformat_btime($item_info['time'])?></dd>
 </dl>
 <?php
             }
@@ -91,7 +91,7 @@
         <tbody>
             <tr>
                 <th>Benötigte Felderzahl</th>
-                <td><?php=utf8_htmlentities($item->getInfo('fields'))?></td>
+                <td><?php echoutf8_htmlentities($item->getInfo('fields'))?></td>
             </tr>
         </tbody>
     </table>
@@ -164,43 +164,43 @@
                 {
                     $act_lvl = $start_lvl+$x;
 ?>
-            <tr<?php=($act_lvl == $lvl) ? ' class="active"' : ''?>>
-                <th><?php=ths($act_lvl)?></th>
+            <tr<?php echo($act_lvl == $lvl) ? ' class="active"' : ''?>>
+                <th><?php echoths($act_lvl)?></th>
 <?php
                     if($prod[0] != 0)
                     {
 ?>
-                <td class="c-carbon"><?php=ths($prod[0]*pow($act_lvl, 2))?></td>
+                <td class="c-carbon"><?php echoths($prod[0]*pow($act_lvl, 2))?></td>
 <?php
                     }
                     if($prod[1] != 0)
                     {
 ?>
-                <td class="c-aluminium"><?php=ths($prod[1]*pow($act_lvl, 2))?></td>
+                <td class="c-aluminium"><?php echoths($prod[1]*pow($act_lvl, 2))?></td>
 <?php
                     }
                     if($prod[2] != 0)
                     {
 ?>
-                <td class="c-wolfram"><?php=ths($prod[2]*pow($act_lvl, 2))?></td>
+                <td class="c-wolfram"><?php echoths($prod[2]*pow($act_lvl, 2))?></td>
 <?php
                     }
                     if($prod[3] != 0)
                     {
 ?>
-                <td class="c-radium"><?php=ths($prod[3]*pow($act_lvl, 2))?></td>
+                <td class="c-radium"><?php echoths($prod[3]*pow($act_lvl, 2))?></td>
 <?php
                     }
                     if($prod[4] != 0)
                     {
 ?>
-                <td class="c-tritium"><?php=ths($prod[4]*pow($act_lvl, 2))?></td>
+                <td class="c-tritium"><?php echoths($prod[4]*pow($act_lvl, 2))?></td>
 <?php
                     }
                     if($prod[5] != 0)
                     {
 ?>
-                <td class="c-energie"><?php=ths($prod[5]*pow($act_lvl, 2))?></td>
+                <td class="c-energie"><?php echoths($prod[5]*pow($act_lvl, 2))?></td>
 <?php
                     }
 ?>
@@ -242,11 +242,11 @@ echo ths($trans[0])."&nbsp;(".ths(round($trans[0]* pow(1.2, $lade_info['level'])
             <tr>
                 <th>Angriffsstärke</th>
                 
-                <td><?php=ths($item->getInfo('att'))."&nbsp;(".ths(round($item->getInfo('att')*pow(1.05,$angriff_info['level'])))?>)</td>
+                <td><?php echoths($item->getInfo('att'))."&nbsp;(".ths(round($item->getInfo('att')*pow(1.05,$angriff_info['level'])))?>)</td>
             </tr>
             <tr>
                 <th>Schild</th>
-                <td><?php=ths($item->getInfo('def'))."&nbsp;(".ths(round($item->getInfo('def')*pow(1.05,$def_info['level'])))?>)</td>
+                <td><?php echoths($item->getInfo('def'))."&nbsp;(".ths(round($item->getInfo('def')*pow(1.05,$def_info['level'])))?>)</td>
             </tr>
             <tr>
                 <th>Antriebsstärke</th>
@@ -267,7 +267,7 @@ echo ths($trans[0])."&nbsp;(".ths(round($trans[0]* pow(1.2, $lade_info['level'])
                 if(isset($type_names[$t]))
                     $t = $type_names[$t];
 ?>
-                        <li><?php=utf8_htmlentities($t)?></li>
+                        <li><?php echoutf8_htmlentities($t)?></li>
 <?php
             }
 ?>
@@ -297,11 +297,11 @@ $def_info = $me->getItemInfo('F5', 'forschung');
         <tbody>
             <tr>
                 <th>Angriffsstärke</th>
-                <td><?php=ths($item->getInfo('att'))."&nbsp;(".ths(round($item->getInfo('att')*pow(1.05,$angriff_info['level'])))?>)</td>
+                <td><?php echoths($item->getInfo('att'))."&nbsp;(".ths(round($item->getInfo('att')*pow(1.05,$angriff_info['level'])))?>)</td>
             </tr>
             <tr>
                 <th>Schild</th>
-                <td><?php=ths($item->getInfo('def'))."&nbsp;(".ths(round($item->getInfo('def')*pow(1.05,$def_info['level'])))?>)</td>
+                <td><?php echoths($item->getInfo('def'))."&nbsp;(".ths(round($item->getInfo('def')*pow(1.05,$def_info['level'])))?>)</td>
 
             </tr>
         </tbody>

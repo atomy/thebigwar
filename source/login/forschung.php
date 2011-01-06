@@ -132,14 +132,14 @@
         {
             $me->setActivePlanet($fastbuild_prev);
 ?>
-    <li class="c-voriger"><a href="forschung.php?planet=<?php=htmlentities(urlencode($fastbuild_prev))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Voriger unbeschäftigter Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>) [U]" tabindex="1" accesskey="u" rel="prev">&larr;</a></li>
+    <li class="c-voriger"><a href="forschung.php?planet=<?php echohtmlentities(urlencode($fastbuild_prev))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Voriger unbeschäftigter Planet: &bdquo;<?php echoutf8_htmlentities($me->planetName())?>&ldquo; (<?php echoutf8_htmlentities($me->getPosString())?>) [U]" tabindex="1" accesskey="u" rel="prev">&larr;</a></li>
 <?php
         }
         if($fastbuild_next !== false)
         {
             $me->setActivePlanet($fastbuild_next);
 ?>
-    <li class="c-naechster"><a href="forschung.php?planet=<?php=htmlentities(urlencode($fastbuild_next))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Nächster unbeschäftigter Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>) [Q]" tabindex="2" accesskey="q" rel="next">&rarr;</a></li>
+    <li class="c-naechster"><a href="forschung.php?planet=<?php echohtmlentities(urlencode($fastbuild_next))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Nächster unbeschäftigter Planet: &bdquo;<?php echoutf8_htmlentities($me->planetName())?>&ldquo; (<?php echoutf8_htmlentities($me->getPosString())?>) [Q]" tabindex="2" accesskey="q" rel="next">&rarr;</a></li>
 <?php
         }
         $me->setActivePlanet($active_planet);
@@ -160,8 +160,8 @@
         if($buildable_global && count($laufende_forschungen) > 0)
             $buildable_global = false; # Es wird schon wo geforscht
 ?>
-<div class="item forschung" id="item-<?php=htmlentities($id)?>">
-    <h3><a href="help/description.php?id=<?php=htmlentities(urlencode($id))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php=utf8_htmlentities($item_info['name'])?></a> <span class="stufe">(Level&nbsp;<?php=ths($item_info['level'])?>)</span></h3>
+<div class="item forschung" id="item-<?php echohtmlentities($id)?>">
+    <h3><a href="help/description.php?id=<?php echohtmlentities(urlencode($id))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php echoutf8_htmlentities($item_info['name'])?></a> <span class="stufe">(Level&nbsp;<?php echoths($item_info['level'])?>)</span></h3>
 <?php
         if((!($building_geb = $me->checkBuildingThing('gebaeude')) || $building_geb[0] != 'B8') && $item_info['buildable'] && $me->permissionToAct() && !($building = $me->checkBuildingThing('forschung')) && !in_array($id, $laufende_forschungen) && $item_info['deps-okay'])
         {
@@ -169,12 +169,12 @@
             $buildable_global = ($buildable_global && $enough_ress);
 ?>
     <ul>
-        <li class="item-ausbau forschung-lokal<?php=$enough_ress ? '' : ' no-ress'?>"><?php=$enough_ress ? '<a href="forschung.php?lokal='.htmlentities(urlencode($id)).'&amp;'.htmlentities(urlencode(session_name()).'='.urlencode(session_id())).'" tabindex="'.($tabindex++).'">' : ''?>Lokal weiterentwickeln<?php=$enough_ress ? '</a>' : ''?></li>
+        <li class="item-ausbau forschung-lokal<?php echo$enough_ress ? '' : ' no-ress'?>"><?php echo$enough_ress ? '<a href="forschung.php?lokal='.htmlentities(urlencode($id)).'&amp;'.htmlentities(urlencode(session_name()).'='.urlencode(session_id())).'" tabindex="'.($tabindex++).'">' : ''?>Lokal weiterentwickeln<?php echo$enough_ress ? '</a>' : ''?></li>
 <?php
             if(count($laufende_forschungen) <= 0)
             {
 ?>
-        <li class="item-ausbau forschung-global<?php=$buildable_global ? '' : ' no-ress'?>"><?php=$buildable_global ? '<a href="forschung.php?global='.htmlentities(urlencode($id)).'&amp;'.htmlentities(urlencode(session_name()).'='.urlencode(session_id())).'" tabindex="'.($tabindex++).'">' : ''?>Global weiterentwickeln<?php=$buildable_global ? '</a>' : ''?></li>
+        <li class="item-ausbau forschung-global<?php echo$buildable_global ? '' : ' no-ress'?>"><?php echo$buildable_global ? '<a href="forschung.php?global='.htmlentities(urlencode($id)).'&amp;'.htmlentities(urlencode(session_name()).'='.urlencode(session_id())).'" tabindex="'.($tabindex++).'">' : ''?>Global weiterentwickeln<?php echo$buildable_global ? '</a>' : ''?></li>
 <?php
             }
 ?>
@@ -184,9 +184,9 @@
         elseif($building && $building[0] == $id)
         {
 ?>
-    <div class="restbauzeit" id="restbauzeit-<?php=htmlentities($id)?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $building[1])?> (Serverzeit), <a href="forschung.php?cancel=<?php=htmlentities(urlencode($id))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" class="abbrechen">Abbrechen</a></div>
+    <div class="restbauzeit" id="restbauzeit-<?php echohtmlentities($id)?>">Fertigstellung: <?php echodate('H:i:s, Y-m-d', $building[1])?> (Serverzeit), <a href="forschung.php?cancel=<?php echohtmlentities(urlencode($id))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" class="abbrechen">Abbrechen</a></div>
     <script type="text/javascript">
-        init_countdown('<?php=$id?>', <?php=$building[1]?>);
+        init_countdown('<?php echo$id?>', <?php echo$building[1]?>);
     </script>
 <?php
         }
@@ -194,14 +194,14 @@
     <dl>
         <dt class="item-kosten">Kosten</dt>
         <dd class="item-kosten">
-            <?php=format_ress($item_info['ress'], 3)?>
+            <?php echoformat_ress($item_info['ress'], 3)?>
         </dd>
 
         <dt class="item-bauzeit forschung-lokal">Bauzeit lokal</dt>
-        <dd class="item-bauzeit forschung-lokal"><?php=format_btime($item_info['time_local'])?></dd>
+        <dd class="item-bauzeit forschung-lokal"><?php echoformat_btime($item_info['time_local'])?></dd>
 
         <dt class="item-bauzeit forschung-global">Bauzeit global</dt>
-        <dd class="item-bauzeit forschung-global"><?php=format_btime($item_info['time_global'])?></dd>
+        <dd class="item-bauzeit forschung-global"><?php echoformat_btime($item_info['time_global'])?></dd>
     </dl>
 </div>
 <?php

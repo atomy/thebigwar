@@ -8,7 +8,7 @@
     {
         # Neue Nachricht verfassen
 ?>
-<h2><a href="nachrichten.php?<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" title="Zurück zur Nachrichtenkategorienübersicht [W]" accesskey="w" tabindex="5">Nachrichten</a></h2>
+<h2><a href="nachrichten.php?<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" title="Zurück zur Nachrichtenkategorienübersicht [W]" accesskey="w" tabindex="5">Nachrichten</a></h2>
 <?php
         $error = '';
         $show_form = true;
@@ -63,7 +63,7 @@
         {
 ?>
 <p class="error">
-    <?php=utf8_htmlentities($error)."\n"?>
+    <?php echoutf8_htmlentities($error)."\n"?>
 </p>
 <?php
         }
@@ -72,7 +72,7 @@
         {
             # Formular zum Absenden anzeigen
 ?>
-<form action="nachrichten.php?to=&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" method="post" class="nachrichten-neu" onsubmit="this.setAttribute('onsubmit', 'return confirm(\'Doppelklickschutz: Sie haben ein zweites Mal auf \u201eAbsenden\u201c geklickt. Dadurch wird die Nachricht auch ein zweites Mal abgeschickt. Sind Sie sicher, dass Sie diese Aktion durchführen wollen?\');');">
+<form action="nachrichten.php?to=&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" method="post" class="nachrichten-neu" onsubmit="this.setAttribute('onsubmit', 'return confirm(\'Doppelklickschutz: Sie haben ein zweites Mal auf \u201eAbsenden\u201c geklickt. Dadurch wird die Nachricht auch ein zweites Mal abgeschickt. Sind Sie sicher, dass Sie diese Aktion durchführen wollen?\');');">
     <fieldset>
         <legend>Nachricht verfassen</legend>
         <dl>
@@ -89,13 +89,13 @@
         if(isset($_POST['betreff']))
             $betreff = $_POST['betreff'];
 ?>
-            <dd class="c-empfaenger"><input type="text" id="empfaenger-input" name="empfaenger" value="<?php=utf8_htmlentities($empfaenger)?>" tabindex="1" accesskey="z" title="[Z]" /></dd>
+            <dd class="c-empfaenger"><input type="text" id="empfaenger-input" name="empfaenger" value="<?php echoutf8_htmlentities($empfaenger)?>" tabindex="1" accesskey="z" title="[Z]" /></dd>
 
             <dt class="c-betreff"><label for="betreff-input">Betreff</label></dt>
-            <dd class="c-betreff"><input type="text" id="betreff-input" name="betreff" value="<?php=utf8_htmlentities($betreff)?>" maxlength="30" tabindex="2" accesskey="j" title="[J]" /></dd>
+            <dd class="c-betreff"><input type="text" id="betreff-input" name="betreff" value="<?php echoutf8_htmlentities($betreff)?>" maxlength="30" tabindex="2" accesskey="j" title="[J]" /></dd>
 
             <dt class="c-inhalt"><label for="inhalt-input">Inhalt</label></dt>
-            <dd class="c-inhalt"><textarea id="inhalt-input" name="inhalt" cols="50" rows="10" tabindex="3" accesskey="x" title="[X]"><?php=isset($_POST['inhalt']) ? preg_replace("/[\n\r\t]/e", '\'&#\'.ord(\'$0\').\';\'', utf8_htmlentities($_POST['inhalt'])) : ''?></textarea></dd>
+            <dd class="c-inhalt"><textarea id="inhalt-input" name="inhalt" cols="50" rows="10" tabindex="3" accesskey="x" title="[X]"><?php echoisset($_POST['inhalt']) ? preg_replace("/[\n\r\t]/e", '\'&#\'.ord(\'$0\').\';\'', utf8_htmlentities($_POST['inhalt'])) : ''?></textarea></dd>
         </dl>
     </fieldset>
     <div><button type="submit" accesskey="n" tabindex="4">Abse<kbd>n</kbd>den</button></div>
@@ -125,7 +125,7 @@
             # Nachricht anzeigen
              
 ?>
-<h2><a href="nachrichten.php?<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Zurück zur Nachrichtenkategorienübersicht [W]" tabindex="6" accesskey="w">Nachrichten</a>: <a href="nachrichten.php?type=<?php=htmlentities(urlencode($_GET['type']))?>&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" title="Zurück zur Nachrichtenübersicht: <?php=utf8_htmlentities($message_type_names[$_GET['type']])?> [O]" tabindex="5" accesskey="o"><?php=utf8_htmlentities($message_type_names[$_GET['type']])?></a></h2>
+<h2><a href="nachrichten.php?<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Zurück zur Nachrichtenkategorienübersicht [W]" tabindex="6" accesskey="w">Nachrichten</a>: <a href="nachrichten.php?type=<?php echohtmlentities(urlencode($_GET['type']))?>&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" title="Zurück zur Nachrichtenübersicht: <?php echoutf8_htmlentities($message_type_names[$_GET['type']])?> [O]" tabindex="5" accesskey="o"><?php echoutf8_htmlentities($message_type_names[$_GET['type']])?></a></h2>
 <?php
                 
         if(!$me->checkMessage($_GET['message'], $_GET['type']))
@@ -188,14 +188,14 @@
                         if($unread_prev !== false)
                         {
 ?>
-    <li class="c-vorige"><a href="nachrichten.php?type=<?php=htmlentities(urlencode($_GET['type']))?>&amp;message=<?php=htmlentities(urlencode($unread_prev))?>&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" title="Vorige ungelesene Nachricht [U]" accesskey="u" tabindex="4">&larr;</a></li>
+    <li class="c-vorige"><a href="nachrichten.php?type=<?php echohtmlentities(urlencode($_GET['type']))?>&amp;message=<?php echohtmlentities(urlencode($unread_prev))?>&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" title="Vorige ungelesene Nachricht [U]" accesskey="u" tabindex="4">&larr;</a></li>
 
 <?php
                         }
                         if($unread_next !== false)
                         {
 ?>
-    <li class="c-naechste"><a href="nachrichten.php?type=<?php=htmlentities(urlencode($_GET['type']))?>&amp;message=<?php=htmlentities(urlencode($unread_next))?>&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" title="Nächste ungelesene Nachricht [Q]" accesskey="q" tabindex="3">&rarr;</a></li>
+    <li class="c-naechste"><a href="nachrichten.php?type=<?php echohtmlentities(urlencode($_GET['type']))?>&amp;message=<?php echohtmlentities(urlencode($unread_next))?>&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" title="Nächste ungelesene Nachricht [Q]" accesskey="q" tabindex="3">&rarr;</a></li>
 <?php
                         }
 ?>
@@ -203,24 +203,24 @@
 <?php
                     }
 ?>
-<dl class="nachricht-informationen type-<?php=utf8_htmlentities($_GET['type'])?><?php=$message->html() ? ' html' : ''?>">
+<dl class="nachricht-informationen type-<?php echoutf8_htmlentities($_GET['type'])?><?php echo$message->html() ? ' html' : ''?>">
 <?php
                     if(trim($message->from()) != '')
                     {
 ?>
     <dt class="c-absender">Absender</dt>
-    <dd class="c-absender"><a href="help/playerinfo.php?player=<?php=htmlentities(urlencode($message->from()))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php=utf8_htmlentities($message->from())?></a></dd>
+    <dd class="c-absender"><a href="help/playerinfo.php?player=<?php echohtmlentities(urlencode($message->from()))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php echoutf8_htmlentities($message->from())?></a></dd>
        <dt class="c-empfaenger">Empfaenger</dt>
-     <dd class="c-empfaenger"><a href="help/playerinfo.php?player=<?php=htmlentities(urlencode($message->to()))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php=utf8_htmlentities($message->to())?></a></dd>
+     <dd class="c-empfaenger"><a href="help/playerinfo.php?player=<?php echohtmlentities(urlencode($message->to()))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php echoutf8_htmlentities($message->to())?></a></dd>
 
 <?php
                     }
 ?>
     <dt class="c-betreff">Betreff</dt>
-    <dd class="c-betreff"><?php=utf8_htmlentities($message->subject())?></dd>
+    <dd class="c-betreff"><?php echoutf8_htmlentities($message->subject())?></dd>
 
     <dt class="c-zeit">Zeit</dt>
-    <dd class="c-zeit"><?php=date('H:i:s, Y-m-d', $message->getTime())?></dd>
+    <dd class="c-zeit"><?php echodate('H:i:s, Y-m-d', $message->getTime())?></dd>
 
     <dt class="c-nachricht">Nachricht</dt>
     <dd class="c-nachricht">
@@ -270,8 +270,8 @@
                     {
 ?>
 <ul class="nachrichten-verbuendeten-links">
-    <li class="c-verbuendete"><a href="verbuendete.php?<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>">Zur Verbündetenseite</a></li>
-    <li class="c-allianz"><a href="allianz.php?<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>">Zur Allianzseite</a></li>
+    <li class="c-verbuendete"><a href="verbuendete.php?<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>">Zur Verbündetenseite</a></li>
+    <li class="c-allianz"><a href="allianz.php?<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>">Zur Allianzseite</a></li>
 </ul>
 <?php
                     }
@@ -285,17 +285,17 @@
 ?>
 <form action="nachrichten.php" method="get" class="nachricht-antworten-formular">
     <div>
-        <input type="hidden" name="<?php=htmlentities(session_name())?>" value="<?php=htmlentities(session_id())?>" />
-        <input type="hidden" name="to" value="<?php=utf8_htmlentities($message->from())?>" />
-        <input type="hidden" name="subject" value="<?php=utf8_htmlentities($re_betreff)?>" />
+        <input type="hidden" name="<?php echohtmlentities(session_name())?>" value="<?php echohtmlentities(session_id())?>" />
+        <input type="hidden" name="to" value="<?php echoutf8_htmlentities($message->from())?>" />
+        <input type="hidden" name="subject" value="<?php echoutf8_htmlentities($re_betreff)?>" />
         <button type="submit" accesskey="w" tabindex="1">Ant<kbd>w</kbd>orten</button>
     </div>
 </form>
 <?php
                     }
 ?>
-<form action="nachrichten.php?type=<?php=htmlentities(urlencode($_GET['type']))?>&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" method="post" class="nachricht-loeschen-formular">
-    <div><input type="hidden" name="message[<?php=htmlentities($_GET['message'])?>]" value="on" /><input type="submit" name="delete" accesskey="n" tabindex="2" value="Löschen" title="[N]" /> <input type="submit" name="archive" tabindex="3" value="Archivieren" /></div>
+<form action="nachrichten.php?type=<?php echohtmlentities(urlencode($_GET['type']))?>&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" method="post" class="nachricht-loeschen-formular">
+    <div><input type="hidden" name="message[<?php echohtmlentities($_GET['message'])?>]" value="on" /><input type="submit" name="delete" accesskey="n" tabindex="2" value="Löschen" title="[N]" /> <input type="submit" name="archive" tabindex="3" value="Archivieren" /></div>
 </form>
 <?php
                     if(isset($_POST['weiterleitung-to']))
@@ -374,7 +374,7 @@
                         $host = get_default_hostname();
 ?>
 <p id="nachricht-veroeffentlichen">
-    Sie können diese Nachricht öffentlich verlinken: <a href="http://<?php=htmlentities($host.h_root)?>/public_message.php?id=<?php=htmlentities(urlencode($_GET['message']))?>&amp;database=<?php=htmlentities(urlencode($_SESSION['database']))?>">http://<?php=htmlentities($host.h_root)?>/public_message.php?id=<?php=htmlentities(urlencode($_GET['message']))?>&amp;database=<?php=htmlentities(urlencode($_SESSION['database']))?></a>
+    Sie können diese Nachricht öffentlich verlinken: <a href="http://<?php echohtmlentities($host.h_root)?>/public_message.php?id=<?php echohtmlentities(urlencode($_GET['message']))?>&amp;database=<?php echohtmlentities(urlencode($_SESSION['database']))?>">http://<?php echohtmlentities($host.h_root)?>/public_message.php?id=<?php echohtmlentities(urlencode($_GET['message']))?>&amp;database=<?php echohtmlentities(urlencode($_SESSION['database']))?></a>
 </p>
 <?php
                     }
@@ -382,17 +382,17 @@
                     {
 ?>
 <ul id="nachricht-veroeffentlichen">
-    <li><a href="nachrichten.php?type=<?php=htmlentities(urlencode($_GET['type']))?>&amp;message=<?php=htmlentities(urlencode($_GET['message']))?>&amp;publish=1&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>#nachricht-veroeffentlichen">Nachricht veröffentlichen</a></li>
+    <li><a href="nachrichten.php?type=<?php echohtmlentities(urlencode($_GET['type']))?>&amp;message=<?php echohtmlentities(urlencode($_GET['message']))?>&amp;publish=1&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>#nachricht-veroeffentlichen">Nachricht veröffentlichen</a></li>
 </ul>
 <?php
                     }
 ?>
-<form action="nachrichten.php?type=<?php=htmlentities(urlencode($_GET['type']))?>&amp;message=<?php=htmlentities(urlencode($_GET['message']))?>&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>#nachricht-weiterleiten-formular" method="post" id="nachricht-weiterleiten-formular" class="nachricht-weiterleiten-formular">
+<form action="nachrichten.php?type=<?php echohtmlentities(urlencode($_GET['type']))?>&amp;message=<?php echohtmlentities(urlencode($_GET['message']))?>&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>#nachricht-weiterleiten-formular" method="post" id="nachricht-weiterleiten-formular" class="nachricht-weiterleiten-formular">
     <fieldset>
         <legend>Nachricht weiterleiten</legend>
         <dl>
             <dt><label for="empfaenger-input">Empfänger</label></dt>
-            <dd><input type="text" id="empfaenger-input" name="weiterleitung-to" value="<?php=isset($_POST['weiterleitung-to']) ? utf8_htmlentities($_POST['weiterleitung-to']) : ''?>" title="[X]" accesskey="x" tabindex="5" /></dd>
+            <dd><input type="text" id="empfaenger-input" name="weiterleitung-to" value="<?php echoisset($_POST['weiterleitung-to']) ? utf8_htmlentities($_POST['weiterleitung-to']) : ''?>" title="[X]" accesskey="x" tabindex="5" /></dd>
         </dl>
         <div><button type="submit" tabindex="6">Weiterleiten</button></div>
     </fieldset>
@@ -423,7 +423,7 @@
         {
             # Nachrichtenuebersicht einer Kategorie anzeigen
 ?>
-<h2><a href="nachrichten.php?<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" title="Zurück zur Nachrichtenkategorienübersicht [W]" accesskey="w" tabindex="4">Nachrichten</a>: <?php=utf8_htmlentities($message_type_names[$_GET['type']])?></h2>
+<h2><a href="nachrichten.php?<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" title="Zurück zur Nachrichtenkategorienübersicht [W]" accesskey="w" tabindex="4">Nachrichten</a>: <?php echoutf8_htmlentities($message_type_names[$_GET['type']])?></h2>
 <?php
             $messages_list = $me->getMessagesList($_GET['type']);
             if(count($messages_list) > 0)
@@ -460,7 +460,7 @@
     }
 // ]]>
 </script>
-<form action="nachrichten.php?type=<?php=htmlentities(urlencode($_GET['type']))?>&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" method="post" class="nachrichten-liste type-<?php=utf8_htmlentities($_GET['type'])?>" id="nachrichten-liste">
+<form action="nachrichten.php?type=<?php echohtmlentities(urlencode($_GET['type']))?>&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" method="post" class="nachrichten-liste type-<?php echoutf8_htmlentities($_GET['type'])?>" id="nachrichten-liste">
     <table>
         <thead>
             <tr>
@@ -487,12 +487,12 @@
                     elseif($status == 1 && $_GET['type'] != 8) $class = 'neu';
                     else $class = 'alt';
 ?>
-            <tr class="<?php=$class?>">
-                <td class="c-auswaehlen"><input type="checkbox" name="message[<?php=htmlentities($message_id)?>]" tabindex="<?php=$tabindex++?>" /></td>
-                <td class="c-betreff"><a href="nachrichten.php?type=<?php=htmlentities(urlencode($_GET['type']))?>&amp;message=<?php=htmlentities(urlencode($message_id))?>&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" tabindex="<?php=$tabindex++?>"><?php=utf8_htmlentities($message->subject())?></a></td>
-                <td class="c-absender"><?php=utf8_htmlentities($message->from())?></td>
-                           <td class="c-"><?php=utf8_htmlentities($message->to())?></td>
-                <td class="c-datum"><?php=date('H:i:s, Y-m-d', $message->getTime())?></td>
+            <tr class="<?php echo$class?>">
+                <td class="c-auswaehlen"><input type="checkbox" name="message[<?php echohtmlentities($message_id)?>]" tabindex="<?php echo$tabindex++?>" /></td>
+                <td class="c-betreff"><a href="nachrichten.php?type=<?php echohtmlentities(urlencode($_GET['type']))?>&amp;message=<?php echohtmlentities(urlencode($message_id))?>&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" tabindex="<?php echo$tabindex++?>"><?php echoutf8_htmlentities($message->subject())?></a></td>
+                <td class="c-absender"><?php echoutf8_htmlentities($message->from())?></td>
+                           <td class="c-"><?php echoutf8_htmlentities($message->to())?></td>
+                <td class="c-datum"><?php echodate('H:i:s, Y-m-d', $message->getTime())?></td>
             </tr>
 <?php
                 }
@@ -573,38 +573,38 @@
     {
 ?>
 <ul class="nachrichten-neu-link">
-    <li><a href="nachrichten.php?to=&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="n" tabindex="1"><kbd>N</kbd>eue Nachricht</a></li>
+    <li><a href="nachrichten.php?to=&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="n" tabindex="1"><kbd>N</kbd>eue Nachricht</a></li>
 </ul>
 <?php
     }
 ?>
 <dl class="nachrichten-kategorien">
-    <dt class="c-kaempfe <?php=$ncount[1][2]?>"><a href="nachrichten.php?type=1&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="ä" tabindex="2">K<kbd>ä</kbd>mpfe</a></dt>
-    <dd class="c-kaempfe <?php=$ncount[1][2]?>"><?php=utf8_htmlentities($ncount[1][0])?> <span class="gesamt">(<?php=utf8_htmlentities($ncount[1][1])?>)</span></dd>
+    <dt class="c-kaempfe <?php echo$ncount[1][2]?>"><a href="nachrichten.php?type=1&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="ä" tabindex="2">K<kbd>ä</kbd>mpfe</a></dt>
+    <dd class="c-kaempfe <?php echo$ncount[1][2]?>"><?php echoutf8_htmlentities($ncount[1][0])?> <span class="gesamt">(<?php echoutf8_htmlentities($ncount[1][1])?>)</span></dd>
 
-    <dt class="c-spionage <?php=$ncount[2][2]?>"><a href="nachrichten.php?type=2&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="o" tabindex="3">Spi<kbd>o</kbd>nage</a></dt>
-    <dd class="c-spionage <?php=$ncount[2][2]?>"><?php=utf8_htmlentities($ncount[2][0])?> <span class="gesamt">(<?php=utf8_htmlentities($ncount[2][1])?>)</span></dd>
+    <dt class="c-spionage <?php echo$ncount[2][2]?>"><a href="nachrichten.php?type=2&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="o" tabindex="3">Spi<kbd>o</kbd>nage</a></dt>
+    <dd class="c-spionage <?php echo$ncount[2][2]?>"><?php echoutf8_htmlentities($ncount[2][0])?> <span class="gesamt">(<?php echoutf8_htmlentities($ncount[2][1])?>)</span></dd>
 
-    <dt class="c-transport <?php=$ncount[3][2]?>"><a href="nachrichten.php?type=3&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="j" title="[J]" tabindex="4">Transport</a></dt>
-    <dd class="c-transport <?php=$ncount[3][2]?>"><?php=utf8_htmlentities($ncount[3][0])?> <span class="gesamt">(<?php=utf8_htmlentities($ncount[3][1])?>)</span></dd>
+    <dt class="c-transport <?php echo$ncount[3][2]?>"><a href="nachrichten.php?type=3&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="j" title="[J]" tabindex="4">Transport</a></dt>
+    <dd class="c-transport <?php echo$ncount[3][2]?>"><?php echoutf8_htmlentities($ncount[3][0])?> <span class="gesamt">(<?php echoutf8_htmlentities($ncount[3][1])?>)</span></dd>
 
-    <dt class="c-sammeln <?php=$ncount[4][2]?>"><a href="nachrichten.php?type=4&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="q" title="[Q]" tabindex="5">Sammeln</a></dt>
-    <dd class="c-sammeln <?php=$ncount[4][2]?>"><?php=utf8_htmlentities($ncount[4][0])?> <span class="gesamt">(<?php=utf8_htmlentities($ncount[4][1])?>)</span></dd>
+    <dt class="c-sammeln <?php echo$ncount[4][2]?>"><a href="nachrichten.php?type=4&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="q" title="[Q]" tabindex="5">Sammeln</a></dt>
+    <dd class="c-sammeln <?php echo$ncount[4][2]?>"><?php echoutf8_htmlentities($ncount[4][0])?> <span class="gesamt">(<?php echoutf8_htmlentities($ncount[4][1])?>)</span></dd>
 
-    <dt class="c-besiedelung <?php=$ncount[5][2]?>"><a href="nachrichten.php?type=5&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="u" tabindex="6">Besiedel<kbd>u</kbd>ng</a></dt>
-    <dd class="c-besiedelung <?php=$ncount[5][2]?>"><?php=utf8_htmlentities($ncount[5][0])?> <span class="gesamt">(<?php=utf8_htmlentities($ncount[5][1])?>)</span></dd>
+    <dt class="c-besiedelung <?php echo$ncount[5][2]?>"><a href="nachrichten.php?type=5&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="u" tabindex="6">Besiedel<kbd>u</kbd>ng</a></dt>
+    <dd class="c-besiedelung <?php echo$ncount[5][2]?>"><?php echoutf8_htmlentities($ncount[5][0])?> <span class="gesamt">(<?php echoutf8_htmlentities($ncount[5][1])?>)</span></dd>
 
-    <dt class="c-benutzernachrichten <?php=$ncount[6][2]?>"><a href="nachrichten.php?type=6&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="z" tabindex="7">Benut<kbd>z</kbd>ernachrichten</a></dt>
-    <dd class="c-benutzernachrichten <?php=$ncount[6][2]?>"><?php=utf8_htmlentities($ncount[6][0])?> <span class="gesamt">(<?php=utf8_htmlentities($ncount[6][1])?>)</span></dd>
+    <dt class="c-benutzernachrichten <?php echo$ncount[6][2]?>"><a href="nachrichten.php?type=6&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="z" tabindex="7">Benut<kbd>z</kbd>ernachrichten</a></dt>
+    <dd class="c-benutzernachrichten <?php echo$ncount[6][2]?>"><?php echoutf8_htmlentities($ncount[6][0])?> <span class="gesamt">(<?php echoutf8_htmlentities($ncount[6][1])?>)</span></dd>
 
-    <dt class="c-verbeundete <?php=$ncount[7][2]?>"><a href="nachrichten.php?type=7&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="ü" tabindex="8">Verb<kbd>ü</kbd>ndete</a></dt>
-    <dd class="c-verbuendete <?php=$ncount[7][2]?>"><?php=utf8_htmlentities($ncount[7][0])?> <span class="gesamt">(<?php=utf8_htmlentities($ncount[7][1])?>)</span></dd>
+    <dt class="c-verbeundete <?php echo$ncount[7][2]?>"><a href="nachrichten.php?type=7&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="ü" tabindex="8">Verb<kbd>ü</kbd>ndete</a></dt>
+    <dd class="c-verbuendete <?php echo$ncount[7][2]?>"><?php echoutf8_htmlentities($ncount[7][0])?> <span class="gesamt">(<?php echoutf8_htmlentities($ncount[7][1])?>)</span></dd>
 
-    <dt class="c-postausgang <?php=$ncount[8][2]?>"><a href="nachrichten.php?type=8&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="w" title="[W]" tabindex="9">Postausgang</a></dt>
-    <dd class="c-postausgang <?php=$ncount[8][2]?>"><?php=utf8_htmlentities($ncount[8][1])?></dd>
+    <dt class="c-postausgang <?php echo$ncount[8][2]?>"><a href="nachrichten.php?type=8&amp;<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" accesskey="w" title="[W]" tabindex="9">Postausgang</a></dt>
+    <dd class="c-postausgang <?php echo$ncount[8][2]?>"><?php echoutf8_htmlentities($ncount[8][1])?></dd>
 
-    <dt class="c-gesamt <?php=$ges_ncount[2]?>">Gesamt</dt>
-    <dd class="c-gesamt <?php=$ges_ncount[2]?>"><?php=utf8_htmlentities($ges_ncount[0])?> <span class="gesamt">(<?php=utf8_htmlentities($ges_ncount[1])?>)</span></dd>
+    <dt class="c-gesamt <?php echo$ges_ncount[2]?>">Gesamt</dt>
+    <dd class="c-gesamt <?php echo$ges_ncount[2]?>"><?php echoutf8_htmlentities($ges_ncount[0])?> <span class="gesamt">(<?php echoutf8_htmlentities($ges_ncount[1])?>)</span></dd>
 </dl>
 
 

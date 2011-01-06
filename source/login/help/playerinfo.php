@@ -28,7 +28,7 @@
 			if($user->userLocked()) $suf = ' (g)';
 			elseif($user->umode()) $suf = ' (U)';
 ?>
-<h2>Spielerinfo <?php if($at){?><span class="playerinfo-allianz">[<a href="allianceinfo.php?alliance=<?php=htmlentities(urlencode($at).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu dieser Allianz anzeigen"><?php=utf8_htmlentities($at)?></a>]</span> <?php }?><em class="playername"><?php=utf8_htmlentities($user->getName())?></em><span class="suffix"><?php=$suf?></span></h2>
+<h2>Spielerinfo <?php if($at){?><span class="playerinfo-allianz">[<a href="allianceinfo.php?alliance=<?php echohtmlentities(urlencode($at).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu dieser Allianz anzeigen"><?php echoutf8_htmlentities($at)?></a>]</span> <?php }?><em class="playername"><?php echoutf8_htmlentities($user->getName())?></em><span class="suffix"><?php echo$suf?></span></h2>
 
 
 <?php
@@ -39,28 +39,28 @@
 <h3 id="punkte">Punkte</h3>
 <dl class="punkte">
 	<dt class="c-gebaeude">Gebäude</dt>
-	<dd class="c-gebaeude"><?php=ths($user->getScores(0))?></dd>
+	<dd class="c-gebaeude"><?php echoths($user->getScores(0))?></dd>
 
 	<dt class="c-forschung">Forschung</dt>
-	<dd class="c-forschung"><?php=ths($user->getScores(1))?></dd>
+	<dd class="c-forschung"><?php echoths($user->getScores(1))?></dd>
 
 	<dt class="c-roboter">Roboter</dt>
-	<dd class="c-roboter"><?php=ths($user->getScores(2))?></dd>
+	<dd class="c-roboter"><?php echoths($user->getScores(2))?></dd>
 
 	<dt class="c-flotte">Flotte</dt>
-	<dd class="c-flotte"><?php=ths($user->getScores(3))?></dd>
+	<dd class="c-flotte"><?php echoths($user->getScores(3))?></dd>
 
 	<dt class="c-verteidigung">Verteidigung</dt>
-	<dd class="c-verteidigung"><?php=ths($user->getScores(4))?></dd>
+	<dd class="c-verteidigung"><?php echoths($user->getScores(4))?></dd>
 
 	<dt class="c-flugerfahrung">Flugerfahrung</dt>
-	<dd class="c-flugerfahrung"><?php=ths($user->getScores(5))?></dd>
+	<dd class="c-flugerfahrung"><?php echoths($user->getScores(5))?></dd>
 
 	<dt class="c-kampferfahrung">Kampferfahrung</dt>
-	<dd class="c-kampferfahrung"><?php=ths($user->getScores(6))?></dd>
+	<dd class="c-kampferfahrung"><?php echoths($user->getScores(6))?></dd>
 
 	<dt class="c-gesamt">Gesamtpunkte</dt>
-	<dd class="c-gesamt"><?php=ths($user->getScores())?></span> <span class="platz">(Platz&nbsp;<?php=ths($user->getRank())?> <span class="gesamt-spieler">von <?php=ths(getUsersCount())?>)</span></span></dd>
+	<dd class="c-gesamt"><?php echoths($user->getScores())?></span> <span class="platz">(Platz&nbsp;<?php echoths($user->getRank())?> <span class="gesamt-spieler">von <?php echoths(getUsersCount())?>)</span></span></dd>
 </dl>
 <?php
 			}
@@ -70,7 +70,7 @@
 <h3 id="punkte">Punkte</h3>
 <dl class="punkte">
 <dt class="c-gesamt">Gesamtpunkte</dt>
-<dd class="c-gesamt"><?php=ths($user->getScores())?></span> <span class="platz">(Platz&nbsp;<?php=ths($user->getRank())?> <span class="gesamt-spieler">von <?php=ths(getUsersCount())?>)</span></span></dd>
+<dd class="c-gesamt"><?php echoths($user->getScores())?></span> <span class="platz">(Platz&nbsp;<?php echoths($user->getRank())?> <span class="gesamt-spieler">von <?php echoths(getUsersCount())?>)</span></span></dd>
 </dl>
 <?php
 			}
@@ -80,22 +80,22 @@
 <h3 id="ausgegebene-rohstoffe">Ausgegebene Rohstoffe</h3>
 <dl class="punkte">
 	<dt class="c-carbon">Carbon</dt>
-	<dd class="c-carbon"><?php=ths($user->getSpentRess(0))?></dd>
+	<dd class="c-carbon"><?php echoths($user->getSpentRess(0))?></dd>
 
 	<dt class="c-eisenerz">Aluminium</dt>
-	<dd class="c-eisenerz"><?php=ths($user->getSpentRess(1))?></dd>
+	<dd class="c-eisenerz"><?php echoths($user->getSpentRess(1))?></dd>
 
 	<dt class="c-wolfram">Wolfram</dt>
-	<dd class="c-wolfram"><?php=ths($user->getSpentRess(2))?></dd>
+	<dd class="c-wolfram"><?php echoths($user->getSpentRess(2))?></dd>
 
 	<dt class="c-radium">Radium</dt>
-	<dd class="c-radium"><?php=ths($user->getSpentRess(3))?></dd>
+	<dd class="c-radium"><?php echoths($user->getSpentRess(3))?></dd>
 
 	<dt class="c-tritium">Tritium</dt>
-	<dd class="c-tritium"><?php=ths($user->getSpentRess(4))?></dd>
+	<dd class="c-tritium"><?php echoths($user->getSpentRess(4))?></dd>
 
 	<dt class="c-gesamt">Gesamt</dt>
-	<dd class="c-gesamt"><?php=ths($user->getSpentRess())?></dd>
+	<dd class="c-gesamt"><?php echoths($user->getSpentRess())?></dd>
 </dl>
 <?php
 			}
@@ -132,7 +132,7 @@
 				foreach($verbuendet as $verbuendeter)
 				{
 ?>
-	<li><a href="playerinfo.php?player=<?php=htmlentities(urlencode($verbuendeter))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php=utf8_htmlentities($verbuendeter)?></a></li>
+	<li><a href="playerinfo.php?player=<?php echohtmlentities(urlencode($verbuendeter))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php echoutf8_htmlentities($verbuendeter)?></a></li>
 <?php
 				}
 ?>
@@ -151,7 +151,7 @@
                         if($last_activity !== false && isset($verbuendet) || $last_activity !== false && $show_koords)
                         {
 ?>
-        <dd class="c-letzte-aktivitaet"><?php=date('H:i:s, Y-m-d', $last_activity)?> (Serverzeit)</dd>
+        <dd class="c-letzte-aktivitaet"><?php echodate('H:i:s, Y-m-d', $last_activity)?> (Serverzeit)</dd>
 <?php
                         }
 			    elseif(($last_activity + 86400) > time())
@@ -176,7 +176,7 @@
 			if($registration_time !== false)
 			{
 ?>
-	<dd class="c-registrierung"><?php=date('H:i:s, Y-m-d', $registration_time)?> (Serverzeit)</dd>
+	<dd class="c-registrierung"><?php echodate('H:i:s, Y-m-d', $registration_time)?> (Serverzeit)</dd>
 <?php
 			}
 			else
@@ -202,7 +202,7 @@
 					$pos = $user->getPos();
 					$pos_string = $user->getPosString();
 ?>
-	<li><?php=utf8_htmlentities($user->planetName())?> <span class="koords">(<a href="../karte.php?galaxy=<?php=htmlentities(urlencode($pos[0]))?>&amp;system=<?php=htmlentities(urlencode($pos[1]))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Jenes Sonnensystem in der Karte ansehen"><?php=utf8_htmlentities($pos_string)?></a>)</span></li>
+	<li><?php echoutf8_htmlentities($user->planetName())?> <span class="koords">(<a href="../karte.php?galaxy=<?php echohtmlentities(urlencode($pos[0]))?>&amp;system=<?php echohtmlentities(urlencode($pos[1]))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Jenes Sonnensystem in der Karte ansehen"><?php echoutf8_htmlentities($pos_string)?></a>)</span></li>
 <?php
 				}
 				if($active_planet !== false) $user->setActivePlanet($active_planet);
@@ -215,7 +215,7 @@
 			{
 ?>
 <h3 id="nachricht">Nachricht</h3>
-<form action="../nachrichten.php?to=&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="playerinfo-nachricht" onsubmit="this.setAttribute('onsubmit', 'return confirm(\'Doppelklickschutz: Sie haben ein zweites Mal auf \u201eAbsenden\u201c geklickt. Dadurch wird die Nachricht auch ein zweites Mal abgeschickt. Sind Sie sicher, dass Sie diese Aktion durchführen wollen?\');');">
+<form action="../nachrichten.php?to=&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="playerinfo-nachricht" onsubmit="this.setAttribute('onsubmit', 'return confirm(\'Doppelklickschutz: Sie haben ein zweites Mal auf \u201eAbsenden\u201c geklickt. Dadurch wird die Nachricht auch ein zweites Mal abgeschickt. Sind Sie sicher, dass Sie diese Aktion durchführen wollen?\');');">
 	<dl>
 		<dt class="c-betreff"><label for="betreff-input">Betreff</label></dt>
 		<dd class="c-betreff"><input type="text" id="betreff-input" name="betreff" maxlength="30" tabindex="1" /></dd>
@@ -227,7 +227,7 @@
 				if(!$me->userLocked())
 				  {
 ?>
-	<div><button type="submit" accesskey="n" tabindex="3"><kbd>N</kbd>achricht absenden</button><input type="hidden" name="empfaenger" value="<?php=utf8_htmlentities($user->getName())?>" /></div>
+	<div><button type="submit" accesskey="n" tabindex="3"><kbd>N</kbd>achricht absenden</button><input type="hidden" name="empfaenger" value="<?php echoutf8_htmlentities($user->getName())?>" /></div>
 <?php
 		}
 ?>

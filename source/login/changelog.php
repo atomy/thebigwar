@@ -19,13 +19,13 @@
 		if(count($log) < 2)
 		{
 ?>
-	<li><?php=utf8_htmlentities($log[0])?></li>
+	<li><?php echoutf8_htmlentities($log[0])?></li>
 <?php
 		}
 		else
 		{
 ?>
-	<li><span class="zeit"><?php=date('Y-m-d, H:i:s', $log[0])?>:</span> <?php=utf8_htmlentities($log[1])?></li>
+	<li><span class="zeit"><?php echodate('Y-m-d, H:i:s', $log[0])?>:</span> <?php echoutf8_htmlentities($log[1])?></li>
 <?php
 		}
 	}

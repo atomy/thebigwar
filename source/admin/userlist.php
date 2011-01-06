@@ -15,7 +15,7 @@
 
     $sort = (isset($_GET['sort']) && $_GET['sort']);
 ?>
-<h2>Benutzerliste &ndash; <?php=$sort ? 'sortiert' : 'unsortiert'?></h2>
+<h2>Benutzerliste &ndash; <?php echo$sort ? 'sortiert' : 'unsortiert'?></h2>
 <?php
     if($sort)
     {
@@ -36,7 +36,7 @@
         foreach($unames as $uname)
         {
 ?>
-    <li><?php=utf8_htmlentities($uname)?></li>
+    <li><?php echoutf8_htmlentities($uname)?></li>
 <?php
             flush();
         }
@@ -55,7 +55,7 @@
             if(!is_file(global_setting("DB_PLAYERS").'/'.$uname) || !is_readable(global_setting("DB_PLAYERS").'/'.$uname))
                 continue;
 ?>
-    <li><?php=utf8_htmlentities(urldecode($uname))?></li>
+    <li><?php echoutf8_htmlentities(urldecode($uname))?></li>
 <?php
             flush();
         }
