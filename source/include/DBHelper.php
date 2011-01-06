@@ -1,4 +1,5 @@
 <?php
+require_once '../include/config_inc.php';
 
 class DBHelper
 {
@@ -8,7 +9,7 @@ class DBHelper
     static public function getInstance()
     {
         if (null === self::$instance) {
-            self::$instance = new self();
+            self::$instance = new self;
         }
         return self::$instance;
     }
@@ -40,39 +41,8 @@ class DBHelper
     /**
      * returns db link
      */
-    public function GetLink()
+    public function getLink()
     {
         return $this->db;
-    }
-    
-    public function DoQuery( $szSQL )
-    {
-    	$dbLink = $this->db;
-    	
-    	if (!$dbLink)
-	    throw new Exception("DBHelper::doQuery database connection not available!");
-
-    	$result = $dbLink->query($szSQL);
-	//echo "exec query: ".$szSQL."\n";
-    	
-    	if ( !$result )
-    	    throw new Exception("DBHelper::doQuery query failed!: ".$this->db->error);
-    		
-    	return $result;
-    }
-    
-    public function GetAffectedRows()
-    {
-    	return $this->db->affected_rows;
-    }
-    
-    public function EscapeString( $string )
-    {
-    	return $this->db->escape_string( $string );    	
-    }
-    
-    public function GetInsertID()
-    {
-    	return $this->db->insert_id;
     }
 }

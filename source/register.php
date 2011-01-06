@@ -51,7 +51,7 @@
 			$error = 'Der Name des Hauptplaneten enthält ungültige Zeichen.';
 		elseif(!isset($_POST['nutzungsbedingungen']) || !$_POST['nutzungsbedingungen'])
 			$error = 'Sie müssen die Nutzungsbedingungen  / AGB lesen und akzeptieren, um am Spiel teilnehmen zu können.';
-		elseif(strlen(trim($_POST['username'])) > USERNAME_MAXLEN || (strlen(trim($_POST['username'])) < 1))
+		elseif(strlen(trim($_POST['username'])) > 20 || (strlen(trim($_POST['username'])) < 1))
 			$error = 'Der Benutzername darf maximal 20 Bytes groß sein und muss mindesten 1 Byte groß sein.';
 		elseif(strlen(trim($_POST['hauptplanet'])) > 16)
 			$error = 'Der Name des Hauptplanets darf maximal 16 Bytes groß sein.';
