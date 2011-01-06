@@ -70,10 +70,10 @@
     <phingcall target="prepare" />
   <!--  <phingcall target="test"/> -->
   <!--  <phingcall target="coverage-report"/> -->
-	<phingcall target="phpcpd" />
-	<phingcall target="phpdoc" />
-	<phingcall target="pdepend" />
-	<phingcall target="phpcs" />
+<!--	<phingcall target="phpcpd" />	-->
+<!--	<phingcall target="phpdoc" />	-->
+<!--	<phingcall target="pdepend" />	-->
+<!--	<phingcall target="phpcs" />	-->
 <!--	<phingcall target="eventhandler" /> -->
 	<phingcall target="phpunit" />
 	<phingcall target="killeventhandler" />
