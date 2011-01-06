@@ -5,6 +5,12 @@ if (! defined ( TBW_ROOT ))
 	require_once ('config_inc.php');
 }
 
+function getVersion() {
+	$fpath = TBW_ROOT."db_things/SVNVERSION";
+	$buf = readfile($fpath);
+	return intval($buf);	
+}
+
 function IsGameOperator($name) {
 	$userObj = Classes::User ( $name );
 	

@@ -5,6 +5,7 @@
 		define( "TBW_ROOT", "" );
 	
 	require_once( TBW_ROOT.'engine/include.php' );
+	require_once( TBW_ROOT.'include/util.php' );
 
 	$resume = false;
 	$del_email_passwd = false;
@@ -390,7 +391,7 @@
 				<li id="navigation-wiki" xml:lang="en"><a href="http://wiki.thebigwar.org/" target="_blank"><abbr title="TBW-Wiki">Wiki</abbr></a></li>
 				<li id="navigation-chat" xml:lang="en"><a href="http://<?php echo htmlentities(get_default_hostname().h_root)?>/chat.php" target="blank"><abbr title="Chat (IRC)">Chat</abbr></a></li>
 				<li<?php echo ($_SERVER['PHP_SELF'] == h_root.'/login/ticketsystem.php') ? ' class="active"' : ''?> id="navigation-ticketsystem"><a href="<?php echo htmlentities('http://'.$_SERVER['HTTP_HOST'].h_root)?>/login/ticketsystem.php?<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()).'&showMyTickets=1')?>">Ticketsystem</a></li>				
-				<li id="navigation-bug" xml:lang="en"><a href="https://mantis.jackinpoint.net/main_page.php" target="_blank"><abbr title="Fehler melden">Fehler melden</abbr></a></li>
+				<li id="navigation-bug" xml:lang="en"><a href="<?php echo utf8_htmlentities(GLOBAL_MANTISURL) ?>" target="_blank"><abbr title="Fehler melden">Fehler melden</abbr></a></li>
 			</ul>
 			
 			<ul id="ad-navigation">
@@ -429,7 +430,7 @@
 		<ul id="gameinfo">
 			<li class="username"><?php echo utf8_htmlentities($_SESSION['username'])?></li>
 			<li class="database"><?php echo utf8_htmlentities($databases[$_SESSION['database']][1])?></li>
-			<li class="version"><a href="<?php echo htmlentities('http://'.$_SERVER['HTTP_HOST'].h_root)?>/login/changelog.php?<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Changelog anzeigen">Version <?php echo VERSION?></a></li>
+			<li class="version"><a href="<?php echo utf8_htmlentities(GLOBAL_CHANGELOGURL)?>" title="Changelog anzeigen">Version <?php echo getVersion().".".VERSION?></a></li>
 <?php
 			if(($rev = get_revision()) !== false)
 			{
