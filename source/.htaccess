@@ -1,7 +1,7 @@
 Order Deny,Allow
 
 # Uncomment the following line for Wartungsarbeiten
-#Deny from All #REPLACEMARKER
+Deny from All #REPLACEMARKER
 
 ErrorDocument 403 /wartungsarbeiten.html
 

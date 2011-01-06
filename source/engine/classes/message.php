@@ -9,8 +9,6 @@ class Message extends Dataset
 
     function __construct( $name = false, $write = true )
     {
-    	Throw new Exception("class Message do not use");
-    	
         $this->save_dir = global_setting( "DB_MESSAGES" );
         parent::__construct( $name, $write );
     }

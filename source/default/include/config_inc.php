@@ -7,7 +7,6 @@
     define("GLOBAL_SGOACCNAME", "admin");
     define("GLOBAL_DEMOACCNAME", "demo");
     define("GLOBAL_DEMOACCPASS", "demo");
-    define("USERNAME_MAXLEN", 20);
 
 	// url for news iframe used at front page
 	define("TBW_EXT_NEWSURL", 'http://forum.thebigwar.org/ext/news.php');
@@ -56,24 +55,4 @@
 	define( "MYSQL_LOGDB_DB", "tbw" );
 
     date_default_timezone_set("Europe/Berlin");
-    
-	define( "INGAMEMESSAGES_MAX_RECIPIENTS", 2 );
-	define( "INGAMEMESSAGES_MAX_SUBJECT_LENGTH", 32 );
-	define( "INGAMEMESSAGES_MAX_TEXT_LENGTH", 5048 );
-
-	define("MSGTYPE_BATTLE", 0);
-	define("MSGTYPE_SPY", 1);
-	define("MSGTYPE_FLEET", 2);
-	define("MSGTYPE_ALLY", 3);
-	define("MSGTYPE_SENT", 4);
-	define("MSGTYPE_USER", 5);
-	define("MSGTYPE_MAX", 6);
-	
-	$g_MSGTYPE_NAMES = array();
-	$g_MSGTYPE_NAMES[MSGTYPE_BATTLE] = "Kämpfe";
-	$g_MSGTYPE_NAMES[MSGTYPE_SPY] = "Spionage";
-	$g_MSGTYPE_NAMES[MSGTYPE_FLEET] = "Flotte";
-	$g_MSGTYPE_NAMES[MSGTYPE_ALLY] = "Verbündete";
-	$g_MSGTYPE_NAMES[MSGTYPE_SENT] = "Postausgang";
-	$g_MSGTYPE_NAMES[MSGTYPE_USER] = "Benutzernachrichten";
-	$g_MSGTYPE_NAMES[MSGTYPE_MAX] = "MAX";
+?>
