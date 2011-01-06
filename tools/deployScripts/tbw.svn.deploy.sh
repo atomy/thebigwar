@@ -15,7 +15,12 @@ SVNREPOPATH="https://svn.jackinpoint.net/tbw/trunk/source/"
 # no restart file to prevent eventhandler starts by crontab - KEEP IN SYNC WITH db_things/checkHandler.sh
 NORESTARTSFILE="$HOME/EVENTHANDLER.KEEPDEAD"
 
+# we save the svn rev in here
+SVNREVFILE="$HOME/htdocs/db_things/SVNVERSION"
+> ${SVNREVFILE}
+
 TARGETREV=0
+TARGETREVNUM=0
 
 cd ~/htdocs/db_things
 ./toggleUniMaintenance.sh on
@@ -31,6 +36,8 @@ else
 	echo "Warning: No Revision given, using default HEAD!"
 	TARGETREV="HEAD"
 fi
+
+TARGETREVNUM=`svn info ${SVNREPOPATH} -r ${TARGETREV} | grep "Revision:" | cut -d" " -f2`
 
 cd ~/
 
@@ -79,9 +86,9 @@ cd db_things
 rm -f ${NORESTARTSFILE}
 
 echo "All done."
-echo "Revision ${TARGETREV} of ${SVNREPOPATH} deployed!"
-
+echo "Revision ${TARGETREV} (${TARGETREVNUM}) of ${SVNREPOPATH} deployed!"
 echo "Uni maintenance removed!"
+echo ${TARGETREVNUM} > ${SVNREVFILE}
 
 ./checkHandler.sh
 
