@@ -402,8 +402,6 @@ require_once( TBW_ROOT.'loghandler/logger.php' );
 
             if($this->started())
             {
-
-
                 if(isset($this->raw[1][$user][1]) && $from !== $this->raw[1][$user][1])
                 {
                     $trennzeichen = '/';
@@ -419,8 +417,7 @@ require_once( TBW_ROOT.'loghandler/logger.php' );
                 $koords = array_shift($koords);
                 if(substr($koords, -1) == 'T') $koords = substr($koords, 0, -1);
                 $time = $this->calcTime($user2, $this->raw[1][$user2][1], $koords);
-                $time2 = $this->calcTime($user2, $from, $koords);
-                
+                $time2 = $this->calcTime($user2, $from, $koords);		                
                 
                 #Buendnissflug funktioniert damit nicht
                 #if($time2 > $time) return false;
@@ -837,7 +834,6 @@ require_once( TBW_ROOT.'loghandler/logger.php' );
                 # Aus der Eventdatei entfernen
                 $event_obj = Classes::EventFile();
                 $event_obj->removeCanceledFleet($this->getName());
-
                 unlink($this->filename);
                             
                 $log = new Logger();

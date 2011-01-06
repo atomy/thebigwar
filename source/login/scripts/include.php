@@ -418,7 +418,7 @@
 				<!-- vote button for gvote -->
 				<li id="navigation-gvote" xml:lang="en">
 					<a href=http://www.galaxy-news.de/charts/?op=vote&game_id=3353 target="_blank">
-						<img src="../images/vote.gif" style="border:0;" alt="Die besten Browsergames in den Galaxy-News MMOG-Charts!">
+						<img src="/images/vote.gif" style="border:0;" alt="Die besten Browsergames in den Galaxy-News MMOG-Charts!">
 					</a>
 				</li>
 			</ul>			
