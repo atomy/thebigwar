@@ -23,7 +23,7 @@
 <th>
 <fieldset>
 <legend>Spieler suchen</legend>
-<form action="get_search.php?<?php echohtmlentities(session_name().'='.urlencode(session_id()))?>" method="post">
+<form action="get_search.php?<?php echo htmlentities(session_name().'='.urlencode(session_id()))?>" method="post">
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Spielername:&nbsp;<input type="text" name="search_name" id="search-user"/>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Suchen" />
 	<br /><br />

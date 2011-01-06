@@ -165,7 +165,7 @@
 			{
 ?>
 			<tr>
-				<td><input type="text" name="admin_array[<?php echohtmlentities($i)?>][0]" value="<?php echoutf8_htmlentities($name)?>" readonly /></td>			
+				<td><input type="text" name="admin_array[<?php echo htmlentities($i)?>][0]" value="<?php echo utf8_htmlentities($name)?>" readonly /></td>			
 <?php
 
 				if($name == $_SESSION['admin_username'])
@@ -177,7 +177,7 @@
 				else
 				{
 ?>
-				<td><a href="editAdmin.php?username=<?php echohtmlentities(urlencode($name))?>">[bearbeiten]</a></td>
+				<td><a href="editAdmin.php?username=<?php echo htmlentities(urlencode($name))?>">[bearbeiten]</a></td>
 <?php
 				}
 ?>

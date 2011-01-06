@@ -4,11 +4,11 @@
 	
 ?>
 	<script type="text/javascript">
-		var root = '<?php echo h_root; ?>';
+		var root = '<?php echo  h_root; ?>';
 		var user = null;
 		var planet = null;
-		var session_name = '<?php echo urlencode(session_name()); ?>';
-		var session_id = '<?php echo urlencode(session_id()); ?>';
+		var session_name = '<?php echo  urlencode(session_name()); ?>';
+		var session_id = '<?php echo  urlencode(session_id()); ?>';
 
 		function getLevels() {
 			//alert(root + "/admin/javascript/ajax.php");

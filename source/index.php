@@ -24,7 +24,7 @@ Neuigkeiten:
 
 <div id="loginbox">
 
-<form method="post" action="<?php echo GLOBAL_GAMEURL; ?>login/index.php" id="login-form">
+<form method="post" action="<?php echo  GLOBAL_GAMEURL; ?>login/index.php" id="login-form">
 
 <div id="inputbox">
 
@@ -49,8 +49,8 @@ Passwort:
 </div> <!-- loginbox/ -->
 
 <div id="login_links">
-<a id="login_links_pass" href="<?php echo GLOBAL_GAMEURL; ?>passwd.php">Passwort vergessen?</a>
-<a id="login_links_guest" href="<?php echo GLOBAL_GAMEURL; ?>login/guest.php?database=Universum1">Probezugang</a>
+<a id="login_links_pass" href="<?php echo  GLOBAL_GAMEURL; ?>passwd.php">Passwort vergessen?</a>
+<a id="login_links_guest" href="<?php echo  GLOBAL_GAMEURL; ?>login/guest.php?database=Universum1">Probezugang</a>
 </div> <!-- login_links/ -->
 
 <div id="votebox">

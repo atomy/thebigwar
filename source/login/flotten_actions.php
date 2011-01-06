@@ -50,9 +50,9 @@
                 elseif($verb) $class = 'verbuendet';
                 else $class = 'fremd';
 ?>
-<form action="flotten_actions.php?action=handel&amp;id=<?php echohtmlentities(urlencode($_GET['id']).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="handel <?php echo$class?>">
+<form action="flotten_actions.php?action=handel&amp;id=<?php echo htmlentities(urlencode($_GET['id']).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="handel <?php echo $class?>">
     <fieldset>
-        <legend><a href="help/playerinfo.php?player=<?php echohtmlentities(urlencode($username).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php echoutf8_htmlentities($username)?></a></legend>
+        <legend><a href="help/playerinfo.php?player=<?php echo htmlentities(urlencode($username).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php echo utf8_htmlentities($username)?></a></legend>
 <?php
                 $trans = $fleet->getTransportCapacity($username);
                 $handel = $fleet->getHandel($username);
@@ -188,9 +188,9 @@
                     }
                 }
 ?>
-        <input type="hidden" name="handel_username" value="<?php echoutf8_htmlentities($username)?>" />
-        <input type="hidden" name="handel_type" value="<?php echo$input_name?>" />
-        <p><?php echohtmlspecialchars($mess1)?></p>
+        <input type="hidden" name="handel_username" value="<?php echo utf8_htmlentities($username)?>" />
+        <input type="hidden" name="handel_type" value="<?php echo $input_name?>" />
+        <p><?php echo htmlspecialchars($mess1)?></p>
         <p><?php printf($mess2, ths($trans[0]), ths($trans[1]), ths($remaining_trans[0]), ths($remaining_trans[1]))?></p>
         <table>
             <thead>
@@ -215,68 +215,68 @@
 ?>
                 <tr class="c-carbon">
                     <th class="c-gut">Carbon</th>
-                    <td class="c-einlagern"><input type="text" name="handel[0][0]" value="<?php printf($value, $handel[0][0])?>"<?php echo$disabled?> id="carbon"/></td>
+                    <td class="c-einlagern"><input type="text" name="handel[0][0]" value="<?php printf($value, $handel[0][0])?>"<?php echo $disabled?> id="carbon"/></td>
 <?php
                     if(!$verb)
                     {
 ?>
-                    <td class="c-bereits-eingelagert"><?php echoths($handel[0][0])?></td>
+                    <td class="c-bereits-eingelagert"><?php echo ths($handel[0][0])?></td>
 <?php
                     }
 ?>
-                    <td class="c-verfuegbar"><?php echoths($available_ress[0])?><input type="button" onclick='document.getElementById("carbon").value = "<?php echoereg_replace("&nbsp;","",ths($available_ress[0]));?>"' value="max"/ ondblclick='document.getElementById("carbon").value = "0"'/></td>
+                    <td class="c-verfuegbar"><?php echo ths($available_ress[0])?><input type="button" onclick='document.getElementById("carbon").value = "<?php echo ereg_replace("&nbsp;","",ths($available_ress[0]));?>"' value="max"/ ondblclick='document.getElementById("carbon").value = "0"'/></td>
                 </tr>
                 <tr class="c-aluminium">
                     <th class="c-gut">Aluminium</th>
-                    <td class="c-einlagern"><input type="text" name="handel[0][1]" value="<?php printf($value, $handel[0][1])?>"<?php echo$disabled?> id="aluminium"/></td>
+                    <td class="c-einlagern"><input type="text" name="handel[0][1]" value="<?php printf($value, $handel[0][1])?>"<?php echo $disabled?> id="aluminium"/></td>
 <?php
                     if(!$verb)
                     {
 ?>
-                    <td class="c-bereits-eingelagert"><?php echoths($handel[0][1])?></td>
+                    <td class="c-bereits-eingelagert"><?php echo ths($handel[0][1])?></td>
 <?php
                     }
 ?>
-                    <td class="c-verfuegbar"><?php echoths($available_ress[1])?><input type="button" onclick='document.getElementById("aluminium").value = "<?php echoereg_replace("&nbsp;","",ths($available_ress[1]));?>"' value="max" ondblclick='document.getElementById("aluminium").value = "0"'/></td>
+                    <td class="c-verfuegbar"><?php echo ths($available_ress[1])?><input type="button" onclick='document.getElementById("aluminium").value = "<?php echo ereg_replace("&nbsp;","",ths($available_ress[1]));?>"' value="max" ondblclick='document.getElementById("aluminium").value = "0"'/></td>
                 </tr>
                 <tr class="c-wolfram">
                     <th class="c-gut">Wolfram</th>
-                    <td class="c-einlagern"><input type="text" name="handel[0][2]" value="<?php printf($value, $handel[0][2])?>"<?php echo$disabled?> id="wolfram"/></td>
+                    <td class="c-einlagern"><input type="text" name="handel[0][2]" value="<?php printf($value, $handel[0][2])?>"<?php echo $disabled?> id="wolfram"/></td>
 <?php
                     if(!$verb)
                     {
 ?>
-                    <td class="c-bereits-eingelagert"><?php echoths($handel[0][2])?></td>
+                    <td class="c-bereits-eingelagert"><?php echo ths($handel[0][2])?></td>
 <?php
                     }
 ?>
-                    <td class="c-verfuegbar"><?php echoths($available_ress[2])?><input type="button" onclick='document.getElementById("wolfram").value = "<?php echoereg_replace("&nbsp;","",ths($available_ress[2]));?>"' value="max" ondblclick='document.getElementById("wolfram").value = "0"'/></td>
+                    <td class="c-verfuegbar"><?php echo ths($available_ress[2])?><input type="button" onclick='document.getElementById("wolfram").value = "<?php echo ereg_replace("&nbsp;","",ths($available_ress[2]));?>"' value="max" ondblclick='document.getElementById("wolfram").value = "0"'/></td>
                 </tr>
                 <tr class="c-radium">
                     <th class="c-gut">Radium</th>
-                    <td class="c-einlagern"><input type="text" name="handel[0][3]" value="<?php printf($value, $handel[0][3])?>"<?php echo$disabled?> id="radium"/></td>
+                    <td class="c-einlagern"><input type="text" name="handel[0][3]" value="<?php printf($value, $handel[0][3])?>"<?php echo $disabled?> id="radium"/></td>
 <?php
                     if(!$verb)
                     {
 ?>
-                    <td class="c-bereits-eingelagert"><?php echoths($handel[0][3])?></td>
+                    <td class="c-bereits-eingelagert"><?php echo ths($handel[0][3])?></td>
 <?php
                     }
 ?>
-                    <td class="c-verfuegbar"><?php echoths($available_ress[3])?><input type="button" onclick='document.getElementById("radium").value = "<?php echoereg_replace("&nbsp;","",ths($available_ress[3]));?>"' value="max"/ ondblclick='document.getElementById("radium").value = "0"'/></td>
+                    <td class="c-verfuegbar"><?php echo ths($available_ress[3])?><input type="button" onclick='document.getElementById("radium").value = "<?php echo ereg_replace("&nbsp;","",ths($available_ress[3]));?>"' value="max"/ ondblclick='document.getElementById("radium").value = "0"'/></td>
                 </tr>
                 <tr class="c-tritium">
                     <th class="c-gut">Tritium</th>
-                    <td class="c-einlagern"><input type="text" name="handel[0][4]" value="<?php printf($value, $handel[0][4])?>"<?php echo$disabled?> id="tritium"/></td>
+                    <td class="c-einlagern"><input type="text" name="handel[0][4]" value="<?php printf($value, $handel[0][4])?>"<?php echo $disabled?> id="tritium"/></td>
 <?php
                     if(!$verb)
                     {
 ?>
-                    <td class="c-bereits-eingelagert"><?php echoths($handel[0][4])?></td>
+                    <td class="c-bereits-eingelagert"><?php echo ths($handel[0][4])?></td>
 <?php
                     }
 ?>
-                    <td class="c-verfuegbar"><?php echoths($available_ress[4])?><input type="button" onclick='document.getElementById("tritium").value = "<?php echoereg_replace("&nbsp;","",ths($available_ress[4]));?>"' value="max" ondblclick='document.getElementById("tritium").value = "0"'/></td>
+                    <td class="c-verfuegbar"><?php echo ths($available_ress[4])?><input type="button" onclick='document.getElementById("tritium").value = "<?php echo ereg_replace("&nbsp;","",ths($available_ress[4]));?>"' value="max" ondblclick='document.getElementById("tritium").value = "0"'/></td>
                 </tr>
 <?php
                 }
@@ -288,10 +288,10 @@
                         $h = 0;
                         if(isset($handel[1][$id])) $h = $handel[1][$id];
 ?>
-                <tr class="c-ro-<?php echoutf8_htmlentities($id)?>">
-                    <th class="c-gut"><?php echoutf8_htmlentities($item_info['name'])?></th>
-                    <td class="c-einlagern"><input type="text" name="handel[1][<?php echo$id?>]" value="<?php echoutf8_htmlentities($h)?>" /></td>
-                    <td class="c-verfuegbar"><?php echoths($available_robs[$id])?></td>
+                <tr class="c-ro-<?php echo utf8_htmlentities($id)?>">
+                    <th class="c-gut"><?php echo utf8_htmlentities($item_info['name'])?></th>
+                    <td class="c-einlagern"><input type="text" name="handel[1][<?php echo $id?>]" value="<?php echo utf8_htmlentities($h)?>" /></td>
+                    <td class="c-verfuegbar"><?php echo ths($available_robs[$id])?></td>
                 </tr>
 <?php
                     }
@@ -304,7 +304,7 @@
 ?>
             <tfoot>
                 <tr>
-                    <td colspan="<?php echo3-$verb?>"><button type="submit">Handel ändern</button></td>
+                    <td colspan="<?php echo 3-$verb?>"><button type="submit">Handel ändern</button></td>
                 </tr>
             </tfoot>
 <?php
@@ -357,7 +357,7 @@
                     }
                     else $s .= '[unbesiedelt]';
 ?>
-        <li><?php echohtmlspecialchars($s)?> <span class="aktionen"><?php if($i>0){?> &ndash; <a href="flotten_actions.php?action=shortcuts&amp;up=<?php echohtmlentities(urlencode($shortcut))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.session_id())?>" class="hoch">[Hoch]</a><?php } if($i<$count-1){?> &ndash; <a href="flotten_actions.php?action=shortcuts&amp;down=<?php echohtmlentities(urlencode($shortcut))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.session_id())?>" class="runter">[Runter]</a><?php }?> &ndash; <a href="flotten_actions.php?action=shortcuts&amp;remove=<?php echohtmlentities(urlencode($shortcut))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.session_id())?>" class="loeschen">[Löschen]</a></span></li>
+        <li><?php echo htmlspecialchars($s)?> <span class="aktionen"><?php if($i>0){?> &ndash; <a href="flotten_actions.php?action=shortcuts&amp;up=<?php echo htmlentities(urlencode($shortcut))?>&amp;<?php echo htmlentities(urlencode(session_name()).'='.session_id())?>" class="hoch">[Hoch]</a><?php } if($i<$count-1){?> &ndash; <a href="flotten_actions.php?action=shortcuts&amp;down=<?php echo htmlentities(urlencode($shortcut))?>&amp;<?php echo htmlentities(urlencode(session_name()).'='.session_id())?>" class="runter">[Runter]</a><?php }?> &ndash; <a href="flotten_actions.php?action=shortcuts&amp;remove=<?php echo htmlentities(urlencode($shortcut))?>&amp;<?php echo htmlentities(urlencode(session_name()).'='.session_id())?>" class="loeschen">[Löschen]</a></span></li>
 <?php
                     $i++;
                 }
@@ -414,10 +414,10 @@
             <p class="buendnisangriff-beschreibung-1">Hier können Sie der ausgewählten Flotte ein Flottenpasswort zuweisen, welches es anderen Spielern ermöglicht, Ihrem Angriff eigene Flotten beizusteuern. Möchte ein anderer Spieler dem Flottenverbund beitreten, so muss er im Flottenmenü Ihren Benutzernamen in Verbindung mit dem hier festgelegten Passwort angeben. Übermitteln Sie ihm hierzu das Passwort selbst, zum Beispiel durch eine Nachricht.</p>
             <p class="buendnisangriff-beschreibung-2">Beachten Sie, dass ein Spieler dem Flottenverbund nicht mehr beitreten kann, wenn seine Flugzeit zum ausgewählten Ziel länger ist als 40% der verbleibenden Flugzeit der Verbandsflotte.</p>
             <p class="buendnisangriff-beschreibung-3">Wenn hier kein Passwort eingetragen ist, ist die Flottenverbundfunktion für diese Flotte deaktiviert.</p>
-            <form action="flotten_actions.php?action=buendnisangriff&amp;id=<?php echohtmlspecialchars(urlencode($_GET['id']).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="buendnisangriff">
+            <form action="flotten_actions.php?action=buendnisangriff&amp;id=<?php echo htmlspecialchars(urlencode($_GET['id']).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="buendnisangriff">
                     <dl>
                             <dt><label for="i-flottenpasswort">Flottenpasswort</label></dt>
-                            <dd><input type="text" name="fleet_passwd"<?php if($passwd !== null){?> value="<?php echohtmlspecialchars($passwd)?>"<?php }?> /></dd>
+                            <dd><input type="text" name="fleet_passwd"<?php if($passwd !== null){?> value="<?php echo htmlspecialchars($passwd)?>"<?php }?> /></dd>
                     </dl>
                     <div><button type="submit">Speichern</button></div>
             </form>

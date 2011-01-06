@@ -16,7 +16,7 @@
     login_gui::html_head();
 ?>
 <h2>Rohstoffproduktion pro Stunde</h2>
-<form action="rohstoffe.php?<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post">
+<form action="rohstoffe.php?<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post">
     <table class="ress-prod">
         <thead>
             <tr>
@@ -61,27 +61,27 @@
         $prod = $me->checkProductionFactor($id);
 ?>
             <tr>
-                <td class="c-gebaeude"><a href="help/description.php?id=<?php echohtmlentities(urlencode($id))?>&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php echoutf8_htmlentities($item_info['name'])?></a> <span class="stufe">(Stufe&nbsp;<?php echoutf8_htmlentities($item_info['level'])?>)</span></td>
-                <td class="c-carbon <?php echoget_prod_class($item_info['prod'][0])?>"><?php echoths($item_info['prod'][0]*$ges_prod[6])?></td>
-                <td class="c-aluminium <?php echoget_prod_class($item_info['prod'][1])?>"><?php echoths($item_info['prod'][1]*$ges_prod[6])?></td>
-                <td class="c-wolfram <?php echoget_prod_class($item_info['prod'][2])?>"><?php echoths($item_info['prod'][2]*$ges_prod[6])?></td>
-                <td class="c-radium <?php echoget_prod_class($item_info['prod'][3])?>"><?php echoths($item_info['prod'][3]*$ges_prod[6])?></td>
-                <td class="c-tritium <?php echoget_prod_class($item_info['prod'][4])?>"><?php echoths($item_info['prod'][4]*$ges_prod[6])?></td>
-                <td class="c-energie <?php echoget_prod_class($item_info['prod'][5])?>"><?php echoths($item_info['prod'][5]*$ges_prod[6])?></td>
+                <td class="c-gebaeude"><a href="help/description.php?id=<?php echo htmlentities(urlencode($id))?>&amp;<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php echo utf8_htmlentities($item_info['name'])?></a> <span class="stufe">(Stufe&nbsp;<?php echo utf8_htmlentities($item_info['level'])?>)</span></td>
+                <td class="c-carbon <?php echo get_prod_class($item_info['prod'][0])?>"><?php echo ths($item_info['prod'][0]*$ges_prod[6])?></td>
+                <td class="c-aluminium <?php echo get_prod_class($item_info['prod'][1])?>"><?php echo ths($item_info['prod'][1]*$ges_prod[6])?></td>
+                <td class="c-wolfram <?php echo get_prod_class($item_info['prod'][2])?>"><?php echo ths($item_info['prod'][2]*$ges_prod[6])?></td>
+                <td class="c-radium <?php echo get_prod_class($item_info['prod'][3])?>"><?php echo ths($item_info['prod'][3]*$ges_prod[6])?></td>
+                <td class="c-tritium <?php echo get_prod_class($item_info['prod'][4])?>"><?php echo ths($item_info['prod'][4]*$ges_prod[6])?></td>
+                <td class="c-energie <?php echo get_prod_class($item_info['prod'][5])?>"><?php echo ths($item_info['prod'][5]*$ges_prod[6])?></td>
                 <td class="c-produktion">
-                    <select name="prod[<?php echoutf8_htmlentities($id)?>]" onchange="this.form.submit();" tabindex="<?php echo$tabindex?>"<?php echo($tabindex == 1) ? ' accesskey="u"' : ''?>>
+                    <select name="prod[<?php echo utf8_htmlentities($id)?>]" onchange="this.form.submit();" tabindex="<?php echo $tabindex?>"<?php echo ($tabindex == 1) ? ' accesskey="u"' : ''?>>
 <?php
         for($i=1,$h=100; $i>=0; $i-=.05,$h-=5)
         {
             $i = round($i, 4);
 ?>
-                        <option value="<?php echohtmlentities($i)?>"<?php echo($prod == $i) ? ' selected="selected"' : ''?>><?php echohtmlentities($h)?>&thinsp;%</option>
+                        <option value="<?php echo htmlentities($i)?>"<?php echo ($prod == $i) ? ' selected="selected"' : ''?>><?php echo htmlentities($h)?>&thinsp;%</option>
 <?php
             $diff = $i-$prod;
             if($diff >= 0.0001 && $diff <= 0.0499)
             {
 ?>
-                        <option value="<?php echohtmlentities($prod)?>" selected="selected"><?php echohtmlentities(str_replace('.', ',', $prod*100))?>&thinsp;%</option>
+                        <option value="<?php echo htmlentities($prod)?>" selected="selected"><?php echo htmlentities(str_replace('.', ',', $prod*100))?>&thinsp;%</option>
 <?php
             }
         }
@@ -97,12 +97,12 @@
         <tfoot>
             <tr class="c-stunde">
                 <th>Gesamt pro Stunde</th>
-                <td class="c-carbon <?php echoget_prod_class($ges_prod[0])?>"><?php echoths($ges_prod[0])?></td>
-                <td class="c-aluminium <?php echoget_prod_class($ges_prod[1])?>"><?php echoths($ges_prod[1])?></td>
-                <td class="c-wolfram <?php echoget_prod_class($ges_prod[2])?>"><?php echoths($ges_prod[2])?></td>
-                <td class="c-radium <?php echoget_prod_class($ges_prod[3])?>"><?php echoths($ges_prod[3])?></td>
-                <td class="c-tritium <?php echoget_prod_class($ges_prod[4])?>"><?php echoths($ges_prod[4])?></td>
-                <td class="c-energie <?php echoget_prod_class($ges_prod[5])?>"><?php echoths($ges_prod[5])?></td>
+                <td class="c-carbon <?php echo get_prod_class($ges_prod[0])?>"><?php echo ths($ges_prod[0])?></td>
+                <td class="c-aluminium <?php echo get_prod_class($ges_prod[1])?>"><?php echo ths($ges_prod[1])?></td>
+                <td class="c-wolfram <?php echo get_prod_class($ges_prod[2])?>"><?php echo ths($ges_prod[2])?></td>
+                <td class="c-radium <?php echo get_prod_class($ges_prod[3])?>"><?php echo ths($ges_prod[3])?></td>
+                <td class="c-tritium <?php echo get_prod_class($ges_prod[4])?>"><?php echo ths($ges_prod[4])?></td>
+                <td class="c-energie <?php echo get_prod_class($ges_prod[5])?>"><?php echo ths($ges_prod[5])?></td>
                 <td class="c-produktion"></td>
             </tr>
             <tr class="c-tag">
@@ -116,13 +116,13 @@
     $show_day_prod[3] *= $show_days;
     $show_day_prod[4] *= $show_days;
 ?>
-                <th>Gesamt pr<kbd>o</kbd> <input type="text" class="prod-show-days" name="show_days" id="show_days" value="<?php echoutf8_htmlentities($show_days)?>" tabindex="<?php echo$tabindex?>" accesskey="o" onchange="recalc_perday();" onclick="recalc_perday();" onkeyup="recalc_perday();" />&nbsp;Tage</th>
-                <td class="c-carbon <?php echoget_prod_class($show_day_prod[0])?>" id="taeglich-carbon"><?php echoths($show_day_prod[0])?></td>
-                <td class="c-aluminium <?php echoget_prod_class($show_day_prod[1])?>" id="taeglich-aluminium"><?php echoths($show_day_prod[1])?></td>
-                <td class="c-wolfram <?php echoget_prod_class($show_day_prod[2])?>" id="taeglich-wolfram"><?php echoths($show_day_prod[2])?></td>
-                <td class="c-radium <?php echoget_prod_class($show_day_prod[3])?>" id="taeglich-radium"><?php echoths($show_day_prod[3])?></td>
-                <td class="c-tritium <?php echoget_prod_class($show_day_prod[4])?>" id="taeglich-tritium"><?php echoths($show_day_prod[4])?></td>
-                <td class="c-speichern" colspan="2"><button type="submit" tabindex="<?php echo$tabindex+1?>" accesskey="n">Speicher<kbd>n</kbd></button></td>
+                <th>Gesamt pr<kbd>o</kbd> <input type="text" class="prod-show-days" name="show_days" id="show_days" value="<?php echo utf8_htmlentities($show_days)?>" tabindex="<?php echo $tabindex?>" accesskey="o" onchange="recalc_perday();" onclick="recalc_perday();" onkeyup="recalc_perday();" />&nbsp;Tage</th>
+                <td class="c-carbon <?php echo get_prod_class($show_day_prod[0])?>" id="taeglich-carbon"><?php echo ths($show_day_prod[0])?></td>
+                <td class="c-aluminium <?php echo get_prod_class($show_day_prod[1])?>" id="taeglich-aluminium"><?php echo ths($show_day_prod[1])?></td>
+                <td class="c-wolfram <?php echo get_prod_class($show_day_prod[2])?>" id="taeglich-wolfram"><?php echo ths($show_day_prod[2])?></td>
+                <td class="c-radium <?php echo get_prod_class($show_day_prod[3])?>" id="taeglich-radium"><?php echo ths($show_day_prod[3])?></td>
+                <td class="c-tritium <?php echo get_prod_class($show_day_prod[4])?>" id="taeglich-tritium"><?php echo ths($show_day_prod[4])?></td>
+                <td class="c-speichern" colspan="2"><button type="submit" tabindex="<?php echo $tabindex+1?>" accesskey="n">Speicher<kbd>n</kbd></button></td>
             </tr>
         </tfoot>
     </table>
@@ -144,11 +144,11 @@
         }
         else
         {
-            carbon = <?php echofloor($day_prod[0])?>*show_days;
-            aluminium = <?php echofloor($day_prod[1])?>*show_days;
-            wolfram = <?php echofloor($day_prod[2])?>*show_days;
-            radium = <?php echofloor($day_prod[3])?>*show_days;
-            tritium = <?php echofloor($day_prod[4])?>*show_days;
+            carbon = <?php echo floor($day_prod[0])?>*show_days;
+            aluminium = <?php echo floor($day_prod[1])?>*show_days;
+            wolfram = <?php echo floor($day_prod[2])?>*show_days;
+            radium = <?php echo floor($day_prod[3])?>*show_days;
+            tritium = <?php echo floor($day_prod[4])?>*show_days;
         }
 
         document.getElementById('taeglich-carbon').firstChild.data = ths(carbon);

@@ -66,10 +66,10 @@
         foreach($anfragen as $anfrage)
         {
 ?>
-    <dt><a href="help/playerinfo.php?player=<?php echohtmlspecialchars(urlencode($anfrage))?>&amp;<?php echohtmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php echoutf8_htmlentities($anfrage)?></a></dt>
+    <dt><a href="help/playerinfo.php?player=<?php echo htmlspecialchars(urlencode($anfrage))?>&amp;<?php echo htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php echo utf8_htmlentities($anfrage)?></a></dt>
     <dd><ul>
-        <li><a href="verbuendete.php?anfrage=<?php echohtmlspecialchars(urlencode($anfrage))?>&amp;annehmen=1&amp;<?php echohtmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>">Annehmen</a></li>
-        <li><a href="verbuendete.php?anfrage=<?php echohtmlspecialchars(urlencode($anfrage))?>&amp;annehmen=0&amp;<?php echohtmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>">Ablehnen</a></li>
+        <li><a href="verbuendete.php?anfrage=<?php echo htmlspecialchars(urlencode($anfrage))?>&amp;annehmen=1&amp;<?php echo htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>">Annehmen</a></li>
+        <li><a href="verbuendete.php?anfrage=<?php echo htmlspecialchars(urlencode($anfrage))?>&amp;annehmen=0&amp;<?php echo htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>">Ablehnen</a></li>
     </ul></dd>
 <?php
         }
@@ -88,9 +88,9 @@
         foreach($bewerbungen as $bewerbung)
         {
 ?>
-    <dt><a href="help/playerinfo.php?player=<?php echohtmlspecialchars(urlencode($bewerbung))?>&amp;<?php echohtmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php echoutf8_htmlentities($bewerbung)?></a></dt>
+    <dt><a href="help/playerinfo.php?player=<?php echo htmlspecialchars(urlencode($bewerbung))?>&amp;<?php echo htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php echo utf8_htmlentities($bewerbung)?></a></dt>
     <dd><ul>
-        <li><a href="verbuendete.php?bewerbung=<?php echohtmlspecialchars(urlencode($bewerbung))?>&amp;<?php echohtmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>">Zurückziehen</a></li>
+        <li><a href="verbuendete.php?bewerbung=<?php echo htmlspecialchars(urlencode($bewerbung))?>&amp;<?php echo htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>">Zurückziehen</a></li>
     </ul></dd>
 <?php
         }
@@ -118,15 +118,15 @@
         foreach($verbuendete as $name)
         {
 ?>
-    <dt><a href="help/playerinfo.php?player=<?php echohtmlspecialchars(urlencode($name))?>&amp;<?php echohtmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php echoutf8_htmlentities($name)?></a></dt>
+    <dt><a href="help/playerinfo.php?player=<?php echo htmlspecialchars(urlencode($name))?>&amp;<?php echo htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Informationen zu diesem Spieler anzeigen"><?php echo utf8_htmlentities($name)?></a></dt>
     <dd><ul>
-        <li><a href="verbuendete.php?kuendigen=<?php echohtmlspecialchars(urlencode($name))?>&amp;<?php echohtmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" onclick="return confirm('Wollen Sie das Bündnis mit dem Spieler <?php echoutf8_jsentities($name)?> wirklich kündigen?');">Kündigen</a></li>
+        <li><a href="verbuendete.php?kuendigen=<?php echo htmlspecialchars(urlencode($name))?>&amp;<?php echo htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" onclick="return confirm('Wollen Sie das Bündnis mit dem Spieler <?php echo utf8_jsentities($name)?> wirklich kündigen?');">Kündigen</a></li>
     </ul></dd>
 <?php
         }
 ?>
 </dl>
-<form action="verbuendete.php?<?php echohtmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="buendnisse-rundschreiben" onsubmit="this.setAttribute('onsubmit', 'return confirm(\'Doppelklickschutz: Sie haben ein zweites Mal auf \u201eAbsenden\u201c geklickt. Dadurch wird die Nachricht auch ein zweites Mal abgeschickt. Sind Sie sicher, dass Sie diese Aktion durchführen wollen?\');');">
+<form action="verbuendete.php?<?php echo htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="buendnisse-rundschreiben" onsubmit="this.setAttribute('onsubmit', 'return confirm(\'Doppelklickschutz: Sie haben ein zweites Mal auf \u201eAbsenden\u201c geklickt. Dadurch wird die Nachricht auch ein zweites Mal abgeschickt. Sind Sie sicher, dass Sie diese Aktion durchführen wollen?\');');">
     <fieldset>
         <legend>Bündnisrundschreiben</legend>
         <dl>
@@ -155,18 +155,18 @@
     {
 ?>
 <p class="error">
-    <?php echohtmlspecialchars($buendnis_error)."\n"?>
+    <?php echo htmlspecialchars($buendnis_error)."\n"?>
 </p>
 <?php
     }
 ?>
-<form action="verbuendete.php?<?php echohtmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="buendnisse-eingehen">
+<form action="verbuendete.php?<?php echo htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="buendnisse-eingehen">
     <dl>
         <dt class="c-spieler"><label for="spieler-input">Spieler</label></dt>
-        <dd class="c-spieler"><input type="text" name="empfaenger" id="spieler-input" value="<?php echo(isset($_POST['empfaenger']) ? utf8_htmlentities($_POST['empfaenger']) : '')?>" tabindex="4" accesskey="z" title="[Z]" /></dd>
+        <dd class="c-spieler"><input type="text" name="empfaenger" id="spieler-input" value="<?php echo (isset($_POST['empfaenger']) ? utf8_htmlentities($_POST['empfaenger']) : '')?>" tabindex="4" accesskey="z" title="[Z]" /></dd>
 
         <dt class="c-mitteilung"><label for="mitteilung-textarea">Mitteilung</label></dt>
-        <dd class="c-mitteilung"><textarea rows="5" cols="30" name="mitteilung" id="mitteilung-textarea" tabindex="5" accesskey="o" title="[O]"><?php echo(isset($_POST['mitteilung']) ? preg_replace("/[\t\r\n]/e", '\'&#\'.ord(\'$0\').\';\'', utf8_htmlentities($_POST['mitteilung'])) : '')?></textarea></dd>
+        <dd class="c-mitteilung"><textarea rows="5" cols="30" name="mitteilung" id="mitteilung-textarea" tabindex="5" accesskey="o" title="[O]"><?php echo (isset($_POST['mitteilung']) ? preg_replace("/[\t\r\n]/e", '\'&#\'.ord(\'$0\').\';\'', utf8_htmlentities($_POST['mitteilung'])) : '')?></textarea></dd>
     </dl>
 <?php
         if(!$me->userLocked())

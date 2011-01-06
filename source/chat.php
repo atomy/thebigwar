@@ -49,7 +49,7 @@ Oder hier Nickname eintragen und auf verbinden klicken.
 <applet code="IRCApplet.class" codebase="chat/"
 	archive="irc.jar,pixx.jar" id="chat-applet" width=640 height=600>
 	<param name="CABINETS" value="irc.cab,securedirc.cab,pixx.cab" />
-	<param name="nick" value="<?php echo$_REQUEST['nickname']?>" />
+	<param name="nick" value="<?php echo $_REQUEST['nickname']?>" />
 	<param name="fullname" value="T-B-W Java User" />
 	<param name="host" value="irc.gamesurge.net" />
 	<param name="command1" value="/join #tbw" />

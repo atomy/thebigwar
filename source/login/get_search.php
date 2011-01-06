@@ -56,7 +56,7 @@ else
 ?>
 <html>
 <head>
-<meta http-equiv="refresh" content="<?php echo $speed; ?>; URL=http://<?php echohtmlentities($_SERVER['HTTP_HOST'].h_root)?>/login/<?php echo $url_s; ?><?php echohtmlentities(session_name().'='.urlencode(session_id()))?>">
+<meta http-equiv="refresh" content="<?php echo  $speed; ?>; URL=http://<?php echo htmlentities($_SERVER['HTTP_HOST'].h_root)?>/login/<?php echo  $url_s; ?><?php echo htmlentities(session_name().'='.urlencode(session_id()))?>">
 </head>
 <body>
 <?php

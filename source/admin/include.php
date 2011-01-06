@@ -138,7 +138,7 @@ require_once( TBW_ROOT.'engine/include.php' );
 			if($request_string != '')
 				$request_uri .= '?'.$request_string;
 ?>
-<form action="<?php echohtmlentities($request_uri)?>" method="post">
+<form action="<?php echo htmlentities($request_uri)?>" method="post">
 	<dl>
 		<dt><label for="admin-runde-select">Runde</label></dt>
 		<dd><select name="database">
@@ -146,7 +146,7 @@ require_once( TBW_ROOT.'engine/include.php' );
 			foreach($databases as $id=>$info)
 			{
 ?>
-			<option value="<?php echoutf8_htmlentities($id)?>"><?php echoutf8_htmlentities($info[1])?></option>
+			<option value="<?php echo utf8_htmlentities($id)?>"><?php echo utf8_htmlentities($info[1])?></option>
 <?php
 			}
 ?>
@@ -161,7 +161,7 @@ require_once( TBW_ROOT.'engine/include.php' );
 	<div><button type="submit">Anmelden</button></div>
 </form>
 <ul>
-	<li><a href="http://<?php echohtmlspecialchars($_SERVER['HTTP_HOST'].h_root)?>/index.php">Zurück zum Spiel</a></li>
+	<li><a href="http://<?php echo htmlspecialchars($_SERVER['HTTP_HOST'].h_root)?>/index.php">Zurück zum Spiel</a></li>
 </ul>
 
 <?php
@@ -181,17 +181,17 @@ require_once( TBW_ROOT.'engine/include.php' );
 		{
 ?>
 
-<?php echo'<?php echoxml version="1.0" encoding="UTF-8"?>'."\n"?>
+<?php echo '<?php echo xml version="1.0" encoding="UTF-8"?>'."\n"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
 		<head>
 		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 		<title>T-B-W &ndash; Adminbereich</title>
-		<link rel="stylesheet" href="<?php echohtmlspecialchars(h_root.'/admin/style.css')?>" type="text/css" />
-		<script type="text/javascript" src="<?php echohtmlspecialchars(h_root.'/login/scripts.js.php')?>"></script>
-		<script type="text/javascript" src="<?php echohtmlspecialchars(h_root.'/sarissa.js')?>"></script>
-		<script type="text/javascript" src="<?php echohtmlspecialchars(h_root.'/javascript/jQuery.js')?>"></script>
+		<link rel="stylesheet" href="<?php echo htmlspecialchars(h_root.'/admin/style.css')?>" type="text/css" />
+		<script type="text/javascript" src="<?php echo htmlspecialchars(h_root.'/login/scripts.js.php')?>"></script>
+		<script type="text/javascript" src="<?php echo htmlspecialchars(h_root.'/sarissa.js')?>"></script>
+		<script type="text/javascript" src="<?php echo htmlspecialchars(h_root.'/javascript/jQuery.js')?>"></script>
 	</head>
 	<body>
 		<a name="top"></a>
@@ -200,7 +200,7 @@ require_once( TBW_ROOT.'engine/include.php' );
 		if ( isset($_SESSION['admin_username']) )
 			print "<div>Logged in as <b>".$_SESSION['admin_username']."</b></div>";
 		?>
-		<h1><a href="<?php echohtmlentities(h_root.'/admin/index.php')?>"><abbr title="The Big War" xml:lang="en">T-B-W</abbr> &ndash; Adminbereich</a> [&nbsp;<a href="?logout=1">Abmelden nicht vergessen!</a>&nbsp;]</h1>
+		<h1><a href="<?php echo htmlentities(h_root.'/admin/index.php')?>"><abbr title="The Big War" xml:lang="en">T-B-W</abbr> &ndash; Adminbereich</a> [&nbsp;<a href="?logout=1">Abmelden nicht vergessen!</a>&nbsp;]</h1>
 <?php
 		}
 

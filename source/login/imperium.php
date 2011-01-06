@@ -32,10 +32,10 @@
 ?>
 <h2>Imperium</h2>
 <ul class="imperium-modi">
-	<li class="c-rohstoffe<?php echo($action == 'ress') ? ' active' : ''?>"><a href="imperium.php?<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?php echo($action == 'ress') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Rohstoffe</a></li>
-	<li class="c-roboter<?php echo($action == 'roboter') ? ' active' : ''?>"><a href="imperium.php?action=roboter&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?php echo($action == 'roboter') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Roboter</a></li>
-	<li class="c-flotte<?php echo($action == 'flotte') ? ' active' : ''?>"><a href="imperium.php?action=flotte&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?php echo($action == 'flotten') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Flotten</a></li>
-	<li class="c-gebaeude<?php echo($action == 'gebaeude') ? ' active' : ''?>"><a href="imperium.php?action=gebaeude&amp;<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?php echo($action == 'gebaeude') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Geb&auml;ude</a></li>
+	<li class="c-rohstoffe<?php echo ($action == 'ress') ? ' active' : ''?>"><a href="imperium.php?<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?php echo ($action == 'ress') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Rohstoffe</a></li>
+	<li class="c-roboter<?php echo ($action == 'roboter') ? ' active' : ''?>"><a href="imperium.php?action=roboter&amp;<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?php echo ($action == 'roboter') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Roboter</a></li>
+	<li class="c-flotte<?php echo ($action == 'flotte') ? ' active' : ''?>"><a href="imperium.php?action=flotte&amp;<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?php echo ($action == 'flotten') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Flotten</a></li>
+	<li class="c-gebaeude<?php echo ($action == 'gebaeude') ? ' active' : ''?>"><a href="imperium.php?action=gebaeude&amp;<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"<?php echo ($action == 'gebaeude') ? '' : ' tabindex="'.htmlentities($tabindex++).'"'?>>Geb&auml;ude</a></li>
 </ul>
 <?php
 	switch( $action )
@@ -57,7 +57,7 @@
 			{
 				$me->setActivePlanet($planet);
 ?>
-			<th<?php echo($planet==$active_planet) ? ' class="active"' : ''?> title="<?php echoutf8_htmlentities($me->planetName())?>"><a href="imperium.php?<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>&amp;planet=<?php echohtmlentities(urlencode($planet))?>&amp;action=gebaeude"><?php echoutf8_htmlentities($me->getPosString())?></a></th>
+			<th<?php echo ($planet==$active_planet) ? ' class="active"' : ''?> title="<?php echo utf8_htmlentities($me->planetName())?>"><a href="imperium.php?<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>&amp;planet=<?php echo htmlentities(urlencode($planet))?>&amp;action=gebaeude"><?php echo utf8_htmlentities($me->getPosString())?></a></th>
 <?php
 			}
 ?>
@@ -76,7 +76,7 @@
 				$item_info = $me->getItemInfo( $id );
 ?>
 		<tr>
-			<th class="c-gebaeude"><a href="help/description.php?id=<?php echohtmlentities(urlencode($id).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php echoutf8_htmlentities($item_info['name'])?></a></th>
+			<th class="c-gebaeude"><a href="help/description.php?id=<?php echo htmlentities(urlencode($id).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php echo utf8_htmlentities($item_info['name'])?></a></th>
 <?php
 				foreach( $planets as $i=>$planet )
 				{
@@ -149,7 +149,7 @@
 <?php
 				}
 ?>
-			<td class="c-gesamt"><?php echoutf8_htmlentities($this_ges)?></td>
+			<td class="c-gesamt"><?php echo utf8_htmlentities($this_ges)?></td>
 		</tr>
 <?php
 			}
@@ -162,11 +162,11 @@
 			foreach($planets as $i=>$planet)
 			{
 ?>
-			<td<?php echo($planet==$active_planet) ? ' class="active"' : ''?>><?php echoths($ges[$i])?></td>
+			<td<?php echo ($planet==$active_planet) ? ' class="active"' : ''?>><?php echo ths($ges[$i])?></td>
 <?php
 			}
 ?>
-			<td class="c-gesamt"><?php echoutf8_htmlentities($ges_ges)?></td>
+			<td class="c-gesamt"><?php echo utf8_htmlentities($ges_ges)?></td>
 		</tr>
 	</tfoot>
 </table>
@@ -203,14 +203,14 @@
 				$this_ges = $ress[0]+$ress[1]+$ress[2]+$ress[3]+$ress[4];
 				$ges[5] += $this_ges;
 ?>
-		<tr<?php echo($planet == $active_planet) ? ' class="active"' : ''?>>
-			<th class="c-planet" title="<?php echoutf8_htmlentities($me->planetName())?>"><a href="imperium.php?<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>&amp;planet=<?php echohtmlentities(urlencode($planet))?>"><?php echoutf8_htmlentities($me->getPosString())?></a></th>
-			<td class="c-carbon"><?php echoths($ress[0])?></td>
-			<td class="c-aluminium"><?php echoths($ress[1])?></td>
-			<td class="c-wolfram"><?php echoths($ress[2])?></td>
-			<td class="c-radium"><?php echoths($ress[3])?></td>
-			<td class="c-tritium"><?php echoths($ress[4])?></td>
-			<td class="c-gesamt"><?php echoths($this_ges)?></td>
+		<tr<?php echo ($planet == $active_planet) ? ' class="active"' : ''?>>
+			<th class="c-planet" title="<?php echo utf8_htmlentities($me->planetName())?>"><a href="imperium.php?<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>&amp;planet=<?php echo htmlentities(urlencode($planet))?>"><?php echo utf8_htmlentities($me->getPosString())?></a></th>
+			<td class="c-carbon"><?php echo ths($ress[0])?></td>
+			<td class="c-aluminium"><?php echo ths($ress[1])?></td>
+			<td class="c-wolfram"><?php echo ths($ress[2])?></td>
+			<td class="c-radium"><?php echo ths($ress[3])?></td>
+			<td class="c-tritium"><?php echo ths($ress[4])?></td>
+			<td class="c-gesamt"><?php echo ths($this_ges)?></td>
 		</tr>
 <?php
 			}
@@ -225,23 +225,23 @@
 ?>
 		<tr>
 			<th class="c-planet">Schiffsbeladung</th>
-			<td class="c-carbon"><?php echoths($schiffb[0])?></td>
-			<td class="c-aluminium"><?php echoths($schiffb[1])?></td>
-			<td class="c-wolfram"><?php echoths($schiffb[2])?></td>
-			<td class="c-radium"><?php echoths($schiffb[3])?></td>
-			<td class="c-tritium"><?php echoths($schiffb[4])?></td>
-			<td class="c-gesamt"><?php echoths($this_ges)?></td>
+			<td class="c-carbon"><?php echo ths($schiffb[0])?></td>
+			<td class="c-aluminium"><?php echo ths($schiffb[1])?></td>
+			<td class="c-wolfram"><?php echo ths($schiffb[2])?></td>
+			<td class="c-radium"><?php echo ths($schiffb[3])?></td>
+			<td class="c-tritium"><?php echo ths($schiffb[4])?></td>
+			<td class="c-gesamt"><?php echo ths($this_ges)?></td>
 		</tr>
 	</tbody>
 	<tfoot>
 		<tr>
 			<th class="c-planet">Gesamt</th>
-			<td class="c-carbon"><?php echoths($ges[0])?></td>
-			<td class="c-aluminium"><?php echoths($ges[1])?></td>
-			<td class="c-wolfram"><?php echoths($ges[2])?></td>
-			<td class="c-radium"><?php echoths($ges[3])?></td>
-			<td class="c-tritium"><?php echoths($ges[4])?></td>
-			<td class="c-gesamt"><?php echoths($ges[5])?></td>
+			<td class="c-carbon"><?php echo ths($ges[0])?></td>
+			<td class="c-aluminium"><?php echo ths($ges[1])?></td>
+			<td class="c-wolfram"><?php echo ths($ges[2])?></td>
+			<td class="c-radium"><?php echo ths($ges[3])?></td>
+			<td class="c-tritium"><?php echo ths($ges[4])?></td>
+			<td class="c-gesamt"><?php echo ths($ges[5])?></td>
 		</tr>
 	</tfoot>
 </table>
@@ -276,15 +276,15 @@
 				$this_ges = $this_prod[0]+$this_prod[1]+$this_prod[2]+$this_prod[3]+$this_prod[4];
 				$ges[6] += $this_ges;
 ?>
-		<tr<?php echo($planet == $active_planet) ? ' class="active"' : ''?>>
-			<th class="c-planet" title="<?php echoutf8_htmlentities($me->planetName())?>"><a href="imperium.php?<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>&amp;planet=<?php echohtmlentities(urlencode($planet))?>"><?php echoutf8_htmlentities($me->getPosString())?></a></th>
-			<td class="c-carbon <?php echoget_prod_class($this_prod[0])?>"><?php echoths($this_prod[0])?></td>
-			<td class="c-aluminium <?php echoget_prod_class($this_prod[1])?>"><?php echoths($this_prod[1])?></td>
-			<td class="c-wolfram <?php echoget_prod_class($this_prod[2])?>"><?php echoths($this_prod[2])?></td>
-			<td class="c-radium <?php echoget_prod_class($this_prod[3])?>"><?php echoths($this_prod[3])?></td>
-			<td class="c-tritium <?php echoget_prod_class($this_prod[4])?>"><?php echoths($this_prod[4])?></td>
-			<td class="c-gesamt <?php echoget_prod_class($this_ges)?>"><?php echoths($this_ges)?></td>
-			<td class="c-energie <?php echoget_prod_class($this_prod[5])?>"><?php echoths($this_prod[5])?></td>
+		<tr<?php echo ($planet == $active_planet) ? ' class="active"' : ''?>>
+			<th class="c-planet" title="<?php echo utf8_htmlentities($me->planetName())?>"><a href="imperium.php?<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>&amp;planet=<?php echo htmlentities(urlencode($planet))?>"><?php echo utf8_htmlentities($me->getPosString())?></a></th>
+			<td class="c-carbon <?php echo get_prod_class($this_prod[0])?>"><?php echo ths($this_prod[0])?></td>
+			<td class="c-aluminium <?php echo get_prod_class($this_prod[1])?>"><?php echo ths($this_prod[1])?></td>
+			<td class="c-wolfram <?php echo get_prod_class($this_prod[2])?>"><?php echo ths($this_prod[2])?></td>
+			<td class="c-radium <?php echo get_prod_class($this_prod[3])?>"><?php echo ths($this_prod[3])?></td>
+			<td class="c-tritium <?php echo get_prod_class($this_prod[4])?>"><?php echo ths($this_prod[4])?></td>
+			<td class="c-gesamt <?php echo get_prod_class($this_ges)?>"><?php echo ths($this_ges)?></td>
+			<td class="c-energie <?php echo get_prod_class($this_prod[5])?>"><?php echo ths($this_prod[5])?></td>
 		</tr>
 <?php
 			}
@@ -303,22 +303,22 @@
 	<tfoot>
 		<tr class="gesamt-stuendlich">
 			<th class="c-planet">Gesamt</th>
-			<td class="c-carbon <?php echoget_prod_class($ges[0])?>"><?php echoths($ges[0])?></td>
-			<td class="c-aluminium <?php echoget_prod_class($ges[1])?>"><?php echoths($ges[1])?></td>
-			<td class="c-wolfram <?php echoget_prod_class($ges[2])?>"><?php echoths($ges[2])?></td>
-			<td class="c-radium <?php echoget_prod_class($ges[3])?>"><?php echoths($ges[3])?></td>
-			<td class="c-tritium <?php echoget_prod_class($ges[4])?>"><?php echoths($ges[4])?></td>
-			<td class="c-gesamt <?php echoget_prod_class($ges[6])?>"><?php echoths($ges[6])?></td>
-			<td class="c-energie <?php echoget_prod_class($ges[5])?>"><?php echoths($ges[5])?></td>
+			<td class="c-carbon <?php echo get_prod_class($ges[0])?>"><?php echo ths($ges[0])?></td>
+			<td class="c-aluminium <?php echo get_prod_class($ges[1])?>"><?php echo ths($ges[1])?></td>
+			<td class="c-wolfram <?php echo get_prod_class($ges[2])?>"><?php echo ths($ges[2])?></td>
+			<td class="c-radium <?php echo get_prod_class($ges[3])?>"><?php echo ths($ges[3])?></td>
+			<td class="c-tritium <?php echo get_prod_class($ges[4])?>"><?php echo ths($ges[4])?></td>
+			<td class="c-gesamt <?php echo get_prod_class($ges[6])?>"><?php echo ths($ges[6])?></td>
+			<td class="c-energie <?php echo get_prod_class($ges[5])?>"><?php echo ths($ges[5])?></td>
 		</tr>
 		<tr class="gesamt-taeglich">
-			<th class="c-planet">Pr<kbd>o</kbd> <input type="text" class="prod-show-days" name="show_days" id="show_days" value="<?php echoutf8_htmlentities($show_days)?>" tabindex="<?php echohtmlentities($tabindex++)?>" accesskey="o" onchange="recalc_perday();" onclick="recalc_perday();" onkeyup="recalc_perday();" />&nbsp;Tage</th>
-			<td class="c-carbon <?php echoget_prod_class($show_day_prod[0])?>" id="taeglich-carbon"><?php echoths($show_day_prod[0])?></td>
-			<td class="c-aluminium <?php echoget_prod_class($show_day_prod[1])?>" id="taeglich-aluminium"><?php echoths($show_day_prod[1])?></td>
-			<td class="c-wolfram <?php echoget_prod_class($show_day_prod[2])?>" id="taeglich-wolfram"><?php echoths($show_day_prod[2])?></td>
-			<td class="c-radium <?php echoget_prod_class($show_day_prod[3])?>" id="taeglich-radium"><?php echoths($show_day_prod[3])?></td>
-			<td class="c-tritium <?php echoget_prod_class($show_day_prod[4])?>" id="taeglich-tritium"><?php echoths($show_day_prod[4])?></td>
-			<td class="c-gesamt <?php echoget_prod_class($show_day_prod[5])?>" id="taeglich-gesamt"><?php echoths($show_day_prod[5])?></td>
+			<th class="c-planet">Pr<kbd>o</kbd> <input type="text" class="prod-show-days" name="show_days" id="show_days" value="<?php echo utf8_htmlentities($show_days)?>" tabindex="<?php echo htmlentities($tabindex++)?>" accesskey="o" onchange="recalc_perday();" onclick="recalc_perday();" onkeyup="recalc_perday();" />&nbsp;Tage</th>
+			<td class="c-carbon <?php echo get_prod_class($show_day_prod[0])?>" id="taeglich-carbon"><?php echo ths($show_day_prod[0])?></td>
+			<td class="c-aluminium <?php echo get_prod_class($show_day_prod[1])?>" id="taeglich-aluminium"><?php echo ths($show_day_prod[1])?></td>
+			<td class="c-wolfram <?php echo get_prod_class($show_day_prod[2])?>" id="taeglich-wolfram"><?php echo ths($show_day_prod[2])?></td>
+			<td class="c-radium <?php echo get_prod_class($show_day_prod[3])?>" id="taeglich-radium"><?php echo ths($show_day_prod[3])?></td>
+			<td class="c-tritium <?php echo get_prod_class($show_day_prod[4])?>" id="taeglich-tritium"><?php echo ths($show_day_prod[4])?></td>
+			<td class="c-gesamt <?php echo get_prod_class($show_day_prod[5])?>" id="taeglich-gesamt"><?php echo ths($show_day_prod[5])?></td>
 			<td class="c-energie"></td>
 		</tr>
 	</tfoot>
@@ -341,11 +341,11 @@
 		}
 		else
 		{
-			carbon = <?php echofloor($day_prod[0])?>*show_days;
-			aluminium = <?php echofloor($day_prod[1])?>*show_days;
-			wolfram = <?php echofloor($day_prod[2])?>*show_days;
-			radium = <?php echofloor($day_prod[3])?>*show_days;
-			tritium = <?php echofloor($day_prod[4])?>*show_days;
+			carbon = <?php echo floor($day_prod[0])?>*show_days;
+			aluminium = <?php echo floor($day_prod[1])?>*show_days;
+			wolfram = <?php echo floor($day_prod[2])?>*show_days;
+			radium = <?php echo floor($day_prod[3])?>*show_days;
+			tritium = <?php echo floor($day_prod[4])?>*show_days;
 			gesamt = carbon+aluminium+wolfram+radium+tritium;
 		}
 
@@ -394,27 +394,27 @@
 <h3 id="ausgegebene-rohstoffe">Ausgegebene Rohstoffe</h3>
 <dl class="punkte">
 	<dt class="c-carbon">Carbon</dt>
-	<dd class="c-carbon"><?php echoths($me->getSpentRess(0))?></dd>
+	<dd class="c-carbon"><?php echo ths($me->getSpentRess(0))?></dd>
 
 	<dt class="c-eisenerz">Aluminium</dt>
-	<dd class="c-eisenerz"><?php echoths($me->getSpentRess(1))?></dd>
+	<dd class="c-eisenerz"><?php echo ths($me->getSpentRess(1))?></dd>
 
 	<dt class="c-wolfram">Wolfram</dt>
-	<dd class="c-wolfram"><?php echoths($me->getSpentRess(2))?></dd>
+	<dd class="c-wolfram"><?php echo ths($me->getSpentRess(2))?></dd>
 
 	<dt class="c-radium">Radium</dt>
-	<dd class="c-radium"><?php echoths($me->getSpentRess(3))?></dd>
+	<dd class="c-radium"><?php echo ths($me->getSpentRess(3))?></dd>
 
 	<dt class="c-tritium">Tritium</dt>
-	<dd class="c-tritium"><?php echoths($me->getSpentRess(4))?></dd>
+	<dd class="c-tritium"><?php echo ths($me->getSpentRess(4))?></dd>
 
 	<dt class="c-gesamt">Gesamt</dt>
-	<dd class="c-gesamt"><?php echoths($me->getSpentRess())?></dd>
+	<dd class="c-gesamt"><?php echo ths($me->getSpentRess())?></dd>
 </dl>
 <h3 id="forschungsverbesserungen">Forschungsverbesserungen</h3>
 <dl class="imperium-rohstoffe-auswirkungsgrade">
 	<dt class="c-energieproduktion">Energieproduktion</dt>
-	<dd class="c-energieproduktion"><?php echostr_replace('.', ',', round((pow(1.05, $me->getItemLevel('F3', 'forschung'))-1)*100, 3))?>&thinsp;<abbr title="Prozent">%</abbr></dd>
+	<dd class="c-energieproduktion"><?php echo str_replace('.', ',', round((pow(1.05, $me->getItemLevel('F3', 'forschung'))-1)*100, 3))?>&thinsp;<abbr title="Prozent">%</abbr></dd>
 </dl>
 <?php
 			break;			
@@ -431,7 +431,7 @@
 			{
 				$item_info = $me->getItemInfo($id, 'roboter');
 ?>
-			<th class="c-<?php echoutf8_htmlentities($id)?>"><a href="help/description.php?id=<?php echohtmlentities(urlencode($id).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php echoutf8_htmlentities($item_info['name'])?></a></th>
+			<th class="c-<?php echo utf8_htmlentities($id)?>"><a href="help/description.php?id=<?php echo htmlentities(urlencode($id).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php echo utf8_htmlentities($item_info['name'])?></a></th>
 <?php
 			}
 ?>
@@ -448,8 +448,8 @@
 				$me->setActivePlanet($planet);
 				$max_rob_limit = floor($me->getBasicFields()/2 *((0.01 + $me->getItemLevel('B9', 'gebaeude'))/10));
 ?>
-		<tr<?php echo($planet==$active_planet) ? ' class="active"' : ''?>>
-			<th class="c-planet" title="<?php echoutf8_htmlentities($me->planetName())?>"><a href="imperium.php?<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>&amp;planet=<?php echohtmlentities(urlencode($planet))?>&amp;action=roboter"><?php echoutf8_htmlentities($me->getPosString())?></a></th>
+		<tr<?php echo ($planet==$active_planet) ? ' class="active"' : ''?>>
+			<th class="c-planet" title="<?php echo utf8_htmlentities($me->planetName())?>"><a href="imperium.php?<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>&amp;planet=<?php echo htmlentities(urlencode($planet))?>&amp;action=roboter"><?php echo utf8_htmlentities($me->getPosString())?></a></th>
 <?php
 				foreach($roboter as $id)
 				{
@@ -468,7 +468,7 @@
 					if(!isset($ges_max[$id])) $ges_max[$id] = 0;
 					$ges_max[$id] += $max;
 ?>
-			<td class="c-<?php echoutf8_htmlentities($id)?>"><?php echoths($count)?> <span class="maximal">(<?php echoths($max)?>)</span></td>
+			<td class="c-<?php echo utf8_htmlentities($id)?>"><?php echo ths($count)?> <span class="maximal">(<?php echo ths($max)?>)</span></td>
 <?php
 				}
 ?>
@@ -484,7 +484,7 @@
 			foreach($roboter as $id)
 			{
 ?>
-			<td class="c-<?php echoutf8_htmlentities($id)?>"><?php echoths($ges[$id])?> <span class="maximal">(<?php echoths($ges_max[$id])?>)</span></td>
+			<td class="c-<?php echo utf8_htmlentities($id)?>"><?php echo ths($ges[$id])?> <span class="maximal">(<?php echo ths($ges_max[$id])?>)</span></td>
 <?php
 			}
 ?>
@@ -494,10 +494,10 @@
 <h3 id="roboter-auswirkungsgrade">Roboter-Auswirkungsgrade</h3>
 <dl class="imperium-roboter-auswirkungsgrade">
 	<dt class="c-bauroboter">Bauroboter</dt>
-	<dd class="c-bauroboter"><?php echostr_replace('.', ',', $me->getItemLevel('F2', 'forschung')*0.025)?>&thinsp;<abbr title="Prozent">%</abbr></dd>
+	<dd class="c-bauroboter"><?php echo str_replace('.', ',', $me->getItemLevel('F2', 'forschung')*0.025)?>&thinsp;<abbr title="Prozent">%</abbr></dd>
 
 	<dt class="c-minenroboter">Minenroboter</dt>
-	<dd class="c-minenroboter"><?php echostr_replace('.', ',', $me->getItemLevel('F2', 'forschung')*0.03125)?>&thinsp;<abbr title="Prozent">%</abbr></dd>
+	<dd class="c-minenroboter"><?php echo str_replace('.', ',', $me->getItemLevel('F2', 'forschung')*0.03125)?>&thinsp;<abbr title="Prozent">%</abbr></dd>
 </dl>
 <?php
 			break;
@@ -518,7 +518,7 @@
 			{
 				$me->setActivePlanet($planet);
 ?>
-			<th<?php echo($planet==$active_planet) ? ' class="active"' : ''?> title="<?php echoutf8_htmlentities($me->planetName())?>"><a href="imperium.php?<?php echohtmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>&amp;planet=<?php echohtmlentities(urlencode($planet))?>&amp;action=flotte"><?php echoutf8_htmlentities($me->getPosString())?></a></th>
+			<th<?php echo ($planet==$active_planet) ? ' class="active"' : ''?> title="<?php echo utf8_htmlentities($me->planetName())?>"><a href="imperium.php?<?php echo htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>&amp;planet=<?php echo htmlentities(urlencode($planet))?>&amp;action=flotte"><?php echo utf8_htmlentities($me->getPosString())?></a></th>
 <?php
 			}
 ?>
@@ -536,7 +536,7 @@
 				$this_ges = 0;
 ?>
 		<tr>
-			<th class="c-einheit"><a href="help/description.php?id=<?php echohtmlentities(urlencode($id).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php echoutf8_htmlentities($item_info['name'])?></a></th>
+			<th class="c-einheit"><a href="help/description.php?id=<?php echo htmlentities(urlencode($id).'&'.urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php echo utf8_htmlentities($item_info['name'])?></a></th>
 <?php
 				foreach($planets as $i=>$planet)
 				{
@@ -547,11 +547,11 @@
 					$ges_ges += $anzahl;
 					$this_ges += $anzahl;
 ?>
-			<td<?php echo($planet==$active_planet) ? ' class="active"' : ''?>><?php echoths($anzahl)?></td>
+			<td<?php echo ($planet==$active_planet) ? ' class="active"' : ''?>><?php echo ths($anzahl)?></td>
 <?php
 				}
 ?>
-			<td class="c-gesamt"><?php echoutf8_htmlentities($this_ges)?></td>
+			<td class="c-gesamt"><?php echo utf8_htmlentities($this_ges)?></td>
 		</tr>
 <?php
 			}
@@ -564,30 +564,30 @@
 			foreach($planets as $i=>$planet)
 			{
 ?>
-			<td<?php echo($planet==$active_planet) ? ' class="active"' : ''?>><?php echoths($ges[$i])?></td>
+			<td<?php echo ($planet==$active_planet) ? ' class="active"' : ''?>><?php echo ths($ges[$i])?></td>
 <?php
 			}
 ?>
-			<td class="c-gesamt"><?php echoutf8_htmlentities($ges_ges)?></td>
+			<td class="c-gesamt"><?php echo utf8_htmlentities($ges_ges)?></td>
 		</tr>
 	</tfoot>
 </table>
 <h3 id="forschungsverbesserungen">Forschungsverbesserungen</h3>
 <dl class="imperium-schiffe-auswirkungsgrade">
 	<dt class="c-antriebe">Antriebe</dt>
-	<dd class="c-antriebe"><?php echostr_replace('.', ',', round((pow(1.025, $me->getItemLevel('F6', 'forschung'))*pow(1.05, $me->getItemLevel('F7', 'forschung'))*pow(1.25, $me->getItemLevel('F8', 'forschung'))-1)*100, 3))?>&thinsp;<abbr title="Prozent">%</abbr></dd>
+	<dd class="c-antriebe"><?php echo str_replace('.', ',', round((pow(1.025, $me->getItemLevel('F6', 'forschung'))*pow(1.05, $me->getItemLevel('F7', 'forschung'))*pow(1.25, $me->getItemLevel('F8', 'forschung'))-1)*100, 3))?>&thinsp;<abbr title="Prozent">%</abbr></dd>
 
 	<dt class="c-waffen">Waffen</dt>
-	<dd class="c-waffen"><?php echostr_replace('.', ',', round((pow(1.05, $me->getItemLevel('F4', 'forschung'))-1)*100, 3))?>&thinsp;<abbr title="Prozent">%</abbr></dd>
+	<dd class="c-waffen"><?php echo str_replace('.', ',', round((pow(1.05, $me->getItemLevel('F4', 'forschung'))-1)*100, 3))?>&thinsp;<abbr title="Prozent">%</abbr></dd>
 
 	<dt class="c-schilde">Schilde</dt>
-	<dd class="c-schilde"><?php echostr_replace('.', ',', round((pow(1.05, $me->getItemLevel('F5', 'forschung'))-1)*100, 3))?>&thinsp;<abbr title="Prozent">%</abbr></dd>
+	<dd class="c-schilde"><?php echo str_replace('.', ',', round((pow(1.05, $me->getItemLevel('F5', 'forschung'))-1)*100, 3))?>&thinsp;<abbr title="Prozent">%</abbr></dd>
 
 	<dt class="c-schildreparatur-pro-runde">Schildreparatur pro Runde</dt>
-	<dd class="c-schildreparatur-pro-runde"><?php echostr_replace('.', ',', round((pow(1.025, $me->getItemLevel('F10', 'forschung'))-1)*100, 3))?>&thinsp;<abbr title="Prozent">%</abbr></dd>
+	<dd class="c-schildreparatur-pro-runde"><?php echo str_replace('.', ',', round((pow(1.025, $me->getItemLevel('F10', 'forschung'))-1)*100, 3))?>&thinsp;<abbr title="Prozent">%</abbr></dd>
 
 	<dt class="c-laderaumvergroesserung">Laderaumvergrößerung</dt>
-	<dd class="c-laderaumvergroesserung"><?php echostr_replace('.', ',', round((pow(1.2, $me->getItemLevel('F11', 'forschung'))-1)*100, 3))?>&thinsp;<abbr title="Prozent">%</abbr></dd>
+	<dd class="c-laderaumvergroesserung"><?php echo str_replace('.', ',', round((pow(1.2, $me->getItemLevel('F11', 'forschung'))-1)*100, 3))?>&thinsp;<abbr title="Prozent">%</abbr></dd>
 </dl>
 <?php
 	}
