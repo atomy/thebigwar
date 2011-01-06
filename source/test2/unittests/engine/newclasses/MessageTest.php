@@ -1,4 +1,4 @@
-<?
+<?php
 require_once '../../../../include/config_inc.php';
 require_once TBW_ROOT.'engine/newclasses/Message.php';
 require_once TBW_ROOT.'include/DBHelper.php';

@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**
  * this example demonstrates howto use the class Logger()

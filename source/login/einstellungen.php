@@ -212,32 +212,32 @@
 	{
 ?>
 <p class="error">
-	<?=htmlentities($error)."\n"?>
+	<?php=htmlentities($error)."\n"?>
 </p>
 <?php
 	}
 ?>
-<form action="<?=htmlentities(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/login/einstellungen.php?'.urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="einstellungen-formular">
+<form action="<?php=htmlentities(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/login/einstellungen.php?'.urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="einstellungen-formular">
 
 	<fieldset class="verschiedene-einstellungen">
 		<legend>Verschiedene Einstellungen<input type="hidden" name="change-checkboxes" value="1" /></legend>
 		<dl>
 			<dt class="c-skin"><label for="skin-choice">Ski<kbd>n</kbd></label></dt>
 			<dd class="c-skin">
-				<select name="skin-choice" id="skin-choice" tabindex="<?=$tabindex++?>" onchange="recalc_skin();" onkeyup="recalc_skin();">
+				<select name="skin-choice" id="skin-choice" tabindex="<?php=$tabindex++?>" onchange="recalc_skin();" onkeyup="recalc_skin();">
 <?php
 	$my_skin = $me->checkSetting('skin');
 	foreach($skins as $skin=>$skin_info)
 	{
 		$skin_selected = ($my_skin && $skin == $my_skin[0]);
 ?>
-					<optgroup label="<?=htmlspecialchars($skin_info[0])?>">
+					<optgroup label="<?php=htmlspecialchars($skin_info[0])?>">
 <?php
 		foreach($skin_info[1] as $type=>$type_info)
 		{
 			$type_selected = ($skin_selected && $my_skin && $type == $my_skin[1]);
 ?>
-						<option value="<?=htmlspecialchars($skin)?>/<?=htmlspecialchars($type)?>"<?=$type_selected ? ' selected="selected"' : ''?>><?=htmlspecialchars($type_info[0])?></option>
+						<option value="<?php=htmlspecialchars($skin)?>/<?php=htmlspecialchars($type)?>"<?php=$type_selected ? ' selected="selected"' : ''?>><?php=htmlspecialchars($type_info[0])?></option>
 <?php
 		}
 ?>
@@ -246,48 +246,48 @@
 	}
 	$custom_skin = ($my_skin && $my_skin[0] == 'custom');
 ?>
-					<option value="custom"<?=$custom_skin ? ' selected="selected"' : ''?>>Benutzerdefiniert</option>
+					<option value="custom"<?php=$custom_skin ? ' selected="selected"' : ''?>>Benutzerdefiniert</option>
 				</select>
-				<input type="text" name="skin" id="skin" value="<?=htmlentities($my_skin[1])?>" tabindex="<?=$tabindex++?>" />
+				<input type="text" name="skin" id="skin" value="<?php=htmlentities($my_skin[1])?>" tabindex="<?php=$tabindex++?>" />
 			</dd>
 
 			<dt class="c-schrift"><label for="schrift-choice">Schrift</label></dt>
 			<dd class="c-schrift">
-				<select name="schrift" id="schrift-choice" tabindex="<?=$tabindex++?>">
-					<option value="1"<?=$me->checkSetting('schrift') ? ' selected="selected"' : ''?>>Lieblingsschrift des Admins</option>
-					<option value="0"<?=!$me->checkSetting('schrift') ? ' selected="selected"' : ''?>>Ihre Lieblingsschrift</option>
+				<select name="schrift" id="schrift-choice" tabindex="<?php=$tabindex++?>">
+					<option value="1"<?php=$me->checkSetting('schrift') ? ' selected="selected"' : ''?>>Lieblingsschrift des Admins</option>
+					<option value="0"<?php=!$me->checkSetting('schrift') ? ' selected="selected"' : ''?>>Ihre Lieblingsschrift</option>
 				</select>
 			</dd>
 
 			<dt class="c-benutzerbeschreibung"><label for="benutzerbeschreibung">Ben<kbd>u</kbd>tzerbeschreibung</label></dt>
-			<dd class="c-benutzerbeschreibung"><textarea name="benutzerbeschreibung" id="benutzerbeschreibung" cols="50" rows="10" accesskey="u" tabindex="<?=$tabindex++?>"><?=preg_replace("/[\r\n\t]/e", '\'&#\'.ord(\'$0\').\';\'', utf8_htmlentities($me->getUserDescription(false)))?></textarea></dd>
+			<dd class="c-benutzerbeschreibung"><textarea name="benutzerbeschreibung" id="benutzerbeschreibung" cols="50" rows="10" accesskey="u" tabindex="<?php=$tabindex++?>"><?php=preg_replace("/[\r\n\t]/e", '\'&#\'.ord(\'$0\').\';\'', utf8_htmlentities($me->getUserDescription(false)))?></textarea></dd>
 
 			<dt class="c-spionagesonden"><label for="spionagesonden">Spionagesonden</label></dt>
-			<dd class="c-spionagesonden"><input type="text" name="spionagesonden" id="spionagesonden" value="<?=utf8_htmlentities($me->checkSetting('sonden'))?>" title="Anzahl Spionagesonden, die bei der Spionage eines fremden Planeten aus der Karte geschickt werden sollen [J]" accesskey="j" tabindex="<?=$tabindex++?>" /></dd>
+			<dd class="c-spionagesonden"><input type="text" name="spionagesonden" id="spionagesonden" value="<?php=utf8_htmlentities($me->checkSetting('sonden'))?>" title="Anzahl Spionagesonden, die bei der Spionage eines fremden Planeten aus der Karte geschickt werden sollen [J]" accesskey="j" tabindex="<?php=$tabindex++?>" /></dd>
 
 			<dt class="c-auto-schnellbau"><label for="fastbuild">Auto-Schnellbau</label></dt>
-			<dd class="c-auto-schnellbau"><input type="checkbox" name="fastbuild" id="fastbuild"<?=$me->checkSetting('fastbuild') ? ' checked="checked"' : ''?> title="Wird ein Gebäude in Auftrag gegeben, wird automatisch zum nächsten unbeschäftigten Planeten gewechselt [Q]" accesskey="q" tabindex="<?=$tabindex++?>" /></dd>
+			<dd class="c-auto-schnellbau"><input type="checkbox" name="fastbuild" id="fastbuild"<?php=$me->checkSetting('fastbuild') ? ' checked="checked"' : ''?> title="Wird ein Gebäude in Auftrag gegeben, wird automatisch zum nächsten unbeschäftigten Planeten gewechselt [Q]" accesskey="q" tabindex="<?php=$tabindex++?>" /></dd>
 
 			<dt class="c-schnell-shortcuts"><label for="shortcuts">Schnell-Shortcuts</label></dt>
-			<dd class="c-schnell-shortcuts"><input type="checkbox" name="shortcuts" id="shortcuts"<?=$me->checkSetting('shortcuts') ? ' checked="checked"' : ''?> title="Mit dieser Funktion brauchen Sie zum Ausführen der Shortcuts keine weitere Taste zu drücken [X]" accesskey="x" tabindex="<?=$tabindex++?>" /></dd>
+			<dd class="c-schnell-shortcuts"><input type="checkbox" name="shortcuts" id="shortcuts"<?php=$me->checkSetting('shortcuts') ? ' checked="checked"' : ''?> title="Mit dieser Funktion brauchen Sie zum Ausführen der Shortcuts keine weitere Taste zu drücken [X]" accesskey="x" tabindex="<?php=$tabindex++?>" /></dd>
 
 			<dt class="c-javascript-tooltips"><label for="tooltips">Javascript-Tooltips</label></dt>
-			<dd class="c-javascript-tooltips"><input type="checkbox" name="tooltips" id="tooltips"<?=$me->checkSetting('tooltips') ? ' checked="checked"' : ''?> title="Nicht auf langsamen Computern verwenden! Ist dieser Punkt aktiviert, werden die normalen Tooltips durch hübsche JavaScript-Tooltips ersetzt. [Y]" accesskey="y" tabindex="<?=$tabindex++?>" /></dd>
+			<dd class="c-javascript-tooltips"><input type="checkbox" name="tooltips" id="tooltips"<?php=$me->checkSetting('tooltips') ? ' checked="checked"' : ''?> title="Nicht auf langsamen Computern verwenden! Ist dieser Punkt aktiviert, werden die normalen Tooltips durch hübsche JavaScript-Tooltips ersetzt. [Y]" accesskey="y" tabindex="<?php=$tabindex++?>" /></dd>
 
 			<dt class="c-auto-refresh"><label for="autorefresh">Auto-Refresh</label></dt>
-			<dd class="c-auto-refresh"><input type="text" name="autorefresh" id="autorefresh" value="<?=utf8_htmlentities($me->checkSetting('ress_refresh'))?>" title="Wird hier eine Zahl größer als 0 eingetragen, wird in deren Sekundenabstand die Rohstoffanzeige oben automatisch aktualisiert. (Hinweis: Diese Funktion erzeugt keinen zusätzlichen Traffic)" tabindex="<?=$tabindex++?>" /></dd>
+			<dd class="c-auto-refresh"><input type="text" name="autorefresh" id="autorefresh" value="<?php=utf8_htmlentities($me->checkSetting('ress_refresh'))?>" title="Wird hier eine Zahl größer als 0 eingetragen, wird in deren Sekundenabstand die Rohstoffanzeige oben automatisch aktualisiert. (Hinweis: Diese Funktion erzeugt keinen zusätzlichen Traffic)" tabindex="<?php=$tabindex++?>" /></dd>
 
 			<dt class="c-ip-schutz"><label for="ipcheck">IP-Schutz</label></dt>
-			<dd class="c-ip-schutz"><input type="checkbox" name="ipcheck" id="ipcheck"<?=$me->checkSetting('ipcheck') ? ' checked="checked"' : ''?> title="Wenn diese Option deaktiviert ist, kann Ihre Session von mehreren IP-Adressen gleichzeitig genutzt werden. (Unsicher!)" tabindex="<?=$tabindex++?>" /></dd>
+			<dd class="c-ip-schutz"><input type="checkbox" name="ipcheck" id="ipcheck"<?php=$me->checkSetting('ipcheck') ? ' checked="checked"' : ''?> title="Wenn diese Option deaktiviert ist, kann Ihre Session von mehreren IP-Adressen gleichzeitig genutzt werden. (Unsicher!)" tabindex="<?php=$tabindex++?>" /></dd>
 
 			<dt class="c-externe-navigationslinks"><label for="show-extern">Externe Navigationslinks</label></dt>
-			<dd class="c-externe-navigationslinks"><input type="checkbox" name="show_extern" id="show-extern"<?=$me->checkSetting('show_extern') ? ' checked="checked"' : ''?> title="Wenn diese Option aktiviert ist, werden in der Navigation Links auf spielexterne Seiten wie das Board angezeigt." tabindex="<?=$tabindex++?>" /></dd>
+			<dd class="c-externe-navigationslinks"><input type="checkbox" name="show_extern" id="show-extern"<?php=$me->checkSetting('show_extern') ? ' checked="checked"' : ''?> title="Wenn diese Option aktiviert ist, werden in der Navigation Links auf spielexterne Seiten wie das Board angezeigt." tabindex="<?php=$tabindex++?>" /></dd>
 
 			<dt class="c-nachrichteninformierung"><label for="notify">Nachrichteninformierung</label></dt>
-			<dd class="c-nachrichteninformierung"><input type="checkbox" name="notify" id="notify"<?=$me->checkSetting('notify') ? ' checked="checked"' : ''?> title="Wenn diese Option aktiviert ist, wird nicht nur in der Übersicht angezeigt, dass Sie eine neue Nachricht erhalten haben, sondern auf allen Seiten." tabindex="<?=$tabindex++?>" /></dd>
+			<dd class="c-nachrichteninformierung"><input type="checkbox" name="notify" id="notify"<?php=$me->checkSetting('notify') ? ' checked="checked"' : ''?> title="Wenn diese Option aktiviert ist, wird nicht nur in der Übersicht angezeigt, dass Sie eine neue Nachricht erhalten haben, sondern auf allen Seiten." tabindex="<?php=$tabindex++?>" /></dd>
 
 			<dt class="c-ajax"><label for="ajax"><acronym title="Asynchronous JavaScript and XML">AJAX</acronym> aktivieren</label></dt>
-			<dd class="c-ajax"><input type="checkbox" name="ajax" id="ajax"<?=$me->checkSetting('ajax') ? ' checked="checked"' : ''?> title="Nützliche Eingabevereinfachungen, empfehlenswert in neuen Browsern mit schneller Internetverbindung." tabindex="<?=$tabindex++?>" /></dd>
+			<dd class="c-ajax"><input type="checkbox" name="ajax" id="ajax"<?php=$me->checkSetting('ajax') ? ' checked="checked"' : ''?> title="Nützliche Eingabevereinfachungen, empfehlenswert in neuen Browsern mit schneller Internetverbindung." tabindex="<?php=$tabindex++?>" /></dd>
 		</dl>
 		<script type="text/javascript">
 			function recalc_skin()
@@ -320,27 +320,27 @@
 				<tr>
 					<th class="c-nachrichtentyp">Kämpfe</th>
 					<td class="c-ankunft leer"></td>
-					<td class="c-rueckkehr"><input type="checkbox" name="nachrichten[1][1]" tabindex="<?=$tabindex++?>"<?=$receive_settings[1][1] ? ' checked="checked"' : ''?> /></td>
+					<td class="c-rueckkehr"><input type="checkbox" name="nachrichten[1][1]" tabindex="<?php=$tabindex++?>"<?php=$receive_settings[1][1] ? ' checked="checked"' : ''?> /></td>
 				</tr>
 				<tr>
 					<th class="c-nachrichtentyp">Spionage</th>
 					<td class="c-ankunft leer"></td>
-					<td class="c-rueckkehr"><input type="checkbox" name="nachrichten[2][1]" tabindex="<?=$tabindex++?>"<?=$receive_settings[2][1] ? ' checked="checked"' : ''?> /></td>
+					<td class="c-rueckkehr"><input type="checkbox" name="nachrichten[2][1]" tabindex="<?php=$tabindex++?>"<?php=$receive_settings[2][1] ? ' checked="checked"' : ''?> /></td>
 				</tr>
 				<tr>
 					<th class="c-nachrichtentyp">Transport</th>
-					<td class="c-ankunft"><input type="checkbox" name="nachrichten[3][0]" tabindex="<?=$tabindex++?>"<?=$receive_settings[3][0] ? ' checked="checked"' : ''?> /></td>
-					<td class="c-rueckkehr"><input type="checkbox" name="nachrichten[3][1]" tabindex="<?=$tabindex++?>"<?=$receive_settings[3][1] ? ' checked="checked"' : ''?> /></td>
+					<td class="c-ankunft"><input type="checkbox" name="nachrichten[3][0]" tabindex="<?php=$tabindex++?>"<?php=$receive_settings[3][0] ? ' checked="checked"' : ''?> /></td>
+					<td class="c-rueckkehr"><input type="checkbox" name="nachrichten[3][1]" tabindex="<?php=$tabindex++?>"<?php=$receive_settings[3][1] ? ' checked="checked"' : ''?> /></td>
 				</tr>
 				<tr>
 					<th class="c-nachrichtentyp">Sammeln</th>
 					<td class="c-ankunft leer"></td>
-					<td class="c-rueckkehr"><input type="checkbox" name="nachrichten[4][1]" tabindex="<?=$tabindex++?>"<?=$receive_settings[4][1] ? ' checked="checked"' : ''?> /></td>
+					<td class="c-rueckkehr"><input type="checkbox" name="nachrichten[4][1]" tabindex="<?php=$tabindex++?>"<?php=$receive_settings[4][1] ? ' checked="checked"' : ''?> /></td>
 				</tr>
 				<tr>
 					<th class="c-nachrichtentyp">Besiedelung</th>
-					<td class="c-ankunft"><input type="checkbox" name="nachrichten[5][0]" tabindex="<?=$tabindex++?>"<?=$receive_settings[5][0] ? ' checked="checked"' : ''?> /></td>
-					<td class="c-rueckkehr"><input type="checkbox" name="nachrichten[5][1]" tabindex="<?=$tabindex++?>"<?=$receive_settings[5][1] ? ' checked="checked"' : ''?> /></td>
+					<td class="c-ankunft"><input type="checkbox" name="nachrichten[5][0]" tabindex="<?php=$tabindex++?>"<?php=$receive_settings[5][0] ? ' checked="checked"' : ''?> /></td>
+					<td class="c-rueckkehr"><input type="checkbox" name="nachrichten[5][1]" tabindex="<?php=$tabindex++?>"<?php=$receive_settings[5][1] ? ' checked="checked"' : ''?> /></td>
 				</tr>
 			</tbody>
 		</table>
@@ -360,38 +360,38 @@
 			<tbody>
 				<tr class="c-gebauede">
 					<th>Gebäude</th>
-					<td><input type="radio" name="building[gebaeude]" value="0"<?=($show_building['gebaeude']==0) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-					<td><input type="radio" name="building[gebaeude]" value="1"<?=($show_building['gebaeude']==1) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[gebaeude]" value="0"<?php=($show_building['gebaeude']==0) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[gebaeude]" value="1"<?php=($show_building['gebaeude']==1) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
 					<td></td>
 					<td></td>
 				</tr>
 				<tr class="c-forschung">
 					<th>Forschung</th>
-					<td><input type="radio" name="building[forschung]" value="0"<?=($show_building['forschung']==0) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-					<td><input type="radio" name="building[forschung]" value="1"<?=($show_building['forschung']==1) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[forschung]" value="0"<?php=($show_building['forschung']==0) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[forschung]" value="1"<?php=($show_building['forschung']==1) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
 					<td></td>
 					<td></td>
 				</tr>
 				<tr class="c-roboter">
 					<th>Roboter</th>
-					<td><input type="radio" name="building[roboter]" value="0"<?=($show_building['roboter']==0) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-					<td><input type="radio" name="building[roboter]" value="1"<?=($show_building['roboter']==1) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-					<td><input type="radio" name="building[roboter]" value="2"<?=($show_building['roboter']==2) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-					<td><input type="radio" name="building[roboter]" value="3"<?=($show_building['roboter']==3) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[roboter]" value="0"<?php=($show_building['roboter']==0) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[roboter]" value="1"<?php=($show_building['roboter']==1) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[roboter]" value="2"<?php=($show_building['roboter']==2) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[roboter]" value="3"<?php=($show_building['roboter']==3) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
 				</tr>
 				<tr class="c-schiffe">
 					<th>Schiffe</th>
-					<td><input type="radio" name="building[schiffe]" value="0"<?=($show_building['schiffe']==0) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-					<td><input type="radio" name="building[schiffe]" value="1"<?=($show_building['schiffe']==1) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-					<td><input type="radio" name="building[schiffe]" value="2"<?=($show_building['schiffe']==2) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-					<td><input type="radio" name="building[schiffe]" value="3"<?=($show_building['schiffe']==3) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[schiffe]" value="0"<?php=($show_building['schiffe']==0) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[schiffe]" value="1"<?php=($show_building['schiffe']==1) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[schiffe]" value="2"<?php=($show_building['schiffe']==2) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[schiffe]" value="3"<?php=($show_building['schiffe']==3) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
 				</tr>
 				<tr class="c-verteidigung">
 					<th>Verteidigung</th>
-					<td><input type="radio" name="building[verteidigung]" value="0"<?=($show_building['verteidigung']==0) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-					<td><input type="radio" name="building[verteidigung]" value="1"<?=($show_building['verteidigung']==1) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-					<td><input type="radio" name="building[verteidigung]" value="2"<?=($show_building['verteidigung']==2) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-					<td><input type="radio" name="building[verteidigung]" value="3"<?=($show_building['verteidigung']==3) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[verteidigung]" value="0"<?php=($show_building['verteidigung']==0) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[verteidigung]" value="1"<?php=($show_building['verteidigung']==1) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[verteidigung]" value="2"<?php=($show_building['verteidigung']==2) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+					<td><input type="radio" name="building[verteidigung]" value="3"<?php=($show_building['verteidigung']==3) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
 				</tr>
 			</tbody>
 		</table>
@@ -413,12 +413,12 @@
 		{
 			$name = (isset($minfo['name']) ? $minfo['name'] : $protocol);
 ?>
-					<option value="<?=htmlspecialchars($protocol)?>"<?=($messenger_settings && $messenger_settings[1] == $protocol) ? ' selected="selected"' : ''?>><?=htmlspecialchars($name)?></option>
+					<option value="<?php=htmlspecialchars($protocol)?>"<?php=($messenger_settings && $messenger_settings[1] == $protocol) ? ' selected="selected"' : ''?>><?php=htmlspecialchars($name)?></option>
 <?php
 		}
 ?>
 				</select>
-				<input type="text" name="im-uin" id="i-im-uin" title="UIN"<?=$messenger_settings ? ' value="'.htmlspecialchars($messenger_settings[0]).'"' : ''?> />
+				<input type="text" name="im-uin" id="i-im-uin" title="UIN"<?php=$messenger_settings ? ' value="'.htmlspecialchars($messenger_settings[0]).'"' : ''?> />
 			</dd>
 		</dl>
 		<script type="text/javascript">
@@ -428,25 +428,25 @@
 			<legend>Benachrichtigung bei Nachrichten</legend>
 			<dl>
 				<dt class="c-kaempfe"><label for="i-im-message-kaempfe">Kämpfe</label></dt>
-				<dd class="c-kaempfe"><input type="checkbox" name="im-receive[messages][1]" id="i-im-message-kaempfe"<?=$messenger_receive['messages'][1] ? ' checked="checked"' : ''?> /></dd>
+				<dd class="c-kaempfe"><input type="checkbox" name="im-receive[messages][1]" id="i-im-message-kaempfe"<?php=$messenger_receive['messages'][1] ? ' checked="checked"' : ''?> /></dd>
 
 				<dt class="c-spionage"><label for="i-im-message-spionage">Spionage</label></dt>
-				<dd class="c-spionage"><input type="checkbox" name="im-receive[messages][2]" id="i-im-message-spionage"<?=$messenger_receive['messages'][2] ? ' checked="checked"' : ''?> /></dd>
+				<dd class="c-spionage"><input type="checkbox" name="im-receive[messages][2]" id="i-im-message-spionage"<?php=$messenger_receive['messages'][2] ? ' checked="checked"' : ''?> /></dd>
 
 				<dt class="c-transport"><label for="i-im-message-transport">Transport</label></dt>
-				<dd class="c-transport"><input type="checkbox" name="im-receive[messages][3]" id="i-im-message-transport"<?=$messenger_receive['messages'][3] ? ' checked="checked"' : ''?> /></dd>
+				<dd class="c-transport"><input type="checkbox" name="im-receive[messages][3]" id="i-im-message-transport"<?php=$messenger_receive['messages'][3] ? ' checked="checked"' : ''?> /></dd>
 
 				<dt class="c-sammeln"><label for="i-im-message-sammeln">Sammeln</label></dt>
-				<dd class="c-sammeln"><input type="checkbox" name="im-receive[messages][4]" id="i-im-message-sammeln"<?=$messenger_receive['messages'][4] ? ' checked="checked"' : ''?> /></dd>
+				<dd class="c-sammeln"><input type="checkbox" name="im-receive[messages][4]" id="i-im-message-sammeln"<?php=$messenger_receive['messages'][4] ? ' checked="checked"' : ''?> /></dd>
 
 				<dt class="c-besiedelung"><label for="i-im-message-besiedelung">Besiedelung</label></dt>
-				<dd class="c-besiedelung"><input type="checkbox" name="im-receive[messages][5]" id="i-im-message-besiedelung"<?=$messenger_receive['messages'][5] ? ' checked="checked"' : ''?> /></dd>
+				<dd class="c-besiedelung"><input type="checkbox" name="im-receive[messages][5]" id="i-im-message-besiedelung"<?php=$messenger_receive['messages'][5] ? ' checked="checked"' : ''?> /></dd>
 
 				<dt class="c-benutzernachrichten"><label for="i-im-message-benutzernachrichten">Benutzernachrichten</label></dt>
-				<dd class="c-benutzernachrichten"><input type="checkbox" name="im-receive[messages][6]" id="i-im-message-benutzernachrichten"<?=$messenger_receive['messages'][6] ? ' checked="checked"' : ''?> /></dd>
+				<dd class="c-benutzernachrichten"><input type="checkbox" name="im-receive[messages][6]" id="i-im-message-benutzernachrichten"<?php=$messenger_receive['messages'][6] ? ' checked="checked"' : ''?> /></dd>
 
 				<dt class="c-verbuendete"><label for="i-im-message-verbuendete">Verbündete</label></dt>
-				<dd class="c-verbuendete"><input type="checkbox" name="im-receive[messages][7]" id="i-im-message-verbuendete"<?=$messenger_receive['messages'][7] ? ' checked="checked"' : ''?> /></dd>
+				<dd class="c-verbuendete"><input type="checkbox" name="im-receive[messages][7]" id="i-im-message-verbuendete"<?php=$messenger_receive['messages'][7] ? ' checked="checked"' : ''?> /></dd>
 			</dl>
 		</fieldset>
 		<fieldset class="benachrichtigung-fertigstellung">
@@ -464,38 +464,38 @@
 				<tbody>
 					<tr class="c-gebauede">
 						<th>Gebäude</th>
-						<td><input type="radio" name="im-receive[building][gebaeude]" value="0"<?=($messenger_receive['building']['gebaeude']==0) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-						<td><input type="radio" name="im-receive[building][gebaeude]" value="1"<?=($messenger_receive['building']['gebaeude']==1) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][gebaeude]" value="0"<?php=($messenger_receive['building']['gebaeude']==0) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][gebaeude]" value="1"<?php=($messenger_receive['building']['gebaeude']==1) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
 						<td></td>
 						<td></td>
 					</tr>
 					<tr class="c-forschung">
 						<th>Forschung</th>
-						<td><input type="radio" name="im-receive[building][forschung]" value="0"<?=($messenger_receive['building']['forschung']==0) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-						<td><input type="radio" name="im-receive[building][forschung]" value="1"<?=($messenger_receive['building']['forschung']==1) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][forschung]" value="0"<?php=($messenger_receive['building']['forschung']==0) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][forschung]" value="1"<?php=($messenger_receive['building']['forschung']==1) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
 						<td></td>
 						<td></td>
 					</tr>
 					<tr class="c-roboter">
 						<th>Roboter</th>
-						<td><input type="radio" name="im-receive[building][roboter]" value="0"<?=($messenger_receive['building']['roboter']==0) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-						<td><input type="radio" name="im-receive[building][roboter]" value="1"<?=($messenger_receive['building']['roboter']==1) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-						<td><input type="radio" name="im-receive[building][roboter]" value="2"<?=($messenger_receive['building']['roboter']==2) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-						<td><input type="radio" name="im-receive[building][roboter]" value="3"<?=($messenger_receive['building']['roboter']==3) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][roboter]" value="0"<?php=($messenger_receive['building']['roboter']==0) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][roboter]" value="1"<?php=($messenger_receive['building']['roboter']==1) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][roboter]" value="2"<?php=($messenger_receive['building']['roboter']==2) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][roboter]" value="3"<?php=($messenger_receive['building']['roboter']==3) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
 					</tr>
 					<tr class="c-schiffe">
 						<th>Schiffe</th>
-						<td><input type="radio" name="im-receive[building][schiffe]" value="0"<?=($messenger_receive['building']['schiffe']==0) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-						<td><input type="radio" name="im-receive[building][schiffe]" value="1"<?=($messenger_receive['building']['schiffe']==1) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-						<td><input type="radio" name="im-receive[building][schiffe]" value="2"<?=($messenger_receive['building']['schiffe']==2) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-						<td><input type="radio" name="im-receive[building][schiffe]" value="3"<?=($messenger_receive['building']['schiffe']==3) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][schiffe]" value="0"<?php=($messenger_receive['building']['schiffe']==0) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][schiffe]" value="1"<?php=($messenger_receive['building']['schiffe']==1) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][schiffe]" value="2"<?php=($messenger_receive['building']['schiffe']==2) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][schiffe]" value="3"<?php=($messenger_receive['building']['schiffe']==3) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
 					</tr>
 					<tr class="c-verteidigung">
 						<th>Verteidigung</th>
-						<td><input type="radio" name="im-receive[building][verteidigung]" value="0"<?=($messenger_receive['building']['verteidigung']==0) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-						<td><input type="radio" name="im-receive[building][verteidigung]" value="1"<?=($messenger_receive['building']['verteidigung']==1) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-						<td><input type="radio" name="im-receive[building][verteidigung]" value="2"<?=($messenger_receive['building']['verteidigung']==2) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
-						<td><input type="radio" name="im-receive[building][verteidigung]" value="3"<?=($messenger_receive['building']['verteidigung']==3) ? ' checked="checked"' : ''?> tabindex="<?=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][verteidigung]" value="0"<?php=($messenger_receive['building']['verteidigung']==0) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][verteidigung]" value="1"<?php=($messenger_receive['building']['verteidigung']==1) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][verteidigung]" value="2"<?php=($messenger_receive['building']['verteidigung']==2) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
+						<td><input type="radio" name="im-receive[building][verteidigung]" value="3"<?php=($messenger_receive['building']['verteidigung']==3) ? ' checked="checked"' : ''?> tabindex="<?php=$tabindex++?>" /></td>
 					</tr>
 				</tbody>
 			</table>
@@ -520,8 +520,8 @@
 			if($me->permissionToUmode() || isset($_SESSION['admin_username']))
 			{
 ?>
-		<div><input type="submit" name="umode" value="Urlaubsmodus" tabindex="<?=$tabindex++?>" onclick="return confirm('Wollen Sie den Urlaubsmodus wirklich betreten?');" /></div>
-		<center><p>Sie werden frühestens nach zwei Tagen (<?=date('Y-m-d, H:i', $me->getUmodeReturnTime())?>, Serverzeit) aus dem Urlaubsmodus zurückkehren können.<br>Sie können erst in den Umod wechseln, wenn Ihre Flotten sich alle auf dem Rückweg befinden.<br>Aktive Bau- oder Forschungsaktivitäten werden im Umode eingefroren.<br> Wenn Sie den Urlaubmodus aktivieren, werden alle Ihre Flotten zurückgerufen.</p></center>
+		<div><input type="submit" name="umode" value="Urlaubsmodus" tabindex="<?php=$tabindex++?>" onclick="return confirm('Wollen Sie den Urlaubsmodus wirklich betreten?');" /></div>
+		<center><p>Sie werden frühestens nach zwei Tagen (<?php=date('Y-m-d, H:i', $me->getUmodeReturnTime())?>, Serverzeit) aus dem Urlaubsmodus zurückkehren können.<br>Sie können erst in den Umod wechseln, wenn Ihre Flotten sich alle auf dem Rückweg befinden.<br>Aktive Bau- oder Forschungsaktivitäten werden im Umode eingefroren.<br> Wenn Sie den Urlaubmodus aktivieren, werden alle Ihre Flotten zurückgerufen.</p></center>
 <?php
 			
 			
@@ -529,20 +529,20 @@
 			else
 			{
 ?>
-		<center><p>Sie können erst wieder ab dem <?=date('Y-m-d, H:i', $me->getUmodeReturnTime())?> (Serverzeit) in den Urlaubsmodus wechseln..<br>Sie können erst in den Umod wechseln, wenn Ihre Flotten sich alle auf dem Rückweg befinden.<br>Aktive Bau- oder Forschungsaktivitäten werden im Umode eingefroren.<br> Wenn Sie den Urlaubmodus aktivieren, werden alle Ihre Flotten zurückgerufen.</p></center>
+		<center><p>Sie können erst wieder ab dem <?php=date('Y-m-d, H:i', $me->getUmodeReturnTime())?> (Serverzeit) in den Urlaubsmodus wechseln..<br>Sie können erst in den Umod wechseln, wenn Ihre Flotten sich alle auf dem Rückweg befinden.<br>Aktive Bau- oder Forschungsaktivitäten werden im Umode eingefroren.<br> Wenn Sie den Urlaubmodus aktivieren, werden alle Ihre Flotten zurückgerufen.</p></center>
 <?php
 			}
 		}
 		elseif($me->permissionToUmode() || isset($_SESSION['admin_username']))
 		{
 ?>
-		<div><input type="submit" name="umode" value="Urlaubsmodus verlassen" tabindex="<?=$tabindex++?>" onclick="return confirm('Wollen Sie den Urlaubsmodus wirklich verlassen?');" /></div>
+		<div><input type="submit" name="umode" value="Urlaubsmodus verlassen" tabindex="<?php=$tabindex++?>" onclick="return confirm('Wollen Sie den Urlaubsmodus wirklich verlassen?');" /></div>
 <?php
 		}
 		else
 		{
 ?>
-		<p>Sie können den Urlaubsmodus frühestens am <?=date('Y-m-d, H:i', $me->getUmodeReturnTime())?> (Serverzeit) verlassen.</p>
+		<p>Sie können den Urlaubsmodus frühestens am <?php=date('Y-m-d, H:i', $me->getUmodeReturnTime())?> (Serverzeit) verlassen.</p>
 <?php
 		}
 ?>
@@ -554,23 +554,23 @@
 		<legend>E-Mail-Adresse</legend>
 		<dl>
 			<dt class="c-email-adresse"><label for="email">E-Mail-Adresse</label></dt>
-			<dd class="c-email-adresse"><input type="text" name="email" id="email" value="<?=utf8_htmlentities($me->checkSetting('email'))?>" title="Ihre E-Mail-Adresse wird benötigt, wenn Sie Ihr Passwort vergessen haben. [Z]" tabindex="<?=$tabindex++?>" accesskey="z" /></dd>
+			<dd class="c-email-adresse"><input type="text" name="email" id="email" value="<?php=utf8_htmlentities($me->checkSetting('email'))?>" title="Ihre E-Mail-Adresse wird benötigt, wenn Sie Ihr Passwort vergessen haben. [Z]" tabindex="<?php=$tabindex++?>" accesskey="z" /></dd>
 		</dl>
 	</fieldset>
 	<fieldset class="passwort-aendern">
 		<legend>Passwort ändern</legend>
 		<dl>
 			<dt class="c-altes-passwort"><label for="old-password">Altes Passw<kbd>o</kbd>rt</label></dt>
-			<dd class="c-altes-passwort"><input type="password" name="old-password" id="old-password" tabindex="<?=$tabindex++?>" accesskey="o" /></dd>
+			<dd class="c-altes-passwort"><input type="password" name="old-password" id="old-password" tabindex="<?php=$tabindex++?>" accesskey="o" /></dd>
 
 			<dt class="c-neues-passwort"><label for="new-password">Neues Passwort</label></dt>
-			<dd class="c-neues-passwort"><input type="password" name="new-password" id="new-password" tabindex="<?=$tabindex++?>" /></dd>
+			<dd class="c-neues-passwort"><input type="password" name="new-password" id="new-password" tabindex="<?php=$tabindex++?>" /></dd>
 
 			<dt class="c-neues-passwort-wiederholen"><label for="new-password2">Neues Passwort wiederholen</label></dt>
-			<dd class="c-neues-passwort-wiederholen"><input type="password" name="new-password2" id="new-password2" tabindex="<?=$tabindex++?>" /></dd>
+			<dd class="c-neues-passwort-wiederholen"><input type="password" name="new-password2" id="new-password2" tabindex="<?php=$tabindex++?>" /></dd>
 		</dl>
 	</fieldset>
-	<div class="einstellungen-speichern-2"><button type="submit" tabindex="<?=$save_tabindex?>" accesskey="w" title="[W]">Speichern</button></div>
+	<div class="einstellungen-speichern-2"><button type="submit" tabindex="<?php=$save_tabindex?>" accesskey="w" title="[W]">Speichern</button></div>
 </form>
 <?php
 	login_gui::html_foot();

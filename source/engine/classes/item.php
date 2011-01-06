@@ -100,6 +100,8 @@ class Items
 
     function getItemsList( $type = false )
     {
+        echo "getItemsList for type: '".$type."'";
+        print_r($this->elements);
         if ( $type === false )
             $type = 'ids';
         

@@ -1700,8 +1700,10 @@ class User extends Dataset
      */       
     function getItemsList( $type = false )
     {
-        if ( ! $this->status )
+        if ( ! $this->status ) {
+            echo "AIKS, status";
             return false;
+        }
         
         $items_instance = Classes::Items();
         return $items_instance->getItemsList( $type );

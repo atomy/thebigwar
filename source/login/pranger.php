@@ -10,7 +10,7 @@
 
 	$pranger = preg_split("/\r\n|\r|\n/", $pranger);
 ?>
-<h2 id="changelog">Pranger - <?=utf8_htmlentities($databases[$_SESSION['database']][1])?></h2>
+<h2 id="changelog">Pranger - <?php=utf8_htmlentities($databases[$_SESSION['database']][1])?></h2>
 <ol class="changelog">
 <?php
 	foreach($pranger as $log)
@@ -19,13 +19,13 @@
 		if(count($log) < 2)
 		{
 ?>
-	<li><?=utf8_htmlentities($log[0])?></li>
+	<li><?php=utf8_htmlentities($log[0])?></li>
 <?php
 		}
 		else
 		{
 ?>
-	<li><span class="zeit"><?=date('Y-m-d, H:i:s', $log[0])?>:</span> <?=utf8_htmlentities($log[1])?></li>
+	<li><span class="zeit"><?php=date('Y-m-d, H:i:s', $log[0])?>:</span> <?php=utf8_htmlentities($log[1])?></li>
 <?php
 		}
 	}

@@ -56,10 +56,10 @@ else
 ?>
 <html>
 <head>
-<meta http-equiv="refresh" content="<? echo $speed; ?>; URL=http://<?=htmlentities($_SERVER['HTTP_HOST'].h_root)?>/login/<? echo $url_s; ?><?=htmlentities(session_name().'='.urlencode(session_id()))?>">
+<meta http-equiv="refresh" content="<?php echo $speed; ?>; URL=http://<?php=htmlentities($_SERVER['HTTP_HOST'].h_root)?>/login/<?php echo $url_s; ?><?php=htmlentities(session_name().'='.urlencode(session_id()))?>">
 </head>
 <body>
-<?
+<?php
     echo '<div class="successful">';
     echo '<p></p>';
     echo $info;

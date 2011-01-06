@@ -43,7 +43,7 @@
      	{
 ?>
 <ul id="planeten-umbenennen">
-	<li><a href="scripts/rename.php?<?=htmlentities(session_name().'='.urlencode(session_id()))?>" title="Planeten umbenennen/aufgeben" accesskey="u" tabindex="2"><kbd>u</kbd>mbenennen</a></li>
+	<li><a href="scripts/rename.php?<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" title="Planeten umbenennen/aufgeben" accesskey="u" tabindex="2"><kbd>u</kbd>mbenennen</a></li>
 </ul>
 <?php
          }
@@ -96,7 +96,7 @@
 			$link .= urlencode(session_name()).'='.urlencode(session_id());
 ?>
 <p class="neue-nachrichten">
-	<a href="<?=htmlentities('http://'.$_SERVER['HTTP_HOST'].h_root.'/login/'.$link)?>" title="<?=$title?>">Sie haben <?=htmlentities($ges_ncount)?> neue <kbd>N</kbd>achricht<?=($ges_ncount != 1) ? 'en' : ''?>.</a>
+	<a href="<?php=htmlentities('http://'.$_SERVER['HTTP_HOST'].h_root.'/login/'.$link)?>" title="<?php=$title?>">Sie haben <?php=htmlentities($ges_ncount)?> neue <kbd>N</kbd>achricht<?php=($ges_ncount != 1) ? 'en' : ''?>.</a>
 </p>
 <?php
 		}
@@ -319,31 +319,31 @@
  	  	           $string .= " Das Verbundflottenpasswort lautet <span class=\"flottenpasswd\">".htmlspecialchars($fleet_passwd)."</span>.";
  	  	       }
 ?>
-	<dt class="<?=($me_in_users !== false) ? 'eigen' : 'fremd'?> type-<?=utf8_htmlentities($fl->getCurrentType())?> <?=$fl->isFlyingBack() ? 'rueck' : 'hin'?>flug">
-		<?=$string."\n"?>
+	<dt class="<?php=($me_in_users !== false) ? 'eigen' : 'fremd'?> type-<?php=utf8_htmlentities($fl->getCurrentType())?> <?php=$fl->isFlyingBack() ? 'rueck' : 'hin'?>flug">
+		<?php=$string."\n"?>
 <?php
 			if($hold !== -1 && $fl->getCurrentType() == 4 && !$fl->isFlyingBack() && $me->isOwnPlanet($fl->getCurrentTarget()) && !$me->userLocked() && !$me->umode())
 			{
 ?>
-				<div class="handel"><a href="flotten_actions.php?action=handel&amp;id=<?=htmlspecialchars(urlencode($flotte))?>&amp;<?=htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Geben Sie dieser Flotte Ladung mit auf den R�ckweg">Handel</a></div>
+				<div class="handel"><a href="flotten_actions.php?action=handel&amp;id=<?php=htmlspecialchars(urlencode($flotte))?>&amp;<?php=htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Geben Sie dieser Flotte Ladung mit auf den R�ckweg">Handel</a></div>
 <?php
  	  	       }
                      if($fl->getCurrentType() == 3 && !$fl->isFlyingBack() && array_search($me->getName(), $fl->getUsersList()) === 0)
  	  	       { 	  	 
 ?>
- 	  	                 <div class="beschreibung schiffe"><a href="flotten_actions.php?action=buendnisangriff&amp;id=<?=htmlspecialchars(urlencode($flotte))?>&amp;<?=htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Erlauben Sie anderen Spielern, der Flotte eigene Schiffe beizusteuern.">Bündnisangriff</a></div>
+ 	  	                 <div class="beschreibung schiffe"><a href="flotten_actions.php?action=buendnisangriff&amp;id=<?php=htmlspecialchars(urlencode($flotte))?>&amp;<?php=htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Erlauben Sie anderen Spielern, der Flotte eigene Schiffe beizusteuern.">Bündnisangriff</a></div>
 <?php
 			}
 			if(($hold > 0) && $me->isOwnPlanet($to_pos) && ($me_in_users == false))
 			{
 ?>
-				<div class="abweisen"><a href="index.php?abweisen=<?=htmlentities(urlencode($flotte))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" class="abbrechen">Halteposition verweigern.</a></div>
+				<div class="abweisen"><a href="index.php?abweisen=<?php=htmlentities(urlencode($flotte))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" class="abbrechen">Halteposition verweigern.</a></div>
 <?php
 			}
 ?>
 
 	</dt>
-				<dd class="<?=($me_in_users !== false) ? 'eigen' : 'fremd'?> type-<?=utf8_htmlentities($fl->getCurrentType())?> <?=$fl->isFlyingBack() ? 'rueck' : 'hin'?>flug" id="restbauzeit-<?=utf8_htmlentities($flotte)?>">Ankunft: <?=date('H:i:s, Y-m-d', $arrival_time)?> --<?print $arrival_time?>-- (Serverzeit)<?php if(!$fl->isFlyingBack() && ($me_in_users !== false)){?>, <a href="index.php?cancel=<?=htmlentities(urlencode($flotte))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" class="abbrechen">Abbrechen</a><?php }?></dd>
+				<dd class="<?php=($me_in_users !== false) ? 'eigen' : 'fremd'?> type-<?php=utf8_htmlentities($fl->getCurrentType())?> <?php=$fl->isFlyingBack() ? 'rueck' : 'hin'?>flug" id="restbauzeit-<?php=utf8_htmlentities($flotte)?>">Ankunft: <?php=date('H:i:s, Y-m-d', $arrival_time)?> --<?phpprint $arrival_time?>-- (Serverzeit)<?php if(!$fl->isFlyingBack() && ($me_in_users !== false)){?>, <a href="index.php?cancel=<?php=htmlentities(urlencode($flotte))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" class="abbrechen">Abbrechen</a><?php }?></dd>
 <?php
 			$countdowns[] = array($flotte, $arrival_time, ($fl->isFlyingBack() || ($me_in_users === false)));
 		}
@@ -358,7 +358,7 @@
 			foreach($countdowns as $countdown)
 			{
 ?>
-	init_countdown('<?=$countdown[0]?>', <?=$countdown[1]?>, <?=$countdown[2] ? 'false' : 'true'?>, <?=global_setting("EVENTHANDLER_INTERVAL")?>);
+	init_countdown('<?php=$countdown[0]?>', <?php=$countdown[1]?>, <?php=$countdown[2] ? 'false' : 'true'?>, <?php=global_setting("EVENTHANDLER_INTERVAL")?>);
 <?php
 			}
 ?>
@@ -380,10 +380,10 @@
 		$me->setActivePlanet($planet);
 		$class = $me->getPlanetClass();
 ?>
-	<li class="planet-<?=htmlentities($class)?><?=($planet == $active_planet) ? ' active' : ''?>"><?=($planet != $active_planet) ? '<a href="index.php?planet='.htmlentities(urlencode($planet).'&'.urlencode(session_name()).'='.urlencode(session_id())).'" tabindex="'.($tabindex++).'">' : ''?><?=utf8_htmlentities($me->planetName())?><?=($planet != $active_planet) ? '</a>' : ''?> <span class="koords">(<?=utf8_htmlentities($me->getPosString())?>)</span>
+	<li class="planet-<?php=htmlentities($class)?><?php=($planet == $active_planet) ? ' active' : ''?>"><?php=($planet != $active_planet) ? '<a href="index.php?planet='.htmlentities(urlencode($planet).'&'.urlencode(session_name()).'='.urlencode(session_id())).'" tabindex="'.($tabindex++).'">' : ''?><?php=utf8_htmlentities($me->planetName())?><?php=($planet != $active_planet) ? '</a>' : ''?> <span class="koords">(<?php=utf8_htmlentities($me->getPosString())?>)</span>
 		<dl class="planet-info">
 			<dt class="c-felder">Felder</dt>
-			<dd class="c-felder"><?=ths($me->getUsedFields())?> <span class="gesamtgroesse">(<?=ths($me->getTotalFields())?>)</span></dd>
+			<dd class="c-felder"><?php=ths($me->getUsedFields())?> <span class="gesamtgroesse">(<?php=ths($me->getTotalFields())?>)</span></dd>
 <?php
 		if($show_building['gebaeude'])
 		{
@@ -395,7 +395,7 @@
 			{
 				$item_info = $me->getItemInfo($building_gebaeude[0], 'gebaeude');
 ?>
-			<dd class="c-gebaeudebau"><?=utf8_htmlentities($item_info['name'])?> <span class="restbauzeit" id="restbauzeit-ge-<?=utf8_htmlentities($planet)?>">Fertigstellung: <?=date('H:i:s, Y-m-d', $building_gebaeude[1])?> (Serverzeit)</span></dd>
+			<dd class="c-gebaeudebau"><?php=utf8_htmlentities($item_info['name'])?> <span class="restbauzeit" id="restbauzeit-ge-<?php=utf8_htmlentities($planet)?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $building_gebaeude[1])?> (Serverzeit)</span></dd>
 <?php
 				$countdowns[] = array('ge-'.$planet, $building_gebaeude[1]);
 			}
@@ -409,13 +409,13 @@
 			{
 				$item_info = $me->getItemInfo($building_gebaeude[0], 'gebaeude');
 ?>
-				<dd class="c-gebaeudebau gelangweilt"><?=utf8_htmlentities($item_info['name'])?> im Urlaubsmodus</dd><?php
+				<dd class="c-gebaeudebau gelangweilt"><?php=utf8_htmlentities($item_info['name'])?> im Urlaubsmodus</dd><?php
 			}
 
 			else
 			{
 ?>
-			<dd class="c-gebaeudebau gelangweilt"><a href="gebaeude.php?planet=<?=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilter Geb&auml;udebau auf Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
+			<dd class="c-gebaeudebau gelangweilt"><a href="gebaeude.php?planet=<?php=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilter Geb&auml;udebau auf Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
 <?php
 			}
 		}
@@ -439,7 +439,7 @@
 			{
 				$item_info = $me->getItemInfo($building_forschung[0], 'forschung');
 ?>
-			<dd class="c-forschung"><?=utf8_htmlentities($item_info['name'])?> <span id="restbauzeit-fo-<?=utf8_htmlentities($planet)?>">Fertigstellung: <?=date('H:i:s, Y-m-d', $building_forschung[1])?> (Serverzeit)</span></dd>
+			<dd class="c-forschung"><?php=utf8_htmlentities($item_info['name'])?> <span id="restbauzeit-fo-<?php=utf8_htmlentities($planet)?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $building_forschung[1])?> (Serverzeit)</span></dd>
 <?php
 				$countdowns[] = array('fo-'.$planet, $building_forschung[1]);
 			}
@@ -447,13 +447,13 @@
 			{
 				$item_info = $me->getItemInfo($building_forschung[0], 'forschung');
 ?>
-				<dd class="c-forschung gelangweilt"><?=utf8_htmlentities($item_info['name'])?> im Urlaubsmodus</dd><?php
+				<dd class="c-forschung gelangweilt"><?php=utf8_htmlentities($item_info['name'])?> im Urlaubsmodus</dd><?php
 			}
 
 			else
 			{
 ?>
-			<dd class="c-forschung gelangweilt"><a href="forschung.php?planet=<?=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilte Forschung auf Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
+			<dd class="c-forschung gelangweilt"><a href="forschung.php?planet=<?php=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilte Forschung auf Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
 <?php
 			}
 		}
@@ -482,7 +482,7 @@
 						$item_info = $me->getItemInfo($last_building[0], 'roboter');
 						$finishing_time = $last_building[1]+$last_building[2]*$last_building[3];
 ?>
-			<dd class="c-roboter">(<?=utf8_htmlentities($item_info['name'])?>) <span id="restbauzeit-ro-<?=utf8_htmlentities($planet)?>">Fertigstellung: <?=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
+			<dd class="c-roboter">(<?php=utf8_htmlentities($item_info['name'])?>) <span id="restbauzeit-ro-<?php=utf8_htmlentities($planet)?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
 <?php
 						break;
 					case 2:
@@ -490,7 +490,7 @@
 						$item_info = $me->getItemInfo($first_building[0], 'roboter');
 						$finishing_time = $first_building[1]+$first_building[2]*$first_building[3];
 ?>
-			<dd class="c-roboter"><?=utf8_htmlentities($item_info['name'])?> <span class="anzahl">(<?=ths($first_building[2])?>)</span> <span id="restbauzeit-ro-<?=utf8_htmlentities($planet)?>">Fertigstellung: <?=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
+			<dd class="c-roboter"><?php=utf8_htmlentities($item_info['name'])?> <span class="anzahl">(<?php=ths($first_building[2])?>)</span> <span id="restbauzeit-ro-<?php=utf8_htmlentities($planet)?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
 <?php
 						break;
 					case 1:
@@ -498,7 +498,7 @@
 						$item_info = $me->getItemInfo($first_building[0], 'roboter');
 						$finishing_time = $first_building[1]+$first_building[3];
 ?>
-			<dd class="c-roboter"><?=utf8_htmlentities($item_info['name'])?> <span id="restbauzeit-ro-<?=utf8_htmlentities($planet)?>">Fertigstellung: <?=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
+			<dd class="c-roboter"><?php=utf8_htmlentities($item_info['name'])?> <span id="restbauzeit-ro-<?php=utf8_htmlentities($planet)?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
 <?php
 						break;
 				}
@@ -509,13 +509,13 @@
 				$first_building = array_pop($building);
 				$item_info = $me->getItemInfo($first_building[0], 'roboter');
 ?>
-				<dd class="c-roboter gelangweilt"><?=utf8_htmlentities($item_info['name'])?> im Urlaubsmodus</dd><?php
+				<dd class="c-roboter gelangweilt"><?php=utf8_htmlentities($item_info['name'])?> im Urlaubsmodus</dd><?php
 			}
 
 			else
 			{
 ?>
-			<dd class="c-roboter gelangweilt"><a href="roboter.php?planet=<?=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilte Roboterfabrik auf Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
+			<dd class="c-roboter gelangweilt"><a href="roboter.php?planet=<?php=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilte Roboterfabrik auf Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
 <?php
 			}
 		}
@@ -544,7 +544,7 @@
 						$item_info = $me->getItemInfo($last_building[0], 'schiffe');
 						$finishing_time = $last_building[1]+$last_building[2]*$last_building[3];
 ?>
-			<dd class="c-roboter">(<?=utf8_htmlentities($item_info['name'])?>) <span id="restbauzeit-ro-<?=utf8_htmlentities($planet)?>">Fertigstellung: <?=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
+			<dd class="c-roboter">(<?php=utf8_htmlentities($item_info['name'])?>) <span id="restbauzeit-ro-<?php=utf8_htmlentities($planet)?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
 <?php
 						break;
 					case 2:
@@ -552,7 +552,7 @@
 						$item_info = $me->getItemInfo($first_building[0], 'schiffe');
 						$finishing_time = $first_building[1]+$first_building[2]*$first_building[3];
 ?>
-			<dd class="c-schiffe"><?=utf8_htmlentities($item_info['name'])?> <span class="anzahl">(<?=ths($first_building[2])?>)</span> <span id="restbauzeit-sc-<?=utf8_htmlentities($planet)?>">Fertigstellung: <?=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
+			<dd class="c-schiffe"><?php=utf8_htmlentities($item_info['name'])?> <span class="anzahl">(<?php=ths($first_building[2])?>)</span> <span id="restbauzeit-sc-<?php=utf8_htmlentities($planet)?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
 <?php
 						break;
 					case 1:
@@ -560,7 +560,7 @@
 						$item_info = $me->getItemInfo($first_building[0], 'schiffe');
 						$finishing_time = $first_building[1]+$first_building[3];
 ?>
-			<dd class="c-schiffe"><?=utf8_htmlentities($item_info['name'])?> <span id="restbauzeit-sc-<?=utf8_htmlentities($planet)?>">Fertigstellung: <?=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
+			<dd class="c-schiffe"><?php=utf8_htmlentities($item_info['name'])?> <span id="restbauzeit-sc-<?php=utf8_htmlentities($planet)?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
 <?php
 						break;
 				}
@@ -572,13 +572,13 @@
 				$item_info = $me->getItemInfo($first_building[0], 'schiffe');
 
 ?>
-				<dd class="c-schiffe gelangweilt"><?=utf8_htmlentities($item_info['name'])?> im Urlaubsmodus</dd><?php
+				<dd class="c-schiffe gelangweilt"><?php=utf8_htmlentities($item_info['name'])?> im Urlaubsmodus</dd><?php
 			}
 
 			else
 			{
 ?>
-			<dd class="c-schiffe gelangweilt"><a href="schiffswerft.php?planet=<?=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilte Schiffswerft auf Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
+			<dd class="c-schiffe gelangweilt"><a href="schiffswerft.php?planet=<?php=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilte Schiffswerft auf Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
 <?php
 			}
 		}
@@ -607,7 +607,7 @@
 						$item_info = $me->getItemInfo($last_building[0], 'verteidigung');
 						$finishing_time = $last_building[1]+$last_building[2]*$last_building[3];
 ?>
-			<dd class="c-roboter">(<?=utf8_htmlentities($item_info['name'])?>) <span id="restbauzeit-ro-<?=utf8_htmlentities($planet)?>">Fertigstellung: <?=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
+			<dd class="c-roboter">(<?php=utf8_htmlentities($item_info['name'])?>) <span id="restbauzeit-ro-<?php=utf8_htmlentities($planet)?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
 <?php
 						break;
 					case 2:
@@ -615,7 +615,7 @@
 						$item_info = $me->getItemInfo($first_building[0], 'verteidigung');
 						$finishing_time = $first_building[1]+$first_building[2]*$first_building[3];
 ?>
-			<dd class="c-verteidigung"><?=utf8_htmlentities($item_info['name'])?> <span class="anzahl">(<?=ths($first_building[2])?>)</span> <span id="restbauzeit-ve-<?=utf8_htmlentities($planet)?>">Fertigstellung: <?=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
+			<dd class="c-verteidigung"><?php=utf8_htmlentities($item_info['name'])?> <span class="anzahl">(<?php=ths($first_building[2])?>)</span> <span id="restbauzeit-ve-<?php=utf8_htmlentities($planet)?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
 <?php
 						break;
 					case 1:
@@ -623,7 +623,7 @@
 						$item_info = $me->getItemInfo($first_building[0], 'verteidigung');
 						$finishing_time = $first_building[1]+$first_building[3];
 ?>
-			<dd class="c-verteidigung"><?=utf8_htmlentities($item_info['name'])?> <span id="restbauzeit-ve-<?=utf8_htmlentities($planet)?>">Fertigstellung: <?=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
+			<dd class="c-verteidigung"><?php=utf8_htmlentities($item_info['name'])?> <span id="restbauzeit-ve-<?php=utf8_htmlentities($planet)?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span></dd>
 <?php
 						break;
 				}
@@ -635,13 +635,13 @@
 				$item_info = $me->getItemInfo($first_building[0], 'verteidigung');
 
 ?>
-				<dd class="c-verteidgung gelangweilt"><?=utf8_htmlentities($item_info['name'])?> im Urlaubsmodus</dd><?php
+				<dd class="c-verteidgung gelangweilt"><?php=utf8_htmlentities($item_info['name'])?> im Urlaubsmodus</dd><?php
 			}
 
 			else
 			{
 ?>
-			<dd class="c-verteidigung gelangweilt"><a href="verteidigung.php?planet=<?=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilte Verteidigung auf Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
+			<dd class="c-verteidigung gelangweilt"><a href="verteidigung.php?planet=<?php=htmlentities(urlencode($me->getActivePlanet()))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Gelangweilte Verteidigung auf Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>)">Gelangweilt</a></dd>
 <?php
 			}
 		}
@@ -663,7 +663,7 @@
 		foreach($countdowns as $countdown)
 		{
 ?>
-	init_countdown('<?=$countdown[0]?>', <?=$countdown[1]?>, false);
+	init_countdown('<?php=$countdown[0]?>', <?php=$countdown[1]?>, false);
 <?php
 		}
 ?>
@@ -674,28 +674,28 @@
 <h2 id="punkte">Punkte</h2>
 <dl class="punkte">
 	<dt class="c-gebaeude">Gebäude</dt>
-	<dd class="c-gebaeude"><?=ths($me->getScores(0))?></dd>
+	<dd class="c-gebaeude"><?php=ths($me->getScores(0))?></dd>
 
 	<dt class="c-forschung">Forschung</dt>
-	<dd class="c-forschung"><?=ths($me->getScores(1))?></dd>
+	<dd class="c-forschung"><?php=ths($me->getScores(1))?></dd>
 
 	<dt class="c-roboter">Roboter</dt>
-	<dd class="c-roboter"><?=ths($me->getScores(2))?></dd>
+	<dd class="c-roboter"><?php=ths($me->getScores(2))?></dd>
 
 	<dt class="c-flotte">Flotte</dt>
-	<dd class="c-flotte"><?=ths($me->getScores(3))?></dd>
+	<dd class="c-flotte"><?php=ths($me->getScores(3))?></dd>
 
 	<dt class="c-verteidigung">Verteidigung</dt>
-	<dd class="c-verteidigung"><?=ths($me->getScores(4))?></dd>
+	<dd class="c-verteidigung"><?php=ths($me->getScores(4))?></dd>
 
 	<dt class="c-flugerfahrung">Flugerfahrung</dt>
-	<dd class="c-flugerfahrung"><?=ths($me->getScores(5))?></dd>
+	<dd class="c-flugerfahrung"><?php=ths($me->getScores(5))?></dd>
 
 	<dt class="c-kampferfahrung">Kampferfahrung</dt>
-	<dd class="c-kampferfahrung"><?=ths($me->getScores(6))?></dd>
+	<dd class="c-kampferfahrung"><?php=ths($me->getScores(6))?></dd>
 
 	<dt class="c-gesamt">Gesamt</dt>
-	<dd class="c-gesamt"><?=ths($me->getScores())?> <span class="gesamt-spieler">(Platz <?=ths($me->getRank())?> von <?=ths(getUsersCount())?>)</span></dd>
+	<dd class="c-gesamt"><?php=ths($me->getScores())?> <span class="gesamt-spieler">(Platz <?php=ths($me->getRank())?> von <?php=ths(getUsersCount())?>)</span></dd>
 </dl>
 
 <?php

@@ -111,14 +111,14 @@
         {
             $me->setActivePlanet($fastbuild_prev);
 ?>
-    <li class="c-voriger"><a href="schiffswerft.php?planet=<?=htmlentities(urlencode($fastbuild_prev))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Voriger unbeschäftigter Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>) [U]" tabindex="1" accesskey="u" rel="prev">&larr;</a></li>
+    <li class="c-voriger"><a href="schiffswerft.php?planet=<?php=htmlentities(urlencode($fastbuild_prev))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Voriger unbeschäftigter Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>) [U]" tabindex="1" accesskey="u" rel="prev">&larr;</a></li>
 <?php
         }
         if($fastbuild_next !== false)
         {
             $me->setActivePlanet($fastbuild_next);
 ?>
-    <li class="c-naechster"><a href="schiffswerft.php?planet=<?=htmlentities(urlencode($fastbuild_next))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Nächster unbeschäftigter Planet: &bdquo;<?=utf8_htmlentities($me->planetName())?>&ldquo; (<?=utf8_htmlentities($me->getPosString())?>) [Q]" tabindex="2" accesskey="q" rel="next">&rarr;</a></li>
+    <li class="c-naechster"><a href="schiffswerft.php?planet=<?php=htmlentities(urlencode($fastbuild_next))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Nächster unbeschäftigter Planet: &bdquo;<?php=utf8_htmlentities($me->planetName())?>&ldquo; (<?php=utf8_htmlentities($me->getPosString())?>) [Q]" tabindex="2" accesskey="q" rel="next">&rarr;</a></li>
 <?php
         }
         $me->setActivePlanet($active_planet);
@@ -128,7 +128,7 @@
     }
 ?>
 
-<form action="schiffswerft.php?<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post">
+<form action="schiffswerft.php?<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" method="post">
 <?php
     $tabindex = 1;
     $schiffe = $me->getItemsList('schiffe');
@@ -140,14 +140,14 @@
         if(!$item_info['buildable'] && $item_info['level'] <= 0)
             continue;
 ?>
-    <div class="item schiffe" id="item-<?=htmlentities($id)?>">
-        <h3><a href="help/description.php?id=<?=htmlentities(urlencode($id))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?=utf8_htmlentities($item_info['name'])?></a> <span class="anzahl">(<?=utf8_htmlentities($item_info['level'])?>)</span></h3>
+    <div class="item schiffe" id="item-<?php=htmlentities($id)?>">
+        <h3><a href="help/description.php?id=<?php=htmlentities(urlencode($id))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php=utf8_htmlentities($item_info['name'])?></a> <span class="anzahl">(<?php=utf8_htmlentities($item_info['level'])?>)</span></h3>
 <?php
         if($me->permissionToAct() && $building_possible && $item_info['buildable'])
         {
 ?>
         <ul>
-            <li class="item-bau"><input type="text" name="schiffe[<?=utf8_htmlentities($id)?>]" value="0" tabindex="<?=$tabindex++?>" /></li>
+            <li class="item-bau"><input type="text" name="schiffe[<?php=utf8_htmlentities($id)?>]" value="0" tabindex="<?php=$tabindex++?>" /></li>
         </ul>
 <?php
         }
@@ -155,11 +155,11 @@
         <dl>
             <dt class="item-kosten">Kosten</dt>
             <dd class="item-kosten">
-                <?=format_ress($item_info['ress'], 4)?>
+                <?php=format_ress($item_info['ress'], 4)?>
             </dd>
 
             <dt class="item-bauzeit">Bauzeit</dt>
-            <dd class="item-bauzeit"><?=format_btime($item_info['time'])?></dd>
+            <dd class="item-bauzeit"><?php=format_btime($item_info['time'])?></dd>
         </dl>
     </div>
 <?php
@@ -168,7 +168,7 @@
     if($tabindex > 1)
     {
 ?>
-    <div><button type="submit" tabindex="<?=$tabindex++?>" accesskey="u">In A<kbd>u</kbd>ftrag geben</button></div>
+    <div><button type="submit" tabindex="<?php=$tabindex++?>" accesskey="u">In A<kbd>u</kbd>ftrag geben</button></div>
 <?php
     }
 ?>
@@ -191,7 +191,7 @@
         if($first_building[2] <= 0) array_shift($building_schiffe);
         $first_info = $me->getItemInfo($first[0]);
 ?>
-    <li class="<?=utf8_htmlentities($first[0])?> active<?=(count($building_schiffe) <= 0) ? ' last' : ''?>" title="Fertigstellung: <?=date('H:i:s, Y-m-d', (int)$first[1])?> (Serverzeit)"><strong><?=utf8_htmlentities($first_info['name'])?> <span class="restbauzeit" id="restbauzeit-<?=$i++?>">Fertigstellung: <?=date('H:i:s, Y-m-d', (int)$first[0])?> (Serverzeit)</span></strong></li>
+    <li class="<?php=utf8_htmlentities($first[0])?> active<?php=(count($building_schiffe) <= 0) ? ' last' : ''?>" title="Fertigstellung: <?php=date('H:i:s, Y-m-d', (int)$first[1])?> (Serverzeit)"><strong><?php=utf8_htmlentities($first_info['name'])?> <span class="restbauzeit" id="restbauzeit-<?php=$i++?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', (int)$first[0])?> (Serverzeit)</span></strong></li>
 <?php
         if(count($building_schiffe) > 0)
         {
@@ -202,24 +202,24 @@
                 $finishing_time = $bau[1]+$bau[2]*$bau[3];
                 $item_info = $me->getItemInfo($bau[0]);
 ?>
-    <li class="<?=utf8_htmlentities($bau[0])?><?=($key == $last) ? ' last' : ''?>" title="Fertigstellung: <?=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)"><?=utf8_htmlentities($item_info['name'])?> &times; <?=$bau[2]?><?php if($key == $last){?> <span class="restbauzeit" id="restbauzeit-<?=$i++?>">Fertigstellung: <?=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span><?php }?></li>
+    <li class="<?php=utf8_htmlentities($bau[0])?><?php=($key == $last) ? ' last' : ''?>" title="Fertigstellung: <?php=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)"><?php=utf8_htmlentities($item_info['name'])?> &times; <?php=$bau[2]?><?php if($key == $last){?> <span class="restbauzeit" id="restbauzeit-<?php=$i++?>">Fertigstellung: <?php=date('H:i:s, Y-m-d', $finishing_time)?> (Serverzeit)</span><?php }?></li>
 <?php
             }
         }
 ?>
 </ol>
 <script type="text/javascript">
-    init_countdown('0', <?=$first[1]?>, false);
+    init_countdown('0', <?php=$first[1]?>, false);
 <?php
         if(count($building_schiffe) > 0)
         {
 ?>
-    init_countdown('<?=$i-1?>', <?=$finishing_time?>, false);
+    init_countdown('<?php=$i-1?>', <?php=$finishing_time?>, false);
 <?php
         }
 ?>
 </script>
-<form action="<?=htmlentities(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/login/schiffswerft.php?'.urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="alle-abbrechen">
+<form action="<?php=htmlentities(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/login/schiffswerft.php?'.urlencode(session_name()).'='.urlencode(session_id()))?>" method="post" class="alle-abbrechen">
     <p>Geben Sie hier Ihr Passwort ein, um alle im Bau befindlichen Schiffe <strong>ohne Kostenrückerstattung</strong> abzubrechen.</p>
     <div><input type="password" name="cancel-all-schiffe" /><input type="submit" value="Alle abbrechen" /></div>
 </form>

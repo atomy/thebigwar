@@ -1,4 +1,4 @@
-<?
+<?php
 require_once '../../include/config_inc.php';
 require_once TBW_ROOT.'engine/include.php';
 

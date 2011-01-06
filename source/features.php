@@ -24,11 +24,11 @@
 <h2 xml:lang="en">T-B-W &ndash; Features</h2>
 <fieldset><legend>Features</legend>
 <ul>
-	<li><?=count($items->getItemsList('gebaeude'))?> Gebäude</li>
-	<li><?=count($items->getItemsList('forschung'))?> Forschungsmöglichkeiten</li>
-	<li><?=count($items->getItemsList('roboter'))?> verschiedene Roboter</li>
-	<li><?=count($items->getItemsList('schiffe'))?> Raumschiffklassen</li>
-	<li><?=count($items->getItemsList('verteidigung'))?> Verteidigungsanlagen</li>
+	<li><?php=count($items->getItemsList('gebaeude'))?> Gebäude</li>
+	<li><?php=count($items->getItemsList('forschung'))?> Forschungsmöglichkeiten</li>
+	<li><?php=count($items->getItemsList('roboter'))?> verschiedene Roboter</li>
+	<li><?php=count($items->getItemsList('schiffe'))?> Raumschiffklassen</li>
+	<li><?php=count($items->getItemsList('verteidigung'))?> Verteidigungsanlagen</li>
 	<li>Das Spiel läuft in Echtzeit, es gibt keine lästigen <span xml:lang="en">Eventhandler</span>-Wartezeiten</li>
 	<li>Forschung lässt sich global oder lokal durchführen</li>
 	<li>Ausgeklügeltes Allianzsystem</li>
@@ -43,13 +43,13 @@
 	<li>Fliegen Sie gemeinsame Angriffe mit Ihren Verbündeten</li>
 	<li>Sichern Sie Ihre Ressourcen per Saveflugfunktion</li>
 	<li>Veröffentlichen Sie Ihre Nachrichten einfach per Mausklick.
-	<li>derzeit <?=$players?> Spieler</li>
-	<li>derzeit <?=$alliances?> Allianz<?=($alliances != 1) ? 'en' : ''?></li>
+	<li>derzeit <?php=$players?> Spieler</li>
+	<li>derzeit <?php=$alliances?> Allianz<?php=($alliances != 1) ? 'en' : ''?></li>
 <?php
 	if(count($databases) > 1)
 	{
 ?>
-	<li>derzeit <?=count($databases)?> verschiedene Runden</li>
+	<li>derzeit <?php=count($databases)?> verschiedene Runden</li>
 <?php
 	}
 ?>

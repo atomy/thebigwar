@@ -37,7 +37,7 @@
         {
             $string = $sid.": ".$sess[0].", ".date('Y-m-d, H:i:s', $sess[1]);
 ?>
-    <li><a href="logs.php?<?=htmlspecialchars('session='.urlencode($sid).'&start='.urlencode($sess[2]).'&end='.urlencode($sess[3]))?>"><?=htmlspecialchars($string)?></a></li>
+    <li><a href="logs.php?<?php=htmlspecialchars('session='.urlencode($sid).'&start='.urlencode($sess[2]).'&end='.urlencode($sess[3]))?>"><?php=htmlspecialchars($string)?></a></li>
 <?php
         }
 ?>
@@ -92,9 +92,9 @@
             }
 ?>
         <tr>
-            <td><?=date('Y-m-d, H:i:s', $expl[1])?></td>
-            <td><?=htmlspecialchars($expl[2])?></td>
-            <td><?=htmlspecialchars($action_string)?></td>
+            <td><?php=date('Y-m-d, H:i:s', $expl[1])?></td>
+            <td><?php=htmlspecialchars($expl[2])?></td>
+            <td><?php=htmlspecialchars($action_string)?></td>
         </tr>
 <?php
             if(isset($_GET['end']) && ftell($fh) >= $_GET['end']) break;

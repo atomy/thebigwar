@@ -25,7 +25,7 @@ if ( ! isset( $adminObj ) || ! $adminObj->can( ADMIN_TICKETSYSTEM ) )
 admin_gui::html_head();
 ?>
 <link rel="stylesheet" href="/css/ticketsystem.css" type="text/css" />
-<?
+<?php
 
 /*
  * show tickets with the given status

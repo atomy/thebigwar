@@ -90,12 +90,12 @@
 <?php
     }
 ?>
-<form action="rename.php?<?=htmlentities(session_name().'='.urlencode(session_id()))?>" method="post">
+<form action="rename.php?<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" method="post">
     <fieldset>
         <legend>Planeten umbenennen</legend>
         <dl>
             <dt><label for="name"><kbd>N</kbd>euer Name</label></dt>
-            <dd><input type="text" id="name" name="planet_name" value="<?=utf8_htmlentities($me->planetName())?>" maxlength="20" accesskey="n" tabindex="1" /></dd>
+            <dd><input type="text" id="name" name="planet_name" value="<?php=utf8_htmlentities($me->planetName())?>" maxlength="20" accesskey="n" tabindex="1" /></dd>
         </dl>
         <div><button type="submit" accesskey="u" tabindex="2"><kbd>U</kbd>mbenennen</button></div>
     </fieldset>
@@ -115,19 +115,19 @@
         {
 ?>
 <p class="error">
-    <?=htmlentities($aufgeben_error)."\n"?>
+    <?php=htmlentities($aufgeben_error)."\n"?>
 </p>
 <?php
         }
 ?>
-<form action="<?=htmlentities(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/login/scripts/rename.php?'.urlencode(session_name()).'='.urlencode(session_id()))?>" method="post">
+<form action="<?php=htmlentities(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/login/scripts/rename.php?'.urlencode(session_name()).'='.urlencode(session_id()))?>" method="post">
     <fieldset>
-        <legend>Planeten aufgeben<input type="hidden" name="act_planet" value="<?=htmlentities($_SESSION['act_planet'])?>" /></legend>
+        <legend>Planeten aufgeben<input type="hidden" name="act_planet" value="<?php=htmlentities($_SESSION['act_planet'])?>" /></legend>
         <dl>
             <dt><label for="password">Passwort</label></dt>
             <dd><input type="password" id="password" name="password" tabindex="3" /></dd>
         </dl>
-        <div><input type="submit" name="umode" value="Löschen" tabindex="<?=$tabindex++?>" onclick="return confirm('Achtung! Sie sind im Begriff, diesen Planeten zu löschen. Wollen Sie dies wirklich tun?');" /></div>
+        <div><input type="submit" name="umode" value="Löschen" tabindex="<?php=$tabindex++?>" onclick="return confirm('Achtung! Sie sind im Begriff, diesen Planeten zu löschen. Wollen Sie dies wirklich tun?');" /></div>
 
     </fieldset>
 </form>
@@ -146,7 +146,7 @@
         {
             $me->setActivePlanet($planet);
 ?>
-        <li><?=utf8_htmlentities($me->planetName())?> <span class="pos">(<?=utf8_htmlentities($me->getPosString())?>)</span><span class="aktionen"><?php if($i != 0){?> &ndash; <a href="rename.php?up=<?=htmlentities(urlencode($planet))?>&amp;<?=htmlentities(urlencode(session_name()).'='.session_id())?>" class="hoch">[Hoch]</a><?php } if($i != count($planets)-1){?> &ndash; <a href="rename.php?down=<?=htmlentities(urlencode($planet))?>&amp;<?=htmlentities(urlencode(session_name()).'='.session_id())?>" class="runter">[Runter]</a><?php }?></span></li>
+        <li><?php=utf8_htmlentities($me->planetName())?> <span class="pos">(<?php=utf8_htmlentities($me->getPosString())?>)</span><span class="aktionen"><?php if($i != 0){?> &ndash; <a href="rename.php?up=<?php=htmlentities(urlencode($planet))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.session_id())?>" class="hoch">[Hoch]</a><?php } if($i != count($planets)-1){?> &ndash; <a href="rename.php?down=<?php=htmlentities(urlencode($planet))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.session_id())?>" class="runter">[Runter]</a><?php }?></span></li>
 <?php
         }
         $me->setActivePlanet($active_planet);

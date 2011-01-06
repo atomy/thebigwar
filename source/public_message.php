@@ -2,7 +2,7 @@
 	require_once( 'include/config_inc.php' );
 	require( TBW_ROOT.'include.php' );
 ?>
-<?='<?xml version="1.0" encoding="UTF-8"?>'."\n"?>
+<?php='<?xml version="1.0" encoding="UTF-8"?>'."\n"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
@@ -16,7 +16,7 @@
         $keys = array_keys($skins['default'][1]);
         $sub_skin = array_shift($keys);
 ?>
-        <link rel="stylesheet" href="<?=h_root?>/login/style/skin.php?skin=default&amp;type=<?=htmlspecialchars($sub_skin)?>" type="text/css" />
+        <link rel="stylesheet" href="<?php=h_root?>/login/style/skin.php?skin=default&amp;type=<?php=htmlspecialchars($sub_skin)?>" type="text/css" />
 <?php
     }
 ?>
@@ -39,24 +39,24 @@
     {
         $message = Classes::PublicMessage($_GET['id']);
 ?>
-        <dl class="nachricht-informationen type-<?=utf8_htmlentities($message->type())?><?=$message->html() ? ' html' : ''?>">
+        <dl class="nachricht-informationen type-<?php=utf8_htmlentities($message->type())?><?php=$message->html() ? ' html' : ''?>">
 <?php
         if($message->from() != '')
         {
 ?>
             <dt class="c-absender">Absender</dt>
-            <dd class="c-absender"><?=utf8_htmlentities($message->from())?></dd>
+            <dd class="c-absender"><?php=utf8_htmlentities($message->from())?></dd>
 <?php
         }
 ?>
             <dt class="c-empfaenger">Empfänger</dt>
-            <dd class="c-empfaenger"><?=utf8_htmlentities($message->to())?></dd>
+            <dd class="c-empfaenger"><?php=utf8_htmlentities($message->to())?></dd>
 
             <dt class="c-betreff">Betreff</dt>
-            <dd class="c-betreff"><?=utf8_htmlentities($message->subject())?></dd>
+            <dd class="c-betreff"><?php=utf8_htmlentities($message->subject())?></dd>
 
             <dt class="c-zeit">Zeit</dt>
-            <dd class="c-zeit"><?=date('H:i:s, Y-m-d', $message->time())?></dd>
+            <dd class="c-zeit"><?php=date('H:i:s, Y-m-d', $message->time())?></dd>
 
             <dt class="c-nachricht">Nachricht</dt>
             <dd class="c-nachricht">

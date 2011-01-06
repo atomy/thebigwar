@@ -12,24 +12,24 @@
 	$handelskurs = preg_split("/\r\n|\r|\n/", file_get_contents(global_setting("DB_HANDELSKURS")));
 ?>
 <h2>Handelsrechner</h2>
-<form action="handelsrechner.php?<?=htmlentities(session_name().'='.urlencode(session_id()))?>" method="post" class="handelsrechner">
+<form action="handelsrechner.php?<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" method="post" class="handelsrechner">
 	<fieldset class="handelsrechner-handelskurs">
 		<legend>Handelskurs</legend>
 		<dl>
 			<dt class="c-carbon"><label for="handelskurs-carbon">Carbon</label></dt>
-			<dd class="c-carbon"><input type="text" name="handelskurs-carbon" id="handelskurs-carbon" value="<?=isset($_POST['handelskurs-carbon']) ? htmlentities($_POST['handelskurs-carbon']) : round($handelskurs[0], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="24" /></dd>
+			<dd class="c-carbon"><input type="text" name="handelskurs-carbon" id="handelskurs-carbon" value="<?php=isset($_POST['handelskurs-carbon']) ? htmlentities($_POST['handelskurs-carbon']) : round($handelskurs[0], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="24" /></dd>
 
 			<dt class="c-aluminium"><label for="handelskurs-aluminium">Aluminium</label></dt>
-			<dd class="c-aluminium"><input type="text" name="handelskurs-aluminium" id="handelskurs-aluminium" value="<?=isset($_POST['handelskurs-aluminium']) ? htmlentities($_POST['handelskurs-aluminium']) : round($handelskurs[1], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="25" /></dd>
+			<dd class="c-aluminium"><input type="text" name="handelskurs-aluminium" id="handelskurs-aluminium" value="<?php=isset($_POST['handelskurs-aluminium']) ? htmlentities($_POST['handelskurs-aluminium']) : round($handelskurs[1], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="25" /></dd>
 
 			<dt class="c-wolfram"><label for="handelskurs-wolfram">Wolfram</label></dt>
-			<dd class="c-wolfram"><input type="text" name="handelskurs-wolfram" id="handelskurs-wolfram" value="<?=isset($_POST['handelskurs-wolfram']) ? htmlentities($_POST['handelskurs-wolfram']) : round($handelskurs[2], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="26" /></dd>
+			<dd class="c-wolfram"><input type="text" name="handelskurs-wolfram" id="handelskurs-wolfram" value="<?php=isset($_POST['handelskurs-wolfram']) ? htmlentities($_POST['handelskurs-wolfram']) : round($handelskurs[2], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="26" /></dd>
 
 			<dt class="c-radium"><label for="handelskurs-radium">Radium</label></dt>
-			<dd class="c-radium"><input type="text" name="handelskurs-radium" id="handelskurs-radium" value="<?=isset($_POST['handelskurs-radium']) ? htmlentities($_POST['handelskurs-radium']) : round($handelskurs[3], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="27" /></dd>
+			<dd class="c-radium"><input type="text" name="handelskurs-radium" id="handelskurs-radium" value="<?php=isset($_POST['handelskurs-radium']) ? htmlentities($_POST['handelskurs-radium']) : round($handelskurs[3], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="27" /></dd>
 
 			<dt class="c-tritium"><label for="handelskurs-tritium">Tritium</label></dt>
-			<dd class="c-tritium"><input type="text" name="handelskurs-tritium" id="handelskurs-tritium" value="<?=isset($_POST['handelskurs-tritium']) ? htmlentities($_POST['handelskurs-tritium']) : round($handelskurs[4], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="28" /></dd>
+			<dd class="c-tritium"><input type="text" name="handelskurs-tritium" id="handelskurs-tritium" value="<?php=isset($_POST['handelskurs-tritium']) ? htmlentities($_POST['handelskurs-tritium']) : round($handelskurs[4], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="28" /></dd>
 		</dl>
 		<script type="text/javascript">
 			// <![CDATA[
@@ -148,49 +148,49 @@
 ?>
 	<fieldset id="angebot" class="handelsrechner-angebot">
 		<legend>Ihr Angebot</legend>
-		<div><input type="radio" id="eingabe-angebot" name="eingabe" value="angebot" onchange="refresh_eingabe();" onclick="refresh_eingabe();" onkeyup="refresh_eingabe();"<?=(!isset($_POST['eingabe']) || $_POST['eingabe'] != 'zurueck') ? ' checked="checked"' : ''?> tabindex="1" accesskey="o" /> <label for="eingabe-angebot">Angeb<kbd>o</kbd>t eingeben</label></div>
+		<div><input type="radio" id="eingabe-angebot" name="eingabe" value="angebot" onchange="refresh_eingabe();" onclick="refresh_eingabe();" onkeyup="refresh_eingabe();"<?php=(!isset($_POST['eingabe']) || $_POST['eingabe'] != 'zurueck') ? ' checked="checked"' : ''?> tabindex="1" accesskey="o" /> <label for="eingabe-angebot">Angeb<kbd>o</kbd>t eingeben</label></div>
 		<dl>
 			<dt><label for="angebot-carbon">Carb<kbd>o</kbd>n</label></dt>
-			<dd><input type="text" name="angebot-anteil-carbon" id="angebot-anteil-carbon" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?=isset($_POST['angebot-anteil-carbon']) ? htmlentities($_POST['angebot-anteil-carbon']) : '0'?>" tabindex="3" /> <input type="text" name="angebot-carbon" id="angebot-carbon" value="<?=htmlentities($angebot_carbon)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="4" /></dd>
+			<dd><input type="text" name="angebot-anteil-carbon" id="angebot-anteil-carbon" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?php=isset($_POST['angebot-anteil-carbon']) ? htmlentities($_POST['angebot-anteil-carbon']) : '0'?>" tabindex="3" /> <input type="text" name="angebot-carbon" id="angebot-carbon" value="<?php=htmlentities($angebot_carbon)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="4" /></dd>
 
 			<dt><label for="angebot-aluminium">Aluminium</label></dt>
-			<dd><input type="text" name="angebot-anteil-aluminium" id="angebot-anteil-aluminium" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?=isset($_POST['angebot-anteil-aluminium']) ? htmlentities($_POST['angebot-anteil-aluminium']) : '0'?>" tabindex="5" /> <input type="text" name="angebot-aluminium" id="angebot-aluminium" value="<?=htmlentities($angebot_aluminium)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="6" /></dd>
+			<dd><input type="text" name="angebot-anteil-aluminium" id="angebot-anteil-aluminium" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?php=isset($_POST['angebot-anteil-aluminium']) ? htmlentities($_POST['angebot-anteil-aluminium']) : '0'?>" tabindex="5" /> <input type="text" name="angebot-aluminium" id="angebot-aluminium" value="<?php=htmlentities($angebot_aluminium)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="6" /></dd>
 
 			<dt><label for="angebot-wolfram">Wolfram</label></dt>
-			<dd><input type="text" name="angebot-anteil-wolfram" id="angebot-anteil-wolfram" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?=isset($_POST['angebot-anteil-wolfram']) ? htmlentities($_POST['angebot-anteil-wolfram']) : '0'?>" tabindex="7" /> <input type="text" name="angebot-wolfram" id="angebot-wolfram" value="<?=htmlentities($angebot_wolfram)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="8" /></dd>
+			<dd><input type="text" name="angebot-anteil-wolfram" id="angebot-anteil-wolfram" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?php=isset($_POST['angebot-anteil-wolfram']) ? htmlentities($_POST['angebot-anteil-wolfram']) : '0'?>" tabindex="7" /> <input type="text" name="angebot-wolfram" id="angebot-wolfram" value="<?php=htmlentities($angebot_wolfram)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="8" /></dd>
 
 			<dt><label for="angebot-radium">Radium</label></dt>
-			<dd><input type="text" name="angebot-anteil-radium" id="angebot-anteil-radium" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?=isset($_POST['angebot-anteil-radium']) ? htmlentities($_POST['angebot-anteil-radium']) : '0'?>" tabindex="9" /> <input type="text" name="angebot-radium" id="angebot-radium" value="<?=htmlentities($angebot_radium)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="10" /></dd>
+			<dd><input type="text" name="angebot-anteil-radium" id="angebot-anteil-radium" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?php=isset($_POST['angebot-anteil-radium']) ? htmlentities($_POST['angebot-anteil-radium']) : '0'?>" tabindex="9" /> <input type="text" name="angebot-radium" id="angebot-radium" value="<?php=htmlentities($angebot_radium)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="10" /></dd>
 
 			<dt><label for="angebot-tritium">Tritium</label></dt>
-			<dd><input type="text" name="angebot-anteil-tritium" id="angebot-anteil-tritium" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?=isset($_POST['angebot-anteil-tritium']) ? htmlentities($_POST['angebot-anteil-tritium']) : '0'?>" tabindex="11" /> <input type="text" name="angebot-tritium" id="angebot-tritium" value="<?=htmlentities($angebot_tritium)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="12" /></dd>
+			<dd><input type="text" name="angebot-anteil-tritium" id="angebot-anteil-tritium" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?php=isset($_POST['angebot-anteil-tritium']) ? htmlentities($_POST['angebot-anteil-tritium']) : '0'?>" tabindex="11" /> <input type="text" name="angebot-tritium" id="angebot-tritium" value="<?php=htmlentities($angebot_tritium)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="12" /></dd>
 		</dl>
 	</fieldset>
 	<fieldset id="zurueck" class="handelsrechner-erhalten">
 		<legend>Sie erhalten</legend>
-		<div><input type="radio" id="eingabe-zurueck" name="eingabe" value="zurueck" onchange="refresh_eingabe();" onclick="refresh_eingabe();" onkeyup="refresh_eingabe();"<?=(isset($_POST['eingabe']) && $_POST['eingabe'] == 'zurueck') ? ' checked="checked"' : ''?> tabindex="2" accesskey="n" /> <label for="eingabe-zurueck">Erhält<kbd>n</kbd>is eingeben</label></div>
+		<div><input type="radio" id="eingabe-zurueck" name="eingabe" value="zurueck" onchange="refresh_eingabe();" onclick="refresh_eingabe();" onkeyup="refresh_eingabe();"<?php=(isset($_POST['eingabe']) && $_POST['eingabe'] == 'zurueck') ? ' checked="checked"' : ''?> tabindex="2" accesskey="n" /> <label for="eingabe-zurueck">Erhält<kbd>n</kbd>is eingeben</label></div>
 		<dl>
 			<dt><label for="zurueck-carbon">Carbo<kbd>n</kbd></label></dt>
-			<dd><input type="text" name="zurueck-anteil-carbon" id="zurueck-anteil-carbon" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?=isset($_POST['zurueck-anteil-carbon']) ? htmlentities($_POST['zurueck-anteil-carbon']) : '0'?>" tabindex="13" /> <input type="text" name="zurueck-carbon" id="zurueck-carbon" value="<?=htmlentities($zurueck_carbon)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="14" /></dd>
+			<dd><input type="text" name="zurueck-anteil-carbon" id="zurueck-anteil-carbon" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?php=isset($_POST['zurueck-anteil-carbon']) ? htmlentities($_POST['zurueck-anteil-carbon']) : '0'?>" tabindex="13" /> <input type="text" name="zurueck-carbon" id="zurueck-carbon" value="<?php=htmlentities($zurueck_carbon)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="14" /></dd>
 
 			<dt><label for="zurueck-aluminium">Aluminium</label></dt>
-			<dd><input type="text" name="zurueck-anteil-aluminium" id="zurueck-anteil-aluminium" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?=isset($_POST['zurueck-anteil-aluminium']) ? htmlentities($_POST['zurueck-anteil-aluminium']) : '0'?>" tabindex="15" /> <input type="text" name="zurueck-aluminium" id="zurueck-aluminium" value="<?=htmlentities($zurueck_aluminium)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="16" /></dd>
+			<dd><input type="text" name="zurueck-anteil-aluminium" id="zurueck-anteil-aluminium" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?php=isset($_POST['zurueck-anteil-aluminium']) ? htmlentities($_POST['zurueck-anteil-aluminium']) : '0'?>" tabindex="15" /> <input type="text" name="zurueck-aluminium" id="zurueck-aluminium" value="<?php=htmlentities($zurueck_aluminium)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="16" /></dd>
 
 			<dt><label for="zurueck-wolfram">Wolfram</label></dt>
-			<dd><input type="text" name="zurueck-anteil-wolfram" id="zurueck-anteil-wolfram" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?=isset($_POST['zurueck-anteil-wolfram']) ? htmlentities($_POST['zurueck-anteil-wolfram']) : '0'?>" tabindex="17" /> <input type="text" name="zurueck-wolfram" id="zurueck-wolfram" value="<?=htmlentities($zurueck_wolfram)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="18" /></dd>
+			<dd><input type="text" name="zurueck-anteil-wolfram" id="zurueck-anteil-wolfram" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?php=isset($_POST['zurueck-anteil-wolfram']) ? htmlentities($_POST['zurueck-anteil-wolfram']) : '0'?>" tabindex="17" /> <input type="text" name="zurueck-wolfram" id="zurueck-wolfram" value="<?php=htmlentities($zurueck_wolfram)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="18" /></dd>
 
 			<dt><label for="zurueck-radium">Radium</label></dt>
-			<dd><input type="text" name="zurueck-anteil-radium" id="zurueck-anteil-radium" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?=isset($_POST['zurueck-anteil-radium']) ? htmlentities($_POST['zurueck-anteil-radium']) : '0'?>" tabindex="19" /> <input type="text" name="zurueck-radium" id="zurueck-radium" value="<?=htmlentities($zurueck_radium)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="20" /></dd>
+			<dd><input type="text" name="zurueck-anteil-radium" id="zurueck-anteil-radium" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?php=isset($_POST['zurueck-anteil-radium']) ? htmlentities($_POST['zurueck-anteil-radium']) : '0'?>" tabindex="19" /> <input type="text" name="zurueck-radium" id="zurueck-radium" value="<?php=htmlentities($zurueck_radium)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="20" /></dd>
 
 			<dt><label for="zurueck-tritium">Tritium</label></dt>
-			<dd><input type="text" name="zurueck-anteil-tritium" id="zurueck-anteil-tritium" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?=isset($_POST['zurueck-anteil-tritium']) ? htmlentities($_POST['zurueck-anteil-tritium']) : '0'?>" tabindex="21" /> <input type="text" name="zurueck-tritium" id="zurueck-tritium" value="<?=htmlentities($zurueck_tritium)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="22" /></dd>
+			<dd><input type="text" name="zurueck-anteil-tritium" id="zurueck-anteil-tritium" size="3" title="Anteil (fortgeschrittener Modus)" class="handelsrechner-anteil" onkeyup="calc();" onmouseup="calc();" onchange="calc();" value="<?php=isset($_POST['zurueck-anteil-tritium']) ? htmlentities($_POST['zurueck-anteil-tritium']) : '0'?>" tabindex="21" /> <input type="text" name="zurueck-tritium" id="zurueck-tritium" value="<?php=htmlentities($zurueck_tritium)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="22" /></dd>
 		</dl>
 	</fieldset>
 	<noscript>
 		<div><button type="submit" tabindex="30">Berechnen</button></div>
 	</noscript>
 	<p id="fortgeschrittener-modus" class="handelsrechner-fortgeschrittener-modus">
-		<input type="checkbox" name="fortgeschrittener-modus" id="fortgeschrittener-modus-input"<?=isset($_POST['fortgeschrittener-modus']) ? ' checked="checked"' : ''?> onchange="refresh_modus();" onclick="refresh_modus();" onkeyup="refresh_modus();" accesskey="u" tabindex="29" /> <label for="fortgeschrittener-modus-input">Fortgeschrittener Mod<kbd>u</kbd>s</label> (<a href="handelsrechner.php?hilfe=0&amp;<?=htmlentities(session_name().'='.urlencode(session_id()))?>" onclick="show_hilfe(); return false;">Hilfe</a>)
+		<input type="checkbox" name="fortgeschrittener-modus" id="fortgeschrittener-modus-input"<?php=isset($_POST['fortgeschrittener-modus']) ? ' checked="checked"' : ''?> onchange="refresh_modus();" onclick="refresh_modus();" onkeyup="refresh_modus();" accesskey="u" tabindex="29" /> <label for="fortgeschrittener-modus-input">Fortgeschrittener Mod<kbd>u</kbd>s</label> (<a href="handelsrechner.php?hilfe=0&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" onclick="show_hilfe(); return false;">Hilfe</a>)
 	</p>
 <?php
 	if(!isset($_GET['hilfe']))
@@ -206,15 +206,15 @@
 	<hr id="hilfe-trenn" />
 	<div id="hilfe" class="handelsrechner-hilfe">
 		<ul id="hilfe-schliessen-klein">
-			<li><a href="<?=htmlentities($_SERVER['PHP_SELF'])?>?<?=htmlentities(session_name().'='.urlencode(session_id()))?>" onclick="hide_hilfe(); return false;"><abbr title="Hilfe schließen">X</abbr></a></li>
+			<li><a href="<?php=htmlentities($_SERVER['PHP_SELF'])?>?<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" onclick="hide_hilfe(); return false;"><abbr title="Hilfe schließen">X</abbr></a></li>
 		</ul>
 		<h3>Hilfe zum fortgeschrittenen Modus</h3>
 		<p>Der fortgeschrittene Modus bietet die Möglichkeit, Angebot oder Erhältnis zu verschiedenen Anteilen in die Rohstoffe aufzuteilen.</p>
 		<p>Wenn Sie in den fortgeschrittenen Modus wechseln, erscheint vor jedem Rohstofffeld auf der Seite, auf der Sie gerade nichts eintippen wollen, ein zusätzliches kleines Textfeld. Dort können Sie die Verhältnisse eintragen, wie die Rohstoffe aufgeteilt werden sollen. Alternativ können Sie auch einfach Prozentzahlen eintippen. Achten Sie aber darauf, dass diese wirklich zusammen 100 ergeben.</p>
 
 		<ul id="beispiele-ausklappen">
-			<li><a href="handelsrechner.php?hilfe=<?=(isset($_GET['hilfe']) && $_GET['hilfe'] == '1') ? '0' : '1'?>&amp;<?=htmlentities(session_name().'='.urlencode(session_id()))?>" onclick="show_beispiel_1(); return false;">Beispiel 1</a></li>
-			<li><a href="handelsrechner.php?hilfe=<?=(isset($_GET['hilfe']) && $_GET['hilfe'] == '2') ? '0' : '2'?>&amp;<?=htmlentities(session_name().'='.urlencode(session_id()))?>" onclick="show_beispiel_2(); return false;">Beispiel 2</a></li>
+			<li><a href="handelsrechner.php?hilfe=<?php=(isset($_GET['hilfe']) && $_GET['hilfe'] == '1') ? '0' : '1'?>&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" onclick="show_beispiel_1(); return false;">Beispiel 1</a></li>
+			<li><a href="handelsrechner.php?hilfe=<?php=(isset($_GET['hilfe']) && $_GET['hilfe'] == '2') ? '0' : '2'?>&amp;<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" onclick="show_beispiel_2(); return false;">Beispiel 2</a></li>
 		</ul>
 		<hr id="beispiel-trenn" />
 <?php
@@ -230,7 +230,7 @@
 ?>
 		<div id="beispiel-1" class="handelsrechner-beispiel">
 			<h4>Beispiel 1</h4>
-			<p>Sie möchten <?=ths(10000)?>&nbsp;Tritium verscherbeln. Dafür hätten Sie gerne Carbon und Radium. Sie wollen dieses Carbon und dieses Radium im Verhältnis 1:1 ausgezahlt bekommen, das heißt, dass Sie für die eine Hälfte Ihres Tritiums Carbon haben wollen, für die andere aber Radium.</p>
+			<p>Sie möchten <?php=ths(10000)?>&nbsp;Tritium verscherbeln. Dafür hätten Sie gerne Carbon und Radium. Sie wollen dieses Carbon und dieses Radium im Verhältnis 1:1 ausgezahlt bekommen, das heißt, dass Sie für die eine Hälfte Ihres Tritiums Carbon haben wollen, für die andere aber Radium.</p>
 			<p>Sie tippen dazu einfach ins Carbon-Verhältnisfeld (das kleinere Feld links vom Carbonfeld auf der rechten Seite) eine 1 ein, ebenso ins Radium-Verhältnisfeld. (Verhältnis: 1:1)</p>
 			<hr />
 		</div>
@@ -257,7 +257,7 @@
 ?>
 		<div id="beispiel-2" class="handelsrechner-beispiel">
 			<h4>Beispiel 2</h4>
-			<p>Sie möchten einen Handel betreiben, für den Sie <?=ths(10000)?>&nbsp;Carbon und <?=ths(7000)?>&nbsp;Aluminium erhalten. Sie möchten dafür in Wolfram und Radium bezahlen. Die Bezahlung soll im Verhältnis 2:1 geschehen, das heißt, Sie möchten zwei Drittel des Preises in Wolfram und ein Drittel in Radium bezahlen. Dazu tippen Sie nun einfach in das kleine Feld vor dem Wolframfeld auf der linken Seite eine 2, in das vor dem Radiumfeld eine 1 ein.</p>
+			<p>Sie möchten einen Handel betreiben, für den Sie <?php=ths(10000)?>&nbsp;Carbon und <?php=ths(7000)?>&nbsp;Aluminium erhalten. Sie möchten dafür in Wolfram und Radium bezahlen. Die Bezahlung soll im Verhältnis 2:1 geschehen, das heißt, Sie möchten zwei Drittel des Preises in Wolfram und ein Drittel in Radium bezahlen. Dazu tippen Sie nun einfach in das kleine Feld vor dem Wolframfeld auf der linken Seite eine 2, in das vor dem Radiumfeld eine 1 ein.</p>
 			<hr />
 		</div>
 <?php
@@ -273,7 +273,7 @@
 	}
 ?>
 		<ul id="hilfe-schliessen">
-			<li><a href="<?=htmlentities($_SERVER['PHP_SELF'])?>?<?=htmlentities(session_name().'='.urlencode(session_id()))?>" onclick="hide_hilfe(); return false;">Hilfe schließen</a></li>
+			<li><a href="<?php=htmlentities($_SERVER['PHP_SELF'])?>?<?php=htmlentities(session_name().'='.urlencode(session_id()))?>" onclick="hide_hilfe(); return false;">Hilfe schließen</a></li>
 		</ul>
 	</div>
 <?php
@@ -323,11 +323,11 @@
 	// <![CDATA[
 	function reset_handelskurs()
 	{
-		document.getElementById('handelskurs-carbon').value = '<?=round($handelskurs[0], 2)?>';
-		document.getElementById('handelskurs-aluminium').value = '<?=round($handelskurs[1], 2)?>';
-		document.getElementById('handelskurs-wolfram').value = '<?=round($handelskurs[2], 2)?>';
-		document.getElementById('handelskurs-radium').value = '<?=round($handelskurs[3], 2)?>';
-		document.getElementById('handelskurs-tritium').value = '<?=round($handelskurs[4], 2)?>';
+		document.getElementById('handelskurs-carbon').value = '<?php=round($handelskurs[0], 2)?>';
+		document.getElementById('handelskurs-aluminium').value = '<?php=round($handelskurs[1], 2)?>';
+		document.getElementById('handelskurs-wolfram').value = '<?php=round($handelskurs[2], 2)?>';
+		document.getElementById('handelskurs-radium').value = '<?php=round($handelskurs[3], 2)?>';
+		document.getElementById('handelskurs-tritium').value = '<?php=round($handelskurs[4], 2)?>';
 	}
 
 	function refresh_eingabe()
@@ -628,7 +628,7 @@
 		}
 	}
 
-	<?=isset($_GET['hilfe']) ? 'show' : 'hide'?>_hilfe();
+	<?php=isset($_GET['hilfe']) ? 'show' : 'hide'?>_hilfe();
 	init();
 	// ]]>
 </script>

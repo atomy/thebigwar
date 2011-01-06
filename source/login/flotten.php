@@ -42,7 +42,7 @@ if(isset($_GET['action_galaxy']) && isset($_GET['action_system']) && isset($_GET
         elseif($return[0] == 'error')
         {
             ?>
-<p class="<?=htmlspecialchars($return[0])?>"><?=htmlspecialchars($return[1])?></p>
+<p class="<?php=htmlspecialchars($return[0])?>"><?php=htmlspecialchars($return[1])?></p>
             <?php
             login_gui::html_foot();
             exit();
@@ -686,8 +686,8 @@ if($buendnisflug)
 {
     ?>
 	<dt class="c-ziel">Ziel</dt>
-	<dd class="c-ziel"><?=utf8_htmlentities($bndfleet_obj->getCurrentTarget())?>
-	&ndash; <?=$planet_owner ? utf8_htmlentities($galaxy_obj->getPlanetName($_POST['system'], $_POST['planet'])).' <span class="playername">('.utf8_htmlentities($planet_owner).')</span>' : 'Unbesiedelt'?></dd>
+	<dd class="c-ziel"><?php=utf8_htmlentities($bndfleet_obj->getCurrentTarget())?>
+	&ndash; <?php=$planet_owner ? utf8_htmlentities($galaxy_obj->getPlanetName($_POST['system'], $_POST['planet'])).' <span class="playername">('.utf8_htmlentities($planet_owner).')</span>' : 'Unbesiedelt'?></dd>
 
 
 	<dt class="c-auftragsart">Auftragsart</dt>
@@ -697,7 +697,7 @@ if($buendnisflug)
 	</dt>
 
 	<dt class="c-ankunft">Ankunft</dt>
-	<dd class="c-ankunft"><?=date('H:i:s, Y-m-d', $bndfleet_obj->getArrivalTime())?>
+	<dd class="c-ankunft"><?php=date('H:i:s, Y-m-d', $bndfleet_obj->getArrivalTime())?>
 	(Serverzeit)</dd>
 	<?php
 }
@@ -705,18 +705,18 @@ if(!$buendnisflug)
 {
     ?>
 	<dt class="c-ziel">Ziel</dt>
-	<dd class="c-ziel"><?=utf8_htmlentities($fleet_obj->getCurrentTarget())?>
-	&ndash; <?=$planet_owner ? utf8_htmlentities($galaxy_obj->getPlanetName($_POST['system'], $_POST['planet'])).' <span class="playername">('.utf8_htmlentities($planet_owner).')</span>' : 'Unbesiedelt'?></dd>
+	<dd class="c-ziel"><?php=utf8_htmlentities($fleet_obj->getCurrentTarget())?>
+	&ndash; <?php=$planet_owner ? utf8_htmlentities($galaxy_obj->getPlanetName($_POST['system'], $_POST['planet'])).' <span class="playername">('.utf8_htmlentities($planet_owner).')</span>' : 'Unbesiedelt'?></dd>
 
 
 	<dt class="c-auftragsart">Auftragsart</dt>
-	<dd class="c-auftragsart"><?=isset($type_names[$_POST['auftrag']]) ? htmlentities($type_names[$_POST['auftrag']]) : utf8_htmlentities($_POST['auftrag'])?>
+	<dd class="c-auftragsart"><?php=isset($type_names[$_POST['auftrag']]) ? htmlentities($type_names[$_POST['auftrag']]) : utf8_htmlentities($_POST['auftrag'])?>
 	
 	
 	</dt>
 
 	<dt class="c-ankunft">Ankunft</dt>
-	<dd class="c-ankunft"><?=date('H:i:s, Y-m-d', $fleet_obj->getArrivalTime())?>
+	<dd class="c-ankunft"><?php=date('H:i:s, Y-m-d', $fleet_obj->getArrivalTime())?>
 	(Serverzeit)</dd>
 	<?php
 }
@@ -725,7 +725,7 @@ if($_POST['haltezeit'] !=0)
     ?>
 
 	<dt class="c-haltezeit">Haltezeit/Minuten</dt>
-	<dd class="c-haltezeit"><?=($_POST['haltezeit'])." Minuten"?></dd>
+	<dd class="c-haltezeit"><?php=($_POST['haltezeit'])." Minuten"?></dd>
 	<?php
 }
 if(isset($_POST['saveflug']))
@@ -734,7 +734,7 @@ if(isset($_POST['saveflug']))
     ?>
 
 	<dt class="c-saveflug">Saveflug</dt>
-	<dd class="c-saveflug"><?="Saveflug"?></dd>
+	<dd class="c-saveflug"><?php="Saveflug"?></dd>
 	<?php
 }
 ?>
@@ -791,26 +791,26 @@ if(isset($_POST['saveflug']))
 
   		                    ?>
 <form
-	action="flotten.php?<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"
+	action="flotten.php?<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"
 	method="post" class="flotte-versenden-2" name="sendfleet"
 	onsubmit="this.setAttribute('onsubmit', 'return confirm(\'Doppelklickschutz: Sie haben ein zweites Mal auf \u201eAbsenden\u201c geklickt. Dadurch wird Ihre Flotte auch zweimal abgesandt (sofern die nötigen Schiffe verfügbar sind). Sind Sie sicher, dass Sie diese Aktion durchführen wollen?\');');">
 <dl>
 	<dt class="c-ziel">Ziel</dt>
-	<dd class="c-ziel"><?=utf8_htmlentities($_POST['galaxie'].':'.$_POST['system'].':'.$_POST['planet'])?>
-	&ndash; <?=$planet_owner ? utf8_htmlentities($galaxy_obj->getPlanetName($_POST['system'], $_POST['planet'])).' <span class="playername">('.utf8_htmlentities($galaxy_obj->getPlanetOwner($_POST['system'], $_POST['planet'])).')</span>' : 'Unbesiedelt'?></dd>
+	<dd class="c-ziel"><?php=utf8_htmlentities($_POST['galaxie'].':'.$_POST['system'].':'.$_POST['planet'])?>
+	&ndash; <?php=$planet_owner ? utf8_htmlentities($galaxy_obj->getPlanetName($_POST['system'], $_POST['planet'])).' <span class="playername">('.utf8_htmlentities($galaxy_obj->getPlanetOwner($_POST['system'], $_POST['planet'])).')</span>' : 'Unbesiedelt'?></dd>
 
 	<dt class="c-entfernung">Entfernung</dt>
-	<dd class="c-entfernung"><?=ths($distance)?>&thinsp;<abbr
+	<dd class="c-entfernung"><?php=ths($distance)?>&thinsp;<abbr
 		title="Orbits">Or</abbr></dd>
 
 	<dt class="c-antrieb">Antrieb</dt>
-	<dd class="c-antrieb"><?=ths($speed)?>&thinsp;<abbr
+	<dd class="c-antrieb"><?php=ths($speed)?>&thinsp;<abbr
 		title="Mikroorbits pro Quadratsekunde">µOr&frasl;s²</abbr></dd>
 
 	<dt class="c-tritiumverbrauch">Tritiumverbrauch</dt>
 	<dd
-		class="c-tritiumverbrauch <?=($this_ress[4] >= $tritium) ? 'ja' : 'nein'?>"
-		id="tritium-verbrauch"><?=ths($tritium)?>&thinsp;<abbr title="Tonnen">t</abbr></dd>
+		class="c-tritiumverbrauch <?php=($this_ress[4] >= $tritium) ? 'ja' : 'nein'?>"
+		id="tritium-verbrauch"><?php=ths($tritium)?>&thinsp;<abbr title="Tonnen">t</abbr></dd>
 
 	<dt class="c-geschwindigkeit" style="height: 40px; line-height: 40px;"><label
 		for="speed">Gesch<kbd>w</kbd>indigkeit</label></dt>
@@ -826,7 +826,7 @@ if(isset($_POST['saveflug']))
 		onKeyDown="recalc_values();" maxlength="2" /> &#37;</div>
 	</dd>
  
-	<script type="text/javascript" src="<?=htmlentities(h_root.'/javascript/yui-min.js')?>"></script>
+	<script type="text/javascript" src="<?php=htmlentities(h_root.'/javascript/yui-min.js')?>"></script>
 
 	<script type="text/javascript">
 	// Create a YUI instance and request the slider module and its dependencies
@@ -864,7 +864,7 @@ if(isset($_POST['saveflug']))
 
 	<dt class="c-flugzeit">Flugzeit</dt>
 	<dd class="c-flugzeit" id="flugzeit"
-		title="Ankunft: <?=date('H:i:s, Y-m-d', time()+$time)?> (Serverzeit)"><?=$time_string?></dd>
+		title="Ankunft: <?php=date('H:i:s, Y-m-d', time()+$time)?> (Serverzeit)"><?php=$time_string?></dd>
 		<?php
 		if($buendnisflug)
 		{
@@ -874,11 +874,11 @@ if(isset($_POST['saveflug']))
 
 	<dt class="c-tritiumverbrauch">Flugzeit Verbandsflotte</dt>
 	<dd
-		class="c-tritiumverbrauch <?=($this_ress[4] >= $tritium) ? 'ja' : 'nein'?>"
-		id="restbauzeit-<?=utf8_htmlentities($buendnisflug_id)?>">Ankunft: <?=date('H:i:s, Y-m-d', $arrival_time1)?>
+		class="c-tritiumverbrauch <?php=($this_ress[4] >= $tritium) ? 'ja' : 'nein'?>"
+		id="restbauzeit-<?php=utf8_htmlentities($buendnisflug_id)?>">Ankunft: <?php=date('H:i:s, Y-m-d', $arrival_time1)?>
 	(Serverzeit)</dd>
 	<script type="text/javascript">	
-	init_countdown('<?=$countdown1[0]?>', <?=$countdown1[1]?>, <?=$countdown1[2] ? 'false' : 'true'?>, <?=global_setting("EVENTHANDLER_INTERVAL")?>);		
+	init_countdown('<?php=$countdown1[0]?>', <?php=$countdown1[1]?>, <?php=$countdown1[2] ? 'false' : 'true'?>, <?php=global_setting("EVENTHANDLER_INTERVAL")?>);		
 	</script>
 	</dd>
 	<dt class="c-auftrag"><label for="auftrag">A<kbd>u</kbd>ftrag</label></dt>
@@ -888,7 +888,7 @@ if(isset($_POST['saveflug']))
 		?>
 
 	<dt class="c-transportkapazitaet">Transportkapazität</dt>
-	<dd class="c-transportkapazitaet"><?=ths($transport[0])?>&thinsp;<abbr
+	<dd class="c-transportkapazitaet"><?php=ths($transport[0])?>&thinsp;<abbr
 		title="Tonnen">t</abbr></dd>
 		<?php
 		if(!$buendnisflug)
@@ -898,7 +898,7 @@ if(isset($_POST['saveflug']))
 	<script type="text/javascript">
 			// <![CDATA[
 			document.write('<dt class="c-verbleibend" id="transport-verbleibend-dt">Verbleibend</dt>');
-			document.write('<dd class="c-verbleibend" id="transport-verbleibend-dd"><?=ths($transport[0])?>&thinsp;<abbr title="Tonnen">t</abbr></dd>');
+			document.write('<dd class="c-verbleibend" id="transport-verbleibend-dd"><?php=ths($transport[0])?>&thinsp;<abbr title="Tonnen">t</abbr></dd>');
 			// ]]>
 		</script>
 	<dt class="c-auftrag"><label for="auftrag">A<kbd>u</kbd>ftrag</label></dt>
@@ -908,7 +908,7 @@ if(isset($_POST['saveflug']))
 		foreach($types as $type)
 		{
 		    ?>
-		<option value="<?=utf8_htmlentities($type)?>"><?=isset($type_names[$type]) ? htmlentities($type_names[$type]) : $type?></option>
+		<option value="<?php=utf8_htmlentities($type)?>"><?php=isset($type_names[$type]) ? htmlentities($type_names[$type]) : $type?></option>
 		<?php
 		}
 		?>
@@ -929,35 +929,35 @@ if(isset($_POST['saveflug']))
 	    ?>
 		<dt><label for="transport-carbon">Carbo<kbd>n</kbd></label> - <a
 			href="#"
-			onclick='document.getElementById("transport-carbon").value = "<?=ereg_replace("&nbsp;","",ths($ress[0]))?>";recalc_values();'
+			onclick='document.getElementById("transport-carbon").value = "<?php=ereg_replace("&nbsp;","",ths($ress[0]))?>";recalc_values();'
 			ondblclick='document.getElementById("transport-carbon").value = "0";recalc_values();' />max</a></dt>
 		<dd><input type="text" name="transport[0]" id="transport-carbon"
 			value="0" onchange="recalc_values();" accesskey="n" tabindex="3"
 			onkeyup="recalc_values();" onclick="recalc_values();" /></dd>
 
 		<dt><label for="transport-aluminium">Aluminium</label> - <a href="#"
-			onclick='document.getElementById("transport-aluminium").value = "<?=ereg_replace("&nbsp;","",ths($ress[1]))?>";recalc_values();'
+			onclick='document.getElementById("transport-aluminium").value = "<?php=ereg_replace("&nbsp;","",ths($ress[1]))?>";recalc_values();'
 			ondblclick='document.getElementById("transport-aluminium").value = "0";recalc_values();' />max</a></dt>
 		<dd><input type="text" name="transport[1]" id="transport-aluminium"
 			value="0" onchange="recalc_values();" tabindex="4"
 			onkeyup="recalc_values();" onclick="recalc_values();" /></dd>
 
 		<dt><label for="transport-wolfram">Wolfram</label> - <a href="#"
-			onclick='document.getElementById("transport-wolfram").value = "<?=ereg_replace("&nbsp;","",ths($ress[2]))?>";recalc_values();'
+			onclick='document.getElementById("transport-wolfram").value = "<?php=ereg_replace("&nbsp;","",ths($ress[2]))?>";recalc_values();'
 			ondblclick='document.getElementById("transport-wolfram").value = "0";recalc_values();' />max</a></dt>
 		<dd><input type="text" name="transport[2]" id="transport-wolfram"
 			value="0" onchange="recalc_values();" tabindex="5"
 			onkeyup="recalc_values();" onclick="recalc_values();" /></dd>
 
 		<dt><label for="transport-radium">Radium</label> - <a href="#"
-			onclick='document.getElementById("transport-radium").value = "<?=ereg_replace("&nbsp;","",ths($ress[3]))?>";recalc_values();'
+			onclick='document.getElementById("transport-radium").value = "<?php=ereg_replace("&nbsp;","",ths($ress[3]))?>";recalc_values();'
 			ondblclick='document.getElementById("transport-radium").value = "0";recalc_values();' />max</a></dt>
 		<dd><input type="text" name="transport[3]" id="transport-radium"
 			value="0" onchange="recalc_values();" tabindex="6"
 			onkeyup="recalc_values();" onclick="recalc_values();" /></dd>
 
 		<dt><label for="transport-tritium">Tritium</label> - <a href="#"
-			onclick='document.getElementById("transport-tritium").value = "<?=ereg_replace("&nbsp;","",ths($ress[4]))-ereg_replace("&nbsp;","",ths($tritium+2))?>";recalc_values();'
+			onclick='document.getElementById("transport-tritium").value = "<?php=ereg_replace("&nbsp;","",ths($ress[4]))-ereg_replace("&nbsp;","",ths($tritium+2))?>";recalc_values();'
 			ondblclick='document.getElementById("transport-tritium").value = "0";recalc_values();' />max</a></dt>
 		<dd><input type="text" name="transport[4]" id="transport-tritium"
 			value="0" onchange="recalc_values();" tabindex="7"
@@ -974,10 +974,10 @@ if(isset($_POST['saveflug']))
 	    {
 	        $item_info = $me->getItemInfo($rob, 'roboter');
 	        ?>
-		<dt><label for="rtransport-<?=utf8_htmlentities($rob)?>"><?=utf8_htmlentities($item_info['name'])?></label></dt>
-		<dd><input type="text" name="rtransport[<?=utf8_htmlentities($rob)?>]"
-			id="rtransport-<?=utf8_htmlentities($rob)?>" value="0"
-			onchange="recalc_values();" tabindex="<?=$tabindex++?>"
+		<dt><label for="rtransport-<?php=utf8_htmlentities($rob)?>"><?php=utf8_htmlentities($item_info['name'])?></label></dt>
+		<dd><input type="text" name="rtransport[<?php=utf8_htmlentities($rob)?>]"
+			id="rtransport-<?php=utf8_htmlentities($rob)?>" value="0"
+			onchange="recalc_values();" tabindex="<?php=$tabindex++?>"
 			onkeyup="recalc_values();" onclick="recalc_values();" /></dd>
 			<?php
 	    }
@@ -1085,14 +1085,14 @@ if(isset($_POST['saveflug']))
 					speed_obj.value = 100;
 				
 				var speed = parseFloat(speed_obj.value) / 100;
-				var tritium = <?=$tritium?>;
+				var tritium = <?php=$tritium?>;
 				if(!isNaN(speed))
 					tritium = Math.floor(tritium*speed);
 				document.getElementById('tritium-verbrauch').innerHTML = ths(tritium)+'&thinsp;<abbr title="Tonnen">t</abbr>';
-				document.getElementById('tritium-verbrauch').className = 'c-tritiumverbrauch '+((<?=$this_ress[4]?> >= tritium) ? 'ja' : 'nein');
+				document.getElementById('tritium-verbrauch').className = 'c-tritiumverbrauch '+((<?php=$this_ress[4]?> >= tritium) ? 'ja' : 'nein');
 
 				// Flugzeit
-				var time = <?=$time?>;
+				var time = <?php=$time?>;
 				if(!isNaN(speed))
 					time /= speed;
 				time = Math.round(time);
@@ -1145,7 +1145,7 @@ if(isset($_POST['saveflug']))
 									foreach($me->getItemsList('roboter') as $rob)
 										$robs_arr[] = "myParseInt(document.getElementById('rtransport-".$rob."').value)";
 ?>
-					var ges_rob = <?=implode('+', $robs_arr)?>;
+					var ges_rob = <?php=implode('+', $robs_arr)?>;
 <?php
 								}
 								else
@@ -1155,10 +1155,10 @@ if(isset($_POST['saveflug']))
 <?php
 								}
 ?>
-					var remain_ress = <?=$transport[0]?>;
+					var remain_ress = <?php=$transport[0]?>;
 					if(!isNaN(ges_ress))
 						remain_ress -= ges_ress;
-					var remain_rob = <?=$transport[1]?>;
+					var remain_rob = <?php=$transport[1]?>;
 					if(!isNaN(ges_rob))
 						remain_rob -= ges_rob;
 					if(remain_ress < 0)
@@ -1188,21 +1188,21 @@ if(isset($_POST['saveflug']))
 <div><?php
 foreach($_POST['flotte'] as $id=>$anzahl)
 {
-    ?> <input type="hidden" name="flotte[<?=utf8_htmlentities($id)?>]"
-	value="<?=utf8_htmlentities($anzahl)?>" /> <?php
+    ?> <input type="hidden" name="flotte[<?php=utf8_htmlentities($id)?>]"
+	value="<?php=utf8_htmlentities($anzahl)?>" /> <?php
 }
 ?> <input type="hidden" name="galaxie"
-	value="<?=utf8_htmlentities($_POST['galaxie'])?>" /> <input
+	value="<?php=utf8_htmlentities($_POST['galaxie'])?>" /> <input
 	type="hidden" name="system"
-	value="<?=utf8_htmlentities($_POST['system'])?>" /> <input
+	value="<?php=utf8_htmlentities($_POST['system'])?>" /> <input
 	type="hidden" name="planet"
-	value="<?=utf8_htmlentities($_POST['planet'])?>" /> <?php
+	value="<?php=utf8_htmlentities($_POST['planet'])?>" /> <?php
 	if($buendnisflug)
 	{
 	    $_POST["buendnis_benutzername1"] = ereg_replace(' ', "&nbsp", $_POST["buendnis_benutzername"]);
-	    ?> <!--<button type="submit" accesskey="d" name="buendnisflug1" value=<?=$_POST["buendnis_benutzername"]?>>Absen<kbd>d</kbd>en</button>-->
+	    ?> <!--<button type="submit" accesskey="d" name="buendnisflug1" value=<?php=$_POST["buendnis_benutzername"]?>>Absen<kbd>d</kbd>en</button>-->
 <button type="submit" accesskey="d" name="buendnisflug1"
-	value=<?=$_POST["buendnis_benutzername1"]."/".$_POST["buendnis_flottenpasswort"]?>>Absen<kbd>d</kbd>en</button>
+	value=<?php=$_POST["buendnis_benutzername1"]."/".$_POST["buendnis_flottenpasswort"]?>>Absen<kbd>d</kbd>en</button>
 
 	    <?php
 	}
@@ -1234,8 +1234,8 @@ if($show_versenden)
     ?>
 <h3>Flotte versenden</h3>
 <p
-	class="flotte-anzahl<?=($my_flotten >= $max_flotten) ? ' voll' : ''?>">
-Sie haben derzeit <?=ths($my_flotten)?> von <?=ths($max_flotten)?> <?=($max_flotten == 1) ? 'möglichen Flotte' : 'möglichen Flotten'?>
+	class="flotte-anzahl<?php=($my_flotten >= $max_flotten) ? ' voll' : ''?>">
+Sie haben derzeit <?php=ths($my_flotten)?> von <?php=ths($max_flotten)?> <?php=($max_flotten == 1) ? 'möglichen Flotte' : 'möglichen Flotten'?>
 unterwegs.<br />
 Bauen Sie das Kontrollwesen aus, um die maximale Anzahl zu erhöhen.</p>
     <?php
@@ -1245,7 +1245,7 @@ Bauen Sie das Kontrollwesen aus, um die maximale Anzahl zu erhöhen.</p>
     if(isset($_GET['action_planet'])) $this_pos[2] = $_GET['action_planet'];
     ?>
 <form
-	action="flotten.php?<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"
+	action="flotten.php?<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"
 	method="post" class="flotte-versenden"><?php
 	if($my_flotten < $max_flotten && $me->permissionToAct())
 	{
@@ -1257,16 +1257,16 @@ Bauen Sie das Kontrollwesen aus, um die maximale Anzahl zu erhöhen.</p>
 <dl>
 	<dt class="c-ziel"><label for="ziel-galaxie"><kbd>Z</kbd>iel</label></dt>
 	<dd class="c-ziel"><input type="text" id="ziel-galaxie" name="galaxie"
-		value="<?=utf8_htmlentities($this_pos[0])?>" title="Ziel: Galaxie"
+		value="<?php=utf8_htmlentities($this_pos[0])?>" title="Ziel: Galaxie"
 		accesskey="z" tabindex="1" onclick="syncronise(true);"
 		onchange="syncronise(true);" onkeyup="syncronise(true);"
-		maxlength="<?=strlen(getGalaxiesCount())?>" />:<input type="text"
+		maxlength="<?php=strlen(getGalaxiesCount())?>" />:<input type="text"
 		id="ziel-system" name="system"
-		value="<?=utf8_htmlentities($this_pos[1])?>" title="Ziel: System"
+		value="<?php=utf8_htmlentities($this_pos[1])?>" title="Ziel: System"
 		tabindex="2" onclick="syncronise(true);" onchange="syncronise(true);"
 		onkeyup="syncronise(true);" maxlength="3" />:<input type="text"
 		id="ziel-planet" name="planet"
-		value="<?=utf8_htmlentities($this_pos[2])?>" title="Ziel: Planet"
+		value="<?php=utf8_htmlentities($this_pos[2])?>" title="Ziel: Planet"
 		tabindex="3" onclick="syncronise(true);" onchange="syncronise(true);"
 		onkeyup="syncronise(true);" maxlength="2" /></dd>
 	<script type="text/javascript">
@@ -1297,7 +1297,7 @@ Bauen Sie das Kontrollwesen aus, um die maximale Anzahl zu erhöhen.</p>
 						}
 						else $s .= '[unbesiedelt]';
 ?>
-					document.write('<option value="<?=htmlspecialchars($shortcut)?>"><?=preg_replace('/[\'\\\\]/', '\\\\\\0', htmlspecialchars($s))?></option>');
+					document.write('<option value="<?php=htmlspecialchars($shortcut)?>"><?php=preg_replace('/[\'\\\\]/', '\\\\\\0', htmlspecialchars($s))?></option>');
 <?php
 					}
 ?>
@@ -1313,7 +1313,7 @@ Bauen Sie das Kontrollwesen aus, um die maximale Anzahl zu erhöhen.</p>
 				{
 					$me->setActivePlanet($planet);
 ?>
-					document.write('<option value="<?=utf8_htmlentities($me->getPosString())?>"<?=($planet == $active_planet) ? ' selected="selected"' : ''?>><?=utf8_htmlentities($me->getPosString())?>: <?=preg_replace('/[\'\\\\]/', '\\\\\\0', utf8_htmlentities($me->planetName()))?></option>');
+					document.write('<option value="<?php=utf8_htmlentities($me->getPosString())?>"<?php=($planet == $active_planet) ? ' selected="selected"' : ''?>><?php=utf8_htmlentities($me->getPosString())?>: <?php=preg_replace('/[\'\\\\]/', '\\\\\\0', utf8_htmlentities($me->planetName()))?></option>');
 <?php
 				}
 				$me->setActivePlanet($active_planet);
@@ -1324,7 +1324,7 @@ Bauen Sie das Kontrollwesen aus, um die maximale Anzahl zu erhöhen.</p>
 				if(count($shortcuts) > 0)
 				{
 ?>
-					document.write('<a href="flotten_actions.php?action=shortcuts&amp;<?=htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" class="lesezeichen-verwalten-link">[Lesezeichen verwalten]</a>');
+					document.write('<a href="flotten_actions.php?action=shortcuts&amp;<?php=htmlspecialchars(urlencode(session_name()).'='.urlencode(session_id()))?>" class="lesezeichen-verwalten-link">[Lesezeichen verwalten]</a>');
 <?php
 				}
 ?>
@@ -1382,14 +1382,14 @@ Bauen Sie das Kontrollwesen aus, um die maximale Anzahl zu erhöhen.</p>
 	<dd class="c-benutzername"><input type="text"
 		id="i-buendnis-benutzername" name="buendnis_benutzername"
 		<?php if(isset($_POST["buendnis_benutzername"])){?>
-		value="<?=htmlspecialchars($_POST["buendnis_benutzername"])?>"
+		value="<?php=htmlspecialchars($_POST["buendnis_benutzername"])?>"
 		<?php }?> /></dd>
 
 	<dt class="c-passwort"><label for="i-buendnis-flottenpasswort">Flottenpasswort</label></dt>
 	<dd class="c-passwort"><input type="text"
 		id="i-buendnis-flottenpasswort" name="buendnis_flottenpasswort"
 		<?php if(isset($_POST["buendnis_flottenpasswort"])){?>
-		value="<?=htmlspecialchars($_POST["buendnis_flottenpasswort"])?>"
+		value="<?php=htmlspecialchars($_POST["buendnis_flottenpasswort"])?>"
 		<?php }?> /></dd>
 </dl>
 </fieldset>
@@ -1408,15 +1408,15 @@ foreach($me->getItemsList('schiffe') as $id)
     $item_info = $me->getItemInfo($id, 'schiffe');
     ?>
 	<dt><a
-		href="help/description.php?id=<?=htmlentities(urlencode($id))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"
-		title="Genauere Informationen anzeigen"><?=utf8_htmlentities($item_info['name'])?></a>
-	<span class="vorhanden">(<?=ths($item_info['level'])?>&nbsp;vorhanden)</span></dt>
-	<dd><input type="text" name="flotte[<?=utf8_htmlentities($id)?>]"
-		value="0" tabindex="<?=$i?>"
-		<?=($my_flotten >= $max_flotten || !$me->permissionToAct()) ? ' readonly="readonly"' : ''?>
-		id="<?=$i?>" /> <input name="button" type="button"
-		onclick='document.getElementById("<?=$i?>").value = "<?=$item_info['level']?>"'
-		ondblclick='document.getElementById("<?=$i?>").value = "0"'
+		href="help/description.php?id=<?php=htmlentities(urlencode($id))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>"
+		title="Genauere Informationen anzeigen"><?php=utf8_htmlentities($item_info['name'])?></a>
+	<span class="vorhanden">(<?php=ths($item_info['level'])?>&nbsp;vorhanden)</span></dt>
+	<dd><input type="text" name="flotte[<?php=utf8_htmlentities($id)?>]"
+		value="0" tabindex="<?php=$i?>"
+		<?php=($my_flotten >= $max_flotten || !$me->permissionToAct()) ? ' readonly="readonly"' : ''?>
+		id="<?php=$i?>" /> <input name="button" type="button"
+		onclick='document.getElementById("<?php=$i?>").value = "<?php=$item_info['level']?>"'
+		ondblclick='document.getElementById("<?php=$i?>").value = "0"'
 		value="max" /></dd>
 		<?php
 		$i++;
@@ -1429,7 +1429,7 @@ if($i>5 && $my_flotten < $max_flotten && $me->permissionToAct())
 {
     ?>
 <div>
-<button type="submit" accesskey="w" tabindex="<?=$i?>"><kbd>W</kbd>eiter</button>
+<button type="submit" accesskey="w" tabindex="<?php=$i?>"><kbd>W</kbd>eiter</button>
 </div>
     <?php
 }

@@ -91,7 +91,7 @@
 				if($continue)
 				{
 ?>
-<form action="passwd.php?name=<?=htmlspecialchars(urlencode($_GET['name']).'&id='.urlencode($_GET['id']).'&database='.urlencode($_GET['database']))?>" method="post">
+<form action="passwd.php?name=<?php=htmlspecialchars(urlencode($_GET['name']).'&id='.urlencode($_GET['id']).'&database='.urlencode($_GET['database']))?>" method="post">
 	<dl>
 		<dt><label for="neues-passwort-input">Neues Passwort</label></dt>
 		<dd><input type="password" name="new_password" id="neues-passwort-input" /></dd>
@@ -113,7 +113,7 @@
 			if(isset($error) && $error != '')
 			{
 ?>
-<p class="error"><?=htmlspecialchars($error)?></p>
+<p class="error"><?php=htmlspecialchars($error)?></p>
 <?php
 			}
 			else
@@ -132,9 +132,9 @@
 <hr />
 <p>Um Ihr Passwort ändern zu können, füllen Sie bitte in das folgende Formular Ihren Benutzernamen und diejenige <span xml:lang="en">E-Mail</span>-Adresse an, die Sie im Spiel in Ihren Einstellungen gespeichert haben.</p>
 
-<form action="<?=htmlspecialchars(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/passwd.php')?>" method="post">
+<form action="<?php=htmlspecialchars(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/passwd.php')?>" method="post">
 
-<!-- <form action="<?=htmlspecialchars(USE_PROTOCOL.'://'.$_SERVER['HTTP_HOST'].h_root.'/passwd.php')?>" method="post"> -->
+<!-- <form action="<?php=htmlspecialchars(USE_PROTOCOL.'://'.$_SERVER['HTTP_HOST'].h_root.'/passwd.php')?>" method="post"> -->
 	<dl>
 		<dt><label for="runde-select">Runde</label></dt>
 		<dd><select name="database" id="runde-select">
@@ -142,7 +142,7 @@
 		foreach($databases as $id=>$info)
 		{
 ?>
-			<option value="<?=htmlspecialchars($id)?>"><?=htmlspecialchars($info[1])?></option>
+			<option value="<?php=htmlspecialchars($id)?>"><?php=htmlspecialchars($info[1])?></option>
 <?php
 		}
 ?>

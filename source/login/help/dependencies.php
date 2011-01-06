@@ -15,10 +15,10 @@
     foreach($check_deps as $type=>$heading)
     {
 ?>
-<table class="deps" id="deps-<?=htmlentities($type)?>">
+<table class="deps" id="deps-<?php=htmlentities($type)?>">
     <thead>
         <tr>
-            <th class="c-item"><?=utf8_htmlentities($heading)?></th>
+            <th class="c-item"><?php=utf8_htmlentities($heading)?></th>
             <th class="c-deps">Abhängigkeiten</th>
         </tr>
     </thead>
@@ -29,8 +29,8 @@
         {
             $item_info = $me->getItemInfo($item, $type);
 ?>
-        <tr id="deps-<?=htmlentities($item)?>">
-            <td class="c-item"><a href="description.php?id=<?=htmlentities(urlencode($item))?>&amp;<?=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?=utf8_htmlentities($item_info['name'])?></a></td>
+        <tr id="deps-<?php=htmlentities($item)?>">
+            <td class="c-item"><a href="description.php?id=<?php=htmlentities(urlencode($item))?>&amp;<?php=htmlentities(urlencode(session_name()).'='.urlencode(session_id()))?>" title="Genauere Informationen anzeigen"><?php=utf8_htmlentities($item_info['name'])?></a></td>
 <?php
             if(!isset($item_info['deps']) || count($item_info['deps']) <= 0)
             {
@@ -49,7 +49,7 @@
                     $dep = explode('-', $dep, 2);
                     $this_info = $me->getItemInfo($dep[0]);
 ?>
-                    <li class="deps-<?=($this_info['level'] >= $dep[1]) ? 'ja' : 'nein'?>"><a href="#deps-<?=htmlentities($dep[0])?>" title="Zu diesem Gegenstand scrollen."><?=utf8_htmlentities($this_info['name'])?></a> <span class="stufe">(Stufe&nbsp;<?=ths($dep[1])?>)</span></li>
+                    <li class="deps-<?php=($this_info['level'] >= $dep[1]) ? 'ja' : 'nein'?>"><a href="#deps-<?php=htmlentities($dep[0])?>" title="Zu diesem Gegenstand scrollen."><?php=utf8_htmlentities($this_info['name'])?></a> <span class="stufe">(Stufe&nbsp;<?php=ths($dep[1])?>)</span></li>
 <?php
                 }
 ?>

@@ -116,7 +116,7 @@
 					phpbb2egg("\00304Ein neuer Spieler ist dem Universum beigetreten: ".$_POST['username'], "tbw" );
 ?>
 <p class="successful">
-	Die Registrierung war erfolgreich. Sie können sich nun anmelden. Die Koordinaten Ihres Hauptplaneten lauten <?=htmlentities($koords)?>.
+	Die Registrierung war erfolgreich. Sie können sich nun anmelden. Die Koordinaten Ihres Hauptplaneten lauten <?php=htmlentities($koords)?>.
 </p>
 <ul>
 	<li><a href="./">Zur&uuml;ck zur Startseite</a></li>
@@ -131,18 +131,18 @@
 		{
 ?>
 <p class="error">
-	<?=utf8_htmlentities($error)."\n"?>
+	<?php=utf8_htmlentities($error)."\n"?>
 </p>
 <?php
 		}
 	}
 
 ?>
-<form action="<?=htmlentities(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/register.php')?>" method="post" id="register-form">
+<form action="<?php=htmlentities(global_setting("USE_PROTOCOL").'://'.$_SERVER['HTTP_HOST'].h_root.'/register.php')?>" method="post" id="register-form">
 	<div id="registerinput">
 		<div>
 			<label for="username">Benutzername*</label>
-			<input type="text" id="username" name="username"<?=isset($_POST['username']) ? ' value="'.utf8_htmlentities($_POST['username']).'"' : ''?> maxlength="24" />
+			<input type="text" id="username" name="username"<?php=isset($_POST['username']) ? ' value="'.utf8_htmlentities($_POST['username']).'"' : ''?> maxlength="24" />
 		</div>	
 
 		<div>
@@ -157,12 +157,12 @@
 
 		<div>
 			<label for="email"><span xml:lang="en">E-Mail</span>-Adresse</label>
-			<input type="text" name="email" id="email"<?=isset($_POST['email']) ? ' value="'.utf8_htmlentities($_POST['email']).'"' : ''?> />
+			<input type="text" name="email" id="email"<?php=isset($_POST['email']) ? ' value="'.utf8_htmlentities($_POST['email']).'"' : ''?> />
 		</div>
 
 		<div>
 			<label for="hauptplanet">Gew&uuml;nschter Name des Hauptplaneten*</label>
-			<input type="text" id="hauptplanet" name="hauptplanet"<?=isset($_POST['hauptplanet']) ? ' value="'.utf8_htmlentities($_POST['hauptplanet']).'"' : ''?> maxlength="24" />
+			<input type="text" id="hauptplanet" name="hauptplanet"<?php=isset($_POST['hauptplanet']) ? ' value="'.utf8_htmlentities($_POST['hauptplanet']).'"' : ''?> maxlength="24" />
 		</div>
 		
 		<div id="agb_ack">

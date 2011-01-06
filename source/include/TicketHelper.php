@@ -21,7 +21,7 @@ class TicketHelper
         {
 ?>
 <div id="ticketError">Fehler: Betreff ist zu lang!</div>
-<?
+<?php
             return;
         }
         
@@ -29,7 +29,7 @@ class TicketHelper
         {
             ?>
 <div id="ticketError">Fehler: Text ist zu lang!</div>
-<?
+<?php
             return;
         }
         
@@ -40,7 +40,7 @@ class TicketHelper
 ?>
 <div id="ticketError">Fehler: Du hast die maximale Anzahl von
 möglichen offenen Tickets ereicht!</div>
-<?
+<?php
             return;
         }
         
@@ -55,7 +55,7 @@ möglichen offenen Tickets ereicht!</div>
         {
 ?>
 <div id="ticketError">Fehler: Text ist zu lang!</div>
-<?
+<?php
             return;
         }
         
@@ -67,26 +67,26 @@ möglichen offenen Tickets ereicht!</div>
         $tId = $tManager->newTicket($username, $pText, $pSubject);
 ?>
 <div id="addMsg">
-<?
+<?php
         if ( $tId >= 0 )
         {
 ?>
   <div id="addMsgSuccess">Ticket hinzugefügt<br />
   </div>
-  <a href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück zur Ticket&uuml;bersicht</a> 
-  <a href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tId )?>">Zu erstelltem Ticket #<?=$tId?></a> 
-<?
+  <a href="ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück zur Ticket&uuml;bersicht</a> 
+  <a href="ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tId )?>">Zu erstelltem Ticket #<?php=$tId?></a> 
+<?php
         }
         else
         {
 ?>
   <div id="ticketError">Fehler beim Erstellen des Tickets!</div>
-  <a href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück zur Ticketübersicht</a>      
-<?
+  <a href="ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zurück zur Ticketübersicht</a>      
+<?php
         }
 ?>   
 </div> <!-- /addMsg -->
-<?
+<?php
     }
 
     /**
@@ -95,7 +95,7 @@ möglichen offenen Tickets ereicht!</div>
     public static function showNewTicketForm( )
     {
 ?>
-<form action="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>" method="post">
+<form action="ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>" method="post">
   <dl>
 	<dt>Betreff</dt>
 	<dd><input id="input_subject" type="text" name="subject" width="50" /></dd>
@@ -126,19 +126,19 @@ möglichen offenen Tickets ereicht!</div>
         $msgIDs = $tObj->getMessages();
         $msgObj = new TicketMessage( $msgIDs[0] );
 ?>
-<h1>Ticket #<?=$tObj->getId()?></h1>
+<h1>Ticket #<?php=$tObj->getId()?></h1>
 <div id="ticketDetail">
   <div id="ticketDetailSubject">
-    <h2>&#91;<?=$tObj->getStatusString()?>&#93; <?=$tObj->getSubject()?></h2>
+    <h2>&#91;<?php=$tObj->getStatusString()?>&#93; <?php=$tObj->getSubject()?></h2>
   </div>
-  <div id="ticketDetailMain"><?=$msgObj->getText()?></div>
+  <div id="ticketDetailMain"><?php=$msgObj->getText()?></div>
   <div id="ticketDetailSideBar">
-    <div id="ticketDetailReporter"><?=$tObj->getReporter()?></div>
-    <div id="ticketDetailCreatedTime"><?=$tObj->getTimeCreated()?></div>
+    <div id="ticketDetailReporter"><?php=$tObj->getReporter()?></div>
+    <div id="ticketDetailCreatedTime"><?php=$tObj->getTimeCreated()?></div>
   </div>
 </div><!-- ticketDetail -->
 
-<?
+<?php
         $i = 1;
         // loop through all linked messageIDs and create their objects for output
         while ( isset( $msgIDs[$i] ) )
@@ -150,49 +150,49 @@ möglichen offenen Tickets ereicht!</div>
             }
             ?>
 <div id="ticketDetail">
-  <div id="ticketDetailMain"><?=$msgObj->getText()?></div>
+  <div id="ticketDetailMain"><?php=$msgObj->getText()?></div>
   <div id="ticketDetailSideBar">
-<?
+<?php
             if ( $msgObj->isGameoperator() )
             {
                 ?>
-    <div id="ticketDetailReporterGO"><?=$msgObj->getUsername()?> (Gameoperator)</div>   
-<?
+    <div id="ticketDetailReporterGO"><?php=$msgObj->getUsername()?> (Gameoperator)</div>   
+<?php
             }
             else
             {
 ?>
-    <div id="ticketDetailReporter"><?=$msgObj->getUsername()?></div>
-<?
+    <div id="ticketDetailReporter"><?php=$msgObj->getUsername()?></div>
+<?php
             }
             ?>
-    <div id="ticketDetailCreatedTime"><?=$msgObj->getTimeCreated()?></div>
+    <div id="ticketDetailCreatedTime"><?php=$msgObj->getTimeCreated()?></div>
   </div>
 </div><!-- ticketDetail -->
-<?
+<?php
             $i++;
         }
 ?>
-<form action="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>"  method="post">
+<form action="ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>"  method="post">
 <dl>
 	<dt>Neue Nachricht hinzufügen</dt>
 	<dd><textarea name="text" rows="20" cols="50"></textarea></dd>
 </dl>
 <input id="ticketAddMessage" type="submit" value="Nachricht absenden" />
-<?
+<?php
         if ( $showGoOptions )
         {
             ?>
 <input id="ticketResolve" type="submit" name="resolve"
 	value="Ticket als bearbeitet markieren" />
-<?
+<?php
         }
         ?>
-<input type="hidden" name="ticketid" value="<?=$ticketid?>" /></form>
+<input type="hidden" name="ticketid" value="<?php=$ticketid?>" /></form>
 <a
-	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zur&uuml;ck
+	href="ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zur&uuml;ck
 zur Ticket&uuml;bersicht</a>
-<?
+<?php
     }
 
     /**
@@ -233,8 +233,8 @@ zur Ticket&uuml;bersicht</a>
             if ( $i % 2 )
             {
                 ?>       
-        <tr id="<?=$cssID?>"
-		onclick="goTo('ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $ticketId )?>')"
+        <tr id="<?php=$cssID?>"
+		onclick="goTo('ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $ticketId )?>')"
 		onmouseover="style.backgroundColor='#667788'"
 		onmouseout="style.backgroundColor='#778899'">
     <?php
@@ -242,18 +242,18 @@ zur Ticket&uuml;bersicht</a>
             else
             {
                 ?>
-        	<tr id="<?=$cssID?>"
-			onclick="goTo('ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $ticketId )?>')"
+        	<tr id="<?php=$cssID?>"
+			onclick="goTo('ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $ticketId )?>')"
 			onmouseover="style.backgroundColor='#667788'"
 			onmouseout="style.backgroundColor='#7788AA'">
             <?php
             }
             ?>
-    	<td id="ticketTableStatus"><?=$tObj->getStatusString()?></td>
-			<td id="ticketTableSubject"><?=$tObj->getSubject()?></td>
-			<td id="ticketTableCreatedTime"><?=$tObj->getLastActivity()?></td>
+    	<td id="ticketTableStatus"><?php=$tObj->getStatusString()?></td>
+			<td id="ticketTableSubject"><?php=$tObj->getSubject()?></td>
+			<td id="ticketTableCreatedTime"><?php=$tObj->getLastActivity()?></td>
 		</tr>
-        <?
+        <?php
             $i ++;
         }
         
@@ -277,7 +277,7 @@ zur Ticket&uuml;bersicht</a>
 <!-- /ticketlist -->
 
 <form
-	action="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>"
+	action="ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>"
 	method="post"><input id="newticketButton" type="submit"
 	value="Neue Anfrage erstellen"> <input type="hidden"
 	name="newTicketForm" value="1" /></form>
@@ -297,7 +297,7 @@ zur Ticket&uuml;bersicht</a>
         {
             ?>
 <div id="ticketError">Fehler: Text ist zu lang!</div>
-<?
+<?php
             return;
         }
         
@@ -318,25 +318,25 @@ zur Ticket&uuml;bersicht</a>
         {
             ?>
 <div id="ticketError">Fehler: Text ist zu lang!</div>
-<?
+<?php
             return;
         }
         
         ?>
 <div id="addMsg">
-    <?
+    <?php
         if ( $tObj->addMessage( $username, $pText, $gameoperator ) )
         {
             ?>
         <div id="addMsgSuccess">Nachricht hinzugef&uuml;gt<br />
 </div>        
-    	<?
+    	<?php
         }
         else
         {
             ?>
         <div id="ticketError">Fehler beim Hinzuf&uuml;gen der Nachricht!</div> 
-        <?
+        <?php
         }
         // announce new messages to irc
         $url = 'http://'.$_SERVER['HTTP_HOST'].'/admin/ticketsystem.php?ticketid='.urlencode($tObj->getId());
@@ -347,13 +347,13 @@ zur Ticket&uuml;bersicht</a>
             
         ?>
     <a
-	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zur&uuml;ck
+	href="ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zur&uuml;ck
 zur Ticket&uuml;bersicht</a> <a
-	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tObj->getId() )?>">Zur&uuml;ck zu Ticket #<?=$tObj->getId()?></a>
+	href="ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tObj->getId() )?>">Zur&uuml;ck zu Ticket #<?php=$tObj->getId()?></a>
 
 </div>
 <!-- /addMsg -->
-<?
+<?php
     }
 
     /**
@@ -378,20 +378,20 @@ zur Ticket&uuml;bersicht</a> <a
         ?>
     
 <div id="ticketHeadline">Tickets mit Status 
-<?
+<?php
         foreach ( $GLOBALS['TICKETSTATUS'] as $statusID => $statusName )
         {
             if ( $status == $statusID )
             {
                 ?>
-    	<a href="ticketsystem.php?status=<?=$statusID?>"><b><?=$GLOBALS['TICKETSTATUS_DESC'][$statusID]?> (<?=$ticketManager->getTicketNumByStatus( $statusID )?>)</b></a>
-        <?
+    	<a href="ticketsystem.php?status=<?php=$statusID?>"><b><?php=$GLOBALS['TICKETSTATUS_DESC'][$statusID]?> (<?php=$ticketManager->getTicketNumByStatus( $statusID )?>)</b></a>
+        <?php
             }
             else
             {
                 ?>
-    	<font size="1"><a href="ticketsystem.php?status=<?=$statusID?>"><?=$GLOBALS['TICKETSTATUS_DESC'][$statusID]?> (<?=$ticketManager->getTicketNumByStatus( $statusID )?>)</a></font>
-        <?
+    	<font size="1"><a href="ticketsystem.php?status=<?php=$statusID?>"><?php=$GLOBALS['TICKETSTATUS_DESC'][$statusID]?> (<?php=$ticketManager->getTicketNumByStatus( $statusID )?>)</a></font>
+        <?php
             }
         }
         ?>
@@ -418,8 +418,8 @@ zur Ticket&uuml;bersicht</a> <a
             if ( $i % 2 )
             {
                 ?>       
-        <tr id="<?=$cssID?>"
-		onclick="goTo('ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $ticketId )?>')"
+        <tr id="<?php=$cssID?>"
+		onclick="goTo('ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $ticketId )?>')"
 		onmouseover="style.backgroundColor='#667788'"
 		onmouseout="style.backgroundColor='#778899'">
     <?php
@@ -427,18 +427,18 @@ zur Ticket&uuml;bersicht</a> <a
             else
             {
                 ?>
-        	<tr id="<?=$cssID?>"
-			onclick="goTo('ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $ticketId )?>')"
+        	<tr id="<?php=$cssID?>"
+			onclick="goTo('ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $ticketId )?>')"
 			onmouseover="style.backgroundColor='#667788'"
 			onmouseout="style.backgroundColor='#7788AA'">
             <?php
             }
             ?>
-    		<td id="ticketTableStatus"><?=$tObj->getStatusString()?></td>
-			<td id="ticketTableSubject"><?=$tObj->getSubject()?></td>
-			<td id="ticketTableCreatedTime"><?=$tObj->getLastActivity()?></td>
+    		<td id="ticketTableStatus"><?php=$tObj->getStatusString()?></td>
+			<td id="ticketTableSubject"><?php=$tObj->getSubject()?></td>
+			<td id="ticketTableCreatedTime"><?php=$tObj->getLastActivity()?></td>
 		</tr>
-        <?
+        <?php
             $i ++;
         }
         
@@ -477,31 +477,31 @@ zur Ticket&uuml;bersicht</a> <a
         
         ?>
 <div id="addMsg">
-    <?
+    <?php
         if ( $tObj->setStatus( TICKET_STATUS_RESOLVED ) )
         {
             ?>
         <div id="addMsgSuccess">Ticket als erledigt markiert<br />
 </div>        
-    	<?
+    	<?php
         }
         else
         {
             ?>
         <div id="ticketError">Fehler beim Setzen des Status!</div> 
-        <?
+        <?php
         }
         $url = 'http://'.$_SERVER['HTTP_HOST'].'/admin/ticketsystem.php?ticketid='.urlencode($tObj->getId());
         phpbb2egg("\00304Ticket #".$tObj->getId()." von '".$tObj->getReporter()."' mit Betreff '".$tObj->getSubject()."' wurde als erledigt markiert. -- $url", "tbwsupport" );   
         ?>
     <a
-	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zur&uuml;ck
+	href="ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) )?>">Zur&uuml;ck
 zur Ticket&uuml;bersicht</a> <a
-	href="ticketsystem.php?<?=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tObj->getId() )?>">Zur&uuml;ck zu Ticket #<?=$tObj->getId()?></a>
+	href="ticketsystem.php?<?php=htmlentities( session_name() . '=' . urlencode( session_id() ) . '&ticketid=' . $tObj->getId() )?>">Zur&uuml;ck zu Ticket #<?php=$tObj->getId()?></a>
 
 </div>
 <!-- /addMsg -->
-<?
+<?php
     }
 
     /**
