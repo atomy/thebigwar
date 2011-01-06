@@ -37,7 +37,7 @@ else
 	TARGETREV="HEAD"
 fi
 
-TARGETREVNUM=`svn info ${SVNREPOPATH} -r ${TARGETREV} | grep "Revision:" | cut -d" " -f2`
+TARGETREVNUM=`svn info ${SVNREPOPATH} --username ${SVNUSER} --password ${SVNPASSWORD} -r ${TARGETREV} | grep "Revision:" | cut -d" " -f2`
 
 cd ~/
 
