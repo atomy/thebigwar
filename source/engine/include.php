@@ -1257,6 +1257,7 @@
 				if(strlen($content) > 0 && preg_match("/^[0-9]*(\.[0-9]+)?$/", $content))
 					$factors['time'] = $content;
 			}
+
 			if(is_file(global_setting('DB_GLOBAL_PROD_FACTOR')) && is_readable(global_setting('DB_GLOBAL_PROD_FACTOR')))
 			{
 				$content = str_replace(',', '.', trim(file_get_contents(global_setting('DB_GLOBAL_PROD_FACTOR'))));

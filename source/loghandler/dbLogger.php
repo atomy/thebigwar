@@ -1,8 +1,6 @@
 <?php
 
-$root = $_SERVER['DOCUMENT_ROOT'];
-require_once( $root.'/include/config_inc.php' );
-
+require_once( $_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php' );
 
 class DBLogger
 {
@@ -13,7 +11,7 @@ class DBLogger
     
     public function __construct()
     {
-    	if ( is_file($root.'/NOSQLLOG') )
+    	if ( is_file($_SERVER['DOCUMENT_ROOT'].'/NOSQLLOG') )
 	{
 	    $this->dummyRun = true;
 	}
