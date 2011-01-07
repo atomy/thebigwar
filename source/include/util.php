@@ -7,8 +7,10 @@ if (! defined ( TBW_ROOT ))
 
 function getVersion() {
 	$fpath = TBW_ROOT."db_things/SVNVERSION";
-	$buf = readfile($fpath);
-	return intval($buf);	
+	if(is_file($fpath) && is_readable($fpath))
+		return trim(file_get_contents($fpath));
+	else
+		return 0;
 }
 
 function IsGameOperator($name) {

@@ -1,4 +1,6 @@
 <?php
+    require_once($_SERVER['DOCUMENT_ROOT']."/include/config_inc.php");
+    
     header('Cache-control: max-age=1209600');
     header('Expires: '.strftime('%a, %d %b %Y %T %Z', time()+1209600));
     ob_start('ob_gzhandler');

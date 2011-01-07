@@ -3,7 +3,8 @@
 $root = $_SERVER['DOCUMENT_ROOT'];
 
 require_once( $root.'/include/config_inc.php' );
-require_once( TBW_ROOT.'admin/include/cadmin.php' ); 
+require_once( TBW_ROOT.'admin/include/cadmin.php' );
+require_once( TBW_ROOT.'engine/include.php' ); 
 
 // get the relative path after root 
 // e.g. http://tbw.localhost/tbw/admin/index.php gets /tbw/admin/
@@ -194,7 +195,7 @@ require_once( TBW_ROOT.'engine/include.php' );
 	</head>
 	<body>
 		<a name="top"></a>
-		<fieldset><legend>TBW Admin-Interface (Version 1.04)</legend>
+		<fieldset><legend>TBW Admin-Interface (Version <?php echo get_version().".".getVersion()?>)</legend>
 		<?php 
 		if ( isset($_SESSION['admin_username']) )
 			print "<div>Logged in as <b>".$_SESSION['admin_username']."</b></div>";

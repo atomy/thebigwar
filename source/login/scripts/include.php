@@ -9,6 +9,8 @@
 
 	$resume = false;
 	$del_email_passwd = false;
+	if(isset($_REQUEST['PHPSESSID']))
+		session_id($_REQUEST['PHPSESSID']);
 	session_start();
 	header('Cache-Control: no-cache', true);
 
@@ -23,6 +25,8 @@
 
 	if(!isset($_SESSION['username']) || !isset($_SESSION['database']) || (isset($_SESSION['database']) && (!isset($databases[$_SESSION['database']]) || !User::userExists($_SESSION['username']))))
 	{
+		
+		
 		if(isset($_REQUEST['username']) && isset($_REQUEST['password']) && isset($_REQUEST['database']))
 		{
 			# Anmelden
@@ -39,16 +43,18 @@
 					$me = Classes::User($_REQUEST['username']);
 					if(!$me->checkPassword($_REQUEST['password']))
 						$loggedin = false;
-					else
+					else {
 						$loggedin = true;
+					}
 				}
 			}
 		}
-		else
+		else {
 			$loggedin = false;
+		}
 
 		if( !$loggedin )
-		{
+		{			
 			# Auf die Startseite zurueckleiten
 			$url = explode('/', $_SERVER['PHP_SELF']);
 			array_pop($url); array_pop($url);
@@ -430,7 +436,7 @@
 		<ul id="gameinfo">
 			<li class="username"><?php echo utf8_htmlentities($_SESSION['username'])?></li>
 			<li class="database"><?php echo utf8_htmlentities($databases[$_SESSION['database']][1])?></li>
-			<li class="version"><a href="<?php echo utf8_htmlentities(GLOBAL_CHANGELOGURL)?>" title="Changelog anzeigen">Version <?php echo getVersion().".".VERSION?></a></li>
+			<li class="version"><a href="<?php echo utf8_htmlentities(GLOBAL_CHANGELOGURL)?>" title="Changelog anzeigen">Version <?php echo VERSION.".".getVersion() ?></a></li>
 <?php
 			if(($rev = get_revision()) !== false)
 			{

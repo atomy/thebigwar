@@ -1,15 +1,8 @@
 <?php
 
-if ( is_file( '../include/config_inc.php' ) )
-   	require_once( '../include/config_inc.php' );
-else if ( is_file( '../../include/config_inc.php' ) )
-   	require_once( '../../include/config_inc.php' );
-else if ( is_file( '../../../include/config_inc.php' ) )
-{
-   	require_once( '../../../include/config_inc.php' );
-}
-else
-  	require_once( TBW_ROOT.'include/config_inc.php' );
+$root = $_SERVER['DOCUMENT_ROOT'];
+require_once( $root.'/include/config_inc.php' );
+
 
 class DBLogger
 {
@@ -20,14 +13,14 @@ class DBLogger
     
     public function __construct()
     {
-    	if ( is_file('NOSQLLOG') || is_file('../NOSQLLOG') || is_file('../../NOSQLLOG') || is_file('../../../NOSQLLOG') )
+    	if ( is_file($root.'/NOSQLLOG') )
 	{
 	    $this->dummyRun = true;
 	}
 	else
 	{
-        $this->db = new mysqli(MYSQL_LOGDB_HOST, MYSQL_LOGDB_USER, MYSQL_LOGDB_PASS, MYSQL_LOGDB_DB);
-    }
+	    $this->db = new mysqli(MYSQL_LOGDB_HOST, MYSQL_LOGDB_USER, MYSQL_LOGDB_PASS, MYSQL_LOGDB_DB);
+	}
     }
     
 
