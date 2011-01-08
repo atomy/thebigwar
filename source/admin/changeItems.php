@@ -1,14 +1,11 @@
 <?php
-	if ( is_file( '../include/config_inc.php' ) )
-	{
-        require_once( '../include/config_inc.php' );
-	}
-	else
-	{
-		require_once( 'include/config_inc.php' );
-	}
-	require_once( TBW_ROOT.'admin/include.php' );
-	require_once( TBW_ROOT.'admin/javascript/javascript.php' );
+
+if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
+    $_SERVER['DOCUMENT_ROOT'] = getcwd();
+    
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/admin/include.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/admin/javascript/javascript.php');
 	
 	admin_gui::html_head();
 ?>

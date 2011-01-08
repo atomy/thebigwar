@@ -1,6 +1,9 @@
 <?php
-	require_once( '../include/config_inc.php' );
-	require( TBW_ROOT.'login/scripts/include.php' );
+if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
+    $_SERVER['DOCUMENT_ROOT'] = getcwd();
+    
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
+require($_SERVER['DOCUMENT_ROOT'].'/login/scripts/include.php');
 
 	login_gui::html_head();
 

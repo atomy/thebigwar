@@ -1,9 +1,12 @@
 <?php
 
-require_once '../include/config_inc.php';
-require_once TBW_ROOT.'include/DBHelper.php';
-require_once TBW_ROOT.'ticketsystem/DBObject.php';
-require_once TBW_ROOT.'ticketsystem/TicketConstants.php';
+if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
+    $_SERVER['DOCUMENT_ROOT'] = getcwd();
+    
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
+require_once $_SERVER['DOCUMENT_ROOT'].'/include/DBHelper.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/ticketsystem/DBObject.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/ticketsystem/TicketConstants.php';
 
 /**
  * creates a object to seperate each message on a ticket

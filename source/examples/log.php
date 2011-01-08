@@ -7,8 +7,11 @@
  * additional log-entries are prefixed with timestamps
  */
 
-require_once( '../include/config_inc.php' );
-require_once( TBW_ROOT.'loghandler/logger.php' );
+if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
+    $_SERVER['DOCUMENT_ROOT'] = getcwd();
+    
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/loghandler/logger.php');
 
 /*
  * create logger object and send log entry of type LOG_USER to it

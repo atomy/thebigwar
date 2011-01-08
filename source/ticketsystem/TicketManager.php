@@ -1,10 +1,13 @@
 <?php
 
-require_once '../include/config_inc.php';
-require_once TBW_ROOT.'include/DBHelper.php';
-require_once TBW_ROOT.'ticketsystem/Ticket.php';
-require_once TBW_ROOT.'ticketsystem/TicketConstants.php';
-include_once( TBW_ROOT.'include/php2egg.php' );
+if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
+    $_SERVER['DOCUMENT_ROOT'] = getcwd();
+    
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
+require_once $_SERVER['DOCUMENT_ROOT'].'/include/DBHelper.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/ticketsystem/Ticket.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/ticketsystem/TicketConstants.php';
+include_once( $_SERVER['DOCUMENT_ROOT'].'/include/php2egg.php' );
 
 
 class TicketManager

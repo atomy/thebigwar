@@ -1,6 +1,9 @@
 <?php
-	require_once( '../include/config_inc.php' );
-	require( TBW_ROOT.'login/scripts/include.php' );
+if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
+    $_SERVER['DOCUMENT_ROOT'] = getcwd();
+    
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
+require($_SERVER['DOCUMENT_ROOT'].'login/scripts/include.php');
 
 	login_gui::html_head();
 
@@ -17,19 +20,19 @@
 		<legend>Handelskurs</legend>
 		<dl>
 			<dt class="c-carbon"><label for="handelskurs-carbon">Carbon</label></dt>
-			<dd class="c-carbon"><input type="text" name="handelskurs-carbon" id="handelskurs-carbon" value="<?php echo isset($_POST['handelskurs-carbon']) ? htmlentities($_POST['handelskurs-carbon']) : round($handelskurs[0], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="24" /></dd>
+			<dd class="c-carbon"><input type="text" name="handelskurs-carbon" id="handelskurs-carbon" value="<?php echo isset($_POST['handelskurs-carbon']) ? htmlentities($_POST['handelskurs-carbon']) : round(isset($handelskurs[0]) ? $handelskurs[0] : 1, 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="24" /></dd>
 
 			<dt class="c-aluminium"><label for="handelskurs-aluminium">Aluminium</label></dt>
-			<dd class="c-aluminium"><input type="text" name="handelskurs-aluminium" id="handelskurs-aluminium" value="<?php echo isset($_POST['handelskurs-aluminium']) ? htmlentities($_POST['handelskurs-aluminium']) : round($handelskurs[1], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="25" /></dd>
+			<dd class="c-aluminium"><input type="text" name="handelskurs-aluminium" id="handelskurs-aluminium" value="<?php echo isset($_POST['handelskurs-aluminium']) ? htmlentities($_POST['handelskurs-aluminium']) : round(isset($handelskurs[1]) ? $handelskurs[1] : 1, 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="25" /></dd>
 
 			<dt class="c-wolfram"><label for="handelskurs-wolfram">Wolfram</label></dt>
-			<dd class="c-wolfram"><input type="text" name="handelskurs-wolfram" id="handelskurs-wolfram" value="<?php echo isset($_POST['handelskurs-wolfram']) ? htmlentities($_POST['handelskurs-wolfram']) : round($handelskurs[2], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="26" /></dd>
+			<dd class="c-wolfram"><input type="text" name="handelskurs-wolfram" id="handelskurs-wolfram" value="<?php echo isset($_POST['handelskurs-wolfram']) ? htmlentities($_POST['handelskurs-wolfram']) : round(isset($handelskurs[2]) ? $handelskurs[2] : 1, 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="26" /></dd>
 
 			<dt class="c-radium"><label for="handelskurs-radium">Radium</label></dt>
-			<dd class="c-radium"><input type="text" name="handelskurs-radium" id="handelskurs-radium" value="<?php echo isset($_POST['handelskurs-radium']) ? htmlentities($_POST['handelskurs-radium']) : round($handelskurs[3], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="27" /></dd>
+			<dd class="c-radium"><input type="text" name="handelskurs-radium" id="handelskurs-radium" value="<?php echo isset($_POST['handelskurs-radium']) ? htmlentities($_POST['handelskurs-radium']) : round(isset($handelskurs[3]) ? $handelskurs[3] : 1, 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="27" /></dd>
 
 			<dt class="c-tritium"><label for="handelskurs-tritium">Tritium</label></dt>
-			<dd class="c-tritium"><input type="text" name="handelskurs-tritium" id="handelskurs-tritium" value="<?php echo isset($_POST['handelskurs-tritium']) ? htmlentities($_POST['handelskurs-tritium']) : round($handelskurs[4], 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="28" /></dd>
+			<dd class="c-tritium"><input type="text" name="handelskurs-tritium" id="handelskurs-tritium" value="<?php echo isset($_POST['handelskurs-tritium']) ? htmlentities($_POST['handelskurs-tritium']) : round(isset($handelskurs[4]) ? $handelskurs[4] : 1, 2)?>" onkeyup="calc();" onmouseup="calc();" onchange="calc();" tabindex="28" /></dd>
 		</dl>
 		<script type="text/javascript">
 			// <![CDATA[

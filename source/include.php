@@ -1,6 +1,9 @@
 <?php
-	require_once( 'include/config_inc.php' );
-	require( TBW_ROOT.'engine/include.php' );
+if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
+    $_SERVER['DOCUMENT_ROOT'] = getcwd();
+    
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
+require($_SERVER['DOCUMENT_ROOT'].'/engine/include.php');
 
 	class gui
 	{ # Kuemmert sich ums HTML-Grundgeruest der Hauptseite

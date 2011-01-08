@@ -436,7 +436,7 @@
 		<ul id="gameinfo">
 			<li class="username"><?php echo utf8_htmlentities($_SESSION['username'])?></li>
 			<li class="database"><?php echo utf8_htmlentities($databases[$_SESSION['database']][1])?></li>
-			<li class="version"><a href="<?php echo utf8_htmlentities(GLOBAL_CHANGELOGURL)?>" title="Changelog anzeigen">Version <?php echo VERSION.".".getVersion() ?></a></li>
+			<li class="version"><a href="<?php echo utf8_htmlentities(GLOBAL_CHANGELOGURL)?>" target="_blank" title="Changelog anzeigen">Version <?php echo VERSION.".".getVersion() ?></a></li>
 <?php
 			if(($rev = get_revision()) !== false)
 			{

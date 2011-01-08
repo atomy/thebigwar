@@ -1,17 +1,12 @@
 <?php
+if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
+    $_SERVER['DOCUMENT_ROOT'] = getcwd();
+    
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
 
-if ( is_file( '../include/config_inc.php' ) )
-{
-    require_once '../include/config_inc.php';
-}
-else
-{
-    require_once 'include/config_inc.php';
-}
-
-require_once TBW_ROOT . 'admin/include.php';
-require_once TBW_ROOT.'include/TicketHelper.php';
-require_once TBW_ROOT.'ticketsystem/TicketConstants.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/admin/include.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/include/TicketHelper.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/ticketsystem/TicketConstants.php';
 
 /**
  * check for access to that page

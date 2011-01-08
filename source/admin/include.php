@@ -1,10 +1,11 @@
 <?php
 
-$root = $_SERVER['DOCUMENT_ROOT'];
-
-require_once( $root.'/include/config_inc.php' );
-require_once( TBW_ROOT.'admin/include/cadmin.php' );
-require_once( TBW_ROOT.'engine/include.php' ); 
+if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
+    $_SERVER['DOCUMENT_ROOT'] = getcwd();
+    
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/admin/include/cadmin.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/engine/include.php'); 
 
 // get the relative path after root 
 // e.g. http://tbw.localhost/tbw/admin/index.php gets /tbw/admin/

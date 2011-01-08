@@ -1,7 +1,10 @@
 <?php
-require_once ('../include/config_inc.php');
-require_once( TBW_ROOT.'include/util.php' );
-require (TBW_ROOT . 'admin/include.php');
+if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
+    $_SERVER['DOCUMENT_ROOT'] = getcwd();
+    
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/util.php' );
+require($_SERVER['DOCUMENT_ROOT'].'/admin/include.php');
 
 // TODO, this needs to support multiple pages to view messages, 
 // however, how the current messages are stored its kinda impossible to have those listed on fallowing pages
