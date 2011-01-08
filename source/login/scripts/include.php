@@ -109,7 +109,7 @@
 			if($last_click_diff < 0.4)
 			{
 				$_SESSION['last_click_sleep'] = 1.5;
-				die('Schnellklicksperre. Bitte warten Sie 1,5 Sekunden mit der n�chsten Spielaktion, Sie geraten sonst erneut in die Schnellklicksperre. Bitte benutzen Sie den Back Button Ihres Browsers, um zum Spiel zurückzukehren.');				
+				die('Schnellklicksperre. Bitte warten Sie 1,5 Sekunden mit der nächsten Spielaktion, Sie geraten sonst erneut in die Schnellklicksperre. Bitte benutzen Sie den Back Button Ihres Browsers, um zum Spiel zurückzukehren.');				
 			}		
 	}
 	if(isset($_SESSION['last_click_ignore']))

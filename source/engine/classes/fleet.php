@@ -1,14 +1,6 @@
 <?php
 
-if ( ! defined( TBW_ROOT ) && file_exists( '../include/config_inc.php' ) )
-{
-    require_once ( '../include/config_inc.php' );
-}
-else if ( ! defined( TBW_ROOT ) && file_exists( '../../include/config_inc.php' ) )
-{
-    require_once ( '../../include/config_inc.php' );
-}
-
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
 require_once( TBW_ROOT.'loghandler/logger.php' );
 
 	class Fleet extends Dataset
