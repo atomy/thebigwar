@@ -2,7 +2,7 @@
 <?php
 
 if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
-    $_SERVER['DOCUMENT_ROOT'] = getcwd();
+    $_SERVER['DOCUMENT_ROOT'] = getcwd()."/..";
     
 require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/engine/classes/sendLogs.php' );

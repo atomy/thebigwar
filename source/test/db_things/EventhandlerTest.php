@@ -1,7 +1,5 @@
 <?php
 
-ini_set( 'include_path', ini_get( 'include_path' ) . ':../../include:../../engine:../../engine/classes:../../loghandler:../../db_things:../../:' . TBW_ROOT . ':' );
-
 // Call userTest::main() if this source file is executed directly.
 if ( ! defined( 'PHPUNIT_MAIN_METHOD' ) ) {
     define( 'PHPUNIT_MAIN_METHOD', 'EventhandlerTest::main' );
@@ -9,8 +7,11 @@ if ( ! defined( 'PHPUNIT_MAIN_METHOD' ) ) {
 
 require_once 'PHPUnit/Framework.php';
 
-require_once 'include/config_inc.php';
-require_once 'engine/include.php';
+if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
+    $_SERVER['DOCUMENT_ROOT'] = getcwd()."/..";
+    
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
+require_once $_SERVER['DOCUMENT_ROOT'].'/engine/include.php';
 
 /** 
  * Test class for Eventhandler

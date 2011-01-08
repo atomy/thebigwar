@@ -1,11 +1,12 @@
 <?php
 	$LOGIN = true;
 	
-	if ( !defined( "TBW_ROOT" ) )
-		define( "TBW_ROOT", "" );
-	
-	require_once( TBW_ROOT.'engine/include.php' );
-	require_once( TBW_ROOT.'include/util.php' );
+if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
+    $_SERVER['DOCUMENT_ROOT'] = getcwd()."/..";
+    
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/engine/include.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/util.php');
 
 	$resume = false;
 	$del_email_passwd = false;

@@ -8,26 +8,16 @@ if ( ! defined( 'PHPUnit_MAIN_METHOD' ) )
 
 require_once 'PHPUnit/Framework.php';
 
-if ( is_file( '../../../include/config_inc.php' ) )
-{
-    require_once '../../../include/config_inc.php';
-}
-else 
-    if ( is_file( '../include/config_inc.php' ) )
-    {
-        require_once '../include/config_inc.php';
-    }
-    else 
-    {
-        require_once 'include/config_inc.php';
-    }
-
-require_once TBW_ROOT . 'engine/include.php';
-require_once TBW_ROOT . 'engine/classes/galaxy.php';
-require_once TBW_ROOT . 'test/TestData/TestConstants.php';
-require_once TBW_ROOT . 'test/TestData/TestData.php'; 
-require_once TBW_ROOT . 'test/TestData/Tester.php';
-require_once TBW_ROOT . 'test/TestData/TestMessage.php';
+if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
+    $_SERVER['DOCUMENT_ROOT'] = getcwd()."/..";
+    
+require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
+require_once $_SERVER['DOCUMENT_ROOT'].'/engine/include.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/engine/classes/galaxy.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/test/TestData/TestConstants.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/test/TestData/TestData.php'; 
+require_once $_SERVER['DOCUMENT_ROOT'].'/test/TestData/Tester.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/test/TestData/TestMessage.php';
 
 /**
  * Test class for user.

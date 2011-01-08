@@ -1,7 +1,7 @@
 <?php
 
 if(!isset($_SERVER['DOCUMENT_ROOT']) || strlen($_SERVER['DOCUMENT_ROOT']) <= 0)
-    $_SERVER['DOCUMENT_ROOT'] = getcwd();
+    $_SERVER['DOCUMENT_ROOT'] = getcwd()."/..";
     
 require_once($_SERVER['DOCUMENT_ROOT'].'/include/config_inc.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/admin/include/cadmin.php');
@@ -12,8 +12,6 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/engine/include.php');
 // needed for cookies path
 $RELPATH = substr( $_SERVER['PHP_SELF'], 0, strrpos( $_SERVER['PHP_SELF'], "/" ) + 1 );
 ini_set( "session.cookie_path", $RELPATH );
-
-require_once( TBW_ROOT.'engine/include.php' );
 
 	$actions = array(
 		"0" => "%s hat sich angemeldet.",
