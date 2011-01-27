@@ -745,6 +745,24 @@ class User extends Dataset
         $this->changed = true;
         return true;
     }
+    
+    /**
+     * reset given score
+     */
+    function clearScore($i)
+    {
+        if ( ! $this->status || $i > 11 ) {
+            return false;
+        }
+                
+        $this->raw['punkte'][$i] = 0;
+
+        if ( isset( $this->cache['getScores'] ) )
+            unset($this->cache['getScores']);
+        
+        $this->changed = true;
+        return true;
+    }
 
     /**
      * gets spent res for the given res type, 0-4 (5 types)
