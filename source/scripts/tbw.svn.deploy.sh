@@ -7,25 +7,23 @@
 DBDIR="database"
 
 SVNUSER="hudson"
-SVNPASSWORD=""
+SVNPASSWORD="36SWShCBzMwl"
 
 # full svn url to the svn repo
 SVNREPOPATH="https://svn.jackinpoint.net/tbw/trunk/source/"
 
 # no restart file to prevent eventhandler starts by crontab - KEEP IN SYNC WITH db_things/checkHandler.sh
-NORESTARTSFILE="$HOME/EVENTHANDLER.KEEPDEAD"
+NORESTARTSFILE="${HOME}/EVENTHANDLER.KEEPDEAD"
 
 # we save the svn rev in here
-SVNREVFILE="$HOME/htdocs/db_things/SVNVERSION"
+SVNREVFILE="${HOME}/htdocs/db_things/SVNVERSION"
 
-# home dir
-MYHOME=~/localhost/
 > ${SVNREVFILE}
 
 TARGETREV=0
 TARGETREVNUM=0
 
-cd ${MYHOME}/htdocs/db_things
+cd ${HOME}/htdocs/db_things
 ./toggleUniMaintenance.sh on
 
 touch ${NORESTARTSFILE}
@@ -42,22 +40,25 @@ fi
 
 TARGETREVNUM=`svn info ${SVNREPOPATH} --username ${SVNUSER} --password ${SVNPASSWORD} -r ${TARGETREV} | grep "Revision:" | cut -d" " -f2`
 
-cd ${MYHOME}
+cd ${HOME}
 
 # backup our current stuff
 #chmod -R 750 htdocs.bak
-cp -R htdocs htdocs.bak
+#cp -R htdocs htdocs.bak
 
 echo "Killing Eventhandler, should be restarted later by cronjob."
-if [ -f htdocs/database.global/eventhandler.pid ] ; then
-        kill `cat htdocs/database.global/eventhandler.pid`
+if [ -r htdocs/database.global/eventhandler.pid ] ; then
+	EVPID=`cat htdocs/database.global/eventhandler.pid`
+	if [ 0${EVPID} -gt 0 ] ; then
+		kill ${EVPID}
+	fi
 fi
 killall -q "/usr/bin/php"
 
 # export the given revision
 svn --username ${SVNUSER} --password ${SVNPASSWORD} export ${SVNREPOPATH} ./htdocs/ --force -r ${TARGETREV}
 
-cd ${MYHOME}/htdocs/
+cd ${HOME}/htdocs/
 
 echo "Relinking item files..."
 # verlinken aller items zu den benoetigten plaetzen
@@ -69,7 +70,7 @@ ln -fs ../../database.global/forschung forschung
 ln -fs ../../database.global/verteidigung verteidigung
 ln -fs ../../database.global/roboter roboter
 
-cd ${MYHOME}/htdocs/db_things/
+cd ${HOME}/htdocs/db_things/
 ln -fs ../database.global/schiffe schiffe
 ln -fs ../database.global/gebaeude gebaeude
 ln -fs ../database.global/forschung forschung
