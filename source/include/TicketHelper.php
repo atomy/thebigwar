@@ -344,10 +344,17 @@ zur Ticketübersicht</a>
         }
         // announce new messages to irc
         $url = 'http://'.$_SERVER['HTTP_HOST'].'/admin/ticketsystem.php?ticketid='.urlencode($tObj->getId());
-        if($gameoperator)
-            phpbb2egg("\00304Neue Nachricht in #".$tObj->getId()." von '".$username."' (GO) mit Betreff '".$tObj->getSubject()."' -- $url", "tbwsupport" );
-        else
-            phpbb2egg("\00304Neue Nachricht in #".$tObj->getId()." von '".$username."' mit Betreff '".$tObj->getSubject()."' -- $url", "tbwsupport" );      
+        if($gameoperator) {
+            phpbb2egg("\00304Neue Nachricht in #".$tObj->getId()." von '".$username."' (GO) mit Betreff '".$tObj->getSubject()."' -- $url", "tbwsupport" );   
+        } else {
+            phpbb2egg("\00304Neue Nachricht in #".$tObj->getId()." von '".$username."' mit Betreff '".$tObj->getSubject()."' -- $url", "tbwsupport" );
+
+	    $mail_header = "Content-type: text/plain; charset=utf-8";
+            $mail_to = TEAM_SUPPORT_MAILINGLIST;
+	    $mail_subject = mb_encode_mimeheader("Nachricht im Ticket #".$tObj->getId()." mit Betreff '".$tObj->getSubject()."'", "utf-8");
+            $mail_body = "Im Ticketsystem wurde eine neue Nachricht zum Ticket #".$tObj->getId()." durch '".$username."' hinzugefügt.\n\nUm direkt zum Ticket zu springen nutze folgende URL: ".$url;
+	    mail($mail_to, $mail_subject, $mail_body, $mail_header); 
+	}
             
         ?>
     <a

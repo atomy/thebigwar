@@ -44,7 +44,14 @@ class TicketManager
         $tId = $tObj->create( $reporter, $text, $subject );
         $url = 'http://'.$_SERVER['HTTP_HOST'].'/admin/ticketsystem.php?ticketid='.urlencode($tId);
         phpbb2egg("\00304Neues Ticket #".$tId." von '".$reporter."' mit Betreff '".$subject."' -- $url", "tbwsupport" );
-        return $tId;
+        
+        $mail_header = "Content-type: text/plain; charset=utf-8";
+        $mail_to = TEAM_SUPPORT_MAILINGLIST;
+        $mail_subject = mb_encode_mimeheader("Neues Ticket #".$tId." von '".$reporter."' mit Betreff '".$subject."'", "utf-8");
+        $mail_body = "Im Ticketsystem wurde ein neues Ticket von dem Nutzer '".$reporter."' erstellt.\n\nUm direkt zum Ticket zu springen nutze folgende URL: ".$url;
+        mail($mail_to, $mail_subject, $mail_body, $mail_header);
+        
+        return $tId; 
     }
     
     /**
