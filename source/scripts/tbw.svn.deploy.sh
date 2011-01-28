@@ -17,12 +17,15 @@ NORESTARTSFILE="$HOME/EVENTHANDLER.KEEPDEAD"
 
 # we save the svn rev in here
 SVNREVFILE="$HOME/htdocs/db_things/SVNVERSION"
+
+# home dir
+MYHOME=~/localhost/
 > ${SVNREVFILE}
 
 TARGETREV=0
 TARGETREVNUM=0
 
-cd ~/htdocs/db_things
+cd ${MYHOME}/htdocs/db_things
 ./toggleUniMaintenance.sh on
 
 touch ${NORESTARTSFILE}
@@ -39,7 +42,7 @@ fi
 
 TARGETREVNUM=`svn info ${SVNREPOPATH} --username ${SVNUSER} --password ${SVNPASSWORD} -r ${TARGETREV} | grep "Revision:" | cut -d" " -f2`
 
-cd ~/
+cd ${MYHOME}
 
 # backup our current stuff
 #chmod -R 750 htdocs.bak
@@ -54,7 +57,7 @@ killall -q "/usr/bin/php"
 # export the given revision
 svn --username ${SVNUSER} --password ${SVNPASSWORD} export ${SVNREPOPATH} ./htdocs/ --force -r ${TARGETREV}
 
-cd ~/htdocs/
+cd ${MYHOME}/htdocs/
 
 echo "Relinking item files..."
 # verlinken aller items zu den benoetigten plaetzen
@@ -66,7 +69,7 @@ ln -fs ../../database.global/forschung forschung
 ln -fs ../../database.global/verteidigung verteidigung
 ln -fs ../../database.global/roboter roboter
 
-cd ~/htdocs/db_things/
+cd ${MYHOME}/htdocs/db_things/
 ln -fs ../database.global/schiffe schiffe
 ln -fs ../database.global/gebaeude gebaeude
 ln -fs ../database.global/forschung forschung
