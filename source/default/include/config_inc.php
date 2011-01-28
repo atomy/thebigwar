@@ -54,6 +54,8 @@
     define( "MYSQL_LOGDB_USER", "tbw" );
     define( "MYSQL_LOGDB_PASS", "tbwpass" );
     define( "MYSQL_LOGDB_DB", "tbw" );
+    
+    define( "TEAM_SUPPORT_MAILINGLIST", "team-support@list.thebigwar.org")
 
     date_default_timezone_set("Europe/Berlin");
 ?>

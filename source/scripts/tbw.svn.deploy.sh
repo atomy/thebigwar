@@ -4,15 +4,23 @@
 #
 
 # name of the database folder
-DBDIR="db"
+DBDIR="database"
+
+SVNUSER="hudson"
+SVNPASSWORD=""
 
 # full svn url to the svn repo
-SVNREPOPATH="https://jackinpoint.net/svn/testtbw/tags/last-successful/TBW.PostCommit/"
+SVNREPOPATH="https://svn.jackinpoint.net/tbw/trunk/source/"
 
 # no restart file to prevent eventhandler starts by crontab - KEEP IN SYNC WITH db_things/checkHandler.sh
 NORESTARTSFILE="$HOME/EVENTHANDLER.KEEPDEAD"
 
+# we save the svn rev in here
+SVNREVFILE="$HOME/htdocs/db_things/SVNVERSION"
+> ${SVNREVFILE}
+
 TARGETREV=0
+TARGETREVNUM=0
 
 cd ~/htdocs/db_things
 ./toggleUniMaintenance.sh on
@@ -29,17 +37,22 @@ else
 	TARGETREV="HEAD"
 fi
 
+TARGETREVNUM=`svn info ${SVNREPOPATH} --username ${SVNUSER} --password ${SVNPASSWORD} -r ${TARGETREV} | grep "Revision:" | cut -d" " -f2`
+
 cd ~/
 
 # backup our current stuff
-chmod -R 750 htdocs.bak
+#chmod -R 750 htdocs.bak
 cp -R htdocs htdocs.bak
 
 echo "Killing Eventhandler, should be restarted later by cronjob."
-kill `cat htdocs/database.global/eventhandler.pid`
+if [ -f htdocs/database.global/eventhandler.pid ] ; then
+        kill `cat htdocs/database.global/eventhandler.pid`
+fi
+killall -q "/usr/bin/php"
 
 # export the given revision
-svn export ${SVNREPOPATH} ./htdocs/ --force -r ${TARGETREV}
+svn --username ${SVNUSER} --password ${SVNPASSWORD} export ${SVNREPOPATH} ./htdocs/ --force -r ${TARGETREV}
 
 cd ~/htdocs/
 
@@ -66,13 +79,16 @@ echo "done."
 cd ../db_things
 
 chmod +x checkHandler.sh
+cd ..
+chmod -R 770 *
+cd db_things
 
 rm -f ${NORESTARTSFILE}
 
 echo "All done."
-echo "Revision ${TARGETREV} of ${SVNREPOPATH} deployed!"
-
+echo "Revision ${TARGETREV} (${TARGETREVNUM}) of ${SVNREPOPATH} deployed!"
 echo "Uni maintenance removed!"
+echo ${TARGETREVNUM} > ${SVNREVFILE}
 
 ./checkHandler.sh
 
