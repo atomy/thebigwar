@@ -2899,7 +2899,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/loghandler/logger.php' );
                 }
 
                 $message_text .= "\nFolgende G\xc3\xbcter werden abgeliefert:\n";
-                $message_tet .= ths($ress[0], true).' Carbon, '.ths($ress[1], true).' Aluminium, '.ths($ress[2], true).' Wolfram, '.ths($ress[3], true).' Radium, '.ths($ress[4], true)." Tritium.";
+                $message_text .= ths($ress[0], true).' Carbon, '.ths($ress[1], true).' Aluminium, '.ths($ress[2], true).' Wolfram, '.ths($ress[3], true).' Radium, '.ths($ress[4], true)." Tritium.";
                 
                 if(array_sum($robs) > 0)
                     $message_text .= "\n".makeItemsString($robs, false)."\n";
