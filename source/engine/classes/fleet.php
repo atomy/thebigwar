@@ -3379,12 +3379,15 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/loghandler/logger.php' );
 						$item_info = $a_objs[$name]->getItemInfo($id);
 						if(!$item_info) continue;
 						# KK Reduzierung pro Runde auf $kk_max
-									if($kk_kampf == 1 && $anzahl > $kk_max && $id == "S7" && $a == $angreifer) {
-										$staerke += $item_info['att']*$kk_max;
+						if($kk_kampf == 1 && $anzahl > $kk_max && $id == "S7" && $a == $angreifer) {
+							$staerke += $item_info['att']*$kk_max;
 							$arr_staerke[$id] += $item_info['att']*$kk_max;
-									} else {
-										$staerke += $item_info['att']*$anzahl;
-							$arr_staerke[$id] += $item_info['att']*$anzahl;
+						} else {
+							$staerke += $item_info['att']*$anzahl;
+							if(!isset($arr_staerke[$id]))
+								$arr_staerke[$id] = $item_info['att']*$anzahl;
+							else
+								$arr_staerke[$id] += $item_info['att']*$anzahl;
 						}
 					}
 				}
