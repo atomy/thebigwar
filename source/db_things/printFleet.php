@@ -114,5 +114,10 @@ foreach ( $fleetContent as $uName => $userFleet )
     echo "    fleet started at: " . date( "r", $userFleet['startzeit'] ) . "\n";
 }
 
+if($fleet->getArrivalTime() == "" || $fleet->getArrivalTime() <= 0)
+	echo "arrival time: ERROR\n";
+else
+	echo "arrival time: '".date("r",$fleet->getArrivalTime())."'\n";
+
 closedir( $dh );
 ?>
