@@ -1,5 +1,6 @@
 #!/usr/bin/php
 <?php
+die("do not use, flotten verdopplung etc.");
 	$USE_OB = false;
 	require('../engine/include.php');
 
