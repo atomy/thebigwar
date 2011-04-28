@@ -10,6 +10,7 @@
     
     // url for news iframe used at front page
     define("TBW_EXT_NEWSURL", 'http://forum.thebigwar.org/ext/news.php');
+	define("TBW_FORUM_URL", 'http://forum.thebigwar.org/');
     define("GLOBAL_MANTISURL", "https://mantis.jackinpoint.net/main_page.php");
     define("GLOBAL_CHANGELOGURL", "https://mantis.jackinpoint.net/changelog_page.php");    
     require_once( TBW_ROOT."include/util.php" );

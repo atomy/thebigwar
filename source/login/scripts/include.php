@@ -404,7 +404,7 @@ piwikTracker.enableLinkTracking();
 			{
 ?>
 			<ul id="external-navigation">
-				<li id="navigation-board" xml:lang="en"><a href="http://www.stephanlinden.net/forum/" target="_blank"><abbr title="Board / Forum">Forum</abbr></a></li>
+				<li id="navigation-board" xml:lang="en"><a href="<?php echo utf8_htmlentities(TBW_FORUM_URL) ?>" target="_blank"><abbr title="Board / Forum">Forum</abbr></a></li>
 				<li id="navigation-rules" xml:lang="en"><a href="http://wiki.thebigwar.org/index.php/Regelwerk" target="_blank"><abbr title="Regeln">Regeln</abbr></a></li>
 				<li id="navigation-faq" xml:lang="en"><a href="http://wiki.thebigwar.org/index.php/FAQ" target="_blank"><abbr title="Frequently Asked Questions">FAQ</abbr></a></li>
 				<li id="navigation-wiki" xml:lang="en"><a href="http://wiki.thebigwar.org/" target="_blank"><abbr title="TBW-Wiki">Wiki</abbr></a></li>
