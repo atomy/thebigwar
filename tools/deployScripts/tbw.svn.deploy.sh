@@ -10,7 +10,7 @@ SVNUSER=""
 SVNPASSWORD=""
 
 # full svn url to the svn repo
-SVNREPOPATH="https://svn.jackinpoint.net/tbw/trunk/source/"
+SVNREPOPATH="https://svn/tbw/trunk/source/"
 
 # no restart file to prevent eventhandler starts by crontab - KEEP IN SYNC WITH db_things/checkHandler.sh
 NORESTARTSFILE="$HOME/EVENTHANDLER.KEEPDEAD"
